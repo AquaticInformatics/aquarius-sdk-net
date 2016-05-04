@@ -20,12 +20,9 @@
 
   <Target Name="RunTests" DependsOnTargets="BuildApplication;NUnitTestAssemblyFiles" Outputs="%(NUnitTestAssembly.Identity)">
     <Exec
-      Command="$(MSBuildProjectDirectory)\packages\NUnit.Console.3.0.1\tools\nunit3-console.exe %(NUnitTestAssembly.Filename)%(NUnitTestAssembly.Extension)"
-      WorkingDirectory="%(NUnitTestAssembly.RelativeDir)"
-      IgnoreExitCode="True">
-      <Output TaskParameter="ExitCode" ItemName="exitCode" />
+      Command="$(MSBuildProjectDirectory)\src\packages\NUnit.Console.3.0.1\tools\nunit3-console.exe %(NUnitTestAssembly.Filename)%(NUnitTestAssembly.Extension)"
+      WorkingDirectory="%(NUnitTestAssembly.RelativeDir)">
     </Exec>
-    <Error Text="Error while running tests" Condition="@(exitCode) &lt; 0" />
   </Target>
 
 </Project>
