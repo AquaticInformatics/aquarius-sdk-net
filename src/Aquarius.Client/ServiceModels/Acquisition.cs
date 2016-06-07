@@ -5,7 +5,7 @@ Version: 4.054
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://doug-vm2012r2/AQUARIUS/Acquisition/v2
 
-GlobalNamespace: Aquarius.Client.Acquisition
+GlobalNamespace: Aquarius.Client.ServiceModels.Acquisition
 MakePartial: False
 MakeVirtual: False
 //MakeDataContractsExtensible: False
@@ -23,16 +23,11 @@ MakeVirtual: False
 */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using ServiceStack;
-using ServiceStack.DataAnnotations;
 using NodaTime;
-using Aquarius.Client.Acquisition;
+using ServiceStack;
 
-
-namespace Aquarius.Client.Acquisition
+namespace Aquarius.Client.ServiceModels.Acquisition
 {
 
     public enum AppendStatusCode

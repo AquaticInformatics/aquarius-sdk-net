@@ -5,7 +5,7 @@ Version: 4.054
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://doug-vm2012r2/AQUARIUS/Processor
 
-GlobalNamespace: Aquarius.Client.Processor
+GlobalNamespace: Aquarius.Client.ServiceModels.Processor
 MakePartial: False
 MakeVirtual: False
 //MakeDataContractsExtensible: False
@@ -26,13 +26,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Aquarius.Client.Helpers;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 using NodaTime;
-using Aquarius.Client.Processor;
 
 
-namespace Aquarius.Client.Processor
+namespace Aquarius.Client.ServiceModels.Processor
 {
 
     [Route("/codetable/grades", "GET")]
@@ -1232,10 +1232,12 @@ namespace Aquarius.Client.Processor
         public long DeletedPointsCount { get; set; }
     }
 
+    /* // TODO: Manual edit required here: Comment out this class. I think it actually just needs NodaTime.Interval
     public class Interval
         : ValueType
     {
     }
+     */
 
     public enum AxisPosition
     {
@@ -1250,6 +1252,7 @@ namespace Aquarius.Client.Processor
         Surrogate,
     }
 
+    /* // TODO: Manual edit required here: Comment out this business layer class, which conflicts with another class of the same name from the service layer
     public class DataCorrectionChartAxis
     {
         public DataCorrectionChartAxis()
@@ -1268,6 +1271,7 @@ namespace Aquarius.Client.Processor
         public double LogarithmCycles { get; set; }
         public List<TimeSeriesOnChartAxis> TimeSeriesOnAxis { get; set; }
     }
+     * */
 
     public class DataCorrectionSession
         : DataCorrectionSessionBase
@@ -1313,11 +1317,13 @@ namespace Aquarius.Client.Processor
         Logarithmic,
     }
 
+    /*// TODO: Manual edit required here: Comment out this business layer class, which conflicts with another class of the same name from the service layer
     public class TimeSeriesOnChartAxis
     {
         public ObjectId TimeSeriesId { get; set; }
         public PointType PointType { get; set; }
     }
+     **/
 
     [Route("/session", "DELETE")]
     public class DeleteSession

@@ -5,7 +5,7 @@ Version: 4.054
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://doug-vm2012r2/AQUARIUS/apps/v1
 
-GlobalNamespace: Aquarius.Client.FieldData
+GlobalNamespace: Aquarius.Client.ServiceModels.FieldData
 MakePartial: False
 MakeVirtual: False
 //MakeDataContractsExtensible: False
@@ -29,10 +29,9 @@ using System.Runtime.Serialization;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 using NodaTime;
-using Aquarius.Client.FieldData;
 
 
-namespace Aquarius.Client.FieldData
+namespace Aquarius.Client.ServiceModels.FieldData
 {
 
     public enum ActivityType
@@ -548,7 +547,7 @@ namespace Aquarius.Client.FieldData
         None,
     }
 
-    public enum TimeSeriesReadingType
+    public enum TimeSeriesReadingEnum // TODO: Manual edit required here: "TimeSeriesReadingType" => "TimeSeriesReadingEnum" to avoid conflict of non-enum type with same name
     {
         Unknown = 1,
         Routine = 2,
@@ -2646,7 +2645,7 @@ namespace Aquarius.Client.FieldData
         public string Method { get; set; }
         public string MethodDisplayName { get; set; }
         public string Model { get; set; }
-        public TimeSeriesReadingType ReadingType { get; set; }
+        public TimeSeriesReadingEnum ReadingType { get; set; }  // TODO: Manual edit required here
         public string SerialNumber { get; set; }
         public string SubLocation { get; set; }
         public Instant Time { get; set; }

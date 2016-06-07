@@ -5,7 +5,7 @@ Version: 4.054
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://doug-vm2012r2/AQUARIUS/Publish/v2
 
-GlobalNamespace: Aquarius.Client.Publish
+GlobalNamespace: Aquarius.Client.ServiceModels.Publish
 MakePartial: False
 MakeVirtual: False
 //MakeDataContractsExtensible: False
@@ -29,10 +29,9 @@ using System.Runtime.Serialization;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 using NodaTime;
-using Aquarius.Client.Publish;
 
 
-namespace Aquarius.Client.Publish
+namespace Aquarius.Client.ServiceModels.Publish
 {
 
     [Route("/session", "DELETE")]

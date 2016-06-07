@@ -5,7 +5,7 @@ Version: 4.054
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://doug-vm2012r2/AQUARIUS/Provisioning/v1
 
-GlobalNamespace: Aquarius.Client.Provisioning
+GlobalNamespace: Aquarius.Client.ServiceModels.Provisioning
 MakePartial: False
 MakeVirtual: False
 //MakeDataContractsExtensible: False
@@ -29,10 +29,9 @@ using System.Runtime.Serialization;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
 using NodaTime;
-using Aquarius.Client.Provisioning;
 
 
-namespace Aquarius.Client.Provisioning
+namespace Aquarius.Client.ServiceModels.Provisioning
 {
 
     public enum InterpolationType

@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,14 +59,17 @@
     <Compile Include="..\SharedAssemblyInfo\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Acquisition.cs" />
-    <Compile Include="FieldData.cs" />
-    <Compile Include="Processor.cs" />
+    <Compile Include="ServiceModels\Acquisition.cs" />
+    <Compile Include="ServiceModels\FieldData.cs" />
+    <Compile Include="Helpers\ObjectId.cs" />
+    <Compile Include="ServiceModels\Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Provisioning.cs" />
-    <Compile Include="Publish.cs" />
+    <Compile Include="ServiceModels\Provisioning.cs" />
+    <Compile Include="ServiceModels\Publish.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="create.sh" />
+    <None Include="generator.sh" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
