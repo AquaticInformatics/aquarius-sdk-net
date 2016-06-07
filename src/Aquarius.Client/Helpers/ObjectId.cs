@@ -1,5 +1,4 @@
-﻿// Lifted from <https://github.com/AquaticInformatics/Aquarius>\Common\BusinessInterfaces\DataTypes\ObjectId.cs
-using System;
+﻿using System;
 using System.Globalization;
 
 namespace Aquarius.Client.Helpers
