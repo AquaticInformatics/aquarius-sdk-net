@@ -141,10 +141,7 @@ namespace Aquarius.Client.Helpers
 
         public static Offset HoursToOffset(double utcOffsetInHours)
         {
-            const double minOffsetInHours = -12;
-            const double maxOffsetInHours = 14;
-
-            if (utcOffsetInHours < minOffsetInHours || utcOffsetInHours > maxOffsetInHours)
+            if (IsOffsetHoursInvalid(utcOffsetInHours))
             {
                 throw new ArgumentOutOfRangeException("utcOffsetInHours");
             }
@@ -152,6 +149,26 @@ namespace Aquarius.Client.Helpers
             var offsetTicks = TimeSpan.FromHours(utcOffsetInHours).Ticks;
 
             return Offset.FromTicks(offsetTicks);
+        }
+
+        public static double OffsetToHours(Offset offset)
+        {
+            var offsetInHours = offset.ToTimeSpan().TotalHours;
+
+            if (IsOffsetHoursInvalid(offsetInHours))
+            {
+                throw new ArgumentOutOfRangeException("offset");
+            }
+
+            return offsetInHours;
+        }
+
+        private static bool IsOffsetHoursInvalid(double offsetInHours)
+        {
+            const double minOffsetInHours = -12;
+            const double maxOffsetInHours = 14;
+
+            return offsetInHours < minOffsetInHours || offsetInHours > maxOffsetInHours;
         }
 
         public static Instant Iso8601ToInstant(string value, Iso8601ParseOptions options)

@@ -5,7 +5,6 @@ using Aquarius.Client.Helpers;
 using Aquarius.Client.ServiceModels.Publish;
 using NodaTime;
 using ServiceStack;
-using ServiceStack.Logging;
 using ServiceStack.Text;
 using ServiceStack.Text.Common;
 
@@ -14,16 +13,21 @@ namespace Aquarius.Client
     // Munged together from Server.Services.ServiceStack, but stripped of MsgPack references for easier deployment
     public class ServiceStackConfig
     {
-        private static ILog Log { get; set; }
+        private static bool _configured;
+        private static readonly object SyncLock = new object();
 
         public static void ConfigureServiceStack()
         {
-            Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            lock (SyncLock)
+            {
+                if (_configured)
+                    return;
 
-            JsonConfig.ConfigureJson();
-            ConfigurePublishApiJson();
+                JsonConfig.ConfigureJson();
+                ConfigurePublishApiJson();
 
-            Log.Debug("Hello ServiceStack!");
+                _configured = true;
+            }
         }
 
         private static void ConfigurePublishApiJson()
@@ -155,7 +159,7 @@ namespace Aquarius.Client
 
         private static string SerializeOffset(Offset value)
         {
-            return TextExtensions.SerializeToString<TimeSpan>(value.ToTimeSpan());
+            return TextExtensions.SerializeToString(value.ToTimeSpan());
         }
 
         private static Offset DeserializeOffset(string text)

@@ -166,10 +166,45 @@ namespace Aquarius.Client.UnitTests.Helpers
             Assert.That(testDelegate, Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
-        [TestCase(-12.0, -432000000000)]
-        [TestCase(-8.0, -288000000000)]
-        [TestCase(0, 0)]
-        [TestCase(14, 504000000000)]
+        [Test]
+        public void OffsetToHours_WithOffsetLessThanAllowedMinimum_Throws()
+        {
+            var offsetLessThanAllowedMinimum = Offset.FromHours(-15);
+
+            Action action = () => NodaTimeConverter.OffsetToHours(offsetLessThanAllowedMinimum);
+
+            action.ShouldThrow<ArgumentOutOfRangeException>();
+        }
+
+        [Test]
+        public void OffsetToHours_WithOffsetGreaterThanAllowedMaximum_Throws()
+        {
+            var offsetGreaterThanAllowedMaximum = Offset.FromHours(15);
+
+            Action action = () => NodaTimeConverter.OffsetToHours(offsetGreaterThanAllowedMaximum);
+
+            action.ShouldThrow<ArgumentOutOfRangeException>();
+        }
+
+        [TestCaseSource("OffsetsWithinAllowedRange")]
+        public void OffsetToHours_WithValueInAllowedRange_ConvertsCorrectly(double expectedUtcOffsetInHours, long offsetInTicks)
+        {
+            var offset = Offset.FromTicks(offsetInTicks);
+
+            var actual = NodaTimeConverter.OffsetToHours(offset);
+
+            actual.ShouldBeEquivalentTo(expectedUtcOffsetInHours);
+        }
+
+        private static readonly IEnumerable<TestCaseData> OffsetsWithinAllowedRange = new[]
+        {
+            new TestCaseData(-12.0, -432000000000),
+            new TestCaseData(-8.0, -288000000000),
+            new TestCaseData(0, 0),
+            new TestCaseData(14, 504000000000),
+        };
+
+        [TestCaseSource("OffsetsWithinAllowedRange")]
         public void HoursToOffsetPassedValueWithinAllowedRangeReturnsCorrectResult(double testUtcOffset, long expectedResultInTicks)
         {
             var result = NodaTimeConverter.HoursToOffset(testUtcOffset);
