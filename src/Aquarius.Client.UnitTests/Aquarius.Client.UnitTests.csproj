@@ -78,6 +78,7 @@
     <Compile Include="Helpers\ClientHelperTests.cs" />
     <Compile Include="Helpers\DurationExtensionsTests.cs" />
     <Compile Include="Helpers\NodaTimeConverterTests.cs" />
+    <Compile Include="ObjectIdSerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\NodaTimeFixtureRegistrar.cs" />
   </ItemGroup>
