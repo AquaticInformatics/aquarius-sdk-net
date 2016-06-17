@@ -70,6 +70,9 @@ namespace Aquarius.Client
 
             JsConfig<Offset>.RawSerializeFn = SerializeOffset;
             JsConfig<Offset>.DeSerializeFn = DeserializeOffset;
+
+            JsConfig<ObjectId>.SerializeFn = id => id.ToString();
+            JsConfig<ObjectId>.DeSerializeFn = s => new ObjectId(long.Parse(s, CultureInfo.InvariantCulture));
         }
 
         private static string AlwaysSerializeDateTimeAsUtc(DateTime dateTime)
