@@ -8,6 +8,9 @@ namespace Aquarius.Client
 {
     public class AquariusSystemDetector
     {
+        public static TimeSpan ConnectionTimeout = TimeSpan.FromSeconds(10);
+        public static TimeSpan ReadWriteTimeout = TimeSpan.FromSeconds(30);
+
         private static readonly AquariusServerVersion Minimum3XVersion = AquariusServerVersion.Create("3");
         private static readonly AquariusServerVersion FirstNon3XVersion = AquariusServerVersion.Create("4");
 
@@ -24,8 +27,8 @@ namespace Aquarius.Client
         {
             return new JsonServiceClient(baseUri)
             {
-                Timeout = TimeSpan.FromSeconds(10),
-                ReadWriteTimeout = TimeSpan.FromSeconds(5)
+                Timeout = ConnectionTimeout,
+                ReadWriteTimeout = ReadWriteTimeout
             };
         }
 
@@ -43,6 +46,8 @@ namespace Aquarius.Client
 
             if (serverVersion.IsLessThan(FirstNon3XVersion) && Minimum3XVersion.IsLessThan(serverVersion))
                 return AquariusServerType.Legacy3X;
+
+            // TODO: TSS-19 Now that we know it is an NG server, we can add a quick HTTPS-probe when hostname has no explicit scheme
 
             return AquariusServerType.NextGeneration;
         }
