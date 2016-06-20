@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Aquarius.Client.EndPoints;
-using Aquarius.Client.ServiceModels.FieldData;
 using ServiceStack;
 
 namespace Aquarius.Client
 {
     public class AquariusSystemDetector
     {
+        [Route("/version", "GET")]
+        public class GetVersion
+            : IReturn<VersionResponse>
+        {
+        }
+
+        public class VersionResponse
+        {
+            public string ApiVersion { get; set; }
+        }
+
         public static TimeSpan ConnectionTimeout = TimeSpan.FromSeconds(10);
         public static TimeSpan ReadWriteTimeout = TimeSpan.FromSeconds(30);
 
@@ -71,11 +81,12 @@ namespace Aquarius.Client
 
         private AquariusServerVersion DetectServerVersion(string hostname)
         {
-            var internalFieldDataEndpoint = FieldData.ResolveEndpoint(hostname);
+            var versionBaseUri = Root.EndPoint + "/apps/v1";
+            var versionEndpoint = UriHelper.ResolveEndpoint(hostname, versionBaseUri);
 
             try
             {
-                using (var serviceClient = _serviceClientFactory(internalFieldDataEndpoint))
+                using (var serviceClient = _serviceClientFactory(versionEndpoint))
                 {
                     return AquariusServerVersion.Create(serviceClient.Get(new GetVersion()).ApiVersion);
                 }

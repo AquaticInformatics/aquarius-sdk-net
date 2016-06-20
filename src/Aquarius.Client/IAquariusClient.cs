@@ -8,8 +8,10 @@ namespace Aquarius.Client
         IServiceClient PublishClient { get; }
         IServiceClient AcquisitionClient { get; }
         IServiceClient ProvisioningClient { get; }
-        IServiceClient ProcessorClient { get; }
-        IServiceClient FieldDataClient { get; }
+
+        IServiceClient RegisterCustomClient(string baseUri);
+        IServiceClient CloneAuthenticatedClient(IServiceClient client);
+        IServiceClient CloneAuthenticatedClientWithOverrideMethod(IServiceClient client, string overrideMethod);
 
         ScopeAction SessionKeepAlive();
     }

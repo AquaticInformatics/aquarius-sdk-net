@@ -40,5 +40,21 @@ namespace Aquarius.Client.Helpers
                 return encryptedBase64;
             }
         }
+
+        public static JsonServiceClient CloneAuthenticatedClient(ServiceClientBase client, string baseUri)
+        {
+            if (client == null)
+                throw new ArgumentNullException("client");
+
+            var clone = new JsonServiceClient(baseUri);
+
+            foreach (var headerKey in client.Headers.AllKeys)
+            {
+                clone.Headers.Remove(headerKey);
+                clone.Headers.Add(headerKey, client.Headers[headerKey]);
+            }
+
+            return clone;
+        }
     }
 }
