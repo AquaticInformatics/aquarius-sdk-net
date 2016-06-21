@@ -44,8 +44,40 @@ namespace Aquarius.Client
         public IServiceClient PublishClient { get { return _serviceClients[ClientType.PublishJson]; } }
         public IServiceClient AcquisitionClient { get { return _serviceClients[ClientType.AcquisitionJson]; } }
         public IServiceClient ProvisioningClient { get { return _serviceClients[ClientType.ProvisioningJson]; } }
-        public IServiceClient ProcessorClient { get { return _serviceClients[ClientType.ProcessorJson]; } }
-        public IServiceClient FieldDataClient { get { return _serviceClients[ClientType.FieldDataJson]; } }
+
+        public IServiceClient RegisterCustomClient(string baseUri)
+        {
+            if (string.IsNullOrWhiteSpace(baseUri))
+                throw new ArgumentOutOfRangeException("baseUri");
+
+            ServiceClientBase client;
+            if (_customClients.TryGetValue(baseUri, out client))
+                return client;
+
+            client = ClientHelper.CloneAuthenticatedClient(PublishClient as JsonServiceClient, baseUri);
+            _customClients.Add(baseUri, client);
+
+            return client;
+        }
+
+        public IServiceClient CloneAuthenticatedClient(IServiceClient client)
+        {
+            var jsonClient = client as JsonServiceClient;
+
+            if (jsonClient == null)
+                throw new ArgumentException(@"Only JSON clients can be cloned", "client");
+
+            return ClientHelper.CloneAuthenticatedClient(jsonClient, jsonClient.BaseUri);
+        }
+
+        public IServiceClient CloneAuthenticatedClientWithOverrideMethod(IServiceClient client, string overrideMethod)
+        {
+            var clone = (JsonServiceClient)CloneAuthenticatedClient(client);
+
+            clone.RequestFilter = req => req.Headers[HttpHeaders.XHttpMethodOverride] = overrideMethod;
+
+            return clone;
+        }
 
         private string Username { get; set; }
         private string Password { get; set; }
@@ -57,11 +89,10 @@ namespace Aquarius.Client
             PublishJson,
             AcquisitionJson,
             ProvisioningJson,
-            ProcessorJson,
-            FieldDataJson,
         };
 
         private readonly Dictionary<ClientType, ServiceClientBase> _serviceClients = new Dictionary<ClientType, ServiceClientBase>();
+        private readonly Dictionary<string, ServiceClientBase> _customClients = new Dictionary<string, ServiceClientBase>();
 
         private AquariusClient()
         {
@@ -111,8 +142,6 @@ namespace Aquarius.Client
             _serviceClients.Add(ClientType.PublishJson, new JsonServiceClient(PublishV2.ResolveEndpoint(hostname)));
             _serviceClients.Add(ClientType.AcquisitionJson, new JsonServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
             _serviceClients.Add(ClientType.ProvisioningJson, new JsonServiceClient(Provisioning.ResolveEndpoint(hostname)));
-            _serviceClients.Add(ClientType.ProcessorJson, new JsonServiceClient(Processor.ResolveEndpoint(hostname)));
-            _serviceClients.Add(ClientType.FieldDataJson, new JsonServiceClient(FieldData.ResolveEndpoint(hostname)));
 
             Username = username;
             Password = password;
@@ -124,12 +153,18 @@ namespace Aquarius.Client
         {
             DeleteSession();
 
-            foreach (var client in _serviceClients.Values)
+            ClearConnectedClients(_serviceClients);
+            ClearConnectedClients(_customClients);
+        }
+
+        private static void ClearConnectedClients<TKey>(Dictionary<TKey, ServiceClientBase> clientDictionary)
+        {
+            foreach (var client in clientDictionary.Values)
             {
                 client.Dispose();
             }
 
-            _serviceClients.Clear();
+            clientDictionary.Clear();
         }
 
         private void DeleteSession()

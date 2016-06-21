@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aquarius.Client.ServiceModels.FieldData;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using ServiceStack;
-using Version = Aquarius.Client.ServiceModels.FieldData.Version;
 
 namespace Aquarius.Client.UnitTests
 {
@@ -50,8 +48,8 @@ namespace Aquarius.Client.UnitTests
         private void SetupMockToReturnApiVersion(string apiVersion)
         {
             _mockServiceClient
-                .Get(Arg.Any<GetVersion>())
-                .ReturnsForAnyArgs(new Version { ApiVersion = apiVersion });
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>())
+                .ReturnsForAnyArgs(new AquariusSystemDetector.VersionResponse { ApiVersion = apiVersion });
         }
 
         [Test]
@@ -66,7 +64,7 @@ namespace Aquarius.Client.UnitTests
         private void SetupMockToThrow()
         {
             _mockServiceClient
-                .Get(Arg.Any<GetVersion>())
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>())
                 .ThrowsForAnyArgs(new Exception("oops"));
         }
 
@@ -88,7 +86,7 @@ namespace Aquarius.Client.UnitTests
         {
             _mockServiceClient
                 .Received(requiredNumberOfCalls)
-                .Get(Arg.Any<GetVersion>());
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>());
         }
 
         [Test]
@@ -108,8 +106,8 @@ namespace Aquarius.Client.UnitTests
         private void SetupMockForTwoCallsWhereFirstCallThrows()
         {
             _mockServiceClient
-                .Get(Arg.Any<GetVersion>())
-                .Returns(x => { throw new Exception("oops"); }, x => new Version { ApiVersion = SomeLegacyApiVersion });            
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>())
+                .Returns(x => { throw new Exception("oops"); }, x => new AquariusSystemDetector.VersionResponse { ApiVersion = SomeLegacyApiVersion });            
         }
     }
 }

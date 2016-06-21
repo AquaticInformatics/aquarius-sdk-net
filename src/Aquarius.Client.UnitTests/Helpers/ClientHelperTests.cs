@@ -1,4 +1,5 @@
-﻿using Aquarius.Client.Helpers;
+﻿using System;
+using Aquarius.Client.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
@@ -61,6 +62,27 @@ namespace Aquarius.Client.UnitTests.Helpers
             SetAuthenticationToken(token2);
 
             AssertThatTokenMatchesExpected(token2);
+        }
+
+        [Test]
+        public void CloneAuthenticatedClient_WithNullClient_Throws()
+        {
+            Action action = () => ClientHelper.CloneAuthenticatedClient(null, string.Empty);
+
+            action.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void CloneAuthenticatedClient_WithValidClient_ClonesAuthenticationToken()
+        {
+            var token = _fixture.Create<string>();
+
+            SetAuthenticationToken(token);
+
+            var baseUri = _fixture.Create<string>();
+            var clone = ClientHelper.CloneAuthenticatedClient(_rawClient, baseUri);
+
+            clone.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey].ShouldBeEquivalentTo(_rawClient.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey]);
         }
     }
 }

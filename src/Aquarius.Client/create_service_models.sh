@@ -18,14 +18,14 @@ show_usage() {
 	exit_abort "$@"
 }
 
+Generator=./generate_code_from_live_endpoint.sh
+
 ServerName=$1
 OutputPath=$2
 
 [ ! -z "$ServerName" ] || ServerName=localhost
 [ ! -z "$OutputPath" ] || OutputPath=./ServiceModels
 
-./generator.sh Publish Publish/v2 $ServerName $OutputPath || exit_abort
-./generator.sh Provisioning Provisioning/v1 $ServerName $OutputPath || exit_abort
-./generator.sh Acquisition Acquisition/v2 $ServerName $OutputPath || exit_abort
-./generator.sh Processor Processor $ServerName $OutputPath || exit_abort
-./generator.sh FieldData apps/v1 $ServerName $OutputPath || exit_abort
+$Generator Publish Publish/v2 $ServerName $OutputPath || exit_abort
+$Generator Provisioning Provisioning/v1 $ServerName $OutputPath || exit_abort
+$Generator Acquisition Acquisition/v2 $ServerName $OutputPath || exit_abort

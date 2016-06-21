@@ -59,9 +59,7 @@
     <Compile Include="AquariusSystemDetector.cs" />
     <Compile Include="CredentialsParser.cs" />
     <Compile Include="EndPoints\AcquisitionV2.cs" />
-    <Compile Include="EndPoints\FieldData.cs" />
     <Compile Include="EndPoints\LegacyDataService.cs" />
-    <Compile Include="EndPoints\Processor.cs" />
     <Compile Include="EndPoints\Provisioning.cs" />
     <Compile Include="EndPoints\PublishV2.cs" />
     <Compile Include="EndPoints\Root.cs" />
@@ -76,9 +74,7 @@
     <Compile Include="ScopeAction.cs" />
     <Compile Include="ServiceClientExtensions.cs" />
     <Compile Include="ServiceModels\Acquisition.cs" />
-    <Compile Include="ServiceModels\FieldData.cs" />
     <Compile Include="Helpers\ObjectId.cs" />
-    <Compile Include="ServiceModels\Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceModels\Provisioning.cs" />
     <Compile Include="ServiceModels\Publish.cs" />
