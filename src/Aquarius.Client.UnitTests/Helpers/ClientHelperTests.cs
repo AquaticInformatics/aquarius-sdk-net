@@ -79,10 +79,28 @@ namespace Aquarius.Client.UnitTests.Helpers
 
             SetAuthenticationToken(token);
 
-            var baseUri = _fixture.Create<string>();
+            var host = "somehost";
+            var port = 1234;
+            var scheme = Uri.UriSchemeHttps;
+            var path = "/some/path";
+
+            var builder = new UriBuilder(scheme, host, port, path);
+
+            _rawClient.SetBaseUri(builder.ToString());
+
+            var baseUri = "/a/different/path";
+            Assert.That(path, Is.Not.EqualTo(baseUri), "Invalid test data");
+
             var clone = ClientHelper.CloneAuthenticatedClient(_rawClient, baseUri);
 
             clone.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey].ShouldBeEquivalentTo(_rawClient.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey]);
+
+            var uri = new Uri(clone.BaseUri);
+
+            uri.Host.ShouldBeEquivalentTo(host, "Original host retained");
+            uri.Port.ShouldBeEquivalentTo(port, "Original port retained");
+            uri.Scheme.ShouldBeEquivalentTo(scheme, "Original scheme retained");
+            uri.PathAndQuery.ShouldBeEquivalentTo(baseUri, "New endpoint");
         }
     }
 }

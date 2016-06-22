@@ -46,7 +46,10 @@ namespace Aquarius.Client.Helpers
             if (client == null)
                 throw new ArgumentNullException("client");
 
-            var clone = new JsonServiceClient(baseUri);
+            var builder = new UriBuilder(client.BaseUri);
+            builder.Path = baseUri;
+
+            var clone = new JsonServiceClient(builder.ToString());
 
             foreach (var headerKey in client.Headers.AllKeys)
             {

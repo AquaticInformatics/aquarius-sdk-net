@@ -67,7 +67,7 @@ namespace Aquarius.Client
             if (jsonClient == null)
                 throw new ArgumentException(@"Only JSON clients can be cloned", "client");
 
-            return ClientHelper.CloneAuthenticatedClient(jsonClient, jsonClient.BaseUri);
+            return ClientHelper.CloneAuthenticatedClient(jsonClient, new Uri(jsonClient.BaseUri).PathAndQuery);
         }
 
         public IServiceClient CloneAuthenticatedClientWithOverrideMethod(IServiceClient client, string overrideMethod)
