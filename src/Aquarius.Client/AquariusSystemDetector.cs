@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Net;
+using System.Reflection;
 using Aquarius.Client.EndPoints;
 using ServiceStack;
+using ServiceStack.Logging;
 
 namespace Aquarius.Client
 {
     public class AquariusSystemDetector
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         [Route("/version", "GET")]
         public class GetVersion
             : IReturn<VersionResponse>
@@ -84,6 +90,8 @@ namespace Aquarius.Client
             var versionBaseUri = Root.EndPoint + "/apps/v1";
             var versionEndpoint = UriHelper.ResolveEndpoint(hostname, versionBaseUri);
 
+            var stopwatch = Stopwatch.StartNew();
+
             try
             {
                 using (var serviceClient = _serviceClientFactory(versionEndpoint))
@@ -91,8 +99,28 @@ namespace Aquarius.Client
                     return AquariusServerVersion.Create(serviceClient.Get(new GetVersion()).ApiVersion);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                var message = string.Format(
+                    "Unknown server version '{0}' after {1:F3} seconds. {2}",
+                    hostname,
+                    stopwatch.Elapsed.TotalSeconds,
+                    exception.Message);
+
+                var isExpectedException =
+                    exception is NotSupportedException ||
+                    exception is WebException ||
+                    exception is WebServiceException;
+
+                if (isExpectedException)
+                {
+                    Log.Warn(message);
+                }
+                else
+                {
+                    Log.Warn(message, exception);
+                }
+
                 return null;
             }
         }
