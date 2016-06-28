@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -53,12 +54,16 @@ namespace Aquarius.Client.UnitTests
         }
 
         [Test]
-        public void GetAquariusServerType_ServiceClientThatThrows_ReportsUnknown()
+        public void GetAquariusServerType_ServiceClientThatThrows_ReportsUnknownOnFirstFailure()
         {
             SetupMockToThrow();
 
             var actual = _detector.GetAquariusServerType(DummyServerName);
             actual.ShouldBeEquivalentTo(AquariusServerType.Unknown);
+
+            _mockServiceClient
+                .Received(1)
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>());
         }
 
         private void SetupMockToThrow()
@@ -66,6 +71,49 @@ namespace Aquarius.Client.UnitTests
             _mockServiceClient
                 .Get(Arg.Any<AquariusSystemDetector.GetVersion>())
                 .ThrowsForAnyArgs(new Exception("oops"));
+        }
+
+        [Test]
+        public void GetAquariusServerType_ServiceClientThatThrowsTimeoutException_ReportsUnknownAfterAllRetries()
+        {
+            SetupMockToThrowTimeoutException();
+
+            var actual = _detector.GetAquariusServerType(DummyServerName);
+            actual.ShouldBeEquivalentTo(AquariusServerType.Unknown);
+
+            _mockServiceClient
+                .Received(AquariusSystemDetector.MaximumRetryCount)
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>());
+        }
+
+        private void SetupMockToThrowTimeoutException()
+        {
+            _mockServiceClient
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>())
+                .ThrowsForAnyArgs(new WebException("too slow", WebExceptionStatus.Timeout));
+        }
+
+        [Test]
+        public void GetAquariusServerType_ServiceClientThatThrowsTimeoutExceptionAndThenSucceeds_ReportsExpectedType()
+        {
+            SetupMockToThrowOneTimeoutExceptionAndThenSucceed(SomeLegacyApiVersion);
+
+            var actual = _detector.GetAquariusServerType(DummyServerName);
+            actual.ShouldBeEquivalentTo(AquariusServerType.Legacy3X);
+
+            _mockServiceClient
+                .Received(2)
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>());
+        }
+
+        private void SetupMockToThrowOneTimeoutExceptionAndThenSucceed(string apiVersion)
+        {
+            _mockServiceClient
+                .Get(Arg.Any<AquariusSystemDetector.GetVersion>())
+                .Returns(
+                    x => { throw new WebException("too slow", WebExceptionStatus.Timeout); },
+                    x => new AquariusSystemDetector.VersionResponse {ApiVersion = apiVersion}
+                );
         }
 
         [Test]

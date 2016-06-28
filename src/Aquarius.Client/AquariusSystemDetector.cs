@@ -24,8 +24,9 @@ namespace Aquarius.Client
             public string ApiVersion { get; set; }
         }
 
-        public static TimeSpan ConnectionTimeout = TimeSpan.FromSeconds(10);
-        public static TimeSpan ReadWriteTimeout = TimeSpan.FromSeconds(30);
+        public static TimeSpan FirstByteReceivedTimeout = TimeSpan.FromSeconds(10);
+        public static TimeSpan ReadEntireResponseTimeout = TimeSpan.FromSeconds(5);
+        public static int MaximumRetryCount = 3;
 
         private static readonly AquariusServerVersion Minimum3XVersion = AquariusServerVersion.Create("3");
         private static readonly AquariusServerVersion FirstNon3XVersion = AquariusServerVersion.Create("4");
@@ -43,8 +44,8 @@ namespace Aquarius.Client
         {
             return new JsonServiceClient(baseUri)
             {
-                Timeout = ConnectionTimeout,
-                ReadWriteTimeout = ReadWriteTimeout
+                Timeout = FirstByteReceivedTimeout,
+                ReadWriteTimeout = ReadEntireResponseTimeout
             };
         }
 
@@ -90,38 +91,51 @@ namespace Aquarius.Client
             var versionBaseUri = Root.EndPoint + "/apps/v1";
             var versionEndpoint = UriHelper.ResolveEndpoint(hostname, versionBaseUri);
 
-            var stopwatch = Stopwatch.StartNew();
+            var attemptCount = 1;
 
-            try
+            while (true)
             {
-                using (var serviceClient = _serviceClientFactory(versionEndpoint))
-                {
-                    return AquariusServerVersion.Create(serviceClient.Get(new GetVersion()).ApiVersion);
-                }
-            }
-            catch (Exception exception)
-            {
-                var message = string.Format(
-                    "Unknown server version '{0}' after {1:F3} seconds. {2}",
-                    hostname,
-                    stopwatch.Elapsed.TotalSeconds,
-                    exception.Message);
+                var stopwatch = Stopwatch.StartNew();
 
-                var isExpectedException =
-                    exception is NotSupportedException ||
-                    exception is WebException ||
-                    exception is WebServiceException;
-
-                if (isExpectedException)
+                try
                 {
-                    Log.Warn(message);
+                    using (var serviceClient = _serviceClientFactory(versionEndpoint))
+                    {
+                        return AquariusServerVersion.Create(serviceClient.Get(new GetVersion()).ApiVersion);
+                    }
                 }
-                else
+                catch (Exception exception)
                 {
-                    Log.Warn(message, exception);
-                }
+                    var message = string.Format(
+                        "Unknown server version '{0}' after {1:F3} seconds. {2}",
+                        hostname,
+                        stopwatch.Elapsed.TotalSeconds,
+                        exception.Message);
 
-                return null;
+                    var isExpectedException =
+                        exception is NotSupportedException ||
+                        exception is WebException ||
+                        exception is WebServiceException;
+
+                    if (isExpectedException)
+                    {
+                        Log.Warn(message);
+                    }
+                    else
+                    {
+                        Log.Warn(message, exception);
+                    }
+
+                    var webException = exception as WebException;
+                    if (webException != null && (webException.Status == WebExceptionStatus.Timeout) && (attemptCount < MaximumRetryCount))
+                    {
+                        Log.InfoFormat("Version probe attempt #{0} for '{1}'", attemptCount, hostname);
+                        ++attemptCount;
+                        continue;
+                    }
+
+                    return null;
+                }
             }
         }
     }
