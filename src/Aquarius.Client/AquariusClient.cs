@@ -131,7 +131,13 @@ namespace Aquarius.Client
         {
             SessionToken = ClientHelper.Login(_serviceClients.First().Value, Username, Password);
 
-            foreach (var client in _serviceClients.Values)
+            SetAuthenticationTokenForConnectedClients(_serviceClients);
+            SetAuthenticationTokenForConnectedClients(_customClients);
+        }
+
+        private void SetAuthenticationTokenForConnectedClients<TKey>(Dictionary<TKey, ServiceClientBase> clientDictionary)
+        {
+            foreach (var client in clientDictionary.Values)
             {
                 ClientHelper.SetAuthenticationToken(client, SessionToken);
             }
