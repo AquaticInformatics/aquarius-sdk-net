@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Configuration;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
@@ -32,6 +33,7 @@ namespace Aquarius.Client
         private static readonly AquariusServerVersion FirstNon3XVersion = AquariusServerVersion.Create("4");
 
         private readonly ConcurrentDictionary<string, AquariusServerVersion> _knownServerVersions = new ConcurrentDictionary<string, AquariusServerVersion>();
+        private readonly ConcurrentDictionary<string, AquariusServerVersion> _overrideVersions = new ConcurrentDictionary<string, AquariusServerVersion>();
 
         private readonly Func<string, IServiceClient> _serviceClientFactory;
 
@@ -52,7 +54,31 @@ namespace Aquarius.Client
         public AquariusSystemDetector(Func<string, IServiceClient> serviceClientFactory)
         {
             _serviceClientFactory = serviceClientFactory;
+
+            InitializeOverrides();
         }
+
+        private void InitializeOverrides()
+        {
+            var overridesValue = ConfigurationManager.AppSettings["SystemDetectorOverrides"];
+
+            if (string.IsNullOrEmpty(overridesValue))
+                return;
+
+            foreach (var text in overridesValue.Split(OverrideSeparators, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var components = text.Split('=');
+                if (components.Length != 2)
+                    continue;
+
+                var hostname = components[0].Trim();
+                var version = components[1].Trim();
+
+                _overrideVersions[hostname] = AquariusServerVersion.Create(version);
+            }
+        }
+
+        private static readonly char[] OverrideSeparators = {',', ';'};
 
         public AquariusServerType GetAquariusServerType(string hostname)
         {
@@ -75,6 +101,12 @@ namespace Aquarius.Client
 
             if (_knownServerVersions.TryGetValue(hostname, out aquariusServerVersion))
                 return aquariusServerVersion;
+
+            if (_overrideVersions.TryGetValue(hostname, out aquariusServerVersion))
+            {
+                Log.WarnFormat("Version probe bypassed for hostname={0}. Using fakeVersion={1}", hostname, aquariusServerVersion);
+                return aquariusServerVersion;
+            }
 
             aquariusServerVersion = DetectServerVersion(hostname);
 

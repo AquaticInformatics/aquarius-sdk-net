@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using FluentAssertions;
 using NSubstitute;
@@ -22,7 +23,12 @@ namespace Aquarius.Client.UnitTests
         public void ForEachTest()
         {
             _mockServiceClient = Substitute.For<IServiceClient>();
-            _detector = new AquariusSystemDetector(s => _mockServiceClient);
+            _detector = CreateDetector();
+        }
+
+        private AquariusSystemDetector CreateDetector()
+        {
+            return new AquariusSystemDetector(s => _mockServiceClient);
         }
 
         private static readonly IEnumerable<TestCaseData> ValidApiVersions = new[]
@@ -156,6 +162,37 @@ namespace Aquarius.Client.UnitTests
             _mockServiceClient
                 .Get(Arg.Any<AquariusSystemDetector.GetVersion>())
                 .Returns(x => { throw new Exception("oops"); }, x => new AquariusSystemDetector.VersionResponse { ApiVersion = SomeLegacyApiVersion });            
+        }
+
+        [Test]
+        public void GetAquariusServerVersion_WithOverrideHostname_ReportsOverrideValueWithoutProbingServer()
+        {
+            var expectedMockVersion = AquariusServerVersion.Create("3.2.1.0");
+            var expectedOverrideVersion = AquariusServerVersion.Create("16.1.23");
+
+            expectedMockVersion.IsLessThan(expectedOverrideVersion).ShouldBeEquivalentTo(true, "Invalid test data");
+
+            var mockHostname = "server1";
+            var overrideHostname = "10.0.0.14";
+
+            SetupMockToReturnApiVersion(expectedMockVersion.ToString());
+
+            var overrideSetting = string.Format("server3=5.4 ; {0} = {1}", overrideHostname, expectedOverrideVersion);
+
+            overrideSetting.Contains(mockHostname).ShouldBeEquivalentTo(false, "Invalid test data");
+            overrideSetting.Contains(expectedMockVersion.ToString()).ShouldBeEquivalentTo(false, "Invalid test data");
+
+            ConfigurationManager.AppSettings["SystemDetectorOverrides"] = overrideSetting;
+
+            var detector = CreateDetector();
+
+            var mockVersion = detector.GetAquariusServerVersion(mockHostname);
+            var overrideVersion = detector.GetAquariusServerVersion(overrideHostname);
+
+            mockVersion.ToString().ShouldBeEquivalentTo(expectedMockVersion.ToString());
+            overrideVersion.ToString().ShouldBeEquivalentTo(expectedOverrideVersion.ToString());
+
+            AssertServiceClientCallsReceived(1);
         }
     }
 }
