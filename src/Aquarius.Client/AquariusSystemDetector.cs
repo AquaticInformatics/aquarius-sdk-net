@@ -105,6 +105,9 @@ namespace Aquarius.Client
             if (_overrideVersions.TryGetValue(hostname, out aquariusServerVersion))
             {
                 Log.WarnFormat("Version probe bypassed for hostname={0}. Using fakeVersion={1}", hostname, aquariusServerVersion);
+
+                _knownServerVersions.GetOrAdd(hostname, aquariusServerVersion);
+
                 return aquariusServerVersion;
             }
 
