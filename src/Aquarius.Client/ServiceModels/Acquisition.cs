@@ -107,7 +107,7 @@ namespace Aquarius.Client.ServiceModels.Acquisition
         ///Time range to update. Any existing points in the time range will be overwritten
         ///</summary>
         [ApiMember(Description="Time range to update. Any existing points in the time range will be overwritten", DataType="Interval", IsRequired=true)]
-        public string TimeRange { get; set; }
+        public Interval TimeRange { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/append", "POST")]
@@ -157,7 +157,7 @@ namespace Aquarius.Client.ServiceModels.Acquisition
         ///Time range to delete before appending points
         ///</summary>
         [ApiMember(Description="Time range to delete before appending points", DataType="Interval")]
-        public string TimeRange { get; set; }
+        public Interval TimeRange { get; set; }
     }
 
     public class ReflectedTimeSeriesPoint

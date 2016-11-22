@@ -706,7 +706,7 @@ namespace Aquarius.Client.ServiceModels.Publish
         ///Applied time utc
         ///</summary>
         [ApiMember(DataType="Instant", Description="Applied time utc")]
-        public string AppliedTimeUtc { get; set; }
+        public Instant AppliedTimeUtc { get; set; }
 
         ///<summary>
         ///User
@@ -1572,7 +1572,7 @@ namespace Aquarius.Client.ServiceModels.Publish
         ///Utc offset iso duration
         ///</summary>
         [ApiMember(DataType="Offset", Description="Utc offset iso duration")]
-        public string UtcOffsetIsoDuration { get; set; }
+        public Offset UtcOffsetIsoDuration { get; set; }
 
         ///<summary>
         ///Last modified

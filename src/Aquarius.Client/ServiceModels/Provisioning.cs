@@ -312,7 +312,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///ISO 8601 Duration Format
         ///</summary>
         [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
-        public string UtcOffset { get; set; }
+        public Offset UtcOffset { get; set; }
     }
 
     [Route("/locationfolders", "POST")]
@@ -749,7 +749,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///ISO 8601 Duration Format
         ///</summary>
         [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
-        public string GapTolerance { get; set; }
+        public Duration GapTolerance { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/calculated", "POST")]
@@ -784,7 +784,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///ISO 8601 Duration Format
         ///</summary>
         [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
-        public string GapTolerance { get; set; }
+        public Duration GapTolerance { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/statistical", "POST")]
@@ -874,7 +874,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///ISO 8601 Duration Format
         ///</summary>
         [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
-        public string UtcOffset { get; set; }
+        public Offset UtcOffset { get; set; }
 
         ///<summary>
         ///Publish
@@ -1479,13 +1479,13 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///UTC offset
         ///</summary>
         [ApiMember(DataType="Offset", Description="UTC offset")]
-        public string UtcOffset { get; set; }
+        public Offset UtcOffset { get; set; }
 
         ///<summary>
         ///Last modified
         ///</summary>
         [ApiMember(DataType="Instant", Description="Last modified")]
-        public string LastModified { get; set; }
+        public Instant LastModified { get; set; }
 
         ///<summary>
         ///Elevation units
@@ -1938,7 +1938,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///UTC offset
         ///</summary>
         [ApiMember(DataType="Offset", Description="UTC offset")]
-        public string UtcOffset { get; set; }
+        public Offset UtcOffset { get; set; }
 
         ///<summary>
         ///Computation identifier
@@ -1956,7 +1956,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///Last modified time
         ///</summary>
         [ApiMember(DataType="Instant", Description="Last modified time")]
-        public string LastModifiedTime { get; set; }
+        public Instant LastModifiedTime { get; set; }
 
         ///<summary>
         ///Extended attribute values
