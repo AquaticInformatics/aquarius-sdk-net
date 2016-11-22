@@ -658,7 +658,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///\#RRGGBB value in hexadecimal
         ///</summary>
-        [ApiMember(Description="\#RRGGBB value in hexadecimal", IsRequired=true)]
+        [ApiMember(Description="#RRGGBB value in hexadecimal", IsRequired=true)]
         public string Color { get; set; }
 
         ///<summary>
