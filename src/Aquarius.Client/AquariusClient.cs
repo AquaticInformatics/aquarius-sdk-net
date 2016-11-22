@@ -48,7 +48,7 @@ namespace Aquarius.Client
         public IServiceClient RegisterCustomClient(string baseUri)
         {
             if (string.IsNullOrWhiteSpace(baseUri))
-                throw new ArgumentOutOfRangeException("baseUri");
+                throw new ArgumentOutOfRangeException(nameof(baseUri));
 
             ServiceClientBase client;
             if (_customClients.TryGetValue(baseUri, out client))
@@ -65,7 +65,7 @@ namespace Aquarius.Client
             var jsonClient = client as JsonServiceClient;
 
             if (jsonClient == null)
-                throw new ArgumentException(@"Only JSON clients can be cloned", "client");
+                throw new ArgumentException(@"Only JSON clients can be cloned", nameof(client));
 
             return ClientHelper.CloneAuthenticatedClient(jsonClient, new Uri(jsonClient.BaseUri).PathAndQuery);
         }

@@ -44,7 +44,7 @@ namespace Aquarius.Client.Helpers
         public static JsonServiceClient CloneAuthenticatedClient(ServiceClientBase client, string baseUri)
         {
             if (client == null)
-                throw new ArgumentNullException("client");
+                throw new ArgumentNullException(nameof(client));
 
             var builder = new UriBuilder(client.BaseUri);
             builder.Path = baseUri;

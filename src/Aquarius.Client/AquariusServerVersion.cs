@@ -15,12 +15,12 @@ namespace Aquarius.Client
         private AquariusServerVersion(string apiVersion)
         {
             if (apiVersion == null)
-                throw new ArgumentNullException("apiVersion");
+                throw new ArgumentNullException(nameof(apiVersion));
 
             _versionComponents = apiVersion.Split('.').Select(ushort.Parse).ToArray();
 
             if (!_versionComponents.Any())
-                throw new ArgumentOutOfRangeException("apiVersion", apiVersion);
+                throw new ArgumentOutOfRangeException(nameof(apiVersion), apiVersion);
 
             AdjustMajorVersion();
         }
