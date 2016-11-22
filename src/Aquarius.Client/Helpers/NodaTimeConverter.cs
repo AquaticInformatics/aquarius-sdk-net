@@ -26,7 +26,7 @@ namespace Aquarius.Client.Helpers
                 return MaxDateTimeUtc;
 
             if ((instant <= MinDateTimeInstant) || (instant >= MaxDateTimeInstant))
-                throw new ArgumentOutOfRangeException("instant", "Time not within allowable range, MinValue, or MaxValue");
+                throw new ArgumentOutOfRangeException(nameof(instant), "Time not within allowable range, MinValue, or MaxValue");
 
             return instant.ToDateTimeUtc();
         }
@@ -143,7 +143,7 @@ namespace Aquarius.Client.Helpers
         {
             if (IsOffsetHoursInvalid(utcOffsetInHours))
             {
-                throw new ArgumentOutOfRangeException("utcOffsetInHours");
+                throw new ArgumentOutOfRangeException(nameof(utcOffsetInHours));
             }
 
             var offsetTicks = TimeSpan.FromHours(utcOffsetInHours).Ticks;
@@ -157,7 +157,7 @@ namespace Aquarius.Client.Helpers
 
             if (IsOffsetHoursInvalid(offsetInHours))
             {
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
             return offsetInHours;
@@ -201,7 +201,7 @@ namespace Aquarius.Client.Helpers
 
             if ((offsetDateTime.LocalDateTime <= MinDateTimeLocalDateTime) ||
                 (offsetDateTime.LocalDateTime >= MaxDateTimeLocalDateTime))
-                throw new ArgumentOutOfRangeException("offsetDateTime",
+                throw new ArgumentOutOfRangeException(nameof(offsetDateTime),
                     "Time not within allowable range, MinValue, or MaxValue");
 
             return offsetDateTime.ToDateTimeOffset();

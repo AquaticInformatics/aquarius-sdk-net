@@ -50,7 +50,7 @@ namespace Aquarius.Client
             if (uri != null)
                 return;
 
-            throw new ArgumentNullException("uri");
+            throw new ArgumentNullException(nameof(uri));
         }
 
         public string ServerName
@@ -69,7 +69,7 @@ namespace Aquarius.Client
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
 
                 var uriText = value;
 
@@ -91,7 +91,7 @@ namespace Aquarius.Client
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
 
 
                 var builder = new UriBuilder(_uri);
@@ -118,7 +118,7 @@ namespace Aquarius.Client
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
 
                 var builder = new UriBuilder(_uri);
 
