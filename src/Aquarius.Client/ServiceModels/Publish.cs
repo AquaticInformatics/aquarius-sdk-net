@@ -1,8 +1,8 @@
 /* Options:
-Date: 2016-11-21 17:27:03
+Date: 2016-12-14 10:01:26
 Version: 4.50
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://doug-vm2012r2/AQUARIUS/Publish/v2
+BaseUrl: http://autoserver12/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.Client.ServiceModels.Publish
 MakePartial: False
@@ -3185,27 +3185,27 @@ namespace Aquarius.Client.ServiceModels.Publish
         public DoubleWithDisplay VolumeChange { get; set; }
     }
 
-    public class CurrentMeterCalibration
+    public class ActiveMeterCalibration
     {
-        public CurrentMeterCalibration()
+        public ActiveMeterCalibration()
         {
-            Equations = new List<CurrentMeterCalibrationEquation>{};
+            Equations = new List<ActiveMeterCalibrationEquation>{};
         }
 
         ///<summary>
         ///Visit date
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Visit date")]
-        public DateTimeOffset VisitDate { get; set; }
+        [ApiMember(DataType="DateTimeOffset", Description="First used date")]
+        public DateTimeOffset FirstUsedDate { get; set; }
 
         ///<summary>
         ///Equations
         ///</summary>
-        [ApiMember(DataType="Array<CurrentMeterCalibrationEquation>", Description="Equations")]
-        public List<CurrentMeterCalibrationEquation> Equations { get; set; }
+        [ApiMember(DataType="Array<ActiveMeterCalibrationEquation>", Description="Equations")]
+        public List<ActiveMeterCalibrationEquation> Equations { get; set; }
     }
 
-    public class CurrentMeterCalibrationEquation
+    public class ActiveMeterCalibrationEquation
     {
         ///<summary>
         ///Range start
@@ -3238,11 +3238,11 @@ namespace Aquarius.Client.ServiceModels.Publish
         public string InterceptUnit { get; set; }
     }
 
-    public class CurrentMeterDetails
+    public class ActiveMeterDetails
     {
-        public CurrentMeterDetails()
+        public ActiveMeterDetails()
         {
-            MeterCalibrations = new List<CurrentMeterCalibration>{};
+            MeterCalibrations = new List<ActiveMeterCalibration>{};
         }
 
         ///<summary>
@@ -3290,8 +3290,8 @@ namespace Aquarius.Client.ServiceModels.Publish
         ///<summary>
         ///Meter calibrations
         ///</summary>
-        [ApiMember(DataType="Array<CurrentMeterCalibration>", Description="Meter calibrations")]
-        public List<CurrentMeterCalibration> MeterCalibrations { get; set; }
+        [ApiMember(DataType="Array<ActiveMeterCalibration>", Description="Meter calibrations")]
+        public List<ActiveMeterCalibration> MeterCalibrations { get; set; }
     }
 
     public enum AdjustmentType
@@ -3602,6 +3602,12 @@ namespace Aquarius.Client.ServiceModels.Publish
         NonStandard,
     }
 
+    [Route("/GetActiveMetersAndCalibrations", "GET")]
+    public class ActiveMetersAndCalibrationsServiceRequest
+        : IReturn<ActiveMetersAndCalibrationsServiceResponse>
+    {
+    }
+
     [Route("/GetApprovalList", "GET")]
     public class ApprovalListServiceRequest
         : IReturn<ApprovalListServiceResponse>
@@ -3629,12 +3635,6 @@ namespace Aquarius.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with an EndTime at or before the QueryTo time")]
         public DateTimeOffset? QueryTo { get; set; }
-    }
-
-    [Route("/GetCurrentMetersAndCalibrations", "GET")]
-    public class CurrentMetersAndCalibrationsServiceRequest
-        : IReturn<CurrentMetersAndCalibrationsServiceResponse>
-    {
     }
 
     [Route("/GetDownchainProcessorListByRatingModel", "GET")]
@@ -4400,6 +4400,32 @@ namespace Aquarius.Client.ServiceModels.Publish
         public DateTimeOffset? QueryTo { get; set; }
     }
 
+    public class ActiveMetersAndCalibrationsServiceResponse
+    {
+        public ActiveMetersAndCalibrationsServiceResponse()
+        {
+            ActiveMeterDetails = new List<ActiveMeterDetails> { };
+        }
+
+        ///<summary>
+        ///Response version
+        ///</summary>
+        [ApiMember(DataType = "integer", Description = "Response version")]
+        public int ResponseVersion { get; set; }
+
+        ///<summary>
+        ///Response time
+        ///</summary>
+        [ApiMember(DataType = "DateTimeOffset", Description = "Response time")]
+        public DateTimeOffset ResponseTime { get; set; }
+
+        ///<summary>
+        ///Active meter details
+        ///</summary>
+        [ApiMember(DataType = "Array<ActiveMeterDetails>", Description = "Active meter details")]
+        public List<ActiveMeterDetails> ActiveMeterDetails { get; set; }
+    }
+
     public class ApprovalListServiceResponse
     {
         public ApprovalListServiceResponse()
@@ -4462,32 +4488,6 @@ namespace Aquarius.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="Array<Correction>", Description="Corrections")]
         public List<Correction> Corrections { get; set; }
-    }
-
-    public class CurrentMetersAndCalibrationsServiceResponse
-    {
-        public CurrentMetersAndCalibrationsServiceResponse()
-        {
-            CurrentMeterDetails = new List<CurrentMeterDetails>{};
-        }
-
-        ///<summary>
-        ///Response version
-        ///</summary>
-        [ApiMember(DataType="integer", Description="Response version")]
-        public int ResponseVersion { get; set; }
-
-        ///<summary>
-        ///Response time
-        ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Response time")]
-        public DateTimeOffset ResponseTime { get; set; }
-
-        ///<summary>
-        ///Current meter details
-        ///</summary>
-        [ApiMember(DataType="Array<CurrentMeterDetails>", Description="Current meter details")]
-        public List<CurrentMeterDetails> CurrentMeterDetails { get; set; }
     }
 
     public class EffectiveRatingCurveServiceResponse
@@ -5491,6 +5491,6 @@ namespace Aquarius.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("16.3.89.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("16.3.115.0");
     }
 }

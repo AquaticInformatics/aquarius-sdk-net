@@ -1,8 +1,8 @@
 /* Options:
-Date: 2016-11-21 17:27:04
+Date: 2016-12-14 10:01:38
 Version: 4.50
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://doug-vm2012r2/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver12/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -2221,6 +2221,6 @@ namespace Aquarius.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("16.3.89.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("16.3.115.0");
     }
 }
