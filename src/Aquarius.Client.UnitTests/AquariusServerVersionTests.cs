@@ -56,7 +56,8 @@ namespace Aquarius.Client.UnitTests
         private static readonly IEnumerable<TestCaseData> VersionComparisonTests = new[]
         {
             new TestCaseData("Same developer version", "0.0.0.0", "0.0.0.0", false, 0),
-            new TestCaseData("Differ in major version", "0.0.0.0", "15", true, -1),
+            new TestCaseData("Developer version is always considered newer than a real version", "0.0.0.0", "15", false, 1),
+            new TestCaseData("Real version is always considered earlier than a developer version", "15", "0.0.0.0", true, -1),
             new TestCaseData("More components is always greater", "2", "2.1", true, -1),
             new TestCaseData("3X is less than NG", "3.9.123", "15.4.123", true, -1),
             new TestCaseData("NG is greater than NG", "15.4.123", "3.9.123", false, 1),
@@ -86,6 +87,24 @@ namespace Aquarius.Client.UnitTests
 
                 actualCompare2With1.ShouldBeEquivalentTo(1, "ver1 < ver2 should imply that ver2 > ver1");
             }
+        }
+
+        private static readonly IEnumerable<TestCaseData> IsDeveloperBuildTests = new[]
+        {
+            new TestCaseData("Simplest developer build", "0", true),
+            new TestCaseData("Common developer build", "0.0.0.0", true),
+            new TestCaseData("Super early alpha", "0.1", false),
+            new TestCaseData("Early 3.X build", "3.6", false),
+            new TestCaseData("Early NG build", "14.4", false),
+        };
+
+        [TestCaseSource(nameof(IsDeveloperBuildTests))]
+        public void IsDeveloperBuild_DetectsCorrectly(string reason, string versionText, bool expected)
+        {
+            var version = AquariusServerVersion.Create(versionText);
+            var actual = version.IsDeveloperBuild();
+
+            actual.ShouldBeEquivalentTo(expected, reason);
         }
     }
 }

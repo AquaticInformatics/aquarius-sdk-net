@@ -44,6 +44,16 @@ namespace Aquarius.Client
 
         public bool IsLessThan(AquariusServerVersion other)
         {
+            if (IsDeveloperBuild() && !other.IsDeveloperBuild())
+            {
+                return false;
+            }
+
+            if (!IsDeveloperBuild() && other.IsDeveloperBuild())
+            {
+                return true;
+            }
+
             for (var i = 0; i < _versionComponents.Length; ++i)
             {
                 if (i >= other._versionComponents.Length)
@@ -68,6 +78,11 @@ namespace Aquarius.Client
                 return 1;
 
             return 0;
+        }
+
+        public bool IsDeveloperBuild()
+        {
+            return _versionComponents.All(component => component == 0);
         }
     }
 }
