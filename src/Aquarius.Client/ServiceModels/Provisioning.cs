@@ -1,5 +1,5 @@
 /* Options:
-Date: 2016-12-14 10:01:38
+Date: 2017-02-14 12:11:22
 Version: 4.50
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver12/AQUARIUS/Provisioning/v1
@@ -35,12 +35,6 @@ using Aquarius.Client.ServiceModels.Provisioning;
 
 namespace Aquarius.Client.ServiceModels.Provisioning
 {
-
-    public class ExtendedAttributeFieldValue
-    {
-        public string ColumnIdentifier { get; set; }
-        public string Value { get; set; }
-    }
 
     public enum InterpolationType
     {
@@ -209,25 +203,25 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Location identifier
         ///</summary>
-        [ApiMember(Description="Location identifier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Location identifier")]
         public string LocationIdentifier { get; set; }
 
         ///<summary>
         ///Location name
         ///</summary>
-        [ApiMember(Description="Location name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Location name")]
         public string LocationName { get; set; }
 
         ///<summary>
         ///Location path
         ///</summary>
-        [ApiMember(Description="Location path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Location path")]
         public string LocationPath { get; set; }
 
         ///<summary>
         ///Location type
         ///</summary>
-        [ApiMember(Description="Location type", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Location type")]
         public string LocationType { get; set; }
 
         ///<summary>
@@ -263,8 +257,8 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeFieldValue>", Description="Extended attribute values")]
-        public IList<ExtendedAttributeFieldValue> ExtendedAttributeValues { get; set; }
+        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
     public class LocationFolderWriteBase
@@ -398,13 +392,13 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Method code
         ///</summary>
-        [ApiMember(Description="Method code", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Method code")]
         public string MethodCode { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
-        [ApiMember(Description="Display name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Display name")]
         public string DisplayName { get; set; }
 
         ///<summary>
@@ -416,7 +410,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the method's parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the method's parameter", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the method's parameter", DataType="string")]
         public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
@@ -455,25 +449,25 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The Relying Party client identifier
         ///</summary>
-        [ApiMember(Description="The Relying Party client identifier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The Relying Party client identifier")]
         public string ClientIdentifier { get; set; }
 
         ///<summary>
         ///The Relying Party client secret
         ///</summary>
-        [ApiMember(Description="The Relying Party client secret", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The Relying Party client secret")]
         public string ClientSecret { get; set; }
 
         ///<summary>
         ///The redirection URI for the authorization response; e.g. http://my-domain/AQUARIUS/apps/v1/auth/openidconnect
         ///</summary>
-        [ApiMember(Description="The redirection URI for the authorization response; e.g. http://my-domain/AQUARIUS/apps/v1/auth/openidconnect", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The redirection URI for the authorization response; e.g. http://my-domain/AQUARIUS/apps/v1/auth/openidconnect")]
         public string RedirectUri { get; set; }
 
         ///<summary>
         ///If not specified, defaults to openid
         ///</summary>
-        [ApiMember(DataType="IList", Description="If not specified, defaults to openid")]
+        [ApiMember(Description="If not specified, defaults to openid", DataType="IList")]
         public IList<string> Scopes { get; set; }
 
         ///<summary>
@@ -490,7 +484,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///An https URI specifying the fully qualified host name of the issuer
         ///</summary>
-        [ApiMember(Description="An https URI specifying the fully qualified host name of the issuer", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="An https URI specifying the fully qualified host name of the issuer")]
         public string IssuerIdentifier { get; set; }
     }
 
@@ -507,7 +501,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the parameter", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the parameter", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -518,7 +512,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the parameter", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the parameter", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -533,49 +527,49 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Parameter id
         ///</summary>
-        [ApiMember(Description="Parameter id", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Parameter id")]
         public string ParameterId { get; set; }
 
         ///<summary>
         ///The display ID of the parameter
         ///</summary>
-        [ApiMember(Description="The display ID of the parameter", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The display ID of the parameter")]
         public string Identifier { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
-        [ApiMember(Description="Display name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Display name")]
         public string DisplayName { get; set; }
 
         ///<summary>
         ///Unit group identifier
         ///</summary>
-        [ApiMember(Description="Unit group identifier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unit group identifier")]
         public string UnitGroupIdentifier { get; set; }
 
         ///<summary>
         ///Unit identifier
         ///</summary>
-        [ApiMember(Description="Unit identifier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unit identifier")]
         public string UnitIdentifier { get; set; }
 
         ///<summary>
         ///Min value
         ///</summary>
-        [ApiMember(DataType="double", Description="Min value")]
+        [ApiMember(Description="Min value", DataType="double")]
         public double? MinValue { get; set; }
 
         ///<summary>
         ///Max value
         ///</summary>
-        [ApiMember(DataType="double", Description="Max value")]
+        [ApiMember(Description="Max value", DataType="double")]
         public double? MaxValue { get; set; }
 
         ///<summary>
         ///Interpolation type
         ///</summary>
-        [ApiMember(DataType="integer", Description="Interpolation type", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Interpolation type", DataType="integer")]
         public int? InterpolationType { get; set; }
 
         ///<summary>
@@ -598,7 +592,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the parameter", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the parameter", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -609,7 +603,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Grade code", ParameterType="path", DataType="integer")]
         public int GradeCode { get; set; }
     }
 
@@ -620,7 +614,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Grade code", ParameterType="path", DataType="integer")]
         public int GradeCode { get; set; }
     }
 
@@ -643,7 +637,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Grade code", ParameterType="path", DataType="integer")]
         public int? GradeCode { get; set; }
     }
 
@@ -652,19 +646,19 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Grade code", DataType="integer")]
         public int? GradeCode { get; set; }
 
         ///<summary>
         ///\#RRGGBB value in hexadecimal
         ///</summary>
-        [ApiMember(Description="#RRGGBB value in hexadecimal", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="RRGGBB value in hexadecimal")]
         public string Color { get; set; }
 
         ///<summary>
         ///Localized short display name
         ///</summary>
-        [ApiMember(Description="Localized short display name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized short display name")]
         public string DisplayName { get; set; }
 
         ///<summary>
@@ -681,7 +675,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Identifier of the standard daturm
         ///</summary>
-        [ApiMember(Description="Identifier of the standard daturm", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Identifier of the standard daturm", ParameterType="path")]
         public string Identifier { get; set; }
     }
 
@@ -702,7 +696,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Identifier of the standard datum
         ///</summary>
-        [ApiMember(Description="Identifier of the standard datum", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Identifier of the standard datum")]
         public string Identifier { get; set; }
     }
 
@@ -713,7 +707,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the time series", ParameterType="path", DataType="string")]
         public Guid TimeSeriesUniqueId { get; set; }
     }
 
@@ -725,7 +719,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the location", ParameterType="path", DataType="string")]
         public Guid LocationUniqueId { get; set; }
     }
 
@@ -736,8 +730,14 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the time series", ParameterType="path", DataType="string")]
         public Guid TimeSeriesUniqueId { get; set; }
+    }
+
+    [Route("/timeseries/extendedattributes", "GET")]
+    public class GetTimeSeriesExtendedAttributes
+        : IReturn<ExtendedAttributeFieldsResponse>
+    {
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/basic", "POST")]
@@ -765,13 +765,13 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master", DataType="Array<string>")]
         public List<Guid> TimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Formula
         ///</summary>
-        [ApiMember(Description="Formula", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Formula")]
         public string Formula { get; set; }
     }
 
@@ -795,7 +795,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the time series", DataType="string")]
         public Guid TimeSeriesUniqueId { get; set; }
 
         [ApiMember(IsRequired=true)]
@@ -804,32 +804,79 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///New value location
         ///</summary>
-        [ApiMember(DataType="NewValueLocationType", Description="New value location", IsRequired=true)]
+        [ApiMember(Description="New value location", DataType="NewValueLocationType")]
         public NewValueLocationType NewValueLocation { get; set; }
 
         ///<summary>
         ///Require minimum coverage
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Require minimum coverage")]
+        [ApiMember(Description="Require minimum coverage", DataType="boolean")]
         public bool? RequireMinimumCoverage { get; set; }
 
         ///<summary>
         ///Coverage minimum percentage
         ///</summary>
-        [ApiMember(DataType="double", Description="Coverage minimum percentage")]
+        [ApiMember(Description="Coverage minimum percentage", DataType="double")]
         public double? CoverageMinimumPercentage { get; set; }
 
         ///<summary>
         ///Partial coverage grade
         ///</summary>
-        [ApiMember(DataType="integer", Description="Partial coverage grade")]
+        [ApiMember(Description="Partial coverage grade", DataType="integer")]
         public int? PartialCoverageGrade { get; set; }
 
         ///<summary>
         ///Observation offset in minutes
         ///</summary>
-        [ApiMember(DataType="integer", Description="Observation offset in minutes")]
+        [ApiMember(Description="Observation offset in minutes", DataType="integer")]
         public int? ObservationOffsetInMinutes { get; set; }
+    }
+
+    [Route("/timeseries/{TimeSeriesUniqueId}", "PUT")]
+    public class PutTimeSeries
+        : IReturn<TimeSeries>
+    {
+        ///<summary>
+        ///Unique ID of the time series
+        ///</summary>
+        [ApiMember(IsRequired=true, Description="Unique ID of the time series", ParameterType="path", DataType="string")]
+        public Guid TimeSeriesUniqueId { get; set; }
+
+        ///<summary>
+        ///Label
+        ///</summary>
+        [ApiMember(IsRequired=true, Description="Label")]
+        public string Label { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///Publish
+        ///</summary>
+        [ApiMember(Description="Publish", DataType="boolean")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+
+        ///<summary>
+        ///Extended attribute values
+        ///</summary>
+        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
     public class TimeSeriesBase
@@ -837,31 +884,31 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location for which a time series is to be created
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the location for which a time series is to be created", DataType="string")]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
         ///Label
         ///</summary>
-        [ApiMember(Description="Label", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Label")]
         public string Label { get; set; }
 
         ///<summary>
         ///The ID of the parameter
         ///</summary>
-        [ApiMember(Description="The ID of the parameter", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The ID of the parameter")]
         public string Parameter { get; set; }
 
         ///<summary>
         ///The ID of the unit
         ///</summary>
-        [ApiMember(Description="The ID of the unit", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The ID of the unit")]
         public string Unit { get; set; }
 
         ///<summary>
         ///Interpolation type
         ///</summary>
-        [ApiMember(DataType="InterpolationType", Description="Interpolation type", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Interpolation type", DataType="InterpolationType")]
         public InterpolationType InterpolationType { get; set; }
 
         ///<summary>
@@ -879,7 +926,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Publish
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Publish")]
+        [ApiMember(Description="Publish", DataType="boolean")]
         public bool Publish { get; set; }
 
         ///<summary>
@@ -897,7 +944,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Method
         ///</summary>
-        [ApiMember(Description="Method", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Method")]
         public string Method { get; set; }
 
         [ApiMember]
@@ -912,8 +959,8 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeFieldValue>", Description="Extended attribute values")]
-        public IList<ExtendedAttributeFieldValue> ExtendedAttributeValues { get; set; }
+        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
     [Route("/units/{UniqueId}", "DELETE")]
@@ -923,7 +970,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -934,7 +981,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit group", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit group", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -945,7 +992,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit group", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit group", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -956,7 +1003,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -967,7 +1014,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit group", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit group", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -990,7 +1037,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit group", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit group", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1001,13 +1048,13 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Group identifier
         ///</summary>
-        [ApiMember(Description="Group identifier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Group identifier")]
         public string GroupIdentifier { get; set; }
 
         ///<summary>
         ///Unit identifier
         ///</summary>
-        [ApiMember(Description="Unit identifier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unit identifier")]
         public string UnitIdentifier { get; set; }
     }
 
@@ -1024,31 +1071,31 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Localized name
         ///</summary>
-        [ApiMember(Description="Localized name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized name")]
         public string DisplayName { get; set; }
 
         ///<summary>
         ///Base unit identifier
         ///</summary>
-        [ApiMember(Description="Base unit identifier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Base unit identifier")]
         public string BaseUnitIdentifier { get; set; }
 
         ///<summary>
         ///Localized short name or symbol
         ///</summary>
-        [ApiMember(Description="Localized short name or symbol", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized short name or symbol")]
         public string BaseUnitSymbol { get; set; }
 
         ///<summary>
         ///Localized singular name
         ///</summary>
-        [ApiMember(Description="Localized singular name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized singular name")]
         public string BaseUnitSingularName { get; set; }
 
         ///<summary>
         ///Localized plural name
         ///</summary>
-        [ApiMember(Description="Localized plural name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized plural name")]
         public string BaseUnitPluralName { get; set; }
     }
 
@@ -1059,7 +1106,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1070,7 +1117,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the unit group", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the unit group", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1085,31 +1132,31 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Base multiplier
         ///</summary>
-        [ApiMember(DataType="double", Description="Base multiplier", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Base multiplier", DataType="double")]
         public double? BaseMultiplier { get; set; }
 
         ///<summary>
         ///Base offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Base offset", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Base offset", DataType="double")]
         public double? BaseOffset { get; set; }
 
         ///<summary>
         ///Localized short name or symbol
         ///</summary>
-        [ApiMember(Description="Localized short name or symbol", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized short name or symbol")]
         public string Symbol { get; set; }
 
         ///<summary>
         ///Localized singular name
         ///</summary>
-        [ApiMember(Description="Localized singular name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized singular name")]
         public string SingularName { get; set; }
 
         ///<summary>
         ///Localized plural name
         ///</summary>
-        [ApiMember(Description="Localized plural name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Localized plural name")]
         public string PluralName { get; set; }
     }
 
@@ -1118,43 +1165,43 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Current dimension
         ///</summary>
-        [ApiMember(DataType="integer", Description="Current dimension")]
+        [ApiMember(Description="Current dimension", DataType="integer")]
         public int? CurrentDimension { get; set; }
 
         ///<summary>
         ///Intensity dimension
         ///</summary>
-        [ApiMember(DataType="integer", Description="Intensity dimension")]
+        [ApiMember(Description="Intensity dimension", DataType="integer")]
         public int? IntensityDimension { get; set; }
 
         ///<summary>
         ///Length dimension
         ///</summary>
-        [ApiMember(DataType="integer", Description="Length dimension")]
+        [ApiMember(Description="Length dimension", DataType="integer")]
         public int? LengthDimension { get; set; }
 
         ///<summary>
         ///Mass dimension
         ///</summary>
-        [ApiMember(DataType="integer", Description="Mass dimension")]
+        [ApiMember(Description="Mass dimension", DataType="integer")]
         public int? MassDimension { get; set; }
 
         ///<summary>
         ///Substance dimension
         ///</summary>
-        [ApiMember(DataType="integer", Description="Substance dimension")]
+        [ApiMember(Description="Substance dimension", DataType="integer")]
         public int? SubstanceDimension { get; set; }
 
         ///<summary>
         ///Temperature dimension
         ///</summary>
-        [ApiMember(DataType="integer", Description="Temperature dimension")]
+        [ApiMember(Description="Temperature dimension", DataType="integer")]
         public int? TemperatureDimension { get; set; }
 
         ///<summary>
         ///Time dimension
         ///</summary>
-        [ApiMember(DataType="integer", Description="Time dimension")]
+        [ApiMember(Description="Time dimension", DataType="integer")]
         public int? TimeDimension { get; set; }
     }
 
@@ -1165,7 +1212,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the user", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the user", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1176,7 +1223,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the user", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the user", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1193,7 +1240,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
     }
 
@@ -1204,7 +1251,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Password
         ///</summary>
-        [ApiMember(Description="Password", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Password")]
         public string Password { get; set; }
     }
 
@@ -1215,7 +1262,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique identifier within the issuer for the end-user
         ///</summary>
-        [ApiMember(Description="Unique identifier within the issuer for the end-user", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique identifier within the issuer for the end-user")]
         public string SubjectIdentifier { get; set; }
     }
 
@@ -1226,7 +1273,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
     }
 
@@ -1237,7 +1284,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
     }
 
@@ -1248,7 +1295,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Password
         ///</summary>
-        [ApiMember(Description="Password", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Password")]
         public string Password { get; set; }
     }
 
@@ -1259,7 +1306,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Password
         ///</summary>
-        [ApiMember(Description="Password", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Password")]
         public string Password { get; set; }
     }
 
@@ -1270,7 +1317,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique identifier within the issuer for the end-user
         ///</summary>
-        [ApiMember(Description="Unique identifier within the issuer for the end-user", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique identifier within the issuer for the end-user")]
         public string SubjectIdentifier { get; set; }
     }
 
@@ -1281,7 +1328,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique identifier within the issuer for the end-user
         ///</summary>
-        [ApiMember(Description="Unique identifier within the issuer for the end-user", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique identifier within the issuer for the end-user")]
         public string SubjectIdentifier { get; set; }
     }
 
@@ -1290,7 +1337,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the user", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the user", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1300,7 +1347,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the user", ParameterType="path", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Unique ID of the user", ParameterType="path", DataType="string")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1309,25 +1356,25 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Login name
         ///</summary>
-        [ApiMember(Description="Login name", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Login name")]
         public string LoginName { get; set; }
 
         ///<summary>
         ///Inactive users cannot log in and are not counted in licensing
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Inactive users cannot log in and are not counted in licensing", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Inactive users cannot log in and are not counted in licensing", DataType="boolean")]
         public bool Active { get; set; }
 
         ///<summary>
         ///Allow user to run AQUARIUS Manager and edit system settings
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Allow user to run AQUARIUS Manager and edit system settings", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Allow user to run AQUARIUS Manager and edit system settings", DataType="boolean")]
         public bool CanConfigureSystem { get; set; }
 
         ///<summary>
         ///Allow user to launch the Rating Development Toolbox
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Allow user to launch the Rating Development Toolbox", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Allow user to launch the Rating Development Toolbox", DataType="boolean")]
         public bool CanLaunchRatingDevelopmentToolbox { get; set; }
 
         ///<summary>
@@ -1349,12 +1396,45 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         public string Email { get; set; }
     }
 
+    public class ExtendedAttributeField
+    {
+        public string ColumnIdentifier { get; set; }
+        public string DisplayName { get; set; }
+        public ExtendedAttributeFieldType FieldType { get; set; }
+        public bool CanBeEmpty { get; set; }
+        public bool IsReadOnly { get; set; }
+        public short? NumericPrecision { get; set; }
+        public short? NumericScale { get; set; }
+        public int? ColumnSize { get; set; }
+        public IReadOnlyList<string> ValueOptions { get; set; }
+    }
+
+    public class ExtendedAttributeFieldsResponse
+    {
+        public IList<ExtendedAttributeField> Results { get; set; }
+    }
+
+    public enum ExtendedAttributeFieldType
+    {
+        Boolean,
+        DateTime,
+        Number,
+        String,
+        StringOption,
+    }
+
+    public class ExtendedAttributeValue
+    {
+        public string ColumnIdentifier { get; set; }
+        public string Value { get; set; }
+    }
+
     public class Grade
     {
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code")]
+        [ApiMember(Description="Grade code", DataType="integer")]
         public int GradeCode { get; set; }
 
         ///<summary>
@@ -1378,7 +1458,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the grade is required by the system
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if the grade is required by the system")]
+        [ApiMember(Description="True if the grade is required by the system", DataType="boolean")]
         public bool IsSystem { get; set; }
     }
 
@@ -1392,7 +1472,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of grades
         ///</summary>
-        [ApiMember(DataType="Array<Grade>", Description="The list of grades")]
+        [ApiMember(Description="The list of grades", DataType="Array<Grade>")]
         public List<Grade> Results { get; set; }
     }
 
@@ -1413,7 +1493,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Value
         ///</summary>
-        [ApiMember(DataType="integer", Description="Value")]
+        [ApiMember(Description="Value", DataType="integer")]
         public int Value { get; set; }
     }
 
@@ -1427,16 +1507,26 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of interpolation types
         ///</summary>
-        [ApiMember(DataType="Array<InterpolationTypeEntry>", Description="The list of interpolation types")]
+        [ApiMember(Description="The list of interpolation types", DataType="Array<InterpolationTypeEntry>")]
         public List<InterpolationTypeEntry> Results { get; set; }
     }
 
     public class Location
+        : LocationCoreAttributes
+    {
+        ///<summary>
+        ///Extended attribute values
+        ///</summary>
+        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+    }
+
+    public class LocationCoreAttributes
     {
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location")]
+        [ApiMember(Description="Unique ID of the location", DataType="string")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1466,13 +1556,13 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Longitude
         ///</summary>
-        [ApiMember(DataType="double", Description="Longitude")]
+        [ApiMember(Description="Longitude", DataType="double")]
         public double? Longitude { get; set; }
 
         ///<summary>
         ///Latitude
         ///</summary>
-        [ApiMember(DataType="double", Description="Latitude")]
+        [ApiMember(Description="Latitude", DataType="double")]
         public double? Latitude { get; set; }
 
         ///<summary>
@@ -1496,7 +1586,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Elevation
         ///</summary>
-        [ApiMember(DataType="double", Description="Elevation")]
+        [ApiMember(Description="Elevation", DataType="double")]
         public double? Elevation { get; set; }
 
         ///<summary>
@@ -1504,12 +1594,6 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Description")]
         public string Description { get; set; }
-
-        ///<summary>
-        ///Extended attribute values
-        ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeFieldValue>", Description="Extended attribute values")]
-        public IList<ExtendedAttributeFieldValue> ExtendedAttributeValues { get; set; }
     }
 
     public class LocationFolder
@@ -1517,7 +1601,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location folder
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location folder")]
+        [ApiMember(Description="Unique ID of the location folder", DataType="string")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1541,7 +1625,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parent location folder
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the parent location folder")]
+        [ApiMember(Description="Unique ID of the parent location folder", DataType="string")]
         public Guid? ParentLocationFolderUniqueId { get; set; }
 
         ///<summary>
@@ -1561,7 +1645,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of location folders
         ///</summary>
-        [ApiMember(DataType="Array<LocationFolder>", Description="The list of location folders")]
+        [ApiMember(Description="The list of location folders", DataType="Array<LocationFolder>")]
         public List<LocationFolder> Results { get; set; }
     }
 
@@ -1569,14 +1653,14 @@ namespace Aquarius.Client.ServiceModels.Provisioning
     {
         public LocationsResponse()
         {
-            Results = new List<Location>{};
+            Results = new List<LocationCoreAttributes>{};
         }
 
         ///<summary>
         ///The list of locations
         ///</summary>
-        [ApiMember(DataType="Array<Location>", Description="The list of locations")]
-        public List<Location> Results { get; set; }
+        [ApiMember(Description="The list of locations", DataType="Array<Location>")]
+        public List<LocationCoreAttributes> Results { get; set; }
     }
 
     public class LocationType
@@ -1602,8 +1686,14 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location type
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location type")]
+        [ApiMember(Description="Unique ID of the location type", DataType="string")]
         public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Extended attribute field definitions for this location type
+        ///</summary>
+        [ApiMember(Description="Extended attribute field definitions for this location type", DataType="Array<ExtendedAttributeField>")]
+        public IList<ExtendedAttributeField> ExtendedAttributeFields { get; set; }
     }
 
     public class LocationTypesResponse
@@ -1616,7 +1706,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of location types
         ///</summary>
-        [ApiMember(DataType="Array<LocationType>", Description="The list of location types")]
+        [ApiMember(Description="The list of location types", DataType="Array<LocationType>")]
         public List<LocationType> Results { get; set; }
     }
 
@@ -1649,7 +1739,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the parameter")]
+        [ApiMember(Description="Unique ID of the parameter", DataType="string")]
         public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
@@ -1667,7 +1757,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the monitoring method is required by system
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if the monitoring method is required by system")]
+        [ApiMember(Description="True if the monitoring method is required by system", DataType="boolean")]
         public bool System { get; set; }
     }
 
@@ -1681,7 +1771,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of monitoring methods
         ///</summary>
-        [ApiMember(DataType="Array<MonitoringMethod>", Description="The list of monitoring methods")]
+        [ApiMember(Description="The list of monitoring methods", DataType="Array<MonitoringMethod>")]
         public List<MonitoringMethod> Results { get; set; }
     }
 
@@ -1714,13 +1804,13 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Scopes
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Scopes")]
+        [ApiMember(Description="Scopes", DataType="Array<string>")]
         public List<string> Scopes { get; set; }
 
         ///<summary>
         ///Hosted domains
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Hosted domains")]
+        [ApiMember(Description="Hosted domains", DataType="Array<string>")]
         public List<string> HostedDomains { get; set; }
     }
 
@@ -1729,7 +1819,7 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the parameter")]
+        [ApiMember(Description="Unique ID of the parameter", DataType="string")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1961,8 +2051,8 @@ namespace Aquarius.Client.ServiceModels.Provisioning
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeFieldValue>", Description="Extended attribute values")]
-        public IList<ExtendedAttributeFieldValue> ExtendedAttributeValues { get; set; }
+        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
     public class TimeSeriesResponse
@@ -2221,6 +2311,6 @@ namespace Aquarius.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("16.3.115.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.1.78.0");
     }
 }
