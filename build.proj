@@ -1,28 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="BuildApplication;RunTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="BuildApplication" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)'==''">
     <Configuration>Release</Configuration>
   </PropertyGroup>
   
-   <ItemGroup>
+  <ItemGroup>
     <SolutionsToBuild Include="src\TimeSeriesSupport.sln"/>
   </ItemGroup>
   
   <Target Name="BuildApplication">
     <MSBuild Projects="%(SolutionsToBuild.Identity)" Properties="Configuration=$(Configuration)" ContinueOnError="false"/>
   </Target>
-  
-  <Target Name="NUnitTestAssemblyFiles">
-    <ItemGroup>
-      <NUnitTestAssembly Include="**\bin\$(Configuration)\*.UnitTests.dll" />
-    </ItemGroup>
-  </Target>
-
-  <Target Name="RunTests" DependsOnTargets="BuildApplication;NUnitTestAssemblyFiles" Outputs="%(NUnitTestAssembly.Identity)">
-    <Exec
-      Command="$(MSBuildProjectDirectory)\src\packages\NUnit.Console.3.0.1\tools\nunit3-console.exe %(NUnitTestAssembly.Filename)%(NUnitTestAssembly.Extension)"
-      WorkingDirectory="%(NUnitTestAssembly.RelativeDir)">
-    </Exec>
-  </Target>
-
 </Project>
