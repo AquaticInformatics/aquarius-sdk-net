@@ -7,7 +7,7 @@
     <ProjectGuid>{E1A97713-66CD-424D-8CBC-698224FAC01F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aquarius.Client</RootNamespace>
+    <RootNamespace>Aquarius</RootNamespace>
     <AssemblyName>Aquarius.Client</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -35,16 +35,16 @@
       <HintPath>..\packages\NodaTime.1.3.0\lib\net35-Client\NodaTime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Client.4.0.54\lib\net40\ServiceStack.Client.dll</HintPath>
+    <Reference Include="ServiceStack.Client, Version=4.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Client.4.5.6\lib\net45\ServiceStack.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Interfaces.4.0.54\lib\portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Interfaces.4.5.6\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.4.0.54\lib\net40\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Text, Version=4.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.5.6\lib\net45\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -57,40 +57,40 @@
     <Compile Include="..\SharedAssemblyInfo\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AdaptivePollingTimer.cs" />
-    <Compile Include="AquariusClient.cs" />
-    <Compile Include="AquariusServerType.cs" />
-    <Compile Include="AquariusServerVersion.cs" />
-    <Compile Include="AquariusSystemDetector.cs" />
-    <Compile Include="CredentialsParser.cs" />
-    <Compile Include="EndPoints\AcquisitionV2.cs" />
-    <Compile Include="EndPoints\LegacyDataService.cs" />
-    <Compile Include="EndPoints\Provisioning.cs" />
-    <Compile Include="EndPoints\PublishV2.cs" />
-    <Compile Include="EndPoints\Root.cs" />
-    <Compile Include="EndPoints\UriHelper.cs" />
-    <Compile Include="Helpers\AuthenticationHeaders.cs" />
-    <Compile Include="Helpers\ClientHelper.cs" />
-    <Compile Include="Helpers\DurationExtensions.cs" />
-    <Compile Include="Helpers\Iso8601ParseOptions.cs" />
-    <Compile Include="Helpers\NodaTimeConverter.cs" />
-    <Compile Include="IAquariusClient.cs" />
-    <Compile Include="IPollingTimer.cs" />
-    <Compile Include="ScopeAction.cs" />
-    <Compile Include="ServiceClientExtensions.cs" />
-    <Compile Include="ServiceModels\Acquisition.cs" />
-    <Compile Include="Helpers\ObjectId.cs" />
+    <Compile Include="TimeSeries\Client\AdaptivePollingTimer.cs" />
+    <Compile Include="TimeSeries\Client\AquariusClient.cs" />
+    <Compile Include="TimeSeries\Client\AquariusServerType.cs" />
+    <Compile Include="TimeSeries\Client\AquariusServerVersion.cs" />
+    <Compile Include="TimeSeries\Client\AquariusSystemDetector.cs" />
+    <Compile Include="TimeSeries\Client\CredentialsParser.cs" />
+    <Compile Include="TimeSeries\Client\EndPoints\AcquisitionV2.cs" />
+    <Compile Include="TimeSeries\Client\EndPoints\LegacyDataService.cs" />
+    <Compile Include="TimeSeries\Client\EndPoints\Provisioning.cs" />
+    <Compile Include="TimeSeries\Client\EndPoints\PublishV2.cs" />
+    <Compile Include="TimeSeries\Client\EndPoints\Root.cs" />
+    <Compile Include="TimeSeries\Client\EndPoints\UriHelper.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\AuthenticationHeaders.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\ClientHelper.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\DurationExtensions.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\Iso8601ParseOptions.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\NodaTimeConverter.cs" />
+    <Compile Include="TimeSeries\Client\IAquariusClient.cs" />
+    <Compile Include="TimeSeries\Client\IPollingTimer.cs" />
+    <Compile Include="TimeSeries\Client\ScopeAction.cs" />
+    <Compile Include="TimeSeries\Client\ServiceClientExtensions.cs" />
+    <Compile Include="TimeSeries\Client\ServiceModels\Acquisition.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\ObjectId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceModels\Legacy\ReplaceToEndOfTime\Acquisition.cs" />
-    <Compile Include="ServiceModels\Legacy\ResponseLists\Provisioning.cs" />
-    <Compile Include="ServiceModels\Legacy\CreateTimeSeriesNeedsParameterId\Provisioning.cs" />
-    <Compile Include="ServiceModels\Provisioning.cs" />
-    <Compile Include="ServiceModels\Publish.cs" />
-    <Compile Include="ServiceStackConfig.cs" />
+    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\ReplaceToEndOfTime\Acquisition.cs" />
+    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\ResponseLists\Provisioning.cs" />
+    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\CreateTimeSeriesNeedsParameterId\Provisioning.cs" />
+    <Compile Include="TimeSeries\Client\ServiceModels\Provisioning.cs" />
+    <Compile Include="TimeSeries\Client\ServiceModels\Publish.cs" />
+    <Compile Include="TimeSeries\Client\ServiceStackConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="create_service_models.sh" />
-    <None Include="generate_code_from_live_endpoint.sh" />
+    <None Include="TimeSeries\Client\create_service_models.sh" />
+    <None Include="TimeSeries\Client\generate_code_from_live_endpoint.sh" />
     <None Include="packages.config" />
     <None Include="Readme.md" />
   </ItemGroup>

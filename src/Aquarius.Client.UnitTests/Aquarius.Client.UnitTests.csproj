@@ -7,7 +7,7 @@
     <ProjectGuid>{51EEDD80-3F9F-42A4-A9B8-37B46D323C57}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aquarius.Client.UnitTests</RootNamespace>
+    <RootNamespace>Aquarius.UnitTests</RootNamespace>
     <AssemblyName>Aquarius.Client.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,16 +55,16 @@
       <HintPath>..\packages\AutoFixture.3.50.2\lib\net40\Ploeh.AutoFixture.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Client.4.0.54\lib\net40\ServiceStack.Client.dll</HintPath>
+    <Reference Include="ServiceStack.Client, Version=4.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Client.4.5.6\lib\net45\ServiceStack.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Interfaces.4.0.54\lib\portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Interfaces.4.5.6\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.54.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.4.0.54\lib\net40\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Text, Version=4.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.5.6\lib\net45\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -77,16 +77,16 @@
     <Compile Include="..\SharedAssemblyInfo\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AquariusServerVersionTests.cs" />
-    <Compile Include="AquariusSystemDetectorTests.cs" />
-    <Compile Include="CredentialsParserTests.cs" />
-    <Compile Include="DateTimeOffsetSerializerTests.cs" />
-    <Compile Include="Helpers\ClientHelperTests.cs" />
-    <Compile Include="Helpers\DurationExtensionsTests.cs" />
-    <Compile Include="Helpers\NodaTimeConverterTests.cs" />
-    <Compile Include="ObjectIdSerializationTests.cs" />
+    <Compile Include="TimeSeries\Client\AquariusServerVersionTests.cs" />
+    <Compile Include="TimeSeries\Client\AquariusSystemDetectorTests.cs" />
+    <Compile Include="TimeSeries\Client\CredentialsParserTests.cs" />
+    <Compile Include="TimeSeries\Client\DateTimeOffsetSerializerTests.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\ClientHelperTests.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\DurationExtensionsTests.cs" />
+    <Compile Include="TimeSeries\Client\Helpers\NodaTimeConverterTests.cs" />
+    <Compile Include="TimeSeries\Client\ObjectIdSerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestHelpers\NodaTimeFixtureRegistrar.cs" />
+    <Compile Include="TimeSeries\Client\TestHelpers\NodaTimeFixtureRegistrar.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aquarius.Client\Aquarius.Client.csproj">
