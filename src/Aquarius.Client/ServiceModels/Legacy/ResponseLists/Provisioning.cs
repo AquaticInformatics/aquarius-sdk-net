@@ -24,7 +24,7 @@ namespace Aquarius.Client.ServiceModels.Legacy.ResponseLists.Provisioning
 
     [Route("/locations", "GET")]
     public class GetLocations
-        : IReturn<List<Location>>
+        : IReturn<List<LocationCoreAttributes>>
     {
     }
 
