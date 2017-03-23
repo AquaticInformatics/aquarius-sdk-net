@@ -1,8 +1,8 @@
 /* Options:
-Date: 2017-02-14 12:11:22
-Version: 4.50
+Date: 2017-03-21 22:24:32
+Version: 4.56
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver12/AQUARIUS/Acquisition/v2
+BaseUrl: http://autoserver1/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
@@ -17,6 +17,7 @@ MakeVirtual: False
 //AddResponseStatus: False
 //AddImplicitVersion: 
 //InitializeCollections: True
+ExportValueTypes: True
 //IncludeTypes: 
 //ExcludeTypes: 
 //AddNamespaces: 
@@ -78,7 +79,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Identifier returned from a previous append request
         ///</summary>
-        [ApiMember(Description="Identifier returned from a previous append request", ParameterType="path", IsRequired=true)]
+        [ApiMember(ParameterType="path", Description="Identifier returned from a previous append request", IsRequired=true)]
         public string AppendRequestIdentifier { get; set; }
     }
 
@@ -94,7 +95,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the reflected time series to receive points
         ///</summary>
-        [ApiMember(Description="The unique ID (from Publish API) of the reflected time series to receive points", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(ParameterType="path", IsRequired=true, Description="The unique ID (from Publish API) of the reflected time series to receive points", DataType="string")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -106,7 +107,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Time range to update. Any existing points in the time range will be overwritten
         ///</summary>
-        [ApiMember(Description="Time range to update. Any existing points in the time range will be overwritten", DataType="Interval", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="Time range to update. Any existing points in the time range will be overwritten", DataType="Interval")]
         public Interval TimeRange { get; set; }
     }
 
@@ -122,7 +123,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time series to receive points
         ///</summary>
-        [ApiMember(Description="The unique ID (from Publish API) of the time series to receive points", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(ParameterType="path", IsRequired=true, Description="The unique ID (from Publish API) of the time series to receive points", DataType="string")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -144,7 +145,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time series to receive points
         ///</summary>
-        [ApiMember(Description="The unique ID (from Publish API) of the time series to receive points", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(ParameterType="path", IsRequired=true, Description="The unique ID (from Publish API) of the time series to receive points", DataType="string")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -186,7 +187,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///ISO 8601 timestamp
         ///</summary>
-        [ApiMember(Description="ISO 8601 timestamp", DataType="Instant", IsRequired=true)]
+        [ApiMember(IsRequired=true, Description="ISO 8601 timestamp", DataType="Instant")]
         public Instant? Time { get; set; }
 
         ///<summary>
@@ -266,6 +267,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.1.78.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.26.0");
     }
 }
