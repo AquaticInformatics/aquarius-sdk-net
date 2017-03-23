@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using ServiceStack;
@@ -33,16 +34,21 @@ namespace Aquarius.TimeSeries.Client
             }
         }
 
-        public static IEnumerable<TResponse> SendAll<TRequest, TResponse>(this IServiceClient client, int batchSize, IEnumerable<TRequest> requests)
+        public static IEnumerable<TResponse> SendAll<TRequest, TResponse>(this IServiceClient client, int batchSize, IEnumerable<TRequest> requests, TimeSpan? timeout = null)
             where TRequest : IReturn<TResponse>
         {
             var responses = new List<TResponse>();
 
             var requestBatches = BatchesOf(requests, batchSize);
 
+            var stopwatch = Stopwatch.StartNew();
+
             foreach (var requestBatch in requestBatches)
             {
                 responses.AddRange(client.SendAll<TResponse>(requestBatch.Cast<object>()));
+
+                if (timeout.HasValue && stopwatch.Elapsed > timeout.Value)
+                    break;
             }
 
             return responses;

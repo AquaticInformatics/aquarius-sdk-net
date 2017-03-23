@@ -14,7 +14,7 @@ namespace Aquarius.TimeSeries.Client
         IServiceClient CloneAuthenticatedClient(IServiceClient client);
         IServiceClient CloneAuthenticatedClientWithOverrideMethod(IServiceClient client, string overrideMethod);
 
-        IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests)
+        IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, TimeSpan? timeout = null)
             where TRequest : IReturn<TResponse>;
 
         ScopeAction SessionKeepAlive();
