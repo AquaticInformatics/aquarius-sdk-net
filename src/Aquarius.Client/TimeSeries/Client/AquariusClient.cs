@@ -60,12 +60,12 @@ namespace Aquarius.TimeSeries.Client
             return client;
         }
 
-        public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests)
+        public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, TimeSpan? timeout = null)
             where TRequest : IReturn<TResponse>
         {
             using (var batchClient = CreateBatchGetRequestClient(client))
             {
-                return batchClient.SendAll<TRequest, TResponse>(batchSize, requests);
+                return batchClient.SendAll<TRequest, TResponse>(batchSize, requests, timeout);
             }
         }
 
