@@ -24,7 +24,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Legacy.ResponseLists.Provisio
 
     [Route("/locations", "GET")]
     public class GetLocations
-        : IReturn<List<LocationCoreAttributes>>
+        : IReturn<List<Location>>
     {
     }
 

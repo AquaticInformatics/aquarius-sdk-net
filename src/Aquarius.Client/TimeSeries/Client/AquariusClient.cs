@@ -60,6 +60,20 @@ namespace Aquarius.TimeSeries.Client
             return client;
         }
 
+        public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests)
+            where TRequest : IReturn<TResponse>
+        {
+            using (var batchClient = CreateBatchGetRequestClient(client))
+            {
+                return batchClient.SendAll<TRequest, TResponse>(batchSize, requests);
+            }
+        }
+
+        private JsonServiceClient CreateBatchGetRequestClient(IServiceClient client)
+        {
+            return CloneAuthenticatedClientWithOverrideMethod(client, HttpMethods.Get) as JsonServiceClient;
+        }
+
         public IServiceClient CloneAuthenticatedClient(IServiceClient client)
         {
             var jsonClient = client as JsonServiceClient;
