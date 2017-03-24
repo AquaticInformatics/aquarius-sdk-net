@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Aquarius.TimeSeries.Client.EndPoints;
 using Aquarius.TimeSeries.Client.Helpers;
 using ServiceStack;
@@ -45,6 +46,8 @@ namespace Aquarius.TimeSeries.Client
         public IServiceClient AcquisitionClient { get { return _serviceClients[ClientType.AcquisitionJson]; } }
         public IServiceClient ProvisioningClient { get { return _serviceClients[ClientType.ProvisioningJson]; } }
 
+        public AquariusServerVersion ServerVersion { get; private set; }
+
         public IServiceClient RegisterCustomClient(string baseUri)
         {
             if (string.IsNullOrWhiteSpace(baseUri))
@@ -60,12 +63,12 @@ namespace Aquarius.TimeSeries.Client
             return client;
         }
 
-        public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, TimeSpan? timeout = null)
+        public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, CancellationToken? cancellationToken = null)
             where TRequest : IReturn<TResponse>
         {
             using (var batchClient = CreateBatchGetRequestClient(client))
             {
-                return batchClient.SendAll<TRequest, TResponse>(batchSize, requests, timeout);
+                return batchClient.SendAll<TRequest, TResponse>(batchSize, requests, cancellationToken);
             }
         }
 
@@ -165,6 +168,8 @@ namespace Aquarius.TimeSeries.Client
 
             Username = username;
             Password = password;
+
+            ServerVersion = new AquariusSystemDetector().GetAquariusServerVersion(hostname);
 
             ConnectUsingSavedCredentials();
         }
