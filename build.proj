@@ -5,7 +5,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <SolutionsToBuild Include="src\TimeSeriesSupport.sln"/>
+    <SolutionsToBuild Include="src\Aquarius.SDK.sln"/>
   </ItemGroup>
   
   <Target Name="BuildApplication">

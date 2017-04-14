@@ -93,7 +93,6 @@
     <None Include="TimeSeries\Client\create_service_models.sh" />
     <None Include="TimeSeries\Client\generate_code_from_live_endpoint.sh" />
     <None Include="packages.config" />
-    <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
