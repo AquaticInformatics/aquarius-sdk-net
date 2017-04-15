@@ -74,9 +74,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="TimeSeries\Client\AquariusServerVersionTests.cs" />
     <Compile Include="TimeSeries\Client\AquariusSystemDetectorTests.cs" />
     <Compile Include="TimeSeries\Client\CredentialsParserTests.cs" />
