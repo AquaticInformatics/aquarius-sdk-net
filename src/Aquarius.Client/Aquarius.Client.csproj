@@ -54,9 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="TimeSeries\Client\AdaptivePollingTimer.cs" />
     <Compile Include="TimeSeries\Client\AquariusClient.cs" />
     <Compile Include="TimeSeries\Client\AquariusServerType.cs" />
