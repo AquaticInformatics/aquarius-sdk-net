@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>Aquarius.SDK</id>
     <version>$version$</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</projectUrl>
-    <iconUrl>http://aquaticinformatics.com/wp-content/uploads/Logo_WQIcon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/AquaticInformatics/aquarius-sdk-net/blob/develop/images/aquatic-informatics.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>The AQUARIUS SDK for .NET enables .NET developers to easily work with the AQUARIUS Platform of environmental monitoring products.</description>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright &#169; 2017</copyright>
     <tags>Aquatic Informatics Aquarius SDK Time-Series WebPortal Samples</tags>
   </metadata>
 </package>
