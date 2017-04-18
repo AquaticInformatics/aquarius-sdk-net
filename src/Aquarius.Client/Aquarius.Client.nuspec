@@ -10,9 +10,8 @@
     <projectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</projectUrl>
     <iconUrl>http://aquaticinformatics.com/wp-content/uploads/Logo_WQIcon.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>$description$</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <description>The AQUARIUS SDK for .NET enables .NET developers to easily work with the AQUARIUS Platform of environmental monitoring products.</description>
     <copyright>Copyright 2017</copyright>
-    <tags>Tag1 Tag2</tags>
+    <tags>Aquatic Informatics Aquarius SDK Time-Series WebPortal Samples</tags>
   </metadata>
 </package>
