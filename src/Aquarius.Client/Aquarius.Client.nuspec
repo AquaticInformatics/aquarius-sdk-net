@@ -8,7 +8,7 @@
     <owners>$author$</owners>
     <licenseUrl>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/AquaticInformatics/aquarius-sdk-net/blob/develop/images/aquatic-informatics.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/AquaticInformatics/aquarius-sdk-net/blob/develop/images/icon.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>The AQUARIUS SDK for .NET enables .NET developers to easily work with the AQUARIUS Platform of environmental monitoring products.</description>
     <copyright>Copyright &#169; 2017</copyright>
