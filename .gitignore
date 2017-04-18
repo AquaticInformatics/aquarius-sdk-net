@@ -2,6 +2,9 @@
 Thumbs.db
 #Ignore merge conflict files
 *.orig
+#Ignore some MyGet cruft
+[Bb]uild/
+msbuild.log
 #Ignore build output and Visual Studio temp file
 *.obj
 *.exe
