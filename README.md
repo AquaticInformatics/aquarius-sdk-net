@@ -16,11 +16,7 @@ The **AQUARIUS SDK for .NET** enables .NET developers to easily work with the [A
 
 ## Getting Help
 
-TBD
-
-## Examples
-
-TBD
+See the [Wiki](https://github.com/AquaticInformatics/aquarius-sdk-net/wiki) for basic SDK concepts and examples.
 
 ## Contributing
 
