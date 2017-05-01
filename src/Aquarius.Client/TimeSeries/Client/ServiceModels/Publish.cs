@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-03-21 22:24:31
+Date: 2017-05-01 10:56:20
 Version: 4.56
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
@@ -1524,22 +1524,491 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class TimeAlignedPoint
     {
-        public TimeAlignedPoint()
-        {
-            Values = new List<TimeAlignedValue>{};
-        }
-
         ///<summary>
         ///Timestamp
         ///</summary>
-        [ApiMember(Description="Timestamp", DataType="DateTimeOffset")]
+        [ApiMember(DataType="DateTimeOffset", Description="Timestamp")]
         public DateTimeOffset Timestamp { get; set; }
 
         ///<summary>
-        ///Values of all the time-series, interpolated to the timestamp
+        ///Numeric value of output time-series 1
         ///</summary>
-        [ApiMember(Description="Values of all the time-series, interpolated to the timestamp", DataType="Array<TimeAlignedValue>")]
-        public List<TimeAlignedValue> Values { get; set; }
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 1")]
+        public double? NumericValue1 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 1
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 1")]
+        public string DisplayValue1 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 1
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 1")]
+        public long? GradeCode1 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 1
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 1")]
+        public string GradeName1 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 1
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 1")]
+        public string Qualifiers1 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 1
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 1")]
+        public string Method1 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 1
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 1")]
+        public long? ApprovalLevel1 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 1
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 1")]
+        public string ApprovalName1 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 2
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 2")]
+        public double? NumericValue2 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 2
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 2")]
+        public string DisplayValue2 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 2
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 2")]
+        public long? GradeCode2 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 2
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 2")]
+        public string GradeName2 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 2
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 2")]
+        public string Qualifiers2 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 2
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 2")]
+        public string Method2 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 2
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 2")]
+        public long? ApprovalLevel2 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 2
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 2")]
+        public string ApprovalName2 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 3
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 3")]
+        public double? NumericValue3 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 3
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 3")]
+        public string DisplayValue3 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 3
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 3")]
+        public long? GradeCode3 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 3
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 3")]
+        public string GradeName3 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 3
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 3")]
+        public string Qualifiers3 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 3
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 3")]
+        public string Method3 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 3
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 3")]
+        public long? ApprovalLevel3 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 3
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 3")]
+        public string ApprovalName3 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 4
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 4")]
+        public double? NumericValue4 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 4
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 4")]
+        public string DisplayValue4 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 4
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 4")]
+        public long? GradeCode4 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 4
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 4")]
+        public string GradeName4 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 4
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 4")]
+        public string Qualifiers4 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 4
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 4")]
+        public string Method4 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 4
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 4")]
+        public long? ApprovalLevel4 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 4
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 4")]
+        public string ApprovalName4 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 5
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 5")]
+        public double? NumericValue5 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 5
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 5")]
+        public string DisplayValue5 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 5
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 5")]
+        public long? GradeCode5 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 5
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 5")]
+        public string GradeName5 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 5
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 5")]
+        public string Qualifiers5 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 5
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 5")]
+        public string Method5 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 5
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 5")]
+        public long? ApprovalLevel5 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 5
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 5")]
+        public string ApprovalName5 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 6
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 6")]
+        public double? NumericValue6 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 6
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 6")]
+        public string DisplayValue6 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 6
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 6")]
+        public long? GradeCode6 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 6
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 6")]
+        public string GradeName6 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 6
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 6")]
+        public string Qualifiers6 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 6
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 6")]
+        public string Method6 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 6
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 6")]
+        public long? ApprovalLevel6 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 6
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 6")]
+        public string ApprovalName6 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 7
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 7")]
+        public double? NumericValue7 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 7
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 7")]
+        public string DisplayValue7 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 7
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 7")]
+        public long? GradeCode7 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 7
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 7")]
+        public string GradeName7 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 7
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 7")]
+        public string Qualifiers7 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 7
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 7")]
+        public string Method7 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 7
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 7")]
+        public long? ApprovalLevel7 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 7
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 7")]
+        public string ApprovalName7 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 8
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 8")]
+        public double? NumericValue8 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 8
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 8")]
+        public string DisplayValue8 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 8
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 8")]
+        public long? GradeCode8 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 8
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 8")]
+        public string GradeName8 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 8
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 8")]
+        public string Qualifiers8 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 8
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 8")]
+        public string Method8 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 8
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 8")]
+        public long? ApprovalLevel8 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 8
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 8")]
+        public string ApprovalName8 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 9
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 9")]
+        public double? NumericValue9 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 9
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 9")]
+        public string DisplayValue9 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 9
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 9")]
+        public long? GradeCode9 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 9
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 9")]
+        public string GradeName9 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 9
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 9")]
+        public string Qualifiers9 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 9
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 9")]
+        public string Method9 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 9
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 9")]
+        public long? ApprovalLevel9 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 9
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 9")]
+        public string ApprovalName9 { get; set; }
+
+        ///<summary>
+        ///Numeric value of output time-series 10
+        ///</summary>
+        [ApiMember(DataType="double", Description="Numeric value of output time-series 10")]
+        public double? NumericValue10 { get; set; }
+
+        ///<summary>
+        ///Display value of output time-series 10
+        ///</summary>
+        [ApiMember(Description="Display value of output time-series 10")]
+        public string DisplayValue10 { get; set; }
+
+        ///<summary>
+        ///Grade code of output time-series 10
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 10")]
+        public long? GradeCode10 { get; set; }
+
+        ///<summary>
+        ///Grade name of output time-series 10
+        ///</summary>
+        [ApiMember(Description="Grade name of output time-series 10")]
+        public string GradeName10 { get; set; }
+
+        ///<summary>
+        ///Comma-separated list of qualifiers of output time-series 10
+        ///</summary>
+        [ApiMember(Description="Comma-separated list of qualifiers of output time-series 10")]
+        public string Qualifiers10 { get; set; }
+
+        ///<summary>
+        ///Method of output time-series 10
+        ///</summary>
+        [ApiMember(Description="Method of output time-series 10")]
+        public string Method10 { get; set; }
+
+        ///<summary>
+        ///Approval level of output time-series 10
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 10")]
+        public long? ApprovalLevel10 { get; set; }
+
+        ///<summary>
+        ///Approval name of output time-series 10
+        ///</summary>
+        [ApiMember(Description="Approval name of output time-series 10")]
+        public string ApprovalName10 { get; set; }
     }
 
     public class TimeAlignedTimeSeriesInfo
@@ -1549,6 +2018,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Unique id", DataType="string")]
         public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier")]
+        public string Identifier { get; set; }
 
         ///<summary>
         ///Parameter
@@ -1579,44 +2054,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Interpolation type")]
         public string InterpolationType { get; set; }
-    }
-
-    public class TimeAlignedValue
-    {
-        public TimeAlignedValue()
-        {
-            Qualifiers = new List<string>{};
-        }
-
-        ///<summary>
-        ///Value
-        ///</summary>
-        [ApiMember(Description="Value", DataType="DoubleWithDisplay")]
-        public DoubleWithDisplay Value { get; set; }
-
-        ///<summary>
-        ///Grade code
-        ///</summary>
-        [ApiMember(Description="Grade code", DataType="integer")]
-        public int GradeCode { get; set; }
-
-        ///<summary>
-        ///Qualifiers
-        ///</summary>
-        [ApiMember(Description="Qualifiers", DataType="Array<string>")]
-        public List<string> Qualifiers { get; set; }
-
-        ///<summary>
-        ///Method
-        ///</summary>
-        [ApiMember(Description="Method")]
-        public string Method { get; set; }
-
-        ///<summary>
-        ///Approval level
-        ///</summary>
-        [ApiMember(Description="Approval level", DataType="integer")]
-        public int ApprovalLevel { get; set; }
     }
 
     public class TimeRange
@@ -3923,7 +4360,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items with an EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(Description="Filter results to items with an EndTime at or before the QueryTo time", DataType="DateTimeOffset")]
+        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with an EndTime at or before the QueryTo time")]
         public DateTimeOffset? QueryTo { get; set; }
 
         ///<summary>
@@ -4277,6 +4714,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="True if data values should have rounding rules applied", DataType="boolean")]
         public bool? ApplyRounding { get; set; }
+
+        ///<summary>
+        ///True if the point results should include gap markers
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if the point results should include gap markers")]
+        public bool? IncludeGapMarkers { get; set; }
     }
 
     [Route("/GetApprovalsTransactionList", "GET")]
@@ -5390,6 +5833,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public TimeRange TimeRange { get; set; }
 
         ///<summary>
+        ///Number of points
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Number of points")]
+        public int NumPoints { get; set; }
+
+        ///<summary>
         ///Points
         ///</summary>
         [ApiMember(Description="Points", DataType="Array<TimeAlignedPoint>")]
@@ -5699,6 +6148,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.26.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.60.0");
     }
 }

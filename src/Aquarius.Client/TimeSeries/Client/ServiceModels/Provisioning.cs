@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-03-21 22:24:32
+Date: 2017-05-01 10:56:21
 Version: 4.56
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
@@ -123,6 +123,41 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class GetInterpolationTypes
         : IReturn<InterpolationTypesResponse>
     {
+    }
+
+    [Route("/fielddataplugins", "GET")]
+    public class GetFieldDataPlugIns
+        : IReturn<FieldDataPlugInsResponse>
+    {
+    }
+
+    [Route("/fielddataplugins", "POST")]
+    public class PostFieldDataPlugIn
+        : IReturn<FieldDataPlugIn>
+    {
+        ///<summary>
+        ///Plug-in folder name
+        ///</summary>
+        [ApiMember(Description="Plug-in folder name", DataType="string", IsRequired=true)]
+        public string PlugInFolderName { get; set; }
+
+        ///<summary>
+        ///Assembly qualified type name
+        ///</summary>
+        [ApiMember(Description="Assembly qualified type name", DataType="string", IsRequired=true)]
+        public string AssemblyQualifiedTypeName { get; set; }
+
+        ///<summary>
+        ///Plug-in priority; 1 has highest priority
+        ///</summary>
+        [ApiMember(Description="Plug-in priority; 1 has highest priority", DataType="integer", IsRequired=true)]
+        public int PlugInPriority { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description", DataType="string")]
+        public string Description { get; set; }
     }
 
     [Route("/locationfolders/{LocationFolderUniqueId}", "DELETE")]
@@ -643,9 +678,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public int? GradeCode { get; set; }
 
         ///<summary>
-        ///#RRGGBB value in hexadecimal
+        ///Color value in #RRGGBB hexadecimal
         ///</summary>
-        [ApiMember(Description="#RRGGBB value in hexadecimal", IsRequired=true)]
+        [ApiMember(Description="Color value in #RRGGBB hexadecimal", IsRequired=true)]
         public string Color { get; set; }
 
         ///<summary>
@@ -930,9 +965,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Comment { get; set; }
 
         ///<summary>
-        ///Method
+        ///Monitoring method code
         ///</summary>
-        [ApiMember(Description="Method", IsRequired=true)]
+        [ApiMember(Description="Monitoring method code", IsRequired=true)]
         public string Method { get; set; }
 
         [ApiMember]
@@ -1111,7 +1146,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Localized name
         ///</summary>
-        [ApiMember(Description="Localized name")]
+        [ApiMember(Description="Localized name", IsRequired=true)]
         public string DisplayName { get; set; }
     }
 
@@ -1472,6 +1507,53 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Value")]
         public string Value { get; set; }
+    }
+
+    public class FieldDataPlugIn
+    {
+        ///<summary>
+        ///Unique ID of the field data plug-in
+        ///</summary>
+        [ApiMember(Description="Unique ID of the field data plug-in", DataType="string")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Plug-in folder name
+        ///</summary>
+        [ApiMember(Description="Plug-in folder name", DataType="string")]
+        public string PlugInFolderName { get; set; }
+
+        ///<summary>
+        ///Assembly qualified type name
+        ///</summary>
+        [ApiMember(Description="Assembly qualified type name", DataType="string")]
+        public string AssemblyQualifiedTypeName { get; set; }
+
+        ///<summary>
+        ///Plug-in priority; 1 has highest priority
+        ///</summary>
+        [ApiMember(Description="Plug-in priority; 1 has highest priority", DataType="integer")]
+        public int PlugInPriority { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description", DataType="string")]
+        public string Description { get; set; }
+    }
+
+    public class FieldDataPlugInsResponse
+    {
+        public FieldDataPlugInsResponse()
+        {
+            Results = new List<FieldDataPlugIn>{};
+        }
+
+        ///<summary>
+        ///The list of registered field data plug-ins
+        ///</summary>
+        [ApiMember(Description="The list of registered field data plug-ins", DataType="Array<FieldDataPlugIn>")]
+        public List<FieldDataPlugIn> Results { get; set; }
     }
 
     public class Grade
@@ -2338,6 +2420,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.26.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.60.0");
     }
 }
