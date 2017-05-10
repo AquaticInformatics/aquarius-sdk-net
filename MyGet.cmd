@@ -8,7 +8,7 @@ if "%config%" == "" (
 set version=
 if not "%PackageVersion%" == "" (
    set version=-Version %PackageVersion%
-   powershell -Command "foreach ($path in dir -Filter AssemblyInfo.cs -Recurse | %{$_.FullName}){ (gc $path) -replace '0.0.0.0', '%PackageVersion%' | Out-File -Encoding utf8 $path }"
+   powershell -Command "foreach ($path in dir -Filter AssemblyInfo.cs -Recurse | %%{$_.FullName}){ (gc $path) -replace '0.0.0.0', '%PackageVersion%' | Out-File -Encoding utf8 $path }"
 )
 
 rem Package restore
