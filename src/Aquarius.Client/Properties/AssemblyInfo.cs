@@ -15,3 +15,4 @@ using System.Runtime.InteropServices;
 // Developer builds should remain at version 0.0.0.0 so that unofficial binaries will be obvious.
 [assembly: AssemblyVersion("0.0.0.0")]
 [assembly: AssemblyFileVersion("0.0.0.0")]
+[assembly: AssemblyInformationalVersion("0.0.0.0")]

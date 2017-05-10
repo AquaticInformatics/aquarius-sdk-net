@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-05-01 10:56:21
+Date: 2017-05-10 11:48:35
 Version: 4.56
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
@@ -123,6 +123,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class GetInterpolationTypes
         : IReturn<InterpolationTypesResponse>
     {
+    }
+
+    [Route("/fielddataplugins/{UniqueId}", "DELETE")]
+    public class DeleteFieldDataPlugin
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the field data plugin
+        ///</summary>
+        [ApiMember(IsRequired=true, Description="Unique ID of the field data plugin", ParameterType="path", DataType="string")]
+        public Guid UniqueId { get; set; }
     }
 
     [Route("/fielddataplugins", "GET")]
@@ -2420,6 +2431,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.60.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.69.0");
     }
 }

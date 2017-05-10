@@ -7,6 +7,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquarius.Client", "Aquarius
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquarius.Client.UnitTests", "Aquarius.Client.UnitTests\Aquarius.Client.UnitTests.csproj", "{51EEDD80-3F9F-42A4-A9B8-37B46D323C57}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepoRoot", "RepoRoot", "{6B91AAEF-9A80-4489-97F2-6610711A29FD}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.proj = ..\build.proj
+		..\CODE_OF_CONDUCT.md = ..\CODE_OF_CONDUCT.md
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\MyGet.cmd = ..\MyGet.cmd
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
