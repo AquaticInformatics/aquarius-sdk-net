@@ -57,6 +57,12 @@
   <ItemGroup>
     <Compile Include="Helpers\SdkServiceClient.cs" />
     <Compile Include="Helpers\UserAgentBuilder.cs" />
+    <Compile Include="Samples\Client\IPaginatedRequest.cs" />
+    <Compile Include="Samples\Client\IPaginatedResponse.cs" />
+    <Compile Include="Samples\Client\LazyResult.cs" />
+    <Compile Include="Samples\Client\SamplesClient.cs" />
+    <Compile Include="Samples\Client\ServiceModel.cs" />
+    <Compile Include="Samples\Client\ISamplesClient.cs" />
     <Compile Include="TimeSeries\Client\AdaptivePollingTimer.cs" />
     <Compile Include="TimeSeries\Client\AquariusClient.cs" />
     <Compile Include="TimeSeries\Client\AquariusServerType.cs" />
