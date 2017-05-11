@@ -1,4 +1,6 @@
-﻿namespace Aquarius.TimeSeries.Client.EndPoints
+﻿using Aquarius.Helpers;
+
+namespace Aquarius.TimeSeries.Client.EndPoints
 {
     public class LegacyDataService
     {

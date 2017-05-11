@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aquarius.TimeSeries.Client.EndPoints
+namespace Aquarius.Helpers
 {
     public class UriHelper
     {
