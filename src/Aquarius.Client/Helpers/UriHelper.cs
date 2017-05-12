@@ -4,7 +4,7 @@ namespace Aquarius.Helpers
 {
     public class UriHelper
     {
-        public static Uri ResolveUri(string host, string endpoint)
+        public static Uri ResolveUri(string host, string endpoint, string defaultScheme = null)
         {
             var uriBuilder = new UriBuilder();
             Uri uri;
@@ -22,16 +22,16 @@ namespace Aquarius.Helpers
                 }
             }
 
-            uriBuilder.Scheme = Uri.UriSchemeHttp;
+            uriBuilder.Scheme = defaultScheme ?? Uri.UriSchemeHttp;
             uriBuilder.Host = host;
             uriBuilder.Path = endpoint;
 
             return uriBuilder.Uri;
         }
 
-        public static string ResolveEndpoint(string host, string endpoint)
+        public static string ResolveEndpoint(string host, string endpoint, string defaultScheme = null)
         {
-            return ResolveUri(host, endpoint).ToString();
+            return ResolveUri(host, endpoint, defaultScheme).ToString();
         }
     }
 }
