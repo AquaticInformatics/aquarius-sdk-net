@@ -1,4 +1,5 @@
 ﻿using System;
+using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
         [SetUp]
         public void ForEachTest()
         {
-            _rawClient = new JsonServiceClient();
+            _rawClient = new SdkServiceClient();
             _fixture = new Fixture();
         }
 

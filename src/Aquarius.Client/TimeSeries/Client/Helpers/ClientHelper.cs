@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using ServiceStack;
 using GetPublicKey = Aquarius.TimeSeries.Client.ServiceModels.Publish.GetPublicKey;
@@ -49,7 +50,7 @@ namespace Aquarius.TimeSeries.Client.Helpers
             var builder = new UriBuilder(client.BaseUri);
             builder.Path = baseUri;
 
-            var clone = new JsonServiceClient(builder.ToString());
+            var clone = new SdkServiceClient(builder.ToString());
 
             foreach (var headerKey in client.Headers.AllKeys)
             {

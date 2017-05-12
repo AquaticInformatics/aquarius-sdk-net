@@ -45,7 +45,7 @@ namespace Aquarius.TimeSeries.Client
 
         private static IServiceClient CreateJsonServiceClientWithQuickTimeouts(string baseUri)
         {
-            return new JsonServiceClient(baseUri)
+            return new SdkServiceClient(baseUri)
             {
                 Timeout = FirstByteReceivedTimeout,
                 ReadWriteTimeout = ReadEntireResponseTimeout
