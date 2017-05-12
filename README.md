@@ -10,6 +10,8 @@ The **AQUARIUS SDK for .NET** enables .NET developers to easily work with the [A
 * [AQUARIUS Samples](http://aquaticinformatics.com/products/aquarius-samples/) (coming soon!)
 * [AQUARIUS WebPortal](http://aquaticinformatics.com/products/aquarius-webportal/) (coming soon!)
 
+View the [Release Notes](ReleaseNotes.md) here.
+
 ## Downloading
 
 [![Download on NuGet](images/installfromnuget.png)](https://www.nuget.org/packages/Aquarius.SDK/)
@@ -23,3 +25,4 @@ See the [Wiki](https://github.com/AquaticInformatics/aquarius-sdk-net/wiki) for 
 Contributions are always welcome, no matter how large or small. Before contributing, please read the [code of conduct](CODE_OF_CONDUCT.md).
 
 See [Contributing](CONTRIBUTING.md).
+
