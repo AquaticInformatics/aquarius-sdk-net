@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
+using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.EndPoints;
 using ServiceStack;
 using ServiceStack.Logging;
@@ -44,7 +45,7 @@ namespace Aquarius.TimeSeries.Client
 
         private static IServiceClient CreateJsonServiceClientWithQuickTimeouts(string baseUri)
         {
-            return new JsonServiceClient(baseUri)
+            return new SdkServiceClient(baseUri)
             {
                 Timeout = FirstByteReceivedTimeout,
                 ReadWriteTimeout = ReadEntireResponseTimeout

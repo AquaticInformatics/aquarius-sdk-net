@@ -74,6 +74,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\SdkServiceClientTests.cs" />
+    <Compile Include="Helpers\UriHelperTests.cs" />
+    <Compile Include="Helpers\UserAgentBuilderTests.cs" />
     <Compile Include="TimeSeries\Client\AquariusServerVersionTests.cs" />
     <Compile Include="TimeSeries\Client\AquariusSystemDetectorTests.cs" />
     <Compile Include="TimeSeries\Client\CredentialsParserTests.cs" />

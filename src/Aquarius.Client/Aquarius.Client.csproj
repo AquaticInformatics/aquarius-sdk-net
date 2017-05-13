@@ -51,9 +51,12 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\SdkServiceClient.cs" />
+    <Compile Include="Helpers\UserAgentBuilder.cs" />
     <Compile Include="TimeSeries\Client\AdaptivePollingTimer.cs" />
     <Compile Include="TimeSeries\Client\AquariusClient.cs" />
     <Compile Include="TimeSeries\Client\AquariusServerType.cs" />
@@ -65,7 +68,7 @@
     <Compile Include="TimeSeries\Client\EndPoints\Provisioning.cs" />
     <Compile Include="TimeSeries\Client\EndPoints\PublishV2.cs" />
     <Compile Include="TimeSeries\Client\EndPoints\Root.cs" />
-    <Compile Include="TimeSeries\Client\EndPoints\UriHelper.cs" />
+    <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="TimeSeries\Client\Helpers\AuthenticationHeaders.cs" />
     <Compile Include="TimeSeries\Client\Helpers\ClientHelper.cs" />
     <Compile Include="TimeSeries\Client\Helpers\DurationExtensions.cs" />

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.EndPoints;
 using Aquarius.TimeSeries.Client.Helpers;
 using ServiceStack;
@@ -162,9 +163,9 @@ namespace Aquarius.TimeSeries.Client
 
         private void Connect(string hostname, string username, string password)
         {
-            _serviceClients.Add(ClientType.PublishJson, new JsonServiceClient(PublishV2.ResolveEndpoint(hostname)));
-            _serviceClients.Add(ClientType.AcquisitionJson, new JsonServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
-            _serviceClients.Add(ClientType.ProvisioningJson, new JsonServiceClient(Provisioning.ResolveEndpoint(hostname)));
+            _serviceClients.Add(ClientType.PublishJson, new SdkServiceClient(PublishV2.ResolveEndpoint(hostname)));
+            _serviceClients.Add(ClientType.AcquisitionJson, new SdkServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
+            _serviceClients.Add(ClientType.ProvisioningJson, new SdkServiceClient(Provisioning.ResolveEndpoint(hostname)));
 
             Username = username;
             Password = password;
