@@ -14,7 +14,7 @@ namespace Aquarius.Samples.Client
 {
     public class SamplesClient : ISamplesClient
     {
-        public const string AuthorizationHeader = HttpHeaders.Authorization;
+        public const string AuthorizationHeaderKey = HttpHeaders.Authorization;
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -30,7 +30,7 @@ namespace Aquarius.Samples.Client
         private SamplesClient(string baseUrl, string apiToken)
         {
             _client = new SdkServiceClient(UriHelper.ResolveEndpoint(baseUrl, "/api", Uri.UriSchemeHttps));
-            _client.Headers.Add(AuthorizationHeader, $"token {apiToken}");
+            _client.Headers.Add(AuthorizationHeaderKey, $"token {apiToken}");
 
             ServerVersion = GetServerVersion();
 
@@ -149,7 +149,12 @@ namespace Aquarius.Samples.Client
         {
             var fileUploader = new FileUploader(_client);
 
-            return InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(contentToUpload, uploadedFileName, requestDto));
+            return InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(GetPostUrl(requestDto), contentToUpload, uploadedFileName, requestDto));
+        }
+
+        private string GetPostUrl<TResponse>(IReturn<TResponse> requestDto)
+        {
+            return _client.ResolveTypedUrl(HttpMethods.Post, requestDto);
         }
 
         public LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto)

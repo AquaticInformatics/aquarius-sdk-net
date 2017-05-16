@@ -9,51 +9,58 @@ namespace Aquarius.Samples.Client
 {
     public class FileUploader
     {
-        private readonly JsonServiceClient _client;
+        private readonly IRestClient _restClient;
 
         public FileUploader(JsonServiceClient client)
+            : this(new JsonHttpClient(client.BaseUri), client.Headers[SamplesClient.AuthorizationHeaderKey], client.UserAgent)
         {
-            _client = client;
         }
 
-        public TResponse PostFileWithRequest<TResponse>(Stream contentToUpload, string uploadedFileName, IReturn<TResponse> requestDto)
+        public FileUploader(IRestClient restClient, string authorizationHeader, string userAgent)
         {
-            using (var httpClient = new JsonHttpClient(_client.BaseUri))
-            {
-                httpClient.Headers.Add(SamplesClient.AuthorizationHeader, _client.Headers[SamplesClient.AuthorizationHeader]);
-                httpClient.Headers.Add("User-Agent", _client.UserAgent);
-
-                return httpClient.Post<TResponse>(
-                    ComposePostUrlWithQueryParams(requestDto),
-                    CreateMultipartContent(contentToUpload, uploadedFileName, requestDto));
-            }
+            _restClient = restClient;
+            _restClient.AddHeader(SamplesClient.AuthorizationHeaderKey, authorizationHeader);
+            _restClient.AddHeader("User-Agent", userAgent);
         }
 
-        private string ComposePostUrlWithQueryParams<TResponse>(IReturn<TResponse> requestDto)
+        public TResponse PostFileWithRequest<TResponse>(
+            string relativeOrAbsoluteUri,
+            Stream contentToUpload,
+            string uploadedFileName,
+            IReturn<TResponse> requestDto)
+        {
+            return _restClient.Post<TResponse>(
+                ComposePostUrlWithQueryParams(relativeOrAbsoluteUri, requestDto),
+                CreateMultipartContent(relativeOrAbsoluteUri, contentToUpload, uploadedFileName));
+        }
+
+        private string ComposePostUrlWithQueryParams<TResponse>(
+            string relativeOrAbsoluteUri,
+            IReturn<TResponse> requestDto)
         {
             var queryString = QueryStringSerializer.SerializeToString(requestDto);
 
-            var uriBuilder = new UriBuilder(GetPostUrl(requestDto)) {Query = queryString};
+            var uriBuilder = new UriBuilder(relativeOrAbsoluteUri) {Query = queryString};
 
             return uriBuilder.ToString();
         }
 
-        private string GetPostUrl<TResponse>(IReturn<TResponse> requestDto)
+        private MultipartContent CreateMultipartContent(
+            string relativeOrAbsoluteUri,
+            Stream contentToUpload,
+            string uploadedFilename)
         {
-            return _client.ResolveTypedUrl(HttpMethods.Post, requestDto);
+            return IsImportServiceUpload(relativeOrAbsoluteUri)
+                ? CreateImportServiceUploadContent(contentToUpload, uploadedFilename)
+                : CreateFineUploaderContent(contentToUpload, uploadedFilename);
         }
 
-        private MultipartContent CreateMultipartContent<TResponse>(Stream contentToUpload,
-            string uploadedFilename, IReturn<TResponse> requestDto)
+        internal static bool IsImportServiceUpload(string relativeOrAbsoluteUri)
         {
             // TODO: We need a better way to distinguish between file upload request types
             const string importServiceRoute = "/services/import/";
 
-            var url = GetPostUrl(requestDto).ToLowerInvariant();
-
-            return url.Contains(importServiceRoute)
-                ? CreateImportServiceUploadContent(contentToUpload, uploadedFilename)
-                : CreateFineUploaderContent(contentToUpload, uploadedFilename);
+            return relativeOrAbsoluteUri.ToLowerInvariant().Contains(importServiceRoute);
         }
 
         private static MultipartFormDataContent CreateImportServiceUploadContent(Stream contentToUpload, string uploadedFilename)
