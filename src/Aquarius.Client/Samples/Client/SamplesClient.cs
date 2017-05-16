@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -13,6 +14,8 @@ namespace Aquarius.Samples.Client
 {
     public class SamplesClient : ISamplesClient
     {
+        public const string AuthorizationHeader = HttpHeaders.Authorization;
+
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static ISamplesClient CreateConnectedClient(string baseUrl, string apiToken)
@@ -27,9 +30,11 @@ namespace Aquarius.Samples.Client
         private SamplesClient(string baseUrl, string apiToken)
         {
             _client = new SdkServiceClient(UriHelper.ResolveEndpoint(baseUrl, "/api", Uri.UriSchemeHttps));
-            _client.Headers.Add("Authorization", $"token {apiToken}");
+            _client.Headers.Add(AuthorizationHeader, $"token {apiToken}");
 
             ServerVersion = GetServerVersion();
+
+            Log.Info($"Connected to {_client.BaseUri} ({ServerVersion}) ...");
         }
 
         public IServiceClient Client => _client;
@@ -68,14 +73,14 @@ namespace Aquarius.Samples.Client
             return AquariusServerVersion.Create(response.ReleaseName);
         }
 
-        // TODO: This needs to be added to exposed Swagger methods
+        // TODO: The status request & response DTOs need to be added to the exposed Swagger methods
         [Route("/v1/status", HttpMethods.Get)]
-        private class GetStatus : IReturn<StatusResponse>
+        public class GetStatus : IReturn<StatusResponse>
         {
             
         }
 
-        private class StatusResponse
+        public class StatusResponse
         {
             public string ReleaseName { get; set; }
         }
@@ -130,6 +135,22 @@ namespace Aquarius.Samples.Client
             InvokeWebServiceMethod(() => _client.Put(requestDto), WithSparsePutScope);
         }
 
+        public TResponse PostFileWithRequest<TResponse>(string path, IReturn<TResponse> requestDto)
+        {
+            var fileToUpload = new FileInfo(path);
+
+            using (var stream = fileToUpload.OpenRead())
+            {
+                return PostFileWithRequest(stream, fileToUpload.Name, requestDto);
+            }
+        }
+
+        public TResponse PostFileWithRequest<TResponse>(Stream contentToUpload, string uploadedFileName, IReturn<TResponse> requestDto)
+        {
+            var fileUploader = new FileUploader(_client);
+
+            return InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(contentToUpload, uploadedFileName, requestDto));
+        }
 
         public LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto)
             where TRequest : IPaginatedRequest, IReturn<TResponse>
@@ -168,6 +189,18 @@ namespace Aquarius.Samples.Client
             }
         }
 
+        private static void InvokeWebServiceMethod(Action webServiceMethod, Func<JsConfigScope> scopeMethod = null)
+        {
+            const int dummyValueToIgnore = 0;
+
+            var unused = InvokeWebServiceMethod(() =>
+            {
+                webServiceMethod.Invoke();
+
+                return dummyValueToIgnore;
+            }, scopeMethod);
+        }
+
         private static TResponse InvokeWebServiceMethod<TResponse>(Func<TResponse> webServiceMethod, Func<JsConfigScope> scopeMethod = null)
         {
             try
@@ -179,35 +212,11 @@ namespace Aquarius.Samples.Client
             }
             catch (WebServiceException exception)
             {
-                Log.Error(exception);
-                throw;
+                throw WebServiceExceptionHandler.CreateSamplesApiExceptionFromResponse(exception);
             }
             catch (WebException exception)
             {
-                Log.Error(exception);
-                throw;
-            }
-        }
-
-
-        private static void InvokeWebServiceMethod(Action webServiceMethod, Func<JsConfigScope> scopeMethod = null)
-        {
-            try
-            {
-                using (scopeMethod == null ? WithCommonScope() : scopeMethod.Invoke())
-                {
-                    webServiceMethod.Invoke();
-                }
-            }
-            catch (WebServiceException exception)
-            {
-                Log.Error(exception);
-                throw;
-            }
-            catch (WebException exception)
-            {
-                Log.Error(exception);
-                throw;
+                throw WebServiceExceptionHandler.CreateSamplesApiExceptionFromResponse(exception);
             }
         }
     }
