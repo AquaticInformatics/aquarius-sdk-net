@@ -183,6 +183,9 @@ namespace Aquarius.Samples.Client
 
             for (var count = 0; count < totalCount;)
             {
+                if (responseDto.DomainObjects == null)
+                    break;
+
                 foreach (var domainObject in responseDto.DomainObjects)
                 {
                     yield return domainObject;
@@ -190,7 +193,7 @@ namespace Aquarius.Samples.Client
 
                 count += responseDto.DomainObjects.Count;
 
-                if (count >= totalCount || !responseDto.DomainObjects.Any())
+                if (count >= totalCount || count >= responseDto.TotalCount || !responseDto.DomainObjects.Any() || string.IsNullOrEmpty(responseDto.Cursor))
                     break;
 
                 requestDto.Cursor = responseDto.Cursor;
