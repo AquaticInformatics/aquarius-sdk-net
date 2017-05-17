@@ -105,6 +105,11 @@ namespace Aquarius.Samples.Client
             InvokeWebServiceMethod(() => _client.Post(requestDto));
         }
 
+        public TResponse Post<TResponse>(string relativeOrAbsoluteUri, object request)
+        {
+            return InvokeWebServiceMethod(() => _client.Post<TResponse>(relativeOrAbsoluteUri, request));
+        }
+
         public TResponse Put<TResponse>(IReturn<TResponse> requestDto)
         {
             return InvokeWebServiceMethod(() => _client.Put(requestDto));
@@ -194,7 +199,7 @@ namespace Aquarius.Samples.Client
             }
         }
 
-        private static void InvokeWebServiceMethod(Action webServiceMethod, Func<JsConfigScope> scopeMethod = null)
+        public void InvokeWebServiceMethod(Action webServiceMethod, Func<JsConfigScope> scopeMethod = null)
         {
             const int dummyValueToIgnore = 0;
 
@@ -206,7 +211,7 @@ namespace Aquarius.Samples.Client
             }, scopeMethod);
         }
 
-        private static TResponse InvokeWebServiceMethod<TResponse>(Func<TResponse> webServiceMethod, Func<JsConfigScope> scopeMethod = null)
+        public TResponse InvokeWebServiceMethod<TResponse>(Func<TResponse> webServiceMethod, Func<JsConfigScope> scopeMethod = null)
         {
             try
             {

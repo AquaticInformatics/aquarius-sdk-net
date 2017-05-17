@@ -11,8 +11,6 @@ namespace Aquarius.Samples.Client
         IServiceClient Client { get; }
         AquariusServerVersion ServerVersion { get; }
 
-        JsConfigScope WithScope();
-
         TResponse Get<TResponse>(IReturn<TResponse> requestDto);
         void Get(IReturnVoid requestDto);
         TResponse Post<TResponse>(IReturn<TResponse> requestDto);
@@ -31,5 +29,10 @@ namespace Aquarius.Samples.Client
         LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto)
             where TRequest : IPaginatedRequest, IReturn<TResponse>
             where TResponse : IPaginatedResponse<TDomainObject>;
+
+        JsConfigScope WithScope();
+
+        void InvokeWebServiceMethod(Action webServiceMethod, Func<JsConfigScope> scopeMethod = null);
+        TResponse InvokeWebServiceMethod<TResponse>(Func<TResponse> webServiceMethod, Func<JsConfigScope> scopeMethod = null);
     }
 }
