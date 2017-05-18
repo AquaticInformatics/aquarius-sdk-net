@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-05-10 11:48:34
+Date: 2017-05-18 16:16:30
 Version: 4.56
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
@@ -740,6 +740,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Unique id", DataType="string")]
         public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///External locations are created by data connectors.
+        ///</summary>
+        [ApiMember(Description="External locations are created by data connectors.", DataType="boolean")]
+        public bool IsExternalLocation { get; set; }
 
         ///<summary>
         ///Primary folder
@@ -5347,6 +5353,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string LocationType { get; set; }
 
         ///<summary>
+        ///External locations are created by data connectors.
+        ///</summary>
+        [ApiMember(Description="External locations are created by data connectors.")]
+        public bool IsExternalLocation { get; set; }
+
+        ///<summary>
         ///Latitude
         ///</summary>
         [ApiMember(Description="Latitude", DataType="double")]
@@ -6148,6 +6160,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.69.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.81.0");
     }
 }
