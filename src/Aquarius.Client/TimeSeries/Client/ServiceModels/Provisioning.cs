@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-05-10 11:48:35
+Date: 2017-05-18 16:16:34
 Version: 4.56
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
@@ -130,27 +130,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : IReturnVoid
     {
         ///<summary>
-        ///Unique ID of the field data plugin
+        ///Unique ID of the field data plug-in
         ///</summary>
-        [ApiMember(IsRequired=true, Description="Unique ID of the field data plugin", ParameterType="path", DataType="string")]
+        [ApiMember(ParameterType="path", IsRequired=true, DataType="string", Description="Unique ID of the field data plug-in")]
         public Guid UniqueId { get; set; }
     }
 
     [Route("/fielddataplugins", "GET")]
-    public class GetFieldDataPlugIns
-        : IReturn<FieldDataPlugInsResponse>
+    public class GetFieldDataPlugins
+        : IReturn<FieldDataPluginsResponse>
     {
     }
 
     [Route("/fielddataplugins", "POST")]
-    public class PostFieldDataPlugIn
-        : IReturn<FieldDataPlugIn>
+    public class PostFieldDataPlugin
+        : IReturn<FieldDataPlugin>
     {
         ///<summary>
         ///Plug-in folder name
         ///</summary>
-        [ApiMember(Description="Plug-in folder name", DataType="string", IsRequired=true)]
-        public string PlugInFolderName { get; set; }
+        [ApiMember(IsRequired=true, DataType="string", Description="Plug-in folder name")]
+        public string PluginFolderName { get; set; }
 
         ///<summary>
         ///Assembly qualified type name
@@ -161,8 +161,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Plug-in priority; 1 has highest priority
         ///</summary>
-        [ApiMember(Description="Plug-in priority; 1 has highest priority", DataType="integer", IsRequired=true)]
-        public int PlugInPriority { get; set; }
+        [ApiMember(IsRequired=true, DataType="integer", Description="Plug-in priority; 1 has highest priority")]
+        public int PluginPriority { get; set; }
 
         ///<summary>
         ///Description
@@ -1520,7 +1520,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Value { get; set; }
     }
 
-    public class FieldDataPlugIn
+    public class FieldDataPlugin
     {
         ///<summary>
         ///Unique ID of the field data plug-in
@@ -1531,8 +1531,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Plug-in folder name
         ///</summary>
-        [ApiMember(Description="Plug-in folder name", DataType="string")]
-        public string PlugInFolderName { get; set; }
+        [ApiMember(DataType="string", Description="Plug-in folder name")]
+        public string PluginFolderName { get; set; }
 
         ///<summary>
         ///Assembly qualified type name
@@ -1543,8 +1543,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Plug-in priority; 1 has highest priority
         ///</summary>
-        [ApiMember(Description="Plug-in priority; 1 has highest priority", DataType="integer")]
-        public int PlugInPriority { get; set; }
+        [ApiMember(DataType="integer", Description="Plug-in priority; 1 has highest priority")]
+        public int PluginPriority { get; set; }
 
         ///<summary>
         ///Description
@@ -1553,18 +1553,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
     }
 
-    public class FieldDataPlugInsResponse
+    public class FieldDataPluginsResponse
     {
-        public FieldDataPlugInsResponse()
+        public FieldDataPluginsResponse()
         {
-            Results = new List<FieldDataPlugIn>{};
+            Results = new List<FieldDataPlugin>{};
         }
 
         ///<summary>
         ///The list of registered field data plug-ins
         ///</summary>
-        [ApiMember(Description="The list of registered field data plug-ins", DataType="Array<FieldDataPlugIn>")]
-        public List<FieldDataPlugIn> Results { get; set; }
+        [ApiMember(DataType="Array<FieldDataPlugin>", Description="The list of registered field data plug-ins")]
+        public List<FieldDataPlugin> Results { get; set; }
     }
 
     public class Grade
@@ -1680,6 +1680,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Location type")]
         public string LocationType { get; set; }
+
+        ///<summary>
+        ///External locations are created by data connectors.  Only extended attributes can be modified on an external location.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="External locations are created by data connectors.  Only extended attributes can be modified on an external location.")]
+        public bool IsExternalLocation { get; set; }
 
         ///<summary>
         ///Longitude
@@ -2431,6 +2437,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.69.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.81.0");
     }
 }
