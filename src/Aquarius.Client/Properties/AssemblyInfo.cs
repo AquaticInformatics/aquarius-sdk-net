@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Aquarius.Client")]
@@ -10,6 +11,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyConfiguration("")]
+
+[assembly: InternalsVisibleTo("Aquarius.Client.UnitTests")]
 
 // This code will be updated by the build system.
 // Developer builds should remain at version 0.0.0.0 so that unofficial binaries will be obvious.
