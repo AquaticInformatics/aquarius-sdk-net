@@ -7,7 +7,7 @@ The **AQUARIUS SDK for .NET** enables .NET developers to easily work with the [A
 ![AQUARIUS Platform](images/aquatic-informatics.png)
 
 * [AQUARIUS Time-Series](http://aquaticinformatics.com/products/aquarius-time-series/)
-* [AQUARIUS Samples](http://aquaticinformatics.com/products/aquarius-samples/) (coming soon!)
+* [AQUARIUS Samples](http://aquaticinformatics.com/products/aquarius-samples/)
 * [AQUARIUS WebPortal](http://aquaticinformatics.com/products/aquarius-webportal/) (coming soon!)
 
 View the [Release Notes](ReleaseNotes.md) here.
