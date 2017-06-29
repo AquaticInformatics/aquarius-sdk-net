@@ -86,6 +86,7 @@
     <Compile Include="TimeSeries\Client\Helpers\ClientHelperTests.cs" />
     <Compile Include="TimeSeries\Client\Helpers\DurationExtensionsTests.cs" />
     <Compile Include="TimeSeries\Client\Helpers\NodaTimeConverterTests.cs" />
+    <Compile Include="TimeSeries\Client\JsonSerializationTests.cs" />
     <Compile Include="TimeSeries\Client\ObjectIdSerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeSeries\Client\TestHelpers\NodaTimeFixtureRegistrar.cs" />
