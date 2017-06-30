@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using NodaTime;
 using ServiceStack;
 using ServiceStack.Text;
 using ServiceStack.Text.Common;
+using ServiceStack.Text.Json;
 
 namespace Aquarius.TimeSeries.Client
 {
@@ -40,8 +40,6 @@ namespace Aquarius.TimeSeries.Client
     // Also lifted from Server.Services.ServiceStack
     public class JsonConfig
     {
-        private static readonly Regex XsdDateTimeStringRegex = new Regex(@"\.[0-9]{2}Z", RegexOptions.Compiled);
-
         internal class IntervalDto
         {
             public Instant Start { get; set; }
@@ -55,42 +53,50 @@ namespace Aquarius.TimeSeries.Client
             JsConfig.AssumeUtc = true;
             JsConfig.IncludeNullValues = true;
             JsConfig.IncludeNullValuesInDictionaries = true;
+            JsConfig.ThrowOnDeserializationError = true;
 
             JsConfig<DateTime>.SerializeFn = AlwaysSerializeDateTimeAsUtc;
             JsConfig<DateTime>.DeSerializeFn = AlwaysDeserializeDateTimeAsUtc;
+            JsConfig<DateTime>.IncludeDefaultValue = true;
 
             JsConfig<Instant>.SerializeFn = SerializeInstant;
             JsConfig<Instant>.DeSerializeFn = DeserializeInstant;
+            JsConfig<Instant>.IncludeDefaultValue = true;
+
+            JsConfig<Instant?>.SerializeFn = SerializeInstant;
+            JsConfig<Instant?>.DeSerializeFn = DeserializeNullableInstant;
 
             JsConfig<Interval>.RawSerializeFn = SerializeInterval;
             JsConfig<Interval>.RawDeserializeFn = DeserializeInterval;
+            JsConfig<Interval>.IncludeDefaultValue = true;
 
             JsConfig<Duration>.RawSerializeFn = SerializeDuration;
             JsConfig<Duration>.DeSerializeFn = DeserializeDuration;
+            JsConfig<Duration>.IncludeDefaultValue = true;
+
+            JsConfig<Duration?>.RawSerializeFn = SerializeDuration;
+            JsConfig<Duration?>.DeSerializeFn = DeserializeNullableDuration;
 
             JsConfig<Offset>.RawSerializeFn = SerializeOffset;
             JsConfig<Offset>.DeSerializeFn = DeserializeOffset;
+            JsConfig<Offset>.IncludeDefaultValue = true;
 
             JsConfig<ObjectId>.SerializeFn = id => id.ToString();
             JsConfig<ObjectId>.DeSerializeFn = s => new ObjectId(long.Parse(s, CultureInfo.InvariantCulture));
+
+            JsConfig<double>.RawSerializeFn = SerializeDouble;
+            JsConfig<double>.RawDeserializeFn = DeserializeDouble;
+            JsConfig<double>.IncludeDefaultValue = true;
+
+            JsConfig<double?>.RawSerializeFn = SerializeNullableDouble;
+            JsConfig<double?>.RawDeserializeFn = DeserializeNullableDouble;
         }
 
         private static string AlwaysSerializeDateTimeAsUtc(DateTime dateTime)
         {
             dateTime = ForceKindToUtc(dateTime);
 
-            var dateTimeString = DateTimeSerializer.ToXsdDateTimeString(dateTime);
-            return GetStableXsdDateTimeString(dateTimeString);
-        }
-
-        // AQ-17088 : Remove this hack when ServiceStack is upgraded to 4.0.43+
-        private static string GetStableXsdDateTimeString(string dateTimeString)
-        {
-            if (!XsdDateTimeStringRegex.IsMatch(dateTimeString))
-                return dateTimeString;
-
-            var dateTimeStringWithoutUtcSuffix = dateTimeString.Substring(0, dateTimeString.Length - 1);
-            return dateTimeStringWithoutUtcSuffix + "0Z";
+            return DateTimeSerializer.ToXsdDateTimeString(dateTime);
         }
 
         private static DateTime AlwaysDeserializeDateTimeAsUtc(string s)
@@ -120,6 +126,13 @@ namespace Aquarius.TimeSeries.Client
             return DateTimeSerializer.ToXsdDateTimeString(value.ToDateTimeUtc());
         }
 
+        private static string SerializeInstant(Instant? value)
+        {
+            if (value == null)
+                return null;
+            return SerializeInstant(value.Value);
+        }
+
         private static Instant DeserializeInstant(string text)
         {
             switch (text.ToLowerInvariant())
@@ -132,6 +145,14 @@ namespace Aquarius.TimeSeries.Client
                     var dateTimeOffset = DateTimeSerializer.ParseDateTimeOffset(text);
                     return Instant.FromDateTimeOffset(dateTimeOffset);
             }
+        }
+
+        private static Instant? DeserializeNullableInstant(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
+            return DeserializeInstant(text);
         }
 
         private static string SerializeInterval(Interval value)
@@ -159,15 +180,59 @@ namespace Aquarius.TimeSeries.Client
         {
             return text.ParseDuration();
         }
+        private static string SerializeDuration(Duration? value)
+        {
+            return value?.SerializeToQuotedString();
+        }
+
+        private static Duration? DeserializeNullableDuration(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
+            return text.ParseDuration();
+        }
 
         private static string SerializeOffset(Offset value)
         {
-            return TextExtensions.SerializeToString(value.ToTimeSpan());
+            return value.ToTimeSpan().SerializeToString();
         }
 
         private static Offset DeserializeOffset(string text)
         {
             return Offset.FromTicks(text.FromJson<TimeSpan>().Ticks);
+        }
+
+        private static string SerializeDouble(double value)
+        {
+            if (double.IsNegativeInfinity(value) || double.IsPositiveInfinity(value))
+                throw new ArgumentException("Infinite values are invalid in JSON", nameof(value));
+
+            if (double.IsNaN(value))
+                return JsonUtils.Null;
+
+            return value.ToString("R", CultureInfo.InvariantCulture);
+        }
+
+        private static string SerializeNullableDouble(double? value)
+        {
+            return (value == null) ? JsonUtils.Null : SerializeDouble(value.Value);
+        }
+
+        private static double DeserializeDouble(string text)
+        {
+            if (text == null || text == JsonUtils.Null)
+                return double.NaN;
+
+            return double.Parse(text, NumberStyles.Float, CultureInfo.InvariantCulture);
+        }
+
+        private static double? DeserializeNullableDouble(string text)
+        {
+            if (text == null || text == JsonUtils.Null)
+                return null;
+
+            return DeserializeDouble(text);
         }
     }
 
