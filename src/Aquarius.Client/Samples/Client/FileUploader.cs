@@ -11,9 +11,22 @@ namespace Aquarius.Samples.Client
     {
         private readonly IRestClient _restClient;
 
-        public FileUploader(JsonServiceClient client)
-            : this(new JsonHttpClient(client.BaseUri), client.Headers[SamplesClient.AuthorizationHeaderKey], client.UserAgent)
+        public static FileUploader Create(IServiceClient client)
         {
+            var baseUri = string.Empty;
+            var authHeader = string.Empty;
+            var userAgent = string.Empty;
+
+            var jsonServiceClient = client as JsonServiceClient;
+
+            if (jsonServiceClient != null)
+            {
+                baseUri = jsonServiceClient.BaseUri;
+                authHeader = jsonServiceClient.Headers[SamplesClient.AuthorizationHeaderKey];
+                userAgent = jsonServiceClient.UserAgent;
+            }
+
+            return new FileUploader(new JsonHttpClient(baseUri), authHeader, userAgent);
         }
 
         public FileUploader(IRestClient restClient, string authorizationHeader, string userAgent)

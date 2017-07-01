@@ -23,18 +23,34 @@ namespace Aquarius.Samples.Client
             return new SamplesClient(baseUrl, apiToken);
         }
 
+        public static ISamplesClient CreateTestClient(IServiceClient client)
+        {
+            return new SamplesClient(client, string.Empty);
+        }
+
         public AquariusServerVersion ServerVersion { get; }
 
-        private JsonServiceClient _client;
+        private IServiceClient _client;
 
         private SamplesClient(string baseUrl, string apiToken)
+            :this(new SdkServiceClient(UriHelper.ResolveEndpoint(baseUrl, "/api", Uri.UriSchemeHttps)), apiToken)
         {
-            _client = new SdkServiceClient(UriHelper.ResolveEndpoint(baseUrl, "/api", Uri.UriSchemeHttps));
-            _client.Headers.Add(AuthorizationHeaderKey, $"token {apiToken}");
+        }
+
+        private SamplesClient(IServiceClient client, string apiToken)
+        {
+            _client = client;
+
+            Client.AddHeader(AuthorizationHeaderKey, $"token {apiToken}");
 
             ServerVersion = GetServerVersion();
 
-            Log.Info($"Connected to {_client.BaseUri} ({ServerVersion}) ...");
+            Log.Info($"Connected to {GetBaseUri()} ({ServerVersion}) ...");
+        }
+
+        private string GetBaseUri()
+        {
+            return (Client as JsonServiceClient)?.BaseUri ?? "http://fake.aqsamples.com/api";
         }
 
         public IServiceClient Client => _client;
@@ -152,19 +168,25 @@ namespace Aquarius.Samples.Client
 
         public TResponse PostFileWithRequest<TResponse>(Stream contentToUpload, string uploadedFileName, IReturn<TResponse> requestDto)
         {
-            var fileUploader = new FileUploader(_client);
+            var fileUploader = FileUploader.Create(_client);
 
             return InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(GetPostUrl(requestDto), contentToUpload, uploadedFileName, requestDto));
         }
 
         private string GetPostUrl<TResponse>(IReturn<TResponse> requestDto)
         {
-            return _client.ResolveTypedUrl(HttpMethods.Post, requestDto);
+            var jsonServiceClient = _client as JsonServiceClient;
+
+            if (jsonServiceClient != null)
+                return jsonServiceClient.ResolveTypedUrl(HttpMethods.Post, requestDto);
+
+            return requestDto.ToPostUrl();
         }
 
         public LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto)
             where TRequest : IPaginatedRequest, IReturn<TResponse>
             where TResponse : IPaginatedResponse<TDomainObject>
+
         {
             var responseDto = Get(requestDto);
 

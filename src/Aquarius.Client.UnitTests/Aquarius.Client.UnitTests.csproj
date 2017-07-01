@@ -79,6 +79,7 @@
     <Compile Include="Helpers\UriHelperTests.cs" />
     <Compile Include="Helpers\UserAgentBuilderTests.cs" />
     <Compile Include="Samples\Client\FileUploaderTests.cs" />
+    <Compile Include="Samples\Client\LazyGetTests.cs" />
     <Compile Include="TimeSeries\Client\AquariusServerVersionTests.cs" />
     <Compile Include="TimeSeries\Client\AquariusSystemDetectorTests.cs" />
     <Compile Include="TimeSeries\Client\CredentialsParserTests.cs" />
