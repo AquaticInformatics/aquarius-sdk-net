@@ -79,7 +79,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Identifier returned from a previous append request
         ///</summary>
-        [ApiMember(ParameterType="path", Description="Identifier returned from a previous append request", IsRequired=true)]
+        [ApiMember(Description="Identifier returned from a previous append request", IsRequired=true, ParameterType="path")]
         public string AppendRequestIdentifier { get; set; }
     }
 
@@ -95,21 +95,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the reflected time series to receive points
         ///</summary>
-        [ApiMember(ParameterType="path", IsRequired=true, Description="The unique ID (from Publish API) of the reflected time series to receive points", DataType="string")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the reflected time series to receive points", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
-        [ApiMember(Description="Points to append (can be empty). All points must lie within the time range", DataType="Array<ReflectedTimeSeriesPoint>")]
+        [ApiMember(DataType="Array<ReflectedTimeSeriesPoint>", Description="Points to append (can be empty). All points must lie within the time range")]
         public List<ReflectedTimeSeriesPoint> Points { get; set; }
 
         ///<summary>
         ///Time range to update. Any existing points in the time range will be overwritten
         ///</summary>
-        [ApiMember(IsRequired=true, Description="Time range to update. Any existing points in the time range will be overwritten", DataType="Interval")]
+        [ApiMember(DataType="Interval", Description="Time range to update. Any existing points in the time range will be overwritten", IsRequired=true)]
         public Interval TimeRange { get; set; }
     }
+
 
     [Route("/timeseries/{UniqueId}/append", "POST")]
     public class PostTimeSeriesAppend
@@ -123,13 +124,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time series to receive points
         ///</summary>
-        [ApiMember(ParameterType="path", IsRequired=true, Description="The unique ID (from Publish API) of the time series to receive points", DataType="string")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time series to receive points", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Points to append (can be empty)
         ///</summary>
-        [ApiMember(Description="Points to append (can be empty)", DataType="Array<TimeSeriesPoint>")]
+        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points to append (can be empty)")]
         public List<TimeSeriesPoint> Points { get; set; }
     }
 
@@ -145,19 +146,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time series to receive points
         ///</summary>
-        [ApiMember(ParameterType="path", IsRequired=true, Description="The unique ID (from Publish API) of the time series to receive points", DataType="string")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time series to receive points", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
-        [ApiMember(Description="Points to append (can be empty). All points must lie within the time range", DataType="Array<TimeSeriesPoint>")]
+        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points to append (can be empty). All points must lie within the time range")]
         public List<TimeSeriesPoint> Points { get; set; }
 
         ///<summary>
         ///Time range to delete before appending points
         ///</summary>
-        [ApiMember(Description="Time range to delete before appending points", DataType="Interval")]
+        [ApiMember(DataType="Interval", Description="Time range to delete before appending points")]
         public Interval TimeRange { get; set; }
     }
 
@@ -172,13 +173,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(Description="Grade code", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Grade code")]
         public int? GradeCode { get; set; }
 
         ///<summary>
         ///Qualifier codes
         ///</summary>
-        [ApiMember(Description="Qualifier codes", DataType="Array<string>")]
+        [ApiMember(DataType="Array<string>", Description="Qualifier codes")]
         public List<string> Qualifiers { get; set; }
     }
 
@@ -187,13 +188,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///ISO 8601 timestamp
         ///</summary>
-        [ApiMember(IsRequired=true, Description="ISO 8601 timestamp", DataType="Instant")]
+        [ApiMember(DataType="Instant", Description="ISO 8601 timestamp", IsRequired=true)]
         public Instant? Time { get; set; }
 
         ///<summary>
         ///The value of the point. Null or empty to represent a NaN
         ///</summary>
-        [ApiMember(Description="The value of the point. Null or empty to represent a NaN", DataType="double")]
+        [ApiMember(DataType="double", Description="The value of the point. Null or empty to represent a NaN")]
         public double? Value { get; set; }
     }
 
@@ -205,6 +206,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         [ApiMember(Description="A token to use in subsequent GetTimeSeriesAppendStatus calls")]
         public string AppendRequestIdentifier { get; set; }
     }
+
 
     [Route("/session", "DELETE")]
     public class DeleteSession
@@ -252,7 +254,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///RSA key size in bits
         ///</summary>
-        [ApiMember(Description="RSA key size in bits", DataType="integer")]
+        [ApiMember(DataType="integer", Description="RSA key size in bits")]
         public int KeySize { get; set; }
 
         ///<summary>
