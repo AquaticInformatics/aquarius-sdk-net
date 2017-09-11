@@ -1,8 +1,8 @@
 /* Options:
-Date: 2017-05-18 16:16:34
-Version: 4.56
+Date: 2017-09-12 11:13:14
+Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver17/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -112,6 +112,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Xml { get; set; }
     }
 
+    public enum MeasurementDirection
+    {
+        Unknown,
+        FromTopToBottom,
+        FromBottomToTop,
+    }
+
     public enum NewValueLocationType
     {
         Unknown,
@@ -171,6 +178,45 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
     }
 
+    [Route("/locations/{LocationUniqueId}/datumperiods", "DELETE")]
+    public class DeleteLocationDatum
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/datumperiods", "GET")]
+    public class GetLocationDatum
+        : IReturn<LocationDatumResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/datumperiods", "POST")]
+    public class PostLocationDatumPeriod
+        : LocationDatumPeriodBase, IReturn<LocationDatumResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Reference standard this period is related to, which must be a standard reference datum for the location
+        ///</summary>
+        [ApiMember(Description="Reference standard this period is related to, which must be a standard reference datum for the location", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
+    }
+
     [Route("/locationfolders/{LocationFolderUniqueId}", "DELETE")]
     public class DeleteLocationFolder
         : IReturnVoid
@@ -191,6 +237,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Unique ID of the location type", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/referencepoints/{ReferencePointUniqueId}", "DELETE")]
+    public class DeleteReferencePoint
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique ID of the reference point
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the reference point", IsRequired=true, ParameterType="path")]
+        public Guid ReferencePointUniqueId { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}", "GET")]
@@ -219,6 +282,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class GetLocationFolders
         : IReturn<LocationFoldersResponse>
     {
+    }
+
+    [Route("/locations/{LocationUniqueId}/referencepoints/", "GET")]
+    public class GetLocationReferencePoints
+        : IReturn<ReferencePointResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
     }
 
     [Route("/locationtypes/{UniqueId}", "GET")]
@@ -271,15 +345,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
 
         ///<summary>
-        ///Longitude
+        ///Longitude (WGS 84)
         ///</summary>
-        [ApiMember(DataType="double", Description="Longitude")]
+        [ApiMember(DataType="double", Description="Longitude (WGS 84)")]
         public double? Longitude { get; set; }
 
         ///<summary>
-        ///Latitude
+        ///Latitude (WGS 84)
         ///</summary>
-        [ApiMember(DataType="double", Description="Latitude")]
+        [ApiMember(DataType="double", Description="Latitude (WGS 84)")]
         public double? Latitude { get; set; }
 
         ///<summary>
@@ -342,9 +416,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : LocationBase, IReturn<Location>
     {
         ///<summary>
-        ///ISO 8601 Duration Format
+        ///ISO 8601 duration format
         ///</summary>
-        [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
+        [ApiMember(DataType="Offset", Description="ISO 8601 duration format")]
         public Offset UtcOffset { get; set; }
     }
 
@@ -362,6 +436,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     [Route("/locationtypes", "POST")]
     public class PostLocationType
         : LocationTypeBase, IReturn<LocationType>
+    {
+    }
+
+    [Route("/locations/{LocationUniqueId}/referencepoints", "POST")]
+    public class PostReferencePoint
+        : ReferencePointBase, IReturn<ReferencePoint>
+    {
+        public PostReferencePoint()
+        {
+            ReferencePointPeriods = new List<PostReferencePointPeriod>{};
+        }
+
+        ///<summary>
+        ///Periods of applicablity for this reference point. Must have at least one period
+        ///</summary>
+        [ApiMember(DataType="Array<PostReferencePointPeriod>", Description="Periods of applicablity for this reference point. Must have at least one period", IsRequired=true)]
+        public List<PostReferencePointPeriod> ReferencePointPeriods { get; set; }
+    }
+
+    public class PostReferencePointPeriod
+        : ReferencePointPeriodBase
     {
     }
 
@@ -396,6 +491,51 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Unique ID of the location type", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
+    }
+
+    public class ReferencePointBase
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name", IsRequired=true)]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Decommissioned date
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Decommissioned date")]
+        public Instant? DecommissionedDate { get; set; }
+
+        ///<summary>
+        ///Decommissioned reason
+        ///</summary>
+        [ApiMember(Description="Decommissioned reason")]
+        public string DecommissionedReason { get; set; }
+
+        ///<summary>
+        ///Longitude (WGS 84)
+        ///</summary>
+        [ApiMember(DataType="double", Description="Longitude (WGS 84)")]
+        public double? Longitude { get; set; }
+
+        ///<summary>
+        ///Latitude (WGS 84)
+        ///</summary>
+        [ApiMember(DataType="double", Description="Latitude (WGS 84)")]
+        public double? Latitude { get; set; }
     }
 
     [Route("/monitoringmethods/{MethodCode}", "DELETE")]
@@ -739,6 +879,78 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Identifier { get; set; }
     }
 
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/{StandardIdentifier}", "DELETE")]
+    public class DeleteStandardReferenceDatum
+        : StandardReferenceDatumRequestBase, IReturnVoid
+    {
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums", "GET")]
+    public class GetStandardReferenceDatums
+        : IReturn<StandardReferenceDatumsResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereference", "POST")]
+    public class PostBaseStandardReferenceDatum
+        : StandardReferenceDatumRequestBase, IReturn<StandardReferenceDatum>
+    {
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset", "POST")]
+    public class PostBaseStandardReferenceDatumOffset
+        : StandardReferenceDatumRequestBase, IReturn<StandardReferenceDatum>
+    {
+        ///<summary>
+        ///Offset in relation to the base reference.
+        ///</summary>
+        [ApiMember(DataType="double", Description="Offset in relation to the base reference.", IsRequired=true)]
+        public double OffsetToBaseReference { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset/{StandardIdentifier}", "PUT")]
+    public class PutBaseStandardReferenceDatumOffset
+        : IReturn<StandardReferenceDatum>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Standard identifier
+        ///</summary>
+        [ApiMember(DataType="string", Description="Standard identifier", IsRequired=true, ParameterType="path")]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///Offset in relation to the base reference.
+        ///</summary>
+        [ApiMember(DataType="double", Description="Offset in relation to the base reference.", IsRequired=true)]
+        public double OffsetToBaseReference { get; set; }
+    }
+
+    public class StandardReferenceDatumRequestBase
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///StandardIdentifier
+        ///</summary>
+        [ApiMember(DataType="string", Description="StandardIdentifier", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
+    }
+
     [Route("/timeseries/{TimeSeriesUniqueId}", "DELETE")]
     public class DeleteTimeSeries
         : IReturnVoid
@@ -864,6 +1076,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="integer", Description="Observation offset in minutes")]
         public int? ObservationOffsetInMinutes { get; set; }
+
+        ///<summary>
+        ///Time Step Count. Must be included for 'Statistic' derived time-series.
+        ///</summary>
+        [ApiMember(Description="Time Step Count. Must be included for 'Statistic' derived time-series.")]
+        public int? TimeStepCount { get; set; }
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}", "PUT")]
@@ -1688,15 +1906,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public bool IsExternalLocation { get; set; }
 
         ///<summary>
-        ///Longitude
+        ///Longitude (WGS 84)
         ///</summary>
-        [ApiMember(DataType="double", Description="Longitude")]
+        [ApiMember(DataType="double", Description="Longitude (WGS 84)")]
         public double? Longitude { get; set; }
 
         ///<summary>
-        ///Latitude
+        ///Latitude (WGS 84)
         ///</summary>
-        [ApiMember(DataType="double", Description="Latitude")]
+        [ApiMember(DataType="double", Description="Latitude (WGS 84)")]
         public double? Latitude { get; set; }
 
         ///<summary>
@@ -1734,6 +1952,69 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+    }
+
+    public class LocationDatumPeriod
+        : LocationDatumPeriodBase
+    {
+        ///<summary>
+        ///Applied date
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Applied date")]
+        public Instant AppliedTimeUtc { get; set; }
+
+        ///<summary>
+        ///Applied by user
+        ///</summary>
+        [ApiMember(Description="Applied by user")]
+        public string AppliedByUser { get; set; }
+
+        ///<summary>
+        ///Reference standard this period is related to
+        ///</summary>
+        [ApiMember(DataType="StandardReferenceDatum", Description="Reference standard this period is related to")]
+        public StandardReferenceDatum ReferenceStandard { get; set; }
+    }
+
+    public class LocationDatumPeriodBase
+    {
+        ///<summary>
+        ///Time this period is valid from
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Time this period is valid from", IsRequired=true)]
+        public Instant ValidFrom { get; set; }
+
+        ///<summary>
+        ///Elevation difference from the reference standard
+        ///</summary>
+        [ApiMember(DataType="double", Description="Elevation difference from the reference standard", IsRequired=true)]
+        public double Elevation { get; set; }
+
+        ///<summary>
+        ///Direction of positive elevations in relation to the reference standard
+        ///</summary>
+        [ApiMember(DataType="MeasurementDirection", Description="Direction of positive elevations in relation to the reference standard", IsRequired=true)]
+        public MeasurementDirection MeasurementDirection { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+    }
+
+    public class LocationDatumResponse
+    {
+        public LocationDatumResponse()
+        {
+            Results = new List<LocationDatumPeriod>{};
+        }
+
+        ///<summary>
+        ///The list of assumed local datums for the location
+        ///</summary>
+        [ApiMember(DataType="Array<LocationDatumPeriod>", Description="The list of assumed local datums for the location")]
+        public List<LocationDatumPeriod> Results { get; set; }
     }
 
     public class LocationFolder
@@ -2047,6 +2328,102 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<PopulatedUnitGroup> Results { get; set; }
     }
 
+    public class ReferencePoint
+        : ReferencePointBase
+    {
+        public ReferencePoint()
+        {
+            ReferencePointPeriods = new List<ReferencePointPeriod>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the reference point
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the reference point")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Periods of applicablity for this reference point
+        ///</summary>
+        [ApiMember(DataType="Array<ReferencePointPeriod>", Description="Periods of applicablity for this reference point")]
+        public List<ReferencePointPeriod> ReferencePointPeriods { get; set; }
+    }
+
+    public class ReferencePointPeriod
+        : ReferencePointPeriodBase
+    {
+        ///<summary>
+        ///Unique ID of the reference point
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the reference point")]
+        public Guid ReferencePointUniqueId { get; set; }
+
+        ///<summary>
+        ///Applied date
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Applied date")]
+        public Instant AppliedTimeUtc { get; set; }
+
+        ///<summary>
+        ///Applied by user
+        ///</summary>
+        [ApiMember(Description="Applied by user")]
+        public string AppliedByUser { get; set; }
+    }
+
+    public class ReferencePointPeriodBase
+    {
+        ///<summary>
+        ///Time this period is valid from
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Time this period is valid from", IsRequired=true)]
+        public Instant ValidFrom { get; set; }
+
+        ///<summary>
+        ///Standard identifier. Standard reference datum must already be defined in this location
+        ///</summary>
+        [ApiMember(Description="Standard identifier. Standard reference datum must already be defined in this location")]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///True if this period is measured against the location's local assumed datum instead of a standard datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if this period is measured against the location's local assumed datum instead of a standard datum", IsRequired=true)]
+        public bool IsMeasuredAgainstLocalAssumedDatum { get; set; }
+
+        ///<summary>
+        ///Elevation of the reference point relative to the standard or local assumed datum
+        ///</summary>
+        [ApiMember(DataType="double", Description="Elevation of the reference point relative to the standard or local assumed datum", IsRequired=true)]
+        public double Elevation { get; set; }
+
+        ///<summary>
+        ///Direction of positive elevations in relation to the reference point
+        ///</summary>
+        [ApiMember(DataType="MeasurementDirection", Description="Direction of positive elevations in relation to the reference point", IsRequired=true)]
+        public MeasurementDirection MeasurementDirection { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+    }
+
+    public class ReferencePointResponse
+    {
+        public ReferencePointResponse()
+        {
+            Results = new List<ReferencePoint>{};
+        }
+
+        ///<summary>
+        ///The list of reference points
+        ///</summary>
+        [ApiMember(DataType="Array<ReferencePoint>", Description="The list of reference points")]
+        public List<ReferencePoint> Results { get; set; }
+    }
+
     public class StandardDatum
     {
         ///<summary>
@@ -2068,6 +2445,47 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<StandardDatum>", Description="The list of standard datums")]
         public List<StandardDatum> Results { get; set; }
+    }
+
+    public class StandardReferenceDatum
+    {
+        ///<summary>
+        ///Unique ID of the Location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the Location")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///StandardIdentifier
+        ///</summary>
+        [ApiMember(DataType="string", Description="StandardIdentifier")]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///True if the Standard Reference Datum is the Base Reference
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if the Standard Reference Datum is the Base Reference")]
+        public bool IsBaseReference { get; set; }
+
+        ///<summary>
+        ///Offset in relation to the Base Reference. Not used if IsBaseReference is set to true
+        ///</summary>
+        [ApiMember(DataType="double", Description="Offset in relation to the Base Reference. Not used if IsBaseReference is set to true")]
+        public double? OffsetToBaseReference { get; set; }
+    }
+
+    public class StandardReferenceDatumsResponse
+    {
+        public StandardReferenceDatumsResponse()
+        {
+            Results = new List<StandardReferenceDatum>{};
+        }
+
+        ///<summary>
+        ///The list of Standard Reference Datums
+        ///</summary>
+        [ApiMember(DataType="Array<StandardReferenceDatum>", Description="The list of Standard Reference Datums")]
+        public List<StandardReferenceDatum> Results { get; set; }
     }
 
     public class TimeSeries
@@ -2189,9 +2607,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         }
 
         ///<summary>
-        ///The lsit of time series
+        ///The list of time series
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeries>", Description="The lsit of time series")]
+        [ApiMember(DataType="Array<TimeSeries>", Description="The list of time series")]
         public List<TimeSeries> Results { get; set; }
     }
 
@@ -2437,6 +2855,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.81.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.3.86.0");
     }
 }
