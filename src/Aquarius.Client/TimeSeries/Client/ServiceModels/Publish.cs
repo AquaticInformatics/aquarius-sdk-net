@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-09-12 11:13:12
+Date: 2017-09-12 16:24:02
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver17/AQUARIUS/Publish/v2
@@ -25,11 +25,10 @@ ExportValueTypes: True
 */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
+using ServiceStack.Web;
 using NodaTime;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 
