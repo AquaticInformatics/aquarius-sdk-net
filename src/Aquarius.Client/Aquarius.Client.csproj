@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Aquarius.Client.nuspec" />
+    <None Include="Samples\Client\create_service_models.sh" />
     <None Include="TimeSeries\Client\create_service_models.sh" />
     <None Include="TimeSeries\Client\generate_code_from_live_endpoint.sh" />
     <None Include="packages.config" />
