@@ -8,6 +8,8 @@ namespace SamplesServiceModelGenerator.Swagger
     {
         private static readonly string DefaultFormat = string.Empty;
 
+        public static TargetLanguage Language { get; set; } = TargetLanguage.CSharp;
+
         public static string Map(ITypedItem item)
         {
             switch (item.Type)
@@ -31,7 +33,7 @@ namespace SamplesServiceModelGenerator.Swagger
             }
 
             Dictionary<string, string> formatsForType;
-            if (!TypeMaps.TryGetValue(item.Type, out formatsForType))
+            if (!TypeMaps[Language].TryGetValue(item.Type, out formatsForType))
             {
                 return item.Type.ToString();
             }
@@ -43,15 +45,29 @@ namespace SamplesServiceModelGenerator.Swagger
             return formatsForType[DefaultFormat];
         }
 
-        private static readonly Dictionary<Type, Dictionary<string, string>> TypeMaps =
-            new Dictionary<Type, Dictionary<string, string>>
+        private static readonly Dictionary<TargetLanguage, Dictionary<Type, Dictionary<string, string>>> TypeMaps =
+            new Dictionary<TargetLanguage, Dictionary<Type, Dictionary<string, string>>>
             {
-                { Type.Boolean, new Dictionary<string, string> { { DefaultFormat, "bool"} } },
-                { Type.Integer, new Dictionary<string, string> { { DefaultFormat, "int"}, {"int64", "long"} } },
-                { Type.String, new Dictionary<string, string> { { DefaultFormat, "string"}, { "date-time", "Instant"} } },
-                { Type.Number, new Dictionary<string, string> { { DefaultFormat, "double"} } },
-                { Type.Byte, new Dictionary<string, string> { { DefaultFormat, "byte[]"} } },
-                { Type.Object, new Dictionary<string, string> { { DefaultFormat, "object"} } },
+                {
+                    TargetLanguage.CSharp, new Dictionary<Type, Dictionary<string, string>>
+                    {
+                        {Type.Boolean, new Dictionary<string, string> {{DefaultFormat, "bool"}}},
+                        {Type.Integer, new Dictionary<string, string> {{DefaultFormat, "int"}, {"int64", "long"}}},
+                        {Type.String, new Dictionary<string, string> {{DefaultFormat, "string"}, {"date-time", "Instant"}}},
+                        {Type.Number, new Dictionary<string, string> {{DefaultFormat, "double"}}},
+                        {Type.Byte, new Dictionary<string, string> {{DefaultFormat, "byte[]"}}},
+                        {Type.Object, new Dictionary<string, string> {{DefaultFormat, "object"}}},
+                    }
+                },
+                {
+                    TargetLanguage.Java, new Dictionary<Type, Dictionary<string, string>>
+                    {
+                        {Type.Integer, new Dictionary<string, string> {{DefaultFormat, "Integer"}}},
+                        {Type.String, new Dictionary<string, string> {{DefaultFormat, "String"}, {"date-time", "Instant"}}},
+                        {Type.Number, new Dictionary<string, string> {{DefaultFormat, "Double"}}},
+                        {Type.Byte, new Dictionary<string, string> {{DefaultFormat, "byte[]"}}},
+                    }
+                },
             };
     }
 }

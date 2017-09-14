@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using SamplesServiceModelGenerator.CodeGenerators;
 using SamplesServiceModelGenerator.Swagger;
 using ServiceStack.Logging;
 using ServiceStack.Logging.Log4Net;
@@ -70,10 +72,32 @@ namespace SamplesServiceModelGenerator
 
         private string _usageMessage;
         private string _url = "https://demo.aqsamples.com/api/swagger.json";
-        private string _namespace = "Aquarius.Samples.Client.ServiceModel";
-        private string _usingDirectives = "System.Collections.Generic;ServiceStack;NodaTime;Aquarius.TimeSeries.Client";
-        private string _filename = "ServiceModel.cs";
-        private string _aliases = "DomainDateTime=Instant;DomainDateTimeRange=Interval";
+        private TargetLanguage _targetLanguage = TargetLanguage.CSharp;
+
+        private Dictionary<TargetLanguage, string> _namespace = new Dictionary<TargetLanguage, string>
+        {
+            {TargetLanguage.CSharp, "Aquarius.Samples.Client.ServiceModel"},
+            {TargetLanguage.Java, "com.aquaticinformatics.aquarius.sdk.samples"},
+        };
+
+        private Dictionary<TargetLanguage, string> _usingDirectives = new Dictionary<TargetLanguage, string>
+        {
+            {TargetLanguage.CSharp, "System.Collections.Generic;ServiceStack;NodaTime;Aquarius.TimeSeries.Client"},
+            {TargetLanguage.Java, "java.time.*;java.util.*;net.servicestack.client.*;com.aquaticinformatics.aquarius.sdk.AquariusServerVersion"},
+        };
+
+        private Dictionary<TargetLanguage, string> _filename = new Dictionary<TargetLanguage, string>
+        {
+            {TargetLanguage.CSharp, "ServiceModel.cs"},
+            {TargetLanguage.Java, "ServiceModel.java"},
+        };
+
+        private Dictionary<TargetLanguage, string> _aliases = new Dictionary<TargetLanguage, string>
+        {
+            {TargetLanguage.CSharp, "DomainDateTime=Instant;DomainDateTimeRange=Interval"},
+            {TargetLanguage.Java, "DomainDateTime=Instant;DomainDateTimeRange=Interval"},
+        };
+
         private string _fixups = "GET:/v1/samplinglocations/{id}/attachments=GetSamplingLocationAttachments;"
                                  + "GET:/v1/fieldvisits/{id}/attachments=GetFieldVisitAttachments;"
                                  + "GET:/v1/unitgroupwithunits=GetUnitGroupsWithUnits;"
@@ -95,11 +119,12 @@ namespace SamplesServiceModelGenerator
         {
             var options = new[]
             {
+                new Option {Key = "Language", Setter = value => _targetLanguage = (TargetLanguage)System.Enum.Parse(typeof(TargetLanguage), value, true), Getter = () => _targetLanguage.ToString(), Description = $"Language for the generated service model code. One of: {string.Join(", ", System.Enum.GetNames(typeof(TargetLanguage)))}. This option should be set before setting any -Namespace, -UsingDirectives, or -Aliases options."},
                 new Option {Key = "URL", Setter = value => _url = value, Getter = () => _url, Description = "URL for Swagger 2.0 JSON"},
-                new Option {Key = "Filename", Setter = value => _filename = value, Getter = () => _filename, Description = "Filename for the generated service model C# code"},
-                new Option {Key = "Namespace", Setter = value => _namespace = value, Getter = () => _namespace, Description = "Namespace for the generated service model"},
-                new Option {Key = "UsingDirectives", Setter = value => _usingDirectives = value, Getter = () => _usingDirectives, Description = "using directives (semicolon-separated) for the generated sevice model"},
-                new Option {Key = "Aliases", Setter = value => _aliases = value, Getter = () => _aliases, Description = "Type aliases (semicolon-separated) in SwaggerType=AliasType format"},
+                new Option {Key = "Filename", Setter = value => _filename[_targetLanguage] = value, Getter = () => _filename[_targetLanguage], Description = "Filename for the generated service model code"},
+                new Option {Key = "Namespace", Setter = value => _namespace[_targetLanguage] = value, Getter = () => _namespace[_targetLanguage], Description = "Namespace for the generated service model"},
+                new Option {Key = "UsingDirectives", Setter = value => _usingDirectives[_targetLanguage] = value, Getter = () => _usingDirectives[_targetLanguage], Description = "using directives (semicolon-separated) for the generated sevice model"},
+                new Option {Key = "Aliases", Setter = value => _aliases[_targetLanguage] = value, Getter = () => _aliases[_targetLanguage], Description = "Type aliases (semicolon-separated) in SwaggerType=AliasType format"},
                 new Option {Key = "Fixups", Setter = value => _fixups = value, Getter = () => _fixups, Description = "Fixups (semicolon-separated) in Verb:Route=RequestDtoName format"},
                 new Option {Key = "Enums", Setter = value => _enums = value, Getter = () => _enums, Description = "Enum overrides (semicolon-separated) in EnumTypeName=fieldName.Value1,...,ValueN format"},
             };
@@ -136,6 +161,8 @@ namespace SamplesServiceModelGenerator
 
         private void Run()
         {
+            TypeMapper.Language = _targetLanguage;
+
             var jsonText = LoadStringFromUrl(_url);
 
             var parser = new Parser
@@ -154,32 +181,16 @@ namespace SamplesServiceModelGenerator
 
             var api = parser.Parse(jsonText, _url);
 
-            var generator = new CodeGenerator
-            {
-                Api = api,
-                Filename = _filename,
-                Namespace = _namespace,
-                UsingDirectives = _usingDirectives
-                    .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries),
-                Aliases = _aliases
-                    .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => AliasRegex.Match(s))
-                    .Where(m => m.Success)
-                    .ToDictionary(m => m.Groups["swaggerType"].Value.Trim(), m => m.Groups["aliasType"].Value.Trim()),
-                RequestDtoFixups = _fixups
-                    .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => FixupRegex.Match(s))
-                    .Where(m => m.Success)
-                    .ToDictionary(m => m.Groups["methodRoute"].Value.Trim(), m => m.Groups["requestDtoName"].Value.Trim()),
-            };
+            var generator = CreateCodeGenerator(api);
 
             _log.Info($"{api.Title} ({api.Version}) has {api.Paths.SelectMany(p => p.Operations).Count()} operations, {api.Definitions.Count} definitions and {api.Enums.Count} enumerations");
 
             var code = generator.GenerateServiceModel();
+            var filename = _filename[_targetLanguage];
 
-            _log.Info($"Writing code to {_filename} ...");
+            _log.Info($"Writing code to {filename} ...");
 
-            File.WriteAllText(_filename, code);
+            File.WriteAllText(filename, code);
         }
 
         private static readonly char[] ItemSeparators = { ';' };
@@ -188,7 +199,7 @@ namespace SamplesServiceModelGenerator
         private static readonly Regex FixupRegex = new Regex(@"^\s*(?<methodRoute>[^= ]+)\s*=\s*(?<requestDtoName>[^ ]+)\s*$", RegexOptions.Compiled);
         private static readonly Regex EnumRegex = new Regex(@"^\s*(?<enumName>[^= ]+)\s*=\s*(?<fieldName>[^. ]+)\s*\.\s*(?<valueList>[^ ]+)\s*$", RegexOptions.Compiled);
 
-        public string LoadStringFromUrl(string url)
+        private string LoadStringFromUrl(string url)
         {
             var uri = new Uri(url);
 
@@ -198,6 +209,34 @@ namespace SamplesServiceModelGenerator
             {
                 return client.DownloadString(uri);
             }
+        }
+
+        private CodeGeneratorBase CreateCodeGenerator(Api api)
+        {
+            var generator = _targetLanguage == TargetLanguage.CSharp
+                ? (CodeGeneratorBase)new CSharpCodeGenerator()
+                : new JavaCodeGenerator();
+
+            generator.Api = api;
+            generator.Filename = _filename[_targetLanguage];
+            generator.Namespace = _namespace[_targetLanguage];
+
+            generator.UsingDirectives = _usingDirectives[_targetLanguage]
+                .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries);
+
+            generator.Aliases = _aliases[_targetLanguage]
+                .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => AliasRegex.Match(s))
+                .Where(m => m.Success)
+                .ToDictionary(m => m.Groups["swaggerType"].Value.Trim(), m => m.Groups["aliasType"].Value.Trim());
+
+            generator.RequestDtoFixups = _fixups
+                .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => FixupRegex.Match(s))
+                .Where(m => m.Success)
+                .ToDictionary(m => m.Groups["methodRoute"].Value.Trim(), m => m.Groups["requestDtoName"].Value.Trim());
+
+            return generator;
         }
     }
 }
