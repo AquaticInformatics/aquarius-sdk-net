@@ -17,6 +17,3 @@ When the standard code generators can do what we need, we'll delete this hack.
 ## What this project isn't
 
 - This project is not an arbitrary Swagger code generator. It has been ~~hacked~~ tuned to work with the idiosyncracies of the Samples Swagger spec.
-
-## Project roadmap
-- Add support for generating Java DTOs for the Java Platform SDK.

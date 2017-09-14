@@ -68,10 +68,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Swagger\Api.cs" />
-    <Compile Include="Swagger\CodeGenerator.cs" />
+    <Compile Include="CodeGenerators\CodeGeneratorBase.cs" />
+    <Compile Include="CodeGenerators\CSharpCodeGenerator.cs" />
     <Compile Include="Swagger\Definition.cs" />
     <Compile Include="Swagger\Enum.cs" />
     <Compile Include="Swagger\ITypedItem.cs" />
+    <Compile Include="CodeGenerators\JavaCodeGenerator.cs" />
     <Compile Include="Swagger\Operation.cs" />
     <Compile Include="Swagger\OperationParameter.cs" />
     <Compile Include="Swagger\OperationResponse.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Swagger\Parser.cs" />
     <Compile Include="Swagger\Path.cs" />
     <Compile Include="Swagger\Property.cs" />
+    <Compile Include="Swagger\TargetLanguage.cs" />
     <Compile Include="Swagger\Type.cs" />
     <Compile Include="Swagger\TypeMapper.cs" />
   </ItemGroup>
