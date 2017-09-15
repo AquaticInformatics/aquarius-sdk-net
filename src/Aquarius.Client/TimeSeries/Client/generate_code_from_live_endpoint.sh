@@ -37,7 +37,7 @@ ApiVersion=`echo "$ApiVersionJson" | sed -e "s/{\"ApiVersion\":\"//" -e "s/\"}//
 
 echo "Generating $OutputFile ..."
 OutputFile=$OutputPath/$EndPointName.cs
-curl -s -o "$OutputFile" "http://$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartial=false&MakeVirtual=false&ExportValueTypes=true&GlobalNamespace=$GlobalNamespace&DefaultNamespaces=System,System.Collections,System.Collections.Generic,System.Runtime.Serialization,ServiceStack,ServiceStack.DataAnnotations,NodaTime" || exit_abort "Can't read endpoint"
+curl -s -o "$OutputFile" "http://$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartial=false&MakeVirtual=false&ExportValueTypes=true&GlobalNamespace=$GlobalNamespace&DefaultNamespaces=System,System.Collections.Generic,ServiceStack,ServiceStack.DataAnnotations,ServiceStack.Web,NodaTime" || exit_abort "Can't read endpoint"
 
 # Append the generated version to the code
 echo "namespace $GlobalNamespace" >> "$OutputFile"

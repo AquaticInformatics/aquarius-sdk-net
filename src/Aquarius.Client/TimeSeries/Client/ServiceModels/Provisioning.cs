@@ -1,8 +1,8 @@
 /* Options:
-Date: 2017-05-18 16:16:34
-Version: 4.56
+Date: 2017-09-12 16:24:03
+Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver17/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -25,11 +25,10 @@ ExportValueTypes: True
 */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using ServiceStack;
 using ServiceStack.DataAnnotations;
+using ServiceStack.Web;
 using NodaTime;
 using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
 
@@ -102,7 +101,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///RSA key size in bits
         ///</summary>
-        [ApiMember(Description="RSA key size in bits", DataType="integer")]
+        [ApiMember(DataType="integer", Description="RSA key size in bits")]
         public int KeySize { get; set; }
 
         ///<summary>
@@ -110,6 +109,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="XML blob containing the RSA public key components")]
         public string Xml { get; set; }
+    }
+
+    public enum MeasurementDirection
+    {
+        Unknown,
+        FromTopToBottom,
+        FromBottomToTop,
     }
 
     public enum NewValueLocationType
@@ -132,7 +138,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the field data plug-in
         ///</summary>
-        [ApiMember(ParameterType="path", IsRequired=true, DataType="string", Description="Unique ID of the field data plug-in")]
+        [ApiMember(DataType="string", Description="Unique ID of the field data plug-in", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -149,26 +155,65 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Plug-in folder name
         ///</summary>
-        [ApiMember(IsRequired=true, DataType="string", Description="Plug-in folder name")]
+        [ApiMember(DataType="string", Description="Plug-in folder name", IsRequired=true)]
         public string PluginFolderName { get; set; }
 
         ///<summary>
         ///Assembly qualified type name
         ///</summary>
-        [ApiMember(Description="Assembly qualified type name", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Assembly qualified type name", IsRequired=true)]
         public string AssemblyQualifiedTypeName { get; set; }
 
         ///<summary>
         ///Plug-in priority; 1 has highest priority
         ///</summary>
-        [ApiMember(IsRequired=true, DataType="integer", Description="Plug-in priority; 1 has highest priority")]
+        [ApiMember(DataType="integer", Description="Plug-in priority; 1 has highest priority", IsRequired=true)]
         public int PluginPriority { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
-        [ApiMember(Description="Description", DataType="string")]
+        [ApiMember(DataType="string", Description="Description")]
         public string Description { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/datumperiods", "DELETE")]
+    public class DeleteLocationDatum
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/datumperiods", "GET")]
+    public class GetLocationDatum
+        : IReturn<LocationDatumResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/datumperiods", "POST")]
+    public class PostLocationDatumPeriod
+        : LocationDatumPeriodBase, IReturn<LocationDatumResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Reference standard this period is related to, which must be a standard reference datum for the location
+        ///</summary>
+        [ApiMember(Description="Reference standard this period is related to, which must be a standard reference datum for the location", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
     }
 
     [Route("/locationfolders/{LocationFolderUniqueId}", "DELETE")]
@@ -178,7 +223,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location folder
         ///</summary>
-        [ApiMember(Description="Unique ID of the location folder", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location folder", IsRequired=true, ParameterType="path")]
         public Guid LocationFolderUniqueId { get; set; }
     }
 
@@ -189,8 +234,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location type
         ///</summary>
-        [ApiMember(Description="Unique ID of the location type", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location type", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/referencepoints/{ReferencePointUniqueId}", "DELETE")]
+    public class DeleteReferencePoint
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique ID of the reference point
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the reference point", IsRequired=true, ParameterType="path")]
+        public Guid ReferencePointUniqueId { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}", "GET")]
@@ -200,7 +262,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(Description="Unique ID of the location", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
     }
 
@@ -211,7 +273,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location folder
         ///</summary>
-        [ApiMember(Description="Unique ID of the location folder", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location folder", IsRequired=true, ParameterType="path")]
         public Guid LocationFolderUniqueId { get; set; }
     }
 
@@ -221,6 +283,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
     }
 
+    [Route("/locations/{LocationUniqueId}/referencepoints/", "GET")]
+    public class GetLocationReferencePoints
+        : IReturn<ReferencePointResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
     [Route("/locationtypes/{UniqueId}", "GET")]
     public class GetLocationType
         : IReturn<LocationType>
@@ -228,7 +301,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location type
         ///</summary>
-        [ApiMember(Description="Unique ID of the location type", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location type", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -271,15 +344,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
 
         ///<summary>
-        ///Longitude
+        ///Longitude (WGS 84)
         ///</summary>
-        [ApiMember(Description="Longitude", DataType="double")]
+        [ApiMember(DataType="double", Description="Longitude (WGS 84)")]
         public double? Longitude { get; set; }
 
         ///<summary>
-        ///Latitude
+        ///Latitude (WGS 84)
         ///</summary>
-        [ApiMember(Description="Latitude", DataType="double")]
+        [ApiMember(DataType="double", Description="Latitude (WGS 84)")]
         public double? Latitude { get; set; }
 
         ///<summary>
@@ -291,13 +364,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Elevation
         ///</summary>
-        [ApiMember(Description="Elevation", DataType="double")]
+        [ApiMember(DataType="double", Description="Elevation")]
         public double? Elevation { get; set; }
 
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
@@ -342,9 +415,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : LocationBase, IReturn<Location>
     {
         ///<summary>
-        ///ISO 8601 Duration Format
+        ///ISO 8601 duration format
         ///</summary>
-        [ApiMember(Description="ISO 8601 Duration Format", DataType="Offset")]
+        [ApiMember(DataType="Offset", Description="ISO 8601 duration format")]
         public Offset UtcOffset { get; set; }
     }
 
@@ -365,6 +438,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
     }
 
+    [Route("/locations/{LocationUniqueId}/referencepoints", "POST")]
+    public class PostReferencePoint
+        : ReferencePointBase, IReturn<ReferencePoint>
+    {
+        public PostReferencePoint()
+        {
+            ReferencePointPeriods = new List<PostReferencePointPeriod>{};
+        }
+
+        ///<summary>
+        ///Periods of applicablity for this reference point. Must have at least one period
+        ///</summary>
+        [ApiMember(DataType="Array<PostReferencePointPeriod>", Description="Periods of applicablity for this reference point. Must have at least one period", IsRequired=true)]
+        public List<PostReferencePointPeriod> ReferencePointPeriods { get; set; }
+    }
+
+    public class PostReferencePointPeriod
+        : ReferencePointPeriodBase
+    {
+    }
+
     [Route("/locations/{LocationUniqueId}", "PUT")]
     public class PutLocation
         : LocationBase, IReturn<Location>
@@ -372,7 +466,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(Description="Unique ID of the location", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
     }
 
@@ -383,7 +477,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location folder
         ///</summary>
-        [ApiMember(Description="Unique ID of the location folder", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location folder", IsRequired=true, ParameterType="path")]
         public Guid LocationFolderUniqueId { get; set; }
     }
 
@@ -394,8 +488,53 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location type
         ///</summary>
-        [ApiMember(Description="Unique ID of the location type", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location type", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
+    }
+
+    public class ReferencePointBase
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name", IsRequired=true)]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Decommissioned date
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Decommissioned date")]
+        public Instant? DecommissionedDate { get; set; }
+
+        ///<summary>
+        ///Decommissioned reason
+        ///</summary>
+        [ApiMember(Description="Decommissioned reason")]
+        public string DecommissionedReason { get; set; }
+
+        ///<summary>
+        ///Longitude (WGS 84)
+        ///</summary>
+        [ApiMember(DataType="double", Description="Longitude (WGS 84)")]
+        public double? Longitude { get; set; }
+
+        ///<summary>
+        ///Latitude (WGS 84)
+        ///</summary>
+        [ApiMember(DataType="double", Description="Latitude (WGS 84)")]
+        public double? Latitude { get; set; }
     }
 
     [Route("/monitoringmethods/{MethodCode}", "DELETE")]
@@ -405,7 +544,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Method code
         ///</summary>
-        [ApiMember(Description="Method code", ParameterType="path", IsRequired=true)]
+        [ApiMember(Description="Method code", IsRequired=true, ParameterType="path")]
         public string MethodCode { get; set; }
     }
 
@@ -416,7 +555,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Method code
         ///</summary>
-        [ApiMember(Description="Method code", ParameterType="path", IsRequired=true)]
+        [ApiMember(Description="Method code", IsRequired=true, ParameterType="path")]
         public string MethodCode { get; set; }
     }
 
@@ -449,7 +588,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the method's parameter
         ///</summary>
-        [ApiMember(Description="Unique ID of the method's parameter", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the method's parameter", IsRequired=true)]
         public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
@@ -506,13 +645,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///If not specified, defaults to openid
         ///</summary>
-        [ApiMember(Description="If not specified, defaults to openid", DataType="IList")]
+        [ApiMember(DataType="IList", Description="If not specified, defaults to openid")]
         public IList<string> Scopes { get; set; }
 
         ///<summary>
         ///Hosted domains
         ///</summary>
-        [ApiMember(Description="Hosted domains", DataType="Array<string>")]
+        [ApiMember(DataType="Array<string>", Description="Hosted domains")]
         public IList<string> HostedDomains { get; set; }
     }
 
@@ -540,7 +679,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(Description="Unique ID of the parameter", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the parameter", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -551,7 +690,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(Description="Unique ID of the parameter", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the parameter", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -596,19 +735,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Min value
         ///</summary>
-        [ApiMember(Description="Min value", DataType="double")]
+        [ApiMember(DataType="double", Description="Min value")]
         public double? MinValue { get; set; }
 
         ///<summary>
         ///Max value
         ///</summary>
-        [ApiMember(Description="Max value", DataType="double")]
+        [ApiMember(DataType="double", Description="Max value")]
         public double? MaxValue { get; set; }
 
         ///<summary>
         ///Interpolation type
         ///</summary>
-        [ApiMember(Description="Interpolation type", DataType="InterpolationType", IsRequired=true)]
+        [ApiMember(DataType="InterpolationType", Description="Interpolation type", IsRequired=true)]
         public InterpolationType InterpolationType { get; set; }
 
         ///<summary>
@@ -631,7 +770,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(Description="Unique ID of the parameter", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the parameter", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -642,7 +781,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(Description="Grade code", ParameterType="path", DataType="integer", IsRequired=true)]
+        [ApiMember(DataType="integer", Description="Grade code", IsRequired=true, ParameterType="path")]
         public int GradeCode { get; set; }
     }
 
@@ -653,7 +792,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(Description="Grade code", ParameterType="path", DataType="integer", IsRequired=true)]
+        [ApiMember(DataType="integer", Description="Grade code", IsRequired=true, ParameterType="path")]
         public int GradeCode { get; set; }
     }
 
@@ -676,7 +815,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(Description="Grade code", ParameterType="path", DataType="integer", IsRequired=true)]
+        [ApiMember(DataType="integer", Description="Grade code", IsRequired=true, ParameterType="path")]
         public int? GradeCode { get; set; }
     }
 
@@ -685,7 +824,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(Description="Grade code", DataType="integer", IsRequired=true)]
+        [ApiMember(DataType="integer", Description="Grade code", IsRequired=true)]
         public int? GradeCode { get; set; }
 
         ///<summary>
@@ -714,7 +853,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Identifier of the standard daturm
         ///</summary>
-        [ApiMember(Description="Identifier of the standard daturm", ParameterType="path", IsRequired=true)]
+        [ApiMember(Description="Identifier of the standard daturm", IsRequired=true, ParameterType="path")]
         public string Identifier { get; set; }
     }
 
@@ -739,6 +878,78 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Identifier { get; set; }
     }
 
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/{StandardIdentifier}", "DELETE")]
+    public class DeleteStandardReferenceDatum
+        : StandardReferenceDatumRequestBase, IReturnVoid
+    {
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums", "GET")]
+    public class GetStandardReferenceDatums
+        : IReturn<StandardReferenceDatumsResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereference", "POST")]
+    public class PostBaseStandardReferenceDatum
+        : StandardReferenceDatumRequestBase, IReturn<StandardReferenceDatum>
+    {
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset", "POST")]
+    public class PostBaseStandardReferenceDatumOffset
+        : StandardReferenceDatumRequestBase, IReturn<StandardReferenceDatum>
+    {
+        ///<summary>
+        ///Offset in relation to the base reference.
+        ///</summary>
+        [ApiMember(DataType="double", Description="Offset in relation to the base reference.", IsRequired=true)]
+        public double OffsetToBaseReference { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset/{StandardIdentifier}", "PUT")]
+    public class PutBaseStandardReferenceDatumOffset
+        : IReturn<StandardReferenceDatum>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Standard identifier
+        ///</summary>
+        [ApiMember(DataType="string", Description="Standard identifier", IsRequired=true, ParameterType="path")]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///Offset in relation to the base reference.
+        ///</summary>
+        [ApiMember(DataType="double", Description="Offset in relation to the base reference.", IsRequired=true)]
+        public double OffsetToBaseReference { get; set; }
+    }
+
+    public class StandardReferenceDatumRequestBase
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///StandardIdentifier
+        ///</summary>
+        [ApiMember(DataType="string", Description="StandardIdentifier", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
+    }
+
     [Route("/timeseries/{TimeSeriesUniqueId}", "DELETE")]
     public class DeleteTimeSeries
         : IReturnVoid
@@ -746,7 +957,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(Description="Unique ID of the time series", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true, ParameterType="path")]
         public Guid TimeSeriesUniqueId { get; set; }
     }
 
@@ -757,7 +968,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(Description="Unique ID of the location", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
     }
 
@@ -768,7 +979,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(Description="Unique ID of the time series", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true, ParameterType="path")]
         public Guid TimeSeriesUniqueId { get; set; }
     }
 
@@ -785,7 +996,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///ISO 8601 Duration Format
         ///</summary>
-        [ApiMember(Description="ISO 8601 Duration Format", DataType="Duration", IsRequired=true)]
+        [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
         public Duration GapTolerance { get; set; }
     }
 
@@ -801,7 +1012,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master
         ///</summary>
-        [ApiMember(Description="List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master", DataType="Array<string>", IsRequired=true)]
+        [ApiMember(DataType="Array<string>", Description="List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master", IsRequired=true)]
         public List<Guid> TimeSeriesUniqueIds { get; set; }
 
         ///<summary>
@@ -818,7 +1029,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///ISO 8601 Duration Format
         ///</summary>
-        [ApiMember(Description="ISO 8601 Duration Format", DataType="Duration", IsRequired=true)]
+        [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
         public Duration GapTolerance { get; set; }
     }
 
@@ -829,7 +1040,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(Description="Unique ID of the time series", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         [ApiMember(IsRequired=true)]
@@ -838,32 +1049,38 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///New value location
         ///</summary>
-        [ApiMember(Description="New value location", DataType="NewValueLocationType")]
+        [ApiMember(DataType="NewValueLocationType", Description="New value location")]
         public NewValueLocationType NewValueLocation { get; set; }
 
         ///<summary>
         ///Require minimum coverage
         ///</summary>
-        [ApiMember(Description="Require minimum coverage", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="Require minimum coverage")]
         public bool? RequireMinimumCoverage { get; set; }
 
         ///<summary>
         ///Coverage minimum percentage
         ///</summary>
-        [ApiMember(Description="Coverage minimum percentage", DataType="double")]
+        [ApiMember(DataType="double", Description="Coverage minimum percentage")]
         public double? CoverageMinimumPercentage { get; set; }
 
         ///<summary>
         ///Partial coverage grade
         ///</summary>
-        [ApiMember(Description="Partial coverage grade", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Partial coverage grade")]
         public int? PartialCoverageGrade { get; set; }
 
         ///<summary>
         ///Observation offset in minutes
         ///</summary>
-        [ApiMember(Description="Observation offset in minutes", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Observation offset in minutes")]
         public int? ObservationOffsetInMinutes { get; set; }
+
+        ///<summary>
+        ///Time Step Count. Must be included for 'Statistic' derived time-series.
+        ///</summary>
+        [ApiMember(Description="Time Step Count. Must be included for 'Statistic' derived time-series.")]
+        public int? TimeStepCount { get; set; }
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}", "PUT")]
@@ -873,7 +1090,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(Description="Unique ID of the time series", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true, ParameterType="path")]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
@@ -891,7 +1108,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Publish
         ///</summary>
-        [ApiMember(Description="Publish", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="Publish")]
         public bool Publish { get; set; }
 
         ///<summary>
@@ -909,7 +1126,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
@@ -918,7 +1135,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location for which a time series is to be created
         ///</summary>
-        [ApiMember(Description="Unique ID of the location for which a time series is to be created", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true)]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
@@ -942,7 +1159,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Interpolation type
         ///</summary>
-        [ApiMember(Description="Interpolation type", DataType="InterpolationType", IsRequired=true)]
+        [ApiMember(DataType="InterpolationType", Description="Interpolation type", IsRequired=true)]
         public InterpolationType InterpolationType { get; set; }
 
         ///<summary>
@@ -954,13 +1171,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///ISO 8601 Duration Format
         ///</summary>
-        [ApiMember(Description="ISO 8601 Duration Format", DataType="Offset")]
+        [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
         public Offset UtcOffset { get; set; }
 
         ///<summary>
         ///Publish
         ///</summary>
-        [ApiMember(Description="Publish", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="Publish")]
         public bool Publish { get; set; }
 
         ///<summary>
@@ -993,7 +1210,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
@@ -1004,7 +1221,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1015,7 +1232,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit group", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit group", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1026,7 +1243,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit group", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit group", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1037,7 +1254,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1048,7 +1265,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit group", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit group", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1071,7 +1288,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit group", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit group", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1140,7 +1357,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1151,7 +1368,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit group", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the unit group", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1166,13 +1383,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Base multiplier
         ///</summary>
-        [ApiMember(Description="Base multiplier", DataType="double", IsRequired=true)]
+        [ApiMember(DataType="double", Description="Base multiplier", IsRequired=true)]
         public double? BaseMultiplier { get; set; }
 
         ///<summary>
         ///Base offset
         ///</summary>
-        [ApiMember(Description="Base offset", DataType="double", IsRequired=true)]
+        [ApiMember(DataType="double", Description="Base offset", IsRequired=true)]
         public double? BaseOffset { get; set; }
 
         ///<summary>
@@ -1199,43 +1416,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Current dimension
         ///</summary>
-        [ApiMember(Description="Current dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Current dimension")]
         public int? CurrentDimension { get; set; }
 
         ///<summary>
         ///Intensity dimension
         ///</summary>
-        [ApiMember(Description="Intensity dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Intensity dimension")]
         public int? IntensityDimension { get; set; }
 
         ///<summary>
         ///Length dimension
         ///</summary>
-        [ApiMember(Description="Length dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Length dimension")]
         public int? LengthDimension { get; set; }
 
         ///<summary>
         ///Mass dimension
         ///</summary>
-        [ApiMember(Description="Mass dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Mass dimension")]
         public int? MassDimension { get; set; }
 
         ///<summary>
         ///Substance dimension
         ///</summary>
-        [ApiMember(Description="Substance dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Substance dimension")]
         public int? SubstanceDimension { get; set; }
 
         ///<summary>
         ///Temperature dimension
         ///</summary>
-        [ApiMember(Description="Temperature dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Temperature dimension")]
         public int? TemperatureDimension { get; set; }
 
         ///<summary>
         ///Time dimension
         ///</summary>
-        [ApiMember(Description="Time dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Time dimension")]
         public int? TimeDimension { get; set; }
     }
 
@@ -1246,7 +1463,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(Description="Unique ID of the user", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the user", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1257,7 +1474,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(Description="Unique ID of the user", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the user", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1371,7 +1588,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(Description="Unique ID of the user", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the user", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1381,7 +1598,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(Description="Unique ID of the user", ParameterType="path", DataType="string", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the user", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
     }
 
@@ -1396,19 +1613,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Inactive users cannot log in and are not counted in licensing
         ///</summary>
-        [ApiMember(Description="Inactive users cannot log in and are not counted in licensing", DataType="boolean", IsRequired=true)]
+        [ApiMember(DataType="boolean", Description="Inactive users cannot log in and are not counted in licensing", IsRequired=true)]
         public bool Active { get; set; }
 
         ///<summary>
         ///Allow user to run AQUARIUS Manager and edit system settings
         ///</summary>
-        [ApiMember(Description="Allow user to run AQUARIUS Manager and edit system settings", DataType="boolean", IsRequired=true)]
+        [ApiMember(DataType="boolean", Description="Allow user to run AQUARIUS Manager and edit system settings", IsRequired=true)]
         public bool CanConfigureSystem { get; set; }
 
         ///<summary>
         ///Allow user to launch the Rating Development Toolbox
         ///</summary>
-        [ApiMember(Description="Allow user to launch the Rating Development Toolbox", DataType="boolean", IsRequired=true)]
+        [ApiMember(DataType="boolean", Description="Allow user to launch the Rating Development Toolbox", IsRequired=true)]
         public bool CanLaunchRatingDevelopmentToolbox { get; set; }
 
         ///<summary>
@@ -1447,43 +1664,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Field type
         ///</summary>
-        [ApiMember(Description="Field type", DataType="ExtendedAttributeFieldType")]
+        [ApiMember(DataType="ExtendedAttributeFieldType", Description="Field type")]
         public ExtendedAttributeFieldType FieldType { get; set; }
 
         ///<summary>
         ///Can be empty
         ///</summary>
-        [ApiMember(Description="Can be empty", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="Can be empty")]
         public bool CanBeEmpty { get; set; }
 
         ///<summary>
         ///Is read only
         ///</summary>
-        [ApiMember(Description="Is read only", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="Is read only")]
         public bool IsReadOnly { get; set; }
 
         ///<summary>
         ///Numeric precision
         ///</summary>
-        [ApiMember(Description="Numeric precision", DataType="short")]
+        [ApiMember(DataType="short", Description="Numeric precision")]
         public short? NumericPrecision { get; set; }
 
         ///<summary>
         ///Numeric scale
         ///</summary>
-        [ApiMember(Description="Numeric scale", DataType="short")]
+        [ApiMember(DataType="short", Description="Numeric scale")]
         public short? NumericScale { get; set; }
 
         ///<summary>
         ///Column size
         ///</summary>
-        [ApiMember(Description="Column size", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Column size")]
         public int? ColumnSize { get; set; }
 
         ///<summary>
         ///Value options
         ///</summary>
-        [ApiMember(Description="Value options", DataType="Array<string>")]
+        [ApiMember(DataType="Array<string>", Description="Value options")]
         public IReadOnlyList<string> ValueOptions { get; set; }
     }
 
@@ -1492,7 +1709,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Results
         ///</summary>
-        [ApiMember(Description="Results", DataType="Array<ExtendedAttributeField>")]
+        [ApiMember(DataType="Array<ExtendedAttributeField>", Description="Results")]
         public IList<ExtendedAttributeField> Results { get; set; }
     }
 
@@ -1525,7 +1742,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the field data plug-in
         ///</summary>
-        [ApiMember(Description="Unique ID of the field data plug-in", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the field data plug-in")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1537,7 +1754,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Assembly qualified type name
         ///</summary>
-        [ApiMember(Description="Assembly qualified type name", DataType="string")]
+        [ApiMember(DataType="string", Description="Assembly qualified type name")]
         public string AssemblyQualifiedTypeName { get; set; }
 
         ///<summary>
@@ -1549,7 +1766,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Description
         ///</summary>
-        [ApiMember(Description="Description", DataType="string")]
+        [ApiMember(DataType="string", Description="Description")]
         public string Description { get; set; }
     }
 
@@ -1572,7 +1789,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(Description="Grade code", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Grade code")]
         public int GradeCode { get; set; }
 
         ///<summary>
@@ -1596,7 +1813,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the grade is required by the system
         ///</summary>
-        [ApiMember(Description="True if the grade is required by the system", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the grade is required by the system")]
         public bool IsSystem { get; set; }
     }
 
@@ -1610,7 +1827,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of grades
         ///</summary>
-        [ApiMember(Description="The list of grades", DataType="Array<Grade>")]
+        [ApiMember(DataType="Array<Grade>", Description="The list of grades")]
         public List<Grade> Results { get; set; }
     }
 
@@ -1631,7 +1848,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Value
         ///</summary>
-        [ApiMember(Description="Value", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Value")]
         public int Value { get; set; }
     }
 
@@ -1645,7 +1862,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of interpolation types
         ///</summary>
-        [ApiMember(Description="The list of interpolation types", DataType="Array<InterpolationTypeEntry>")]
+        [ApiMember(DataType="Array<InterpolationTypeEntry>", Description="The list of interpolation types")]
         public List<InterpolationTypeEntry> Results { get; set; }
     }
 
@@ -1654,31 +1871,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(Description="Unique ID of the location", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the location")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Identifier
         ///</summary>
-        [ApiMember(Description="Identifier")]
+        [ApiMember(DataType="string", Description="Identifier")]
         public string Identifier { get; set; }
 
         ///<summary>
         ///Location name
         ///</summary>
-        [ApiMember(Description="Location name")]
+        [ApiMember(DataType="string", Description="Location name")]
         public string LocationName { get; set; }
 
         ///<summary>
         ///Location path
         ///</summary>
-        [ApiMember(Description="Location path")]
+        [ApiMember(DataType="string", Description="Location path")]
         public string LocationPath { get; set; }
 
         ///<summary>
         ///Location type
         ///</summary>
-        [ApiMember(Description="Location type")]
+        [ApiMember(DataType="string", Description="Location type")]
         public string LocationType { get; set; }
 
         ///<summary>
@@ -1688,52 +1905,115 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public bool IsExternalLocation { get; set; }
 
         ///<summary>
-        ///Longitude
+        ///Longitude (WGS 84)
         ///</summary>
-        [ApiMember(Description="Longitude", DataType="double")]
+        [ApiMember(DataType="double", Description="Longitude (WGS 84)")]
         public double? Longitude { get; set; }
 
         ///<summary>
-        ///Latitude
+        ///Latitude (WGS 84)
         ///</summary>
-        [ApiMember(Description="Latitude", DataType="double")]
+        [ApiMember(DataType="double", Description="Latitude (WGS 84)")]
         public double? Latitude { get; set; }
 
         ///<summary>
         ///UTC offset
         ///</summary>
-        [ApiMember(Description="UTC offset", DataType="Offset")]
+        [ApiMember(DataType="Offset", Description="UTC offset")]
         public Offset UtcOffset { get; set; }
 
         ///<summary>
         ///Last modified
         ///</summary>
-        [ApiMember(Description="Last modified", DataType="Instant")]
+        [ApiMember(DataType="Instant", Description="Last modified")]
         public Instant LastModified { get; set; }
 
         ///<summary>
         ///Elevation units
         ///</summary>
-        [ApiMember(Description="Elevation units")]
+        [ApiMember(DataType="string", Description="Elevation units")]
         public string ElevationUnits { get; set; }
 
         ///<summary>
         ///Elevation
         ///</summary>
-        [ApiMember(Description="Elevation", DataType="double")]
+        [ApiMember(DataType="double", Description="Elevation")]
         public double? Elevation { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
-        [ApiMember(Description="Description")]
+        [ApiMember(DataType="string", Description="Description")]
         public string Description { get; set; }
 
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+    }
+
+    public class LocationDatumPeriod
+        : LocationDatumPeriodBase
+    {
+        ///<summary>
+        ///Applied date
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Applied date")]
+        public Instant AppliedTimeUtc { get; set; }
+
+        ///<summary>
+        ///Applied by user
+        ///</summary>
+        [ApiMember(Description="Applied by user")]
+        public string AppliedByUser { get; set; }
+
+        ///<summary>
+        ///Reference standard this period is related to
+        ///</summary>
+        [ApiMember(DataType="StandardReferenceDatum", Description="Reference standard this period is related to")]
+        public StandardReferenceDatum ReferenceStandard { get; set; }
+    }
+
+    public class LocationDatumPeriodBase
+    {
+        ///<summary>
+        ///Time this period is valid from
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Time this period is valid from", IsRequired=true)]
+        public Instant ValidFrom { get; set; }
+
+        ///<summary>
+        ///Elevation difference from the reference standard
+        ///</summary>
+        [ApiMember(DataType="double", Description="Elevation difference from the reference standard", IsRequired=true)]
+        public double Elevation { get; set; }
+
+        ///<summary>
+        ///Direction of positive elevations in relation to the reference standard
+        ///</summary>
+        [ApiMember(DataType="MeasurementDirection", Description="Direction of positive elevations in relation to the reference standard", IsRequired=true)]
+        public MeasurementDirection MeasurementDirection { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+    }
+
+    public class LocationDatumResponse
+    {
+        public LocationDatumResponse()
+        {
+            Results = new List<LocationDatumPeriod>{};
+        }
+
+        ///<summary>
+        ///The list of assumed local datums for the location
+        ///</summary>
+        [ApiMember(DataType="Array<LocationDatumPeriod>", Description="The list of assumed local datums for the location")]
+        public List<LocationDatumPeriod> Results { get; set; }
     }
 
     public class LocationFolder
@@ -1741,7 +2021,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location folder
         ///</summary>
-        [ApiMember(Description="Unique ID of the location folder", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the location folder")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1765,7 +2045,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parent location folder
         ///</summary>
-        [ApiMember(Description="Unique ID of the parent location folder", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the parent location folder")]
         public Guid? ParentLocationFolderUniqueId { get; set; }
 
         ///<summary>
@@ -1785,7 +2065,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of location folders
         ///</summary>
-        [ApiMember(Description="The list of location folders", DataType="Array<LocationFolder>")]
+        [ApiMember(DataType="Array<LocationFolder>", Description="The list of location folders")]
         public List<LocationFolder> Results { get; set; }
     }
 
@@ -1812,13 +2092,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location type
         ///</summary>
-        [ApiMember(Description="Unique ID of the location type", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the location type")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Extended attribute field definitions for this location type
         ///</summary>
-        [ApiMember(Description="Extended attribute field definitions for this location type", DataType="Array<ExtendedAttributeField>")]
+        [ApiMember(DataType="Array<ExtendedAttributeField>", Description="Extended attribute field definitions for this location type")]
         public IList<ExtendedAttributeField> ExtendedAttributeFields { get; set; }
     }
 
@@ -1832,7 +2112,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of location types
         ///</summary>
-        [ApiMember(Description="The list of location types", DataType="Array<LocationType>")]
+        [ApiMember(DataType="Array<LocationType>", Description="The list of location types")]
         public List<LocationType> Results { get; set; }
     }
 
@@ -1865,7 +2145,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(Description="Unique ID of the parameter", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the parameter")]
         public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
@@ -1883,7 +2163,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the monitoring method is required by system
         ///</summary>
-        [ApiMember(Description="True if the monitoring method is required by system", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the monitoring method is required by system")]
         public bool System { get; set; }
     }
 
@@ -1897,7 +2177,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of monitoring methods
         ///</summary>
-        [ApiMember(Description="The list of monitoring methods", DataType="Array<MonitoringMethod>")]
+        [ApiMember(DataType="Array<MonitoringMethod>", Description="The list of monitoring methods")]
         public List<MonitoringMethod> Results { get; set; }
     }
 
@@ -1930,13 +2210,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Scopes
         ///</summary>
-        [ApiMember(Description="Scopes", DataType="Array<string>")]
+        [ApiMember(DataType="Array<string>", Description="Scopes")]
         public List<string> Scopes { get; set; }
 
         ///<summary>
         ///Hosted domains
         ///</summary>
-        [ApiMember(Description="Hosted domains", DataType="Array<string>")]
+        [ApiMember(DataType="Array<string>", Description="Hosted domains")]
         public List<string> HostedDomains { get; set; }
     }
 
@@ -1945,7 +2225,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the parameter
         ///</summary>
-        [ApiMember(Description="Unique ID of the parameter", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the parameter")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1981,19 +2261,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Min value
         ///</summary>
-        [ApiMember(Description="Min value", DataType="double")]
+        [ApiMember(DataType="double", Description="Min value")]
         public double? MinValue { get; set; }
 
         ///<summary>
         ///Max value
         ///</summary>
-        [ApiMember(Description="Max value", DataType="double")]
+        [ApiMember(DataType="double", Description="Max value")]
         public double? MaxValue { get; set; }
 
         ///<summary>
         ///Interpolation type
         ///</summary>
-        [ApiMember(Description="Interpolation type", DataType="InterpolationType")]
+        [ApiMember(DataType="InterpolationType", Description="Interpolation type")]
         public InterpolationType InterpolationType { get; set; }
 
         ///<summary>
@@ -2005,7 +2285,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the parameter is required by the system
         ///</summary>
-        [ApiMember(Description="True if the parameter is required by the system", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the parameter is required by the system")]
         public bool System { get; set; }
     }
 
@@ -2019,7 +2299,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of parameters
         ///</summary>
-        [ApiMember(Description="The list of parameters", DataType="Array<Parameter>")]
+        [ApiMember(DataType="Array<Parameter>", Description="The list of parameters")]
         public List<Parameter> Results { get; set; }
     }
 
@@ -2029,7 +2309,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of units within the group
         ///</summary>
-        [ApiMember(Description="The list of units within the group", DataType="Array<Unit>")]
+        [ApiMember(DataType="Array<Unit>", Description="The list of units within the group")]
         public IReadOnlyList<Unit> Units { get; set; }
     }
 
@@ -2043,8 +2323,104 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of unit groups
         ///</summary>
-        [ApiMember(Description="The list of unit groups", DataType="Array<PopulatedUnitGroup>")]
+        [ApiMember(DataType="Array<PopulatedUnitGroup>", Description="The list of unit groups")]
         public List<PopulatedUnitGroup> Results { get; set; }
+    }
+
+    public class ReferencePoint
+        : ReferencePointBase
+    {
+        public ReferencePoint()
+        {
+            ReferencePointPeriods = new List<ReferencePointPeriod>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the reference point
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the reference point")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Periods of applicablity for this reference point
+        ///</summary>
+        [ApiMember(DataType="Array<ReferencePointPeriod>", Description="Periods of applicablity for this reference point")]
+        public List<ReferencePointPeriod> ReferencePointPeriods { get; set; }
+    }
+
+    public class ReferencePointPeriod
+        : ReferencePointPeriodBase
+    {
+        ///<summary>
+        ///Unique ID of the reference point
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the reference point")]
+        public Guid ReferencePointUniqueId { get; set; }
+
+        ///<summary>
+        ///Applied date
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Applied date")]
+        public Instant AppliedTimeUtc { get; set; }
+
+        ///<summary>
+        ///Applied by user
+        ///</summary>
+        [ApiMember(Description="Applied by user")]
+        public string AppliedByUser { get; set; }
+    }
+
+    public class ReferencePointPeriodBase
+    {
+        ///<summary>
+        ///Time this period is valid from
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Time this period is valid from", IsRequired=true)]
+        public Instant ValidFrom { get; set; }
+
+        ///<summary>
+        ///Standard identifier. Standard reference datum must already be defined in this location
+        ///</summary>
+        [ApiMember(Description="Standard identifier. Standard reference datum must already be defined in this location")]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///True if this period is measured against the location's local assumed datum instead of a standard datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if this period is measured against the location's local assumed datum instead of a standard datum", IsRequired=true)]
+        public bool IsMeasuredAgainstLocalAssumedDatum { get; set; }
+
+        ///<summary>
+        ///Elevation of the reference point relative to the standard or local assumed datum
+        ///</summary>
+        [ApiMember(DataType="double", Description="Elevation of the reference point relative to the standard or local assumed datum", IsRequired=true)]
+        public double Elevation { get; set; }
+
+        ///<summary>
+        ///Direction of positive elevations in relation to the reference point
+        ///</summary>
+        [ApiMember(DataType="MeasurementDirection", Description="Direction of positive elevations in relation to the reference point", IsRequired=true)]
+        public MeasurementDirection MeasurementDirection { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+    }
+
+    public class ReferencePointResponse
+    {
+        public ReferencePointResponse()
+        {
+            Results = new List<ReferencePoint>{};
+        }
+
+        ///<summary>
+        ///The list of reference points
+        ///</summary>
+        [ApiMember(DataType="Array<ReferencePoint>", Description="The list of reference points")]
+        public List<ReferencePoint> Results { get; set; }
     }
 
     public class StandardDatum
@@ -2066,8 +2442,49 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of standard datums
         ///</summary>
-        [ApiMember(Description="The list of standard datums", DataType="Array<StandardDatum>")]
+        [ApiMember(DataType="Array<StandardDatum>", Description="The list of standard datums")]
         public List<StandardDatum> Results { get; set; }
+    }
+
+    public class StandardReferenceDatum
+    {
+        ///<summary>
+        ///Unique ID of the Location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the Location")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///StandardIdentifier
+        ///</summary>
+        [ApiMember(DataType="string", Description="StandardIdentifier")]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///True if the Standard Reference Datum is the Base Reference
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if the Standard Reference Datum is the Base Reference")]
+        public bool IsBaseReference { get; set; }
+
+        ///<summary>
+        ///Offset in relation to the Base Reference. Not used if IsBaseReference is set to true
+        ///</summary>
+        [ApiMember(DataType="double", Description="Offset in relation to the Base Reference. Not used if IsBaseReference is set to true")]
+        public double? OffsetToBaseReference { get; set; }
+    }
+
+    public class StandardReferenceDatumsResponse
+    {
+        public StandardReferenceDatumsResponse()
+        {
+            Results = new List<StandardReferenceDatum>{};
+        }
+
+        ///<summary>
+        ///The list of Standard Reference Datums
+        ///</summary>
+        [ApiMember(DataType="Array<StandardReferenceDatum>", Description="The list of Standard Reference Datums")]
+        public List<StandardReferenceDatum> Results { get; set; }
     }
 
     public class TimeSeries
@@ -2081,7 +2498,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(Description="Unique ID of the time series", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the time series")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -2105,7 +2522,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Publish
         ///</summary>
-        [ApiMember(Description="Publish", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="Publish")]
         public bool Publish { get; set; }
 
         ///<summary>
@@ -2123,7 +2540,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(Description="Unique ID of the location", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the location")]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
@@ -2135,7 +2552,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Time series type
         ///</summary>
-        [ApiMember(Description="Time series type", DataType="TimeSeriesType")]
+        [ApiMember(DataType="TimeSeriesType", Description="Time series type")]
         public TimeSeriesType TimeSeriesType { get; set; }
 
         ///<summary>
@@ -2153,7 +2570,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///UTC offset
         ///</summary>
-        [ApiMember(Description="UTC offset", DataType="Offset")]
+        [ApiMember(DataType="Offset", Description="UTC offset")]
         public Offset UtcOffset { get; set; }
 
         ///<summary>
@@ -2171,13 +2588,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Last modified time
         ///</summary>
-        [ApiMember(Description="Last modified time", DataType="Instant")]
+        [ApiMember(DataType="Instant", Description="Last modified time")]
         public Instant LastModifiedTime { get; set; }
 
         ///<summary>
         ///Extended attribute values
         ///</summary>
-        [ApiMember(Description="Extended attribute values", DataType="Array<ExtendedAttributeValue>")]
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
     }
 
@@ -2189,9 +2606,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         }
 
         ///<summary>
-        ///The lsit of time series
+        ///The list of time series
         ///</summary>
-        [ApiMember(Description="The lsit of time series", DataType="Array<TimeSeries>")]
+        [ApiMember(DataType="Array<TimeSeries>", Description="The list of time series")]
         public List<TimeSeries> Results { get; set; }
     }
 
@@ -2212,25 +2629,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Base multiplier
         ///</summary>
-        [ApiMember(Description="Base multiplier", DataType="double")]
+        [ApiMember(DataType="double", Description="Base multiplier")]
         public double BaseMultiplier { get; set; }
 
         ///<summary>
         ///Base offset
         ///</summary>
-        [ApiMember(Description="Base offset", DataType="double")]
+        [ApiMember(DataType="double", Description="Base offset")]
         public double BaseOffset { get; set; }
 
         ///<summary>
         ///True if the unit is required by the system
         ///</summary>
-        [ApiMember(Description="True if the unit is required by the system", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the unit is required by the system")]
         public bool IsSystem { get; set; }
 
         ///<summary>
         ///Unique ID of the unit
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the unit")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -2269,55 +2686,55 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the unit group is required by the system
         ///</summary>
-        [ApiMember(Description="True if the unit group is required by the system", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the unit group is required by the system")]
         public bool IsSystem { get; set; }
 
         ///<summary>
         ///Current dimension
         ///</summary>
-        [ApiMember(Description="Current dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Current dimension")]
         public int CurrentDimension { get; set; }
 
         ///<summary>
         ///Intensity dimension
         ///</summary>
-        [ApiMember(Description="Intensity dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Intensity dimension")]
         public int IntensityDimension { get; set; }
 
         ///<summary>
         ///Length dimension
         ///</summary>
-        [ApiMember(Description="Length dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Length dimension")]
         public int LengthDimension { get; set; }
 
         ///<summary>
         ///Mass dimension
         ///</summary>
-        [ApiMember(Description="Mass dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Mass dimension")]
         public int MassDimension { get; set; }
 
         ///<summary>
         ///Substance dimension
         ///</summary>
-        [ApiMember(Description="Substance dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Substance dimension")]
         public int SubstanceDimension { get; set; }
 
         ///<summary>
         ///Temperature dimension
         ///</summary>
-        [ApiMember(Description="Temperature dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Temperature dimension")]
         public int TemperatureDimension { get; set; }
 
         ///<summary>
         ///Time dimension
         ///</summary>
-        [ApiMember(Description="Time dimension", DataType="integer")]
+        [ApiMember(DataType="integer", Description="Time dimension")]
         public int TimeDimension { get; set; }
 
         ///<summary>
         ///Unique ID of the unit group
         ///</summary>
-        [ApiMember(Description="Unique ID of the unit group", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the unit group")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -2337,7 +2754,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of unit groups
         ///</summary>
-        [ApiMember(Description="The list of unit groups", DataType="Array<UnitGroup>")]
+        [ApiMember(DataType="Array<UnitGroup>", Description="The list of unit groups")]
         public List<UnitGroup> Results { get; set; }
     }
 
@@ -2351,7 +2768,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of units
         ///</summary>
-        [ApiMember(Description="The list of units", DataType="Array<Unit>")]
+        [ApiMember(DataType="Array<Unit>", Description="The list of units")]
         public List<Unit> Results { get; set; }
     }
 
@@ -2390,31 +2807,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the user is allowed to log into the system
         ///</summary>
-        [ApiMember(Description="True if the user is allowed to log into the system", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the user is allowed to log into the system")]
         public bool Active { get; set; }
 
         ///<summary>
         ///True if the user is required to exist in the system
         ///</summary>
-        [ApiMember(Description="True if the user is required to exist in the system", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the user is required to exist in the system")]
         public bool System { get; set; }
 
         ///<summary>
         ///True if the user has the 'Can Configure System' right
         ///</summary>
-        [ApiMember(Description="True if the user has the 'Can Configure System' right", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the user has the 'Can Configure System' right")]
         public bool CanConfigureSystem { get; set; }
 
         ///<summary>
         ///True if the user is licenced to launch the Rating Development toolbox
         ///</summary>
-        [ApiMember(Description="True if the user is licenced to launch the Rating Development toolbox", DataType="boolean")]
+        [ApiMember(DataType="boolean", Description="True if the user is licenced to launch the Rating Development toolbox")]
         public bool CanLaunchRatingDevelopmentToolbox { get; set; }
 
         ///<summary>
         ///Unique ID of the user
         ///</summary>
-        [ApiMember(Description="Unique ID of the user", DataType="string")]
+        [ApiMember(DataType="string", Description="Unique ID of the user")]
         public Guid UniqueId { get; set; }
     }
 
@@ -2428,7 +2845,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The list of users
         ///</summary>
-        [ApiMember(Description="The list of users", DataType="Array<User>")]
+        [ApiMember(DataType="Array<User>", Description="The list of users")]
         public List<User> Results { get; set; }
     }
 }
@@ -2437,6 +2854,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.2.81.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.3.86.0");
     }
 }
