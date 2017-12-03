@@ -18,6 +18,24 @@ namespace Aquarius.Samples.Client
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        private static readonly object SyncLock = new object();
+
+        private static bool _serviceStackConfigured;
+
+        private static void SetupServiceStack()
+        {
+            lock (SyncLock)
+            {
+                if (_serviceStackConfigured)
+                    return;
+
+                ServiceStackConfig.ConfigureServiceStack();
+
+                _serviceStackConfigured = true;
+            }
+        }
+
+
         public static ISamplesClient CreateConnectedClient(string baseUrl, string apiToken)
         {
             return new SamplesClient(baseUrl, apiToken);
@@ -39,6 +57,8 @@ namespace Aquarius.Samples.Client
 
         private SamplesClient(IServiceClient client, string apiToken)
         {
+            SetupServiceStack();
+
             _client = client;
 
             Client.AddHeader(AuthorizationHeaderKey, $"token {apiToken}");
