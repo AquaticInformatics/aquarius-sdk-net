@@ -73,7 +73,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
             builder.Append("\r\n    {\r\n");
 
-            var arrayProperties = definition.Properties.Where(p => p.Type == Swagger.Type.Array).ToList();
+            var arrayProperties = definition.Properties.Where(p => p.Type == Type.Array).ToList();
 
             if (arrayProperties.Any())
             {
@@ -99,7 +99,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             return builder.ToString();
         }
 
-        private string CreateEnum(Swagger.Enum enumType)
+        private string CreateEnum(Enum enumType)
         {
             var builder = new StringBuilder();
 
@@ -147,10 +147,10 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
                 switch (parameter.Type)
                 {
-                    case Swagger.Type.Boolean:
-                    case Swagger.Type.Integer:
-                    case Swagger.Type.Number:
-                    case Swagger.Type.Enum:
+                    case Type.Boolean:
+                    case Type.Integer:
+                    case Type.Number:
+                    case Type.Enum:
                         isNullable = true;
                         break;
 

@@ -5,7 +5,7 @@
         string Name { get; set; }
         Type Type { get; set; }
         string Format { get; set; }
-        string SimpleRef { get; set; }
+        string Ref { get; set; }
         string[] Enum { get; set; }
         string EnumTypeName { get; set; }
         

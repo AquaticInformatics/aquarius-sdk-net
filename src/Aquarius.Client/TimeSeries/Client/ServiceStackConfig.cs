@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using Aquarius.Samples.Client;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using NodaTime;
@@ -53,7 +56,8 @@ namespace Aquarius.TimeSeries.Client
             JsConfig.AssumeUtc = true;
             JsConfig.IncludeNullValues = true;
             JsConfig.IncludeNullValuesInDictionaries = true;
-            JsConfig.ThrowOnDeserializationError = true;
+
+            ConfigureForgivingEnumSerialization();
 
             JsConfig<DateTime>.SerializeFn = AlwaysSerializeDateTimeAsUtc;
             JsConfig<DateTime>.DeSerializeFn = AlwaysDeserializeDateTimeAsUtc;
@@ -65,6 +69,9 @@ namespace Aquarius.TimeSeries.Client
 
             JsConfig<Instant?>.SerializeFn = SerializeInstant;
             JsConfig<Instant?>.DeSerializeFn = DeserializeNullableInstant;
+
+            JsConfig<Timestamp>.SerializeFn = timestamp => SerializeInstant(timestamp.Value);
+            JsConfig<Timestamp>.DeSerializeFn = text => DeserializeNullableInstant(text);
 
             JsConfig<Interval>.RawSerializeFn = SerializeInterval;
             JsConfig<Interval>.RawDeserializeFn = DeserializeInterval;
@@ -90,6 +97,38 @@ namespace Aquarius.TimeSeries.Client
 
             JsConfig<double?>.RawSerializeFn = SerializeNullableDouble;
             JsConfig<double?>.RawDeserializeFn = DeserializeNullableDouble;
+        }
+
+        private static void ConfigureForgivingEnumSerialization()
+        {
+            // Disabling throwing on any deserialization error is swinging a very blunt hammer
+            // So keep this enabled and try to do something specific to enumerations only
+            JsConfig.ThrowOnDeserializationError = true;
+
+            var allServiceModelEnumTypes = Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => t.IsEnum && t.IsPublic && ServiceModelNameSpaces.Any(ns => t.FullName.StartsWithIgnoreCase(ns)));
+
+            foreach (var enumType in allServiceModelEnumTypes)
+            {
+                // TODO: Figure out how to map any unknown/unexpected enum values to the default
+                // JsConfig<enumType>.DeSerializeFn = DeserializeEnumWithDefaultFallback<enumType>();
+                // JsConfig<enumType>.DeSerializeFn = DeserializeEnumWithDefaultFallback<enumType>();
+                // var method = typeof(JsConfig).GetMethod("");
+            }
+        }
+
+        private static readonly string[] ServiceModelNameSpaces = { "Aquarius.TimeSeries.Client.ServiceModels.", "Aquarius.Samples.Client.ServiceModel." };
+
+        private static T DeserializeEnumWithDefaultFallback<T>(string text) where T:struct
+        {
+            if (text == null)
+                return default(T);
+
+            if (Enum.TryParse(text, true, out T value))
+                return value;
+
+            return default(T);
         }
 
         private static string AlwaysSerializeDateTimeAsUtc(DateTime dateTime)

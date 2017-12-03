@@ -11,7 +11,7 @@ namespace SamplesServiceModelGenerator.Swagger
 
         public Type Type { get; set; }
         public string Format { get; set; }
-        public string SimpleRef { get; set; }
+        public string Ref { get; set; }
         public string Name { get; set; }
         public bool Simple { get; set; }
 

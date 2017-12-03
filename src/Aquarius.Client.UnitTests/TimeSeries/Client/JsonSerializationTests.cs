@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Aquarius.TimeSeries.Client;
+using Aquarius.TimeSeries.Client.Helpers;
 using FluentAssertions;
 using NodaTime;
 using NUnit.Framework;
@@ -112,7 +113,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new object[] {Instant.MaxValue, "\"MaxInstant\""}
         };
 
-        [TestCaseSource("ExpectedNodaTimeInstantJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeInstantJson))]
         public void NodaTimeInstant_SerializesToExpectedText(Instant input, string expected)
         {
             var actual = input.ToJson();
@@ -120,7 +121,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        [TestCaseSource("ExpectedNodaTimeInstantJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeInstantJson))]
         public void NodaTimeInstant_RoundTrip_ReturnsSameValue(Instant input, string ignore)
         {
             var json = input.ToJson();
@@ -142,7 +143,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new object[] {"\"maxInStAnT\"", Instant.MaxValue}
         };
 
-        [TestCaseSource("ExpectedJsonNodaTimeInstants")]
+        [TestCaseSource(nameof(ExpectedJsonNodaTimeInstants))]
         public void NodaTimeInstant_ParsesVariousValues(string input, Instant expected)
         {
             var actual = input.FromJson<Instant>();
@@ -240,7 +241,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private const string ExpectedIntervalFormatString = "{{\"Start\":{0},\"End\":{1}}}";
 
-        [TestCaseSource("ExpectedNodaTimeInstantJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeInstantJson))]
         public void NodaTimeInterval_SerializesToExpectedText_WithVaryingStart(Instant start, string expectedStart)
         {
             const string expectedEnd = "\"MaxInstant\"";
@@ -252,7 +253,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        [TestCaseSource("ExpectedNodaTimeInstantJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeInstantJson))]
         public void NodaTimeInterval_SerializesToExpectedText_WithVaryingEnd(Instant end, string expectedEnd)
         {
             const string expectedStart = "\"MinInstant\"";
@@ -264,7 +265,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        [TestCaseSource("ExpectedNodaTimeInstantJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeInstantJson))]
         public void NodaTimeInterval_RoundTrip_ReturnsSameValue_WithVaryingStart(Instant start, string ignore)
         {
             var input = new Interval(start, Instant.MaxValue);
@@ -275,7 +276,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
-        [TestCaseSource("ExpectedNodaTimeInstantJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeInstantJson))]
         public void NodaTimeInterval_RoundTrip_ReturnsSameValue_WithVaryingEnd(Instant end, string ignore)
         {
             var input = new Interval(Instant.MinValue, end);
@@ -304,7 +305,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             }
         };
 
-        [TestCaseSource("ExpectedJsonNodaTimeIntervals")]
+        [TestCaseSource(nameof(ExpectedJsonNodaTimeIntervals))]
         public void NodaTimeInterval_ParsesVariousValues(string json, Instant expectedStart, Instant expectedEnd)
         {
             var actual = json.FromJson<Interval>();
@@ -355,10 +356,11 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new object[] {Duration.FromMinutes(-15), "\"-PT15M\""},
             new object[] {Duration.Zero, "\"PT0S\""},
             new object[] {Duration.FromTicks(Int64.MaxValue), "\"MaxDuration\""},
+            new object[] {DurationExtensions.MaxGapDuration, "\"MaxDuration\""},
             new object[] {Duration.FromTicks(Int64.MinValue), "\"MinDuration\""}
         };
 
-        [TestCaseSource("ExpectedNodaTimeDurationJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeDurationJson))]
         public void NodaTimeDuration_SerializesToExpectedText(Duration input, string expected)
         {
             var actual = input.ToJson();
@@ -374,7 +376,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             public Offset Offset { get; set; }
         }
 
-        [TestCaseSource("ExpectedNodaTimeDurationJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeDurationJson))]
         public void NodaTimeDuration_RoundTrip_ReturnsSameValue(Duration input, string ignore)
         {
             var json = input.ToJson();
@@ -394,7 +396,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             }),
         };
 
-        [TestCaseSource("ExpectedNodaTimeDto")]
+        [TestCaseSource(nameof(ExpectedNodaTimeDto))]
         public void NodaTimeDto_RoundTrip_ReturnsSameValue(NodaTimeDto input)
         {
             var json = input.ToJson();
@@ -502,7 +504,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new object[] {Offset.Zero, "\"PT0S\""}
         };
 
-        [TestCaseSource("ExpectedNodaTimeOffsetJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeOffsetJson))]
         public void NodaTimeOffset_SerializesToExpectedText(Offset input, string expected)
         {
             var actual = input.ToJson();
@@ -510,7 +512,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        [TestCaseSource("ExpectedNodaTimeOffsetJson")]
+        [TestCaseSource(nameof(ExpectedNodaTimeOffsetJson))]
         public void NodaTimeOffset_RoundTrip_ReturnsSameValue(Offset input, string ignore)
         {
             var json = input.ToJson();

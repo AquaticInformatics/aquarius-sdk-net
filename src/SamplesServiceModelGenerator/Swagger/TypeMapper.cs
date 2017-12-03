@@ -18,16 +18,27 @@ namespace SamplesServiceModelGenerator.Swagger
                     if (string.IsNullOrEmpty(item.EnumTypeName))
                         throw new ArgumentException($"Cannot resolve enumeration typename for {item.ToJson()}");
 
+                    if (item.EnumTypeName == "Unknown")
+                        throw new ArgumentException($"Unknown enum type for {item.ToJson()}");
+
                     return item.EnumTypeName;
+
                 case Type.Ref:
-                    if (string.IsNullOrEmpty(item.SimpleRef))
+                    if (string.IsNullOrEmpty(item.Ref))
                         throw new ArgumentException($"Cannot resolve reference for {item.ToJson()}");
 
-                    return item.SimpleRef;
+                    if (item.Ref == "Unknown")
+                        throw new ArgumentException($"Unknown refernce type for {item.ToJson()}");
+
+                    return item.Ref;
+
                 case Type.Array:
                     var arrayTypeName = item.ArrayTypeName();
                     if (string.IsNullOrEmpty(arrayTypeName))
                         throw new ArgumentException($"Cannot resolve array type for {item.ToJson()}");
+
+                    if (arrayTypeName == "Unknown")
+                        throw new ArgumentException($"Unknown array type for {item.ToJson()}");
 
                     return $"List<{arrayTypeName}>";
             }
@@ -35,7 +46,12 @@ namespace SamplesServiceModelGenerator.Swagger
             Dictionary<string, string> formatsForType;
             if (!TypeMaps[Language].TryGetValue(item.Type, out formatsForType))
             {
-                return item.Type.ToString();
+                var typeName = item.Type.ToString();
+
+                if (typeName == "Unknown")
+                    throw new ArgumentException($"Unknown type for {item.ToJson()}");
+
+                return typeName;
             }
 
             string specificFormat;
