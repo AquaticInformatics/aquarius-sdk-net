@@ -12,6 +12,8 @@ namespace Aquarius.TimeSeries.Client.Helpers
         private static readonly Duration DurationMaxValue = Duration.FromTicks(Int64.MaxValue);
         private static readonly Duration DurationMinValue = Duration.FromTicks(Int64.MinValue);
 
+        public static readonly Duration MaxGapDuration = DurationMaxValue;
+
         private static readonly StringComparer DurationComparer = StringComparer.InvariantCultureIgnoreCase;
 
         public static Duration ParseDuration(this string s)
