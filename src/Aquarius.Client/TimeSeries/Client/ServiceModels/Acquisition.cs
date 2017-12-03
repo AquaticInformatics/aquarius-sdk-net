@@ -1,8 +1,8 @@
 /* Options:
-Date: 2017-09-12 16:24:15
+Date: 2017-11-30 14:20:36
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver17/AQUARIUS/Acquisition/v2
+BaseUrl: http://autoserver12/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
@@ -172,8 +172,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         [ApiMember(DataType="Instant", Description="Time report was created")]
         public Instant? CreatedTime { get; set; }
 
+        ///<summary>
+        ///File
+        ///</summary>
         [Ignore]
-        [ApiMember(DataType="file", IsRequired=true, ParameterType="form")]
+        [ApiMember(DataType="file", Description="File", IsRequired=true, ParameterType="form")]
         public IHttpFile File { get; set; }
     }
 
@@ -237,8 +240,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         [ApiMember(DataType="string", Description="Unique ID of the location of visits in the file", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
 
+        ///<summary>
+        ///File
+        ///</summary>
         [Ignore]
-        [ApiMember(DataType="file", IsRequired=true, ParameterType="form")]
+        [ApiMember(DataType="file", Description="File", IsRequired=true, ParameterType="form")]
         public IHttpFile File { get; set; }
     }
 
@@ -289,10 +295,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     public class FieldDataPlugin
     {
-        [ApiMember(DataType="string")]
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name")]
         public string Name { get; set; }
 
-        [ApiMember(DataType="string")]
+        ///<summary>
+        ///Unique id
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique id")]
         public Guid UniqueId { get; set; }
     }
 
@@ -315,7 +327,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Relative URIs of created visits
         ///</summary>
-        [ApiMember(DataType="string", Description="Relative URIs of created visits")]
+        [ApiMember(DataType="Array<string>", Description="Relative URIs of created visits")]
         public List<string> VisitUris { get; set; }
 
         ///<summary>
@@ -386,6 +398,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.3.86.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.4.72.0");
     }
 }

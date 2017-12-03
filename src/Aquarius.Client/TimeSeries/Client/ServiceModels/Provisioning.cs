@@ -1,8 +1,8 @@
 /* Options:
-Date: 2017-09-12 16:24:03
+Date: 2017-11-30 14:20:20
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver17/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver12/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -155,13 +155,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Plug-in folder name
         ///</summary>
-        [ApiMember(DataType="string", Description="Plug-in folder name", IsRequired=true)]
+        [ApiMember(Description="Plug-in folder name", IsRequired=true)]
         public string PluginFolderName { get; set; }
 
         ///<summary>
         ///Assembly qualified type name
         ///</summary>
-        [ApiMember(DataType="string", Description="Assembly qualified type name", IsRequired=true)]
+        [ApiMember(Description="Assembly qualified type name", IsRequired=true)]
         public string AssemblyQualifiedTypeName { get; set; }
 
         ///<summary>
@@ -173,7 +173,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Description
         ///</summary>
-        [ApiMember(DataType="string", Description="Description")]
+        [ApiMember(Description="Description")]
         public string Description { get; set; }
     }
 
@@ -523,6 +523,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Decommissioned reason")]
         public string DecommissionedReason { get; set; }
+
+        ///<summary>
+        ///Indicates this reference point has been the primary since the date herein; if null, the point is a regular reference point.
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Indicates this reference point has been the primary since the date herein; if null, the point is a regular reference point.")]
+        public Instant? PrimarySinceDate { get; set; }
 
         ///<summary>
         ///Longitude (WGS 84)
@@ -925,7 +931,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Standard identifier
         ///</summary>
-        [ApiMember(DataType="string", Description="Standard identifier", IsRequired=true, ParameterType="path")]
+        [ApiMember(Description="Standard identifier", IsRequired=true, ParameterType="path")]
         public string StandardIdentifier { get; set; }
 
         ///<summary>
@@ -946,7 +952,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///StandardIdentifier
         ///</summary>
-        [ApiMember(DataType="string", Description="StandardIdentifier", IsRequired=true)]
+        [ApiMember(Description="StandardIdentifier", IsRequired=true)]
         public string StandardIdentifier { get; set; }
     }
 
@@ -1079,7 +1085,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Time Step Count. Must be included for 'Statistic' derived time-series.
         ///</summary>
-        [ApiMember(Description="Time Step Count. Must be included for 'Statistic' derived time-series.")]
+        [ApiMember(DataType="integer", Description="Time Step Count. Must be included for 'Statistic' derived time-series.")]
         public int? TimeStepCount { get; set; }
     }
 
@@ -1748,13 +1754,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Plug-in folder name
         ///</summary>
-        [ApiMember(DataType="string", Description="Plug-in folder name")]
+        [ApiMember(Description="Plug-in folder name")]
         public string PluginFolderName { get; set; }
 
         ///<summary>
         ///Assembly qualified type name
         ///</summary>
-        [ApiMember(DataType="string", Description="Assembly qualified type name")]
+        [ApiMember(Description="Assembly qualified type name")]
         public string AssemblyQualifiedTypeName { get; set; }
 
         ///<summary>
@@ -1766,7 +1772,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Description
         ///</summary>
-        [ApiMember(DataType="string", Description="Description")]
+        [ApiMember(Description="Description")]
         public string Description { get; set; }
     }
 
@@ -1877,25 +1883,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Identifier
         ///</summary>
-        [ApiMember(DataType="string", Description="Identifier")]
+        [ApiMember(Description="Identifier")]
         public string Identifier { get; set; }
 
         ///<summary>
         ///Location name
         ///</summary>
-        [ApiMember(DataType="string", Description="Location name")]
+        [ApiMember(Description="Location name")]
         public string LocationName { get; set; }
 
         ///<summary>
         ///Location path
         ///</summary>
-        [ApiMember(DataType="string", Description="Location path")]
+        [ApiMember(Description="Location path")]
         public string LocationPath { get; set; }
 
         ///<summary>
         ///Location type
         ///</summary>
-        [ApiMember(DataType="string", Description="Location type")]
+        [ApiMember(Description="Location type")]
         public string LocationType { get; set; }
 
         ///<summary>
@@ -1931,7 +1937,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Elevation units
         ///</summary>
-        [ApiMember(DataType="string", Description="Elevation units")]
+        [ApiMember(Description="Elevation units")]
         public string ElevationUnits { get; set; }
 
         ///<summary>
@@ -1943,7 +1949,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Description
         ///</summary>
-        [ApiMember(DataType="string", Description="Description")]
+        [ApiMember(Description="Description")]
         public string Description { get; set; }
 
         ///<summary>
@@ -2457,7 +2463,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///StandardIdentifier
         ///</summary>
-        [ApiMember(DataType="string", Description="StandardIdentifier")]
+        [ApiMember(Description="StandardIdentifier")]
         public string StandardIdentifier { get; set; }
 
         ///<summary>
@@ -2854,6 +2860,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.3.86.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.4.72.0");
     }
 }
