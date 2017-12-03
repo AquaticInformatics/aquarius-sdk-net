@@ -80,6 +80,11 @@ namespace SamplesServiceModelGenerator.Swagger
 
             ParseRef(property, jsonText);
 
+            ParseRef(property.Items, JsonObject.Parse(jsonText).Object("items"));
+
+            if (property.Type == Type.Unknown)
+                throw new ArgumentException($"Can't parse property type for name='{name}' from json={jsonText} , Owner={owner.ToJson()}");
+
             if (string.IsNullOrEmpty(property.Name))
                 property.Name = name;
 
@@ -109,7 +114,7 @@ namespace SamplesServiceModelGenerator.Swagger
                 return;
 
             item.Type = Type.Ref;
-            item.SimpleRef = match.Groups["name"].Value;
+            item.Ref = match.Groups["name"].Value;
         }
 
         private static readonly Regex DefinitionsReferenceRegex = new Regex(@"^\#/definitions/(?<name>\w+)$");
@@ -248,7 +253,8 @@ namespace SamplesServiceModelGenerator.Swagger
                     .ToDictionary(
                         operationKvp => operationKvp.Key.ToUpperInvariant(),
                         operationKvp => ParseOperation(pathKvp.Key, operationKvp.Key, operationKvp.Value))
-            });
+            })
+            .OrderBy(p => p.Route);
         }
 
         private static readonly HashSet<string> SupportedMethods =
@@ -302,6 +308,8 @@ namespace SamplesServiceModelGenerator.Swagger
 
         private void NormalizeOperation(Operation operation)
         {
+            operation.OperationId = GetOperationIdWithoutTrailingNumbers(operation);
+
             var operationId = operation.OperationId;
 
             if (operationId.Equals("sparsePut", StringComparison.InvariantCultureIgnoreCase))
@@ -323,6 +331,11 @@ namespace SamplesServiceModelGenerator.Swagger
             }
 
             operation.OperationId = operationId;
+        }
+
+        private string GetOperationIdWithoutTrailingNumbers(Operation operation)
+        {
+            return operation.OperationId.Split('_')[0];
         }
 
         private static readonly Regex DomainObjectRegex = new Regex(@"domainObjects?", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase);

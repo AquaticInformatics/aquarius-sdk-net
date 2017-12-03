@@ -7,7 +7,7 @@
         public string Description { get; set; }
         public Type Type { get; set; }
         public string Format { get; set; }
-        public string SimpleRef { get; set; }
+        public string Ref { get; set; }
         public string[] Enum { get; set; }
         public string EnumTypeName { get; set; }
         public bool Required { get; set; }

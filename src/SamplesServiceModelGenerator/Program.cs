@@ -94,8 +94,8 @@ namespace SamplesServiceModelGenerator
 
         private Dictionary<TargetLanguage, string> _aliases = new Dictionary<TargetLanguage, string>
         {
-            {TargetLanguage.CSharp, "DomainDateTime=Instant;DomainDateTimeRange=Interval"},
-            {TargetLanguage.Java, "DomainDateTime=Instant;DomainDateTimeRange=Interval"},
+            {TargetLanguage.CSharp, "DomainDateTime=Timestamp;DomainDateTimeRange=TimeRange"},
+            {TargetLanguage.Java, "DomainDateTime=Timestamp;DomainDateTimeRange=TimeRange"},
         };
 
         private string _fixups = "GET:/v1/samplinglocations/{id}/attachments=GetSamplingLocationAttachments;"

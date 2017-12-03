@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ServiceStack;
 using SamplesServiceModelGenerator.Swagger;
+using Type = SamplesServiceModelGenerator.Swagger.Type;
 
 namespace SamplesServiceModelGenerator.CodeGenerators
 {
@@ -81,7 +82,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
         protected string GetPaginatedRequestType(Operation operation, List<OperationParameter> parameters)
         {
-            if (!parameters.Any(p => p.Type == Swagger.Type.String &&
+            if (!parameters.Any(p => p.Type == Type.String &&
                                      p.Name.Equals("Cursor", StringComparison.InvariantCultureIgnoreCase)))
                 return null;
 
@@ -102,9 +103,9 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
         protected string GetPaginatedResponseType(Definition definition)
         {
-            var totalCount = definition.Properties.FirstOrDefault(p => p.Type == Swagger.Type.Integer && p.Name.Equals("TotalCount", StringComparison.InvariantCultureIgnoreCase));
-            var cursor = definition.Properties.FirstOrDefault(p => p.Type == Swagger.Type.String && p.Name.Equals("Cursor", StringComparison.InvariantCultureIgnoreCase));
-            var domainObjects = definition.Properties.FirstOrDefault(p => p.Type == Swagger.Type.Array && p.Name.Equals("DomainObjects", StringComparison.InvariantCultureIgnoreCase));
+            var totalCount = definition.Properties.FirstOrDefault(p => p.Type == Type.Integer && p.Name.Equals("TotalCount", StringComparison.InvariantCultureIgnoreCase));
+            var cursor = definition.Properties.FirstOrDefault(p => p.Type == Type.String && p.Name.Equals("Cursor", StringComparison.InvariantCultureIgnoreCase));
+            var domainObjects = definition.Properties.FirstOrDefault(p => p.Type == Type.Array && p.Name.Equals("DomainObjects", StringComparison.InvariantCultureIgnoreCase));
 
             if (totalCount == null || cursor == null || domainObjects == null)
                 return null;
@@ -116,8 +117,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
         {
             var fixupKey = $"{operation.Method}:{operation.Route}";
 
-            string fixupName;
-            return RequestDtoFixups.TryGetValue(fixupKey, out fixupName)
+            return RequestDtoFixups.TryGetValue(fixupKey, out var fixupName)
                 ? fixupName
                 : operation.OperationId.ToPascalCase();
         }
@@ -128,9 +128,9 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
             foreach (var parameter in operation.Parameters)
             {
-                if (parameter.Type == Swagger.Type.Unknown && parameter.In == ParameterType.Body && parameter.Schema != null)
+                if (parameter.Type == Type.Unknown && parameter.In == ParameterType.Body && parameter.Schema != null)
                 {
-                    if (parameter.Schema.Type == Swagger.Type.Array)
+                    if (parameter.Schema.Type == Type.Array)
                     {
                         // TODO: Can we add support for anonymous lists as a request DTO?
                         // See petstore: `POST /user/createWithArray` where the request body is an anonymous list of User objects
@@ -188,12 +188,15 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             if (property == null)
                 return null;
 
+            if (property.Type == Type.Unknown)
+                throw new ArgumentException($"Unknown property type for {property.ToJson()}");
+
             return new OperationParameter
             {
                 Name = property.Name,
                 Type = property.Type,
                 Format = property.Format,
-                SimpleRef = property.SimpleRef,
+                Ref = property.Ref,
                 Items = Map(property.Items),
                 EnumTypeName = property.EnumTypeName,
                 Enum = property.Enum,
