@@ -4,12 +4,13 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
-### 17.4.2
+### 17.4.3
 - Updated the service models for the 2017.4 release of AQUARIUS Time-Series
 - Updated the service model for the 2017.13 release of AQUARIUS Samples
 - Fixed some JSON serialization bugs for the Samples client, for timestamp and timerange objects
 - Added the `DurationExtensions.MaxGapDuration` constant
 - Capped the `NodaTime` dependency version to 1.x, to avoid some breaking changes in the NodaTime 2.x code base
+- Added some `PostFileWithRequest` extension methods which automatically infer the `<TResponse>` type.
 
 ### 17.3.1
 - Updated the service models for the 2017.3 release of AQUARIUS Time-Series
