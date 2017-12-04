@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using Aquarius.Samples.Client;
 using Aquarius.Samples.Client.ServiceModel;
 using Aquarius.TimeSeries.Client;
 using FluentAssertions;
@@ -76,21 +75,21 @@ namespace Aquarius.UnitTests.Samples.Client
             action.ShouldThrow<SerializationException>();
         }
 
-        public class DtoWithTimestamps
+        public class DtoWithNullableInstants
         {
-            public Timestamp StartTime { get; set; }
-            public Timestamp EndTime { get; set; }
+            public Instant? StartTime { get; set; }
+            public Instant? EndTime { get; set; }
         }
 
         [TestCaseSource(nameof(ValidTimeRanges))]
-        public void Timestamp_FromValidJson(string reason, string jsonText, TimeRange timeRange)
+        public void NullableInstants_FromValidJson_Succeeds(string reason, string jsonText, TimeRange timeRange)
         {
-            var actual = jsonText.FromJson<DtoWithTimestamps>();
-            var expected = new DtoWithTimestamps {StartTime = timeRange.StartTime, EndTime = timeRange.EndTime};
+            var actual = jsonText.FromJson<DtoWithNullableInstants>();
+            var expected = new DtoWithNullableInstants {StartTime = timeRange.StartTime, EndTime = timeRange.EndTime};
             actual.ShouldBeEquivalentTo(expected, $"From JSON: {reason}");
 
             var actualJsonText = actual.ToJson();
-            var actualRoundTrip = actualJsonText.FromJson<DtoWithTimestamps>();
+            var actualRoundTrip = actualJsonText.FromJson<DtoWithNullableInstants>();
 
             actualRoundTrip.ShouldBeEquivalentTo(actual, $"Round trip: {reason}");
         }

@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Aquarius.Samples.Client;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using NodaTime;
@@ -69,9 +68,6 @@ namespace Aquarius.TimeSeries.Client
 
             JsConfig<Instant?>.SerializeFn = SerializeInstant;
             JsConfig<Instant?>.DeSerializeFn = DeserializeNullableInstant;
-
-            JsConfig<Timestamp>.SerializeFn = timestamp => SerializeInstant(timestamp.Value);
-            JsConfig<Timestamp>.DeSerializeFn = text => DeserializeNullableInstant(text);
 
             JsConfig<Interval>.RawSerializeFn = SerializeInterval;
             JsConfig<Interval>.RawDeserializeFn = DeserializeInterval;
