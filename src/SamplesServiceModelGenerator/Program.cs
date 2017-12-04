@@ -94,7 +94,7 @@ namespace SamplesServiceModelGenerator
 
         private Dictionary<TargetLanguage, string> _aliases = new Dictionary<TargetLanguage, string>
         {
-            {TargetLanguage.CSharp, "DomainDateTime=Timestamp;DomainDateTimeRange=TimeRange"},
+            {TargetLanguage.CSharp, "DomainDateTime=Instant?;DomainDateTimeRange=TimeRange"},
             {TargetLanguage.Java, "DomainDateTime=Timestamp;DomainDateTimeRange=TimeRange"},
         };
 

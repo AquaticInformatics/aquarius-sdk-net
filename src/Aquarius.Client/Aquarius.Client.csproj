@@ -82,7 +82,6 @@
     <Compile Include="Samples\Client\SamplesMaintenanceModeException.cs" />
     <Compile Include="Samples\Client\ServiceModel.cs" />
     <Compile Include="Samples\Client\ISamplesClient.cs" />
-    <Compile Include="Samples\Client\Timestamp.cs" />
     <Compile Include="Samples\Client\WebServiceExceptionHandler.cs" />
     <Compile Include="Samples\Client\TimeRange.cs" />
     <Compile Include="TimeSeries\Client\AdaptivePollingTimer.cs" />
