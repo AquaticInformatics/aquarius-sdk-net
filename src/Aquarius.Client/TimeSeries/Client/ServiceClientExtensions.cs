@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using ServiceStack;
@@ -74,6 +75,21 @@ namespace Aquarius.TimeSeries.Client
                 yield return batch.ToArray();
                 batch.Clear();
             }
+        }
+
+        public static TResponse PostFileWithRequest<TResponse>(this IServiceClient client, string path, IReturn<TResponse> requestDto)
+        {
+            var fileToUpload = new FileInfo(path);
+
+            using (var stream = fileToUpload.OpenRead())
+            {
+                return PostFileWithRequest(client, stream, fileToUpload.Name, requestDto);
+            }
+        }
+
+        public static TResponse PostFileWithRequest<TResponse>(this IServiceClient client, Stream contentToUpload, string uploadedFileName, IReturn<TResponse> requestDto)
+        {
+            return client.PostFileWithRequest<TResponse>(contentToUpload, uploadedFileName, requestDto);
         }
     }
 }
