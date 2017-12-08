@@ -10,7 +10,7 @@ namespace Aquarius.Samples.Client
         public static SamplesApiException CreateSamplesApiExceptionFromResponse(WebServiceException e)
         {
             if (e.ResponseHeaders["server"] == "AmazonS3")
-                return new SamplesMaintenanceModeException(FormattableString.Invariant($"{e.Message}: AQUARIUS Samples is in maintenance mode"), e);
+                return new SamplesMaintenanceModeException($"{e.Message}: AQUARIUS Samples is in maintenance mode", e);
 
             var errorResponse = DeserializeErrorFromResponse(e);
             var message = ComposeMessage(e, errorResponse);
@@ -25,7 +25,7 @@ namespace Aquarius.Samples.Client
         {
             var response = e.Response as HttpWebResponse;
             var statusCode = (response == null) ? 0 : (int)response.StatusCode;
-            var message = FormattableString.Invariant($"{e.Status}: {e.Message}");
+            var message = $"{e.Status}: {e.Message}";
 
             return new SamplesApiException(message, e)
             {
@@ -67,7 +67,7 @@ namespace Aquarius.Samples.Client
             if (errorResponse?.Message == null)
                 return e.Message;
 
-            return FormattableString.Invariant($"{e.Message}: {errorResponse.Message}");
+            return $"{e.Message}: {errorResponse.Message}";
         }
     }
 }

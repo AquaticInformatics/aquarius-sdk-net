@@ -1,141 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E1A97713-66CD-424D-8CBC-698224FAC01F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aquarius</RootNamespace>
-    <AssemblyName>Aquarius.Client</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Aquarius.SDK</PackageId>
+    <Authors>Aquatic Informatics Inc.</Authors>
+    <Company>Aquatic Informatics Inc.</Company>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Product>Aquarius.SDK</Product>
+    <Description>The AQUARIUS SDK for .NET enables .NET developers to easily work with the AQUARIUS Platform of environmental monitoring products.</Description>
+    <Copyright>Copyright © 2017</Copyright>
+    <PackageTags>Aquatic Informatics;Aquarius SDK;Time-Series;WebPortal;Samples</PackageTags>
+    <PackageLicenseUrl>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/AquaticInformatics/aquarius-sdk-net/develop/images/icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</RepositoryUrl>
+    <PackageReleaseNotes>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/ReleaseNotes.md</PackageReleaseNotes>
+    <Version>0.0.0</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <!-- .NET Standard 2.0 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="NodaTime" Version="2.2.3" />
+    <PackageReference Include="ServiceStack.Client.Core" Version="1.0.44" />
+    <PackageReference Include="ServiceStack.HttpClient.Core" Version="1.0.44" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="1.0.44" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="1.0.44" />
+  </ItemGroup>
+
+  <!-- .NET 4.5 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NodaTime.1.3.0\lib\net35-Client\NodaTime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Client.4.5.12\lib\net45\ServiceStack.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.HttpClient, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.HttpClient.4.5.12\lib\net45\ServiceStack.HttpClient.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Interfaces.4.5.12\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.4.5.12\lib\net45\ServiceStack.Text.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+    <PackageReference Include="NodaTime" Version="1.3.0" />
+    <PackageReference Include="ServiceStack.Client" Version="4.5.12" />
+    <PackageReference Include="ServiceStack.HttpClient" Version="4.5.12" />
+    <PackageReference Include="ServiceStack.Interfaces" Version="4.5.12" />
+    <PackageReference Include="ServiceStack.Text" Version="4.5.12" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Helpers\SdkServiceClient.cs" />
-    <Compile Include="Helpers\UserAgentBuilder.cs" />
-    <Compile Include="Samples\Client\IPaginatedRequest.cs" />
-    <Compile Include="Samples\Client\IPaginatedResponse.cs" />
-    <Compile Include="Samples\Client\LazyResult.cs" />
-    <Compile Include="Samples\Client\SamplesApiException.cs" />
-    <Compile Include="Samples\Client\SamplesAuthenticationException.cs" />
-    <Compile Include="Samples\Client\SamplesClient.cs" />
-    <Compile Include="Samples\Client\SamplesErrorResponse.cs" />
-    <Compile Include="Samples\Client\FileUploader.cs" />
-    <Compile Include="Samples\Client\SamplesMaintenanceModeException.cs" />
-    <Compile Include="Samples\Client\ServiceModel.cs" />
-    <Compile Include="Samples\Client\ISamplesClient.cs" />
-    <Compile Include="Samples\Client\WebServiceExceptionHandler.cs" />
-    <Compile Include="Samples\Client\TimeRange.cs" />
-    <Compile Include="TimeSeries\Client\AdaptivePollingTimer.cs" />
-    <Compile Include="TimeSeries\Client\AquariusClient.cs" />
-    <Compile Include="TimeSeries\Client\AquariusServerType.cs" />
-    <Compile Include="TimeSeries\Client\AquariusServerVersion.cs" />
-    <Compile Include="TimeSeries\Client\AquariusSystemDetector.cs" />
-    <Compile Include="TimeSeries\Client\CredentialsParser.cs" />
-    <Compile Include="TimeSeries\Client\EndPoints\AcquisitionV2.cs" />
-    <Compile Include="TimeSeries\Client\EndPoints\LegacyDataService.cs" />
-    <Compile Include="TimeSeries\Client\EndPoints\Provisioning.cs" />
-    <Compile Include="TimeSeries\Client\EndPoints\PublishV2.cs" />
-    <Compile Include="TimeSeries\Client\EndPoints\Root.cs" />
-    <Compile Include="Helpers\UriHelper.cs" />
-    <Compile Include="TimeSeries\Client\Helpers\AuthenticationHeaders.cs" />
-    <Compile Include="TimeSeries\Client\Helpers\ClientHelper.cs" />
-    <Compile Include="TimeSeries\Client\Helpers\DurationExtensions.cs" />
-    <Compile Include="TimeSeries\Client\Helpers\Iso8601ParseOptions.cs" />
-    <Compile Include="TimeSeries\Client\Helpers\NodaTimeConverter.cs" />
-    <Compile Include="TimeSeries\Client\IAquariusClient.cs" />
-    <Compile Include="TimeSeries\Client\IPollingTimer.cs" />
-    <Compile Include="TimeSeries\Client\ScopeAction.cs" />
-    <Compile Include="TimeSeries\Client\ServiceClientExtensions.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Acquisition.cs" />
-    <Compile Include="TimeSeries\Client\Helpers\ObjectId.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\3x\Publish.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\DeprecatedGetLocations\Provisioning.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\ReplaceToEndOfTime\Acquisition.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\ResponseLists\Provisioning.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Legacy\CreateTimeSeriesNeedsParameterId\Provisioning.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Provisioning.cs" />
-    <Compile Include="TimeSeries\Client\ServiceModels\Publish.cs" />
-    <Compile Include="TimeSeries\Client\ServiceStackConfig.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Aquarius.Client.nuspec" />
-    <None Include="Samples\Client\create_service_models.sh" />
-    <None Include="TimeSeries\Client\create_service_models.sh" />
-    <None Include="TimeSeries\Client\generate_code_from_live_endpoint.sh" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

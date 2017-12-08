@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquarius.Client", "Aquarius.Client\Aquarius.Client.csproj", "{E1A97713-66CD-424D-8CBC-698224FAC01F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquarius.Client", "Aquarius.Client\Aquarius.Client.csproj", "{E1A97713-66CD-424D-8CBC-698224FAC01F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquarius.Client.UnitTests", "Aquarius.Client.UnitTests\Aquarius.Client.UnitTests.csproj", "{51EEDD80-3F9F-42A4-A9B8-37B46D323C57}"
 EndProject
@@ -41,5 +41,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33AB2171-558E-4D4A-BB88-DF9443EE551F}
 	EndGlobalSection
 EndGlobal
