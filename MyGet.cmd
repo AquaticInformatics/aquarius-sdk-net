@@ -22,7 +22,7 @@ if not "%errorlevel%"=="0" goto failure
 
 rem Build
 echo Building project ...
-dotnet build --configuration "%config%"
+dotnet build --configuration "%config%" src
 rem call "%MsBuildExe%" build.proj /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 if not "%errorlevel%"=="0" goto failure
 
