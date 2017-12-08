@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SamplesServiceModelGenerator.Swagger;
+using ServiceStack;
 using Enum = SamplesServiceModelGenerator.Swagger.Enum;
 
 namespace SamplesServiceModelGenerator.CodeGenerators
@@ -144,7 +145,8 @@ namespace SamplesServiceModelGenerator.CodeGenerators
         private string CreateDtoProperty(string propertyName, string propertyTypeName)
         {
             // TODO: Add @ApiMember annotations to show parameter.Description if not empty
-            return $"public {propertyTypeName} {propertyName} = null;";
+            // TODO: Add @SerializeName
+            return $"@SerializedName(\"{propertyName.ToCamelCase()}\") public {propertyTypeName} {propertyName} = null;";
         }
 
         private string CreateDtoPropertyAccessors(string className, string propertyName, string propertyTypeName)

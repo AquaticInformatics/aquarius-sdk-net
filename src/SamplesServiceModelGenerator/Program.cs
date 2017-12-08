@@ -83,7 +83,7 @@ namespace SamplesServiceModelGenerator
         private Dictionary<TargetLanguage, string> _usingDirectives = new Dictionary<TargetLanguage, string>
         {
             {TargetLanguage.CSharp, "System.Collections.Generic;ServiceStack;NodaTime;Aquarius.TimeSeries.Client"},
-            {TargetLanguage.Java, "java.time.*;java.util.*;net.servicestack.client.*;com.aquaticinformatics.aquarius.sdk.AquariusServerVersion"},
+            {TargetLanguage.Java, "java.time.*;java.util.*;com.google.gson.annotations.SerializedName;net.servicestack.client.*;com.aquaticinformatics.aquarius.sdk.AquariusServerVersion"},
         };
 
         private Dictionary<TargetLanguage, string> _filename = new Dictionary<TargetLanguage, string>
@@ -95,7 +95,7 @@ namespace SamplesServiceModelGenerator
         private Dictionary<TargetLanguage, string> _aliases = new Dictionary<TargetLanguage, string>
         {
             {TargetLanguage.CSharp, "DomainDateTime=Instant?;DomainDateTimeRange=TimeRange"},
-            {TargetLanguage.Java, "DomainDateTime=Timestamp;DomainDateTimeRange=TimeRange"},
+            {TargetLanguage.Java, "DomainDateTime=Instant;DomainDateTimeRange=Interval"},
         };
 
         private string _fixups = "GET:/v1/samplinglocations/{id}/attachments=GetSamplingLocationAttachments;"
