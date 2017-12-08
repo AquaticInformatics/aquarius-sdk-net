@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+#if NETFULL
 using System.Web.Compilation;
+#endif
 
 namespace Aquarius.Helpers
 {
@@ -55,8 +57,12 @@ namespace Aquarius.Helpers
 
             try
             {
+#if NETFULL
                 // This will identify an ASP.NET entry point
                 assembly = BuildManager.GetGlobalAsaxType().BaseType?.Assembly;
+#else
+                // This will never be hit for .NET Core
+#endif
             }
             catch (InvalidOperationException)
             {
