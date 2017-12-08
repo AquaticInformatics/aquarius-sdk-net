@@ -10,16 +10,20 @@ if not "%PackageVersion%" == "" (
    set version=-Version %PackageVersion%
    echo Applying version number %PackageVersion% ...
    powershell -Command "foreach ($path in dir -Filter AssemblyInfo.cs -Recurse | %%{$_.FullName}){ (gc $path) -replace '0.0.0.0', '%PackageVersion%' | Out-File -Encoding utf8 $path }"
+   powershell -Command "foreach ($path in dir -Filter Aquarius.Client.csproj -Recurse | %%{$_.FullName}){ (gc $path) -replace '0.0.0.0', '%PackageVersion%' | Out-File -Encoding utf8 $path }"
 )
 
 rem Package restore
 echo Restoring packages ...
 call "%NuGet%" restore src
 if not "%errorlevel%"=="0" goto failure
+dotnet restore src
+if not "%errorlevel%"=="0" goto failure
 
 rem Build
 echo Building project ...
-call "%MsBuildExe%" build.proj /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+dotnet build --configuration "%config%"
+rem call "%MsBuildExe%" build.proj /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 if not "%errorlevel%"=="0" goto failure
 
 rem Tests
@@ -31,7 +35,8 @@ if not "%errorlevel%"=="0" goto failure
 rem Package create
 mkdir Build
 echo Creating packages ...
-call "%NuGet%" pack "src\Aquarius.Client\Aquarius.Client.csproj" -symbols -o Build -p Configuration=%config% %version%
+rem call "%NuGet%" pack "src\Aquarius.Client\Aquarius.Client.csproj" -symbols -o Build -p Configuration=%config% %version%
+dotnet pack --output Build --configuration "%config%" "src\Aquarius.Client\Aquarius.Client.csproj"
 if not "%errorlevel%"=="0" goto failure
 
 :success
