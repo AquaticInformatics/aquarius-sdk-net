@@ -1,20 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>Aquarius.SDK</PackageId>
+    <PackageId>Aquarius.SDK.Legacy</PackageId>
     <Authors>Aquatic Informatics Inc.</Authors>
     <Company>Aquatic Informatics Inc.</Company>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Product>Aquarius.SDK</Product>
-    <Description>The AQUARIUS SDK for .NET enables .NET developers to easily work with the AQUARIUS Platform of environmental monitoring products.</Description>
+    <Description>Support for legacy versions of the AQUARIUS platform SDK, to adapt to breaking changes.</Description>
     <Copyright>Copyright (c) Aquatic Informatics Inc. 2017</Copyright>
-    <PackageTags>Aquatic Informatics;Aquarius SDK;Time-Series;WebPortal;Samples</PackageTags>
+    <PackageTags>Aquatic Informatics;Aquarius SDK;Legacy</PackageTags>
     <PackageLicenseUrl>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/src/Aquarius.Client.Legacy</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/AquaticInformatics/aquarius-sdk-net/develop/images/icon.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</RepositoryUrl>
+    <RepositoryUrl></RepositoryUrl>
     <PackageReleaseNotes>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/ReleaseNotes.md</PackageReleaseNotes>
     <Version>0.0.0</Version>
   </PropertyGroup>
@@ -47,6 +48,9 @@
     <PackageReference Include="ServiceStack.HttpClient" Version="4.5.12" />
     <PackageReference Include="ServiceStack.Interfaces" Version="4.5.12" />
     <PackageReference Include="ServiceStack.Text" Version="4.5.12" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Aquarius.Client\Aquarius.Client.csproj" />
   </ItemGroup>
 
 </Project>

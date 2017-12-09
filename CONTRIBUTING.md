@@ -5,7 +5,7 @@ please read the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Setup
 
-1. Install Visual Studio 2015+ on your system (Community Edition should be fine): https://www.visualstudio.com/
+1. Install Visual Studio 2017+ on your system (Community Edition should be fine): https://www.visualstudio.com/
 1. Fork the repo: https://github.com/AquaticInformatics/aquarius-sdk-net
 
 ## Building
