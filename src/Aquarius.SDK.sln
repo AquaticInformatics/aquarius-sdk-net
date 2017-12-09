@@ -9,7 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquarius.Client.UnitTests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepoRoot", "RepoRoot", "{6B91AAEF-9A80-4489-97F2-6610711A29FD}"
 	ProjectSection(SolutionItems) = preProject
-		..\build.proj = ..\build.proj
 		..\CODE_OF_CONDUCT.md = ..\CODE_OF_CONDUCT.md
 		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
 		..\LICENSE.txt = ..\LICENSE.txt
@@ -19,6 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepoRoot", "RepoRoot", "{6B
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplesServiceModelGenerator", "SamplesServiceModelGenerator\SamplesServiceModelGenerator.csproj", "{2984E506-EE7F-4F30-8D23-6997458438B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquarius.Client.Legacy", "Aquarius.Client.Legacy\Aquarius.Client.Legacy.csproj", "{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E1A97713-66CD-424D-8CBC-698224FAC01F} = {E1A97713-66CD-424D-8CBC-698224FAC01F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +42,10 @@ Global
 		{2984E506-EE7F-4F30-8D23-6997458438B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2984E506-EE7F-4F30-8D23-6997458438B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2984E506-EE7F-4F30-8D23-6997458438B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
