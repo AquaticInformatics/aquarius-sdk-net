@@ -4,12 +4,15 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 17.4.9
+- Updated the service models for the 2017.4 release of AQUARIUS Time-Series
+- Fixed an enumeration deserialization bug, to make the SDK more robust if a new version of AQTS adds new value to an existing enumeration type.
+- Marked the `PublishClient`, `AcquisitionClient`, and `ProvisioningClient` properties as obsolete, replacing them with the more succinct `Publish`, `Acquisition`, and `Provisioning` properties. The obsolete properties will be removed in a future release of the SDK.
 ### 17.4.8
 - Added two build targets: .NET Standard and .NET Framework 4.5
 - Moved the legacy service models to separate NuGet package: `Aquarius.SDK.Legacy`. Most programs won't need these older service models, so now it is much more difficult to make the wrong choice by accident.
 
 ### 17.4.3
-- Updated the service models for the 2017.4 release of AQUARIUS Time-Series
 - Updated the service model for the 2017.13 release of AQUARIUS Samples
 - Fixed some JSON serialization bugs for the Samples client, for timestamp and timerange objects
 - Added the `DurationExtensions.MaxGapDuration` constant
