@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
@@ -105,26 +106,54 @@ namespace Aquarius.TimeSeries.Client
                 .GetTypes()
                 .Where(t => t.IsEnum && t.IsPublic && ServiceModelNameSpaces.Any(ns => t.FullName.StartsWithIgnoreCase(ns)));
 
-            foreach (var enumType in allServiceModelEnumTypes)
+            var enumsWithUnknownDefault = allServiceModelEnumTypes
+                .Where(e => e.GetDefaultValue().ToString().Equals("Unknown", StringComparison.InvariantCultureIgnoreCase));
+
+            foreach (var enumType in enumsWithUnknownDefault)
             {
-                // TODO: Figure out how to map any unknown/unexpected enum values to the default
-                // JsConfig<enumType>.DeSerializeFn = DeserializeEnumWithDefaultFallback<enumType>();
-                // JsConfig<enumType>.DeSerializeFn = DeserializeEnumWithDefaultFallback<enumType>();
-                // var method = typeof(JsConfig).GetMethod("");
+                ConfigureEnumDeserialization(enumType);
             }
         }
 
-        private static readonly string[] ServiceModelNameSpaces = { "Aquarius.TimeSeries.Client.ServiceModels.", "Aquarius.Samples.Client.ServiceModel." };
+        private static readonly string[] ServiceModelNameSpaces =
+        {
+            "Aquarius.TimeSeries.Client.ServiceModels.",
+            "Aquarius.Samples.Client.ServiceModel."
+        };
 
-        private static T DeserializeEnumWithDefaultFallback<T>(string text) where T:struct
+        private static void ConfigureEnumDeserialization(Type enumType)
+        {
+            // All of this "overly clever" code is just to accomplish this conceptual method call
+            // JsConfig<enumType>.DeSerializeFn = DeserializeEnumWithDefaultFallback<enumType>();
+
+            // ReSharper disable once PossibleNullReferenceException
+            var enumDeserializerDelegate = typeof(JsonConfig)
+                .GetMethod(nameof(DeserializeEnumWithDefaultFallback), BindingFlags.Static | BindingFlags.NonPublic)
+                .MakeGenericMethod(enumType);
+
+            var stringParameter = Expression.Parameter(typeof(string));
+
+            var lambdaExpression = Expression.Lambda(
+                typeof(Func<,>).MakeGenericType(typeof(string), enumType),
+                Expression.Call(enumDeserializerDelegate, stringParameter), stringParameter);
+
+            var enumJsConfigDeserializerSetter = typeof(JsConfig<>)
+                .MakeGenericType(enumType)
+                .GetMethod("set_DeSerializeFn");
+
+            // ReSharper disable once PossibleNullReferenceException
+            enumJsConfigDeserializerSetter.Invoke(null, new object[] {lambdaExpression.Compile()});
+        }
+
+        private static TEnum DeserializeEnumWithDefaultFallback<TEnum>(string text) where TEnum : struct
         {
             if (text == null)
-                return default(T);
+                return default(TEnum);
 
-            if (Enum.TryParse(text, true, out T value))
+            if (Enum.TryParse(text, true, out TEnum value))
                 return value;
 
-            return default(T);
+            return default(TEnum);
         }
 
         private static string AlwaysSerializeDateTimeAsUtc(DateTime dateTime)

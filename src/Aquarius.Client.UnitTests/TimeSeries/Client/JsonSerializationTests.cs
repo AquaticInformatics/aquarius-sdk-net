@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Aquarius.TimeSeries.Client;
 using Aquarius.TimeSeries.Client.Helpers;
+using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using FluentAssertions;
 using NodaTime;
 using NUnit.Framework;
@@ -778,6 +779,52 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
                 Assert.That(actual, Is.EqualTo(expected));
             }
+        }
+
+        [Test]
+        public void EnumWithoutUnknownDefault_WithUnexpectedValue_Throws()
+        {
+            AssertEnumDoesNotHaveUnknownDefault<CorrectionProcessingOrder>();
+
+            var jsonText = $"\"{GetDefaultEnumValue<CorrectionProcessingOrder>()}_SomeValueThatWontBeExpected\"";
+
+            Action action = () => jsonText.FromJson<CorrectionProcessingOrder>();
+
+            action.ShouldThrow<ArgumentException>();
+        }
+
+
+        [Test]
+        public void EnumWithUnknownDefault_WithUnexpectedValue_DeserializesToUnknown()
+        {
+            AssertEnumHasUnknownDefault<FlowDirectionType>();
+
+            var defaultValue = GetDefaultEnumValue<FlowDirectionType>();
+
+            var jsonText = $"\"{defaultValue}_SomeValueThatWontBeExpected\"";
+
+            var actual = jsonText.FromJson<FlowDirectionType>();
+
+            actual.ShouldBeEquivalentTo(defaultValue);
+        }
+
+        private void AssertEnumHasUnknownDefault<TEnum>() where TEnum : struct
+        {
+            var defaultValue = GetDefaultEnumValue<TEnum>();
+
+            defaultValue.ToString().ToLowerInvariant().ShouldBeEquivalentTo("unknown", $"{typeof(TEnum).FullName} should have a default value of 'Unknown'");
+        }
+
+        private void AssertEnumDoesNotHaveUnknownDefault<TEnum>() where TEnum : struct
+        {
+            var defaultValue = GetDefaultEnumValue<TEnum>();
+
+            defaultValue.ToString().ToLowerInvariant().Should().NotBe("unknown", $"{typeof(TEnum).FullName} should NOT have a default value of 'Unknown'");
+        }
+
+        private TEnum GetDefaultEnumValue<TEnum>() where TEnum : struct
+        {
+            return default(TEnum);
         }
     }
 }
