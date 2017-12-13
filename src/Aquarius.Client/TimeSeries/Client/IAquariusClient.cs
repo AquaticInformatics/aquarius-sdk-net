@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using ServiceStack;
 
@@ -7,8 +8,15 @@ namespace Aquarius.TimeSeries.Client
 {
     public interface IAquariusClient : IDisposable
     {
+        IServiceClient Publish { get; }
+        IServiceClient Acquisition { get; }
+        IServiceClient Provisioning { get; }
+
+        [Obsolete("Use the Publish property instead."), EditorBrowsable(EditorBrowsableState.Never)]
         IServiceClient PublishClient { get; }
+        [Obsolete("Use the Acquisition property instead."), EditorBrowsable(EditorBrowsableState.Never)]
         IServiceClient AcquisitionClient { get; }
+        [Obsolete("Use the Provisioning property instead."), EditorBrowsable(EditorBrowsableState.Never)]
         IServiceClient ProvisioningClient { get; }
 
         AquariusServerVersion ServerVersion { get; }

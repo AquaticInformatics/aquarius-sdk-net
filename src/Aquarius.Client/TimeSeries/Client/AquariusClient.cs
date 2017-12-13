@@ -9,6 +9,7 @@ using Aquarius.TimeSeries.Client.EndPoints;
 using Aquarius.TimeSeries.Client.Helpers;
 using ServiceStack;
 using ServiceStack.Logging;
+using ProvisioningV1 = Aquarius.TimeSeries.Client.EndPoints.Provisioning;
 
 namespace Aquarius.TimeSeries.Client
 {
@@ -43,9 +44,12 @@ namespace Aquarius.TimeSeries.Client
             }
         }
 
-        public IServiceClient PublishClient { get { return _serviceClients[ClientType.PublishJson]; } }
-        public IServiceClient AcquisitionClient { get { return _serviceClients[ClientType.AcquisitionJson]; } }
-        public IServiceClient ProvisioningClient { get { return _serviceClients[ClientType.ProvisioningJson]; } }
+        public IServiceClient Publish => _serviceClients[ClientType.PublishJson];
+        public IServiceClient Acquisition => _serviceClients[ClientType.AcquisitionJson];
+        public IServiceClient Provisioning => _serviceClients[ClientType.ProvisioningJson];
+        public IServiceClient PublishClient => _serviceClients[ClientType.PublishJson];
+        public IServiceClient AcquisitionClient => _serviceClients[ClientType.AcquisitionJson];
+        public IServiceClient ProvisioningClient => _serviceClients[ClientType.ProvisioningJson];
 
         public AquariusServerVersion ServerVersion { get; private set; }
 
@@ -165,7 +169,7 @@ namespace Aquarius.TimeSeries.Client
         {
             _serviceClients.Add(ClientType.PublishJson, new SdkServiceClient(PublishV2.ResolveEndpoint(hostname)));
             _serviceClients.Add(ClientType.AcquisitionJson, new SdkServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
-            _serviceClients.Add(ClientType.ProvisioningJson, new SdkServiceClient(Provisioning.ResolveEndpoint(hostname)));
+            _serviceClients.Add(ClientType.ProvisioningJson, new SdkServiceClient(ProvisioningV1.ResolveEndpoint(hostname)));
 
             Username = username;
             Password = password;
