@@ -47,19 +47,18 @@ namespace Aquarius.TimeSeries.Client
         public IServiceClient Publish => _serviceClients[ClientType.PublishJson];
         public IServiceClient Acquisition => _serviceClients[ClientType.AcquisitionJson];
         public IServiceClient Provisioning => _serviceClients[ClientType.ProvisioningJson];
-        public IServiceClient PublishClient => _serviceClients[ClientType.PublishJson];
-        public IServiceClient AcquisitionClient => _serviceClients[ClientType.AcquisitionJson];
-        public IServiceClient ProvisioningClient => _serviceClients[ClientType.ProvisioningJson];
+        public IServiceClient PublishClient => Publish;
+        public IServiceClient AcquisitionClient => Acquisition;
+        public IServiceClient ProvisioningClient => Provisioning;
 
-        public AquariusServerVersion ServerVersion { get; private set; }
+        public AquariusServerVersion ServerVersion { get; internal set; }
 
         public IServiceClient RegisterCustomClient(string baseUri)
         {
             if (string.IsNullOrWhiteSpace(baseUri))
                 throw new ArgumentOutOfRangeException(nameof(baseUri));
 
-            ServiceClientBase client;
-            if (_customClients.TryGetValue(baseUri, out client))
+            if (_customClients.TryGetValue(baseUri, out var client))
                 return client;
 
             client = ClientHelper.CloneAuthenticatedClient(PublishClient as JsonServiceClient, baseUri);
@@ -103,20 +102,20 @@ namespace Aquarius.TimeSeries.Client
 
         private string Username { get; set; }
         private string Password { get; set; }
-        private string SessionToken { get; set; }
+        internal string SessionToken { get; set; }
         private readonly Stopwatch _stopwatch;
 
-        private enum ClientType
+        internal enum ClientType
         {
             PublishJson,
             AcquisitionJson,
             ProvisioningJson,
         };
 
-        private readonly Dictionary<ClientType, ServiceClientBase> _serviceClients = new Dictionary<ClientType, ServiceClientBase>();
-        private readonly Dictionary<string, ServiceClientBase> _customClients = new Dictionary<string, ServiceClientBase>();
+        internal readonly Dictionary<ClientType, IServiceClient> _serviceClients = new Dictionary<ClientType, IServiceClient>();
+        internal readonly Dictionary<string, IServiceClient> _customClients = new Dictionary<string, IServiceClient>();
 
-        private AquariusClient()
+        internal AquariusClient()
         {
             SetupServiceStack();
 
@@ -157,10 +156,13 @@ namespace Aquarius.TimeSeries.Client
             SetAuthenticationTokenForConnectedClients(_customClients);
         }
 
-        private void SetAuthenticationTokenForConnectedClients<TKey>(Dictionary<TKey, ServiceClientBase> clientDictionary)
+        private void SetAuthenticationTokenForConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
         {
-            foreach (var client in clientDictionary.Values)
+            foreach (var client in clientDictionary.Values.Cast<ServiceClientBase>())
             {
+                if (client == null)
+                    continue;
+
                 ClientHelper.SetAuthenticationToken(client, SessionToken);
             }
         }
@@ -187,7 +189,7 @@ namespace Aquarius.TimeSeries.Client
             ClearConnectedClients(_customClients);
         }
 
-        private static void ClearConnectedClients<TKey>(Dictionary<TKey, ServiceClientBase> clientDictionary)
+        private static void ClearConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
         {
             foreach (var client in clientDictionary.Values)
             {
@@ -204,7 +206,10 @@ namespace Aquarius.TimeSeries.Client
 
             try
             {
-                ClientHelper.Logout(_serviceClients.First().Value);
+                if (FirstNgVersion.IsLessThan(ServerVersion))
+                {
+                    ClientHelper.Logout(_serviceClients.First().Value);
+                }
             }
             catch (Exception exception)
             {
@@ -213,5 +218,7 @@ namespace Aquarius.TimeSeries.Client
 
             SessionToken = null;
         }
+
+        private static readonly AquariusServerVersion FirstNgVersion = AquariusServerVersion.Create("14");
     }
 }

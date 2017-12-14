@@ -17,14 +17,14 @@ namespace Aquarius.TimeSeries.Client.Helpers
             client.Headers.Add(AuthenticationHeaders.AuthenticationHeaderNameKey, authenticationToken);
         }
 
-        public static string Login(ServiceClientBase client, string username, string password)
+        public static string Login(IServiceClient client, string username, string password)
         {
             var publicKey = client.Get(new GetPublicKey());
             var encryptedPassword = EncryptPassword(publicKey.Xml, password);
             return client.Post(new PostSession {EncryptedPassword = encryptedPassword, Username = username});
         }
 
-        public static void Logout(ServiceClientBase client)
+        public static void Logout(IServiceClient client)
         {
             client.Delete(new DeleteSession());
         }

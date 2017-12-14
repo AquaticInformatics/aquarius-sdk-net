@@ -82,6 +82,7 @@
     <Compile Include="Samples\Client\JsonSerializationTests.cs" />
     <Compile Include="Samples\Client\LazyGetTests.cs" />
     <Compile Include="Samples\Client\TimeRangeTests.cs" />
+    <Compile Include="TimeSeries\Client\AquariusClientTests.cs" />
     <Compile Include="TimeSeries\Client\AquariusServerVersionTests.cs" />
     <Compile Include="TimeSeries\Client\AquariusSystemDetectorTests.cs" />
     <Compile Include="TimeSeries\Client\CredentialsParserTests.cs" />
