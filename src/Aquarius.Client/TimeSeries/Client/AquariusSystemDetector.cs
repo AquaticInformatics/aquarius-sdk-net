@@ -38,11 +38,21 @@ namespace Aquarius.TimeSeries.Client
         private readonly ConcurrentDictionary<string, AquariusServerVersion> _knownServerVersions = new ConcurrentDictionary<string, AquariusServerVersion>();
         private readonly ConcurrentDictionary<string, AquariusServerVersion> _overrideVersions = new ConcurrentDictionary<string, AquariusServerVersion>();
 
-        private readonly Func<string, IServiceClient> _serviceClientFactory;
+        internal Func<string, IServiceClient> ServiceClientFactory { get; set; }
 
-        public AquariusSystemDetector()
-            : this(CreateJsonServiceClientWithQuickTimeouts)
+        public static readonly AquariusSystemDetector Instance = new AquariusSystemDetector();
+
+        private AquariusSystemDetector()
         {
+            ServiceClientFactory = CreateJsonServiceClientWithQuickTimeouts;
+
+            InitializeOverrides();
+        }
+
+        public void Reset()
+        {
+            _knownServerVersions.Clear();
+            _overrideVersions.Clear();
         }
 
         private static IServiceClient CreateJsonServiceClientWithQuickTimeouts(string baseUri)
@@ -54,14 +64,7 @@ namespace Aquarius.TimeSeries.Client
             };
         }
 
-        public AquariusSystemDetector(Func<string, IServiceClient> serviceClientFactory)
-        {
-            _serviceClientFactory = serviceClientFactory;
-
-            InitializeOverrides();
-        }
-
-        private void InitializeOverrides()
+        internal void InitializeOverrides()
         {
             var overridesValue =
 #if NETFULL
@@ -143,7 +146,7 @@ namespace Aquarius.TimeSeries.Client
 
                 try
                 {
-                    using (var serviceClient = _serviceClientFactory(versionEndpoint))
+                    using (var serviceClient = ServiceClientFactory(versionEndpoint))
                     {
                         return AquariusServerVersion.Create(serviceClient.Get(new GetVersion()).ApiVersion);
                     }

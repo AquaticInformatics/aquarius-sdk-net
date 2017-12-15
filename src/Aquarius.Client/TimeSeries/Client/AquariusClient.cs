@@ -158,7 +158,7 @@ namespace Aquarius.TimeSeries.Client
             ServiceClients.Add(ClientType.AcquisitionJson, new SdkServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
             ServiceClients.Add(ClientType.ProvisioningJson, new SdkServiceClient(ProvisioningV1.ResolveEndpoint(hostname)));
 
-            ServerVersion = new AquariusSystemDetector().GetAquariusServerVersion(hostname);
+            ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
 
             Connection = ConnectionPool.Instance.GetConnection(hostname, username, password, CreateSession, DeleteSession);
         }
