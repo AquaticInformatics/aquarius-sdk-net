@@ -7,9 +7,8 @@ namespace Aquarius.Helpers
         public static Uri ResolveUri(string host, string endpoint, string defaultScheme = null)
         {
             var uriBuilder = new UriBuilder();
-            Uri uri;
 
-            if (Uri.TryCreate(host, UriKind.RelativeOrAbsolute, out uri))
+            if (Uri.TryCreate(host, UriKind.RelativeOrAbsolute, out var uri))
             {
                 if (uri.IsAbsoluteUri)
                 {

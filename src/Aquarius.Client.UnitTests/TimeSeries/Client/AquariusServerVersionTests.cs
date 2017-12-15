@@ -61,7 +61,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new TestCaseData("Real version is always considered earlier than a developer version", "15", "0.0.0.0", true, -1),
             new TestCaseData("More components is always greater", "2", "2.1", true, -1),
             new TestCaseData("3X is less than NG", "3.9.123", "15.4.123", true, -1),
-            new TestCaseData("NG is greater than NG", "15.4.123", "3.9.123", false, 1),
+            new TestCaseData("NG is greater than 3X", "15.4.123", "3.9.123", false, 1),
             new TestCaseData("PreviousYear.Last is less than NextYear.First", "15.4.123", "16.1.123", true, -1),
             new TestCaseData("NextYear.First is greater than PreviousYear.Last", "16.1.123", "15.4.123", false, 1),
             new TestCaseData("Simplest 3X version test is less than NG", "3", "15.4.123", true, -1),

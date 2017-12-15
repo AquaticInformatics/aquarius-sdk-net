@@ -29,7 +29,13 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private AquariusSystemDetector CreateDetector()
         {
-            return new AquariusSystemDetector(s => _mockServiceClient);
+            var detector = AquariusSystemDetector.Instance;
+
+            detector.ServiceClientFactory = s => _mockServiceClient;
+            detector.Reset();
+            detector.InitializeOverrides();
+
+            return detector;
         }
 
         private static readonly IEnumerable<TestCaseData> ValidApiVersions = new[]
@@ -186,6 +192,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             ConfigurationManager.AppSettings["SystemDetectorOverrides"] = overrideSetting;
 
             var detector = CreateDetector();
+            detector.InitializeOverrides();
 
             var mockVersion = detector.GetAquariusServerVersion(mockHostname);
             var overrideVersion = detector.GetAquariusServerVersion(overrideHostname);
