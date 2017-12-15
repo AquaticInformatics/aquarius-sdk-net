@@ -2,6 +2,7 @@
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using NSubstitute;
 using NUnit.Framework;
+using Ploeh.AutoFixture;
 using ServiceStack;
 
 namespace Aquarius.UnitTests.TimeSeries.Client
@@ -9,6 +10,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
     [TestFixture]
     public class AquariusClientTests
     {
+        private IFixture _fixture;
         private AquariusClient _client;
         private IServiceClient _mockPublish;
         private IServiceClient _mockAcquisition;
@@ -17,6 +19,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         [SetUp]
         public void BeforeEachTest()
         {
+            _fixture = new Fixture();
+
             SetupClientWithMockEndpoints();
         }
 
@@ -24,17 +28,22 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         {
             _client = new AquariusClient
             {
-                ServerVersion = CreateDeveloperBuild(),
-                SessionToken = "some token"
+                ServerVersion = CreateDeveloperBuild()
             };
 
             _mockPublish = CreateMockServiceClient();
             _mockAcquisition = CreateMockServiceClient();
             _mockProvisioning = CreateMockServiceClient();
 
-            _client._serviceClients.Add(AquariusClient.ClientType.PublishJson, _mockPublish);
-            _client._serviceClients.Add(AquariusClient.ClientType.AcquisitionJson, _mockAcquisition);
-            _client._serviceClients.Add(AquariusClient.ClientType.ProvisioningJson, _mockProvisioning);
+            _client.ServiceClients.Add(AquariusClient.ClientType.PublishJson, _mockPublish);
+            _client.ServiceClients.Add(AquariusClient.ClientType.AcquisitionJson, _mockAcquisition);
+            _client.ServiceClients.Add(AquariusClient.ClientType.ProvisioningJson, _mockProvisioning);
+
+            _client.Connection = new Connection(
+                _fixture.Create<string>(),
+                _fixture.Create<string>(),
+                (username,password) => string.Join("/", username, password),
+                _client.DeleteSession);
         }
 
         private AquariusServerVersion CreateDeveloperBuild()

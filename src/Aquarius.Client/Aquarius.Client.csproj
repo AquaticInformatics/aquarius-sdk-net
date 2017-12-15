@@ -17,6 +17,7 @@
     <RepositoryUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/ReleaseNotes.md</PackageReleaseNotes>
     <Version>0.0.0</Version>
+    <RootNamespace>Aquarius</RootNamespace>
   </PropertyGroup>
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->

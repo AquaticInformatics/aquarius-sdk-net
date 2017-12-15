@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -44,9 +43,9 @@ namespace Aquarius.TimeSeries.Client
             }
         }
 
-        public IServiceClient Publish => _serviceClients[ClientType.PublishJson];
-        public IServiceClient Acquisition => _serviceClients[ClientType.AcquisitionJson];
-        public IServiceClient Provisioning => _serviceClients[ClientType.ProvisioningJson];
+        public IServiceClient Publish => ServiceClients[ClientType.PublishJson];
+        public IServiceClient Acquisition => ServiceClients[ClientType.AcquisitionJson];
+        public IServiceClient Provisioning => ServiceClients[ClientType.ProvisioningJson];
         public IServiceClient PublishClient => Publish;
         public IServiceClient AcquisitionClient => Acquisition;
         public IServiceClient ProvisioningClient => Provisioning;
@@ -58,11 +57,11 @@ namespace Aquarius.TimeSeries.Client
             if (string.IsNullOrWhiteSpace(baseUri))
                 throw new ArgumentOutOfRangeException(nameof(baseUri));
 
-            if (_customClients.TryGetValue(baseUri, out var client))
+            if (CustomClients.TryGetValue(baseUri, out var client))
                 return client;
 
             client = ClientHelper.CloneAuthenticatedClient(PublishClient as JsonServiceClient, baseUri);
-            _customClients.Add(baseUri, client);
+            CustomClients.Add(baseUri, client);
 
             return client;
         }
@@ -83,9 +82,7 @@ namespace Aquarius.TimeSeries.Client
 
         public IServiceClient CloneAuthenticatedClient(IServiceClient client)
         {
-            var jsonClient = client as JsonServiceClient;
-
-            if (jsonClient == null)
+            if (!(client is JsonServiceClient jsonClient))
                 throw new ArgumentException(@"Only JSON clients can be cloned", nameof(client));
 
             return ClientHelper.CloneAuthenticatedClient(jsonClient, new Uri(jsonClient.BaseUri).PathAndQuery);
@@ -100,10 +97,7 @@ namespace Aquarius.TimeSeries.Client
             return clone;
         }
 
-        private string Username { get; set; }
-        private string Password { get; set; }
-        internal string SessionToken { get; set; }
-        private readonly Stopwatch _stopwatch;
+        internal Connection Connection { get; set; }
 
         internal enum ClientType
         {
@@ -112,16 +106,12 @@ namespace Aquarius.TimeSeries.Client
             ProvisioningJson,
         };
 
-        internal readonly Dictionary<ClientType, IServiceClient> _serviceClients = new Dictionary<ClientType, IServiceClient>();
-        internal readonly Dictionary<string, IServiceClient> _customClients = new Dictionary<string, IServiceClient>();
+        internal readonly Dictionary<ClientType, IServiceClient> ServiceClients = new Dictionary<ClientType, IServiceClient>();
+        internal readonly Dictionary<string, IServiceClient> CustomClients = new Dictionary<string, IServiceClient>();
 
         internal AquariusClient()
         {
             SetupServiceStack();
-
-            _stopwatch = Stopwatch.StartNew();
-            _stopwatch.Stop();
-            _stopwatch.Reset();
         }
 
         public void Dispose()
@@ -134,26 +124,9 @@ namespace Aquarius.TimeSeries.Client
 
         public ScopeAction SessionKeepAlive()
         {
-            ReconnectIfIdle();
+            Connection.ReconnectIfIdle(IdleConnectionTimeSpan);
 
-            return new ScopeAction(() => _stopwatch.Restart());
-        }
-
-        private void ReconnectIfIdle()
-        {
-            if (_stopwatch.Elapsed < IdleConnectionTimeSpan)
-                return;
-
-            DeleteSession();
-            ConnectUsingSavedCredentials();
-        }
-
-        private void ConnectUsingSavedCredentials()
-        {
-            SessionToken = ClientHelper.Login(_serviceClients.First().Value, Username, Password);
-
-            SetAuthenticationTokenForConnectedClients(_serviceClients);
-            SetAuthenticationTokenForConnectedClients(_customClients);
+            return new ScopeAction(() => Connection.RestartIdleTimer());
         }
 
         private void SetAuthenticationTokenForConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
@@ -163,30 +136,27 @@ namespace Aquarius.TimeSeries.Client
                 if (client == null)
                     continue;
 
-                ClientHelper.SetAuthenticationToken(client, SessionToken);
+                ClientHelper.SetAuthenticationToken(client, Connection.SessionToken);
             }
         }
 
         private void Connect(string hostname, string username, string password)
         {
-            _serviceClients.Add(ClientType.PublishJson, new SdkServiceClient(PublishV2.ResolveEndpoint(hostname)));
-            _serviceClients.Add(ClientType.AcquisitionJson, new SdkServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
-            _serviceClients.Add(ClientType.ProvisioningJson, new SdkServiceClient(ProvisioningV1.ResolveEndpoint(hostname)));
-
-            Username = username;
-            Password = password;
+            ServiceClients.Add(ClientType.PublishJson, new SdkServiceClient(PublishV2.ResolveEndpoint(hostname)));
+            ServiceClients.Add(ClientType.AcquisitionJson, new SdkServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
+            ServiceClients.Add(ClientType.ProvisioningJson, new SdkServiceClient(ProvisioningV1.ResolveEndpoint(hostname)));
 
             ServerVersion = new AquariusSystemDetector().GetAquariusServerVersion(hostname);
 
-            ConnectUsingSavedCredentials();
+            Connection = ConnectionPool.Instance.GetConnection(hostname, username, password, CreateSession, DeleteSession);
         }
 
         private void Disconnect()
         {
-            DeleteSession();
+            Connection.Close();
 
-            ClearConnectedClients(_serviceClients);
-            ClearConnectedClients(_customClients);
+            ClearConnectedClients(ServiceClients);
+            ClearConnectedClients(CustomClients);
         }
 
         private static void ClearConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
@@ -199,24 +169,29 @@ namespace Aquarius.TimeSeries.Client
             clientDictionary.Clear();
         }
 
-        private void DeleteSession()
+        internal string CreateSession(string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(SessionToken))
-                return;
+            var sessionToken = ClientHelper.Login(ServiceClients.First().Value, username, password);
 
+            SetAuthenticationTokenForConnectedClients(ServiceClients);
+            SetAuthenticationTokenForConnectedClients(CustomClients);
+
+            return sessionToken;
+        }
+
+        internal void DeleteSession()
+        {
             try
             {
                 if (FirstNgVersion.IsLessThan(ServerVersion))
                 {
-                    ClientHelper.Logout(_serviceClients.First().Value);
+                    ClientHelper.Logout(ServiceClients.First().Value);
                 }
             }
             catch (Exception exception)
             {
                 Log.Warn("Ignoring exception during disconnect", exception);
             }
-
-            SessionToken = null;
         }
 
         private static readonly AquariusServerVersion FirstNgVersion = AquariusServerVersion.Create("14");
