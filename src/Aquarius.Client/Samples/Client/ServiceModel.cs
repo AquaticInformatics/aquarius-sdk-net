@@ -987,40 +987,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
     }
 
-    [Route("/v1/resultgrades", "GET")]
-    public class GetResultGrades : IReturn<SearchResultResultGrade>
-    {
-        
-    }
-
-    [Route("/v1/resultgrades", "POST")]
-    public class PostResultGrade : IReturn<ResultGrade>
-    {
-        public string Id { get; set; }
-        public string CustomId { get; set; }
-        public AuditAttributes AuditAttributes { get; set; }
-    }
-
-    [Route("/v1/resultgrades/{id}", "GET")]
-    public class GetResultGrade : IReturn<ResultGrade>
-    {
-        public string Id { get; set; }
-    }
-
-    [Route("/v1/resultgrades/{id}", "PUT")]
-    public class PutSparseResultGrade : IReturn<ResultGrade>
-    {
-        public string Id { get; set; }
-        public string CustomId { get; set; }
-        public AuditAttributes AuditAttributes { get; set; }
-    }
-
-    [Route("/v1/resultgrades/{id}", "DELETE")]
-    public class DeleteResultGradeById : IReturnVoid
-    {
-        public string Id { get; set; }
-    }
-
     [Route("/v1/samplinglocationgroups", "GET")]
     public class GetSamplingLocationGroups : IReturn<SearchResultSamplingLocationGroup>
     {
