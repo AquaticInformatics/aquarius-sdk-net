@@ -1,6 +1,6 @@
-// Date: 2017-12-04T11:40:37.9776470-08:00
+// Date: 2017-12-15T13:13:21.7121049-08:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2017.13.2578)
+// Source: AQUARIUS Samples API (2017.14.2659)
 
 using System.Collections.Generic;
 using ServiceStack;
@@ -13,7 +13,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2017.13.2578");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2017.14.2659");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -647,10 +647,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Instant? EndResultTime { get; set; }
         public Instant? EndModificationTime { get; set; }
         public string FieldVisitId { get; set; }
-        public List<string> Ids { get; set; }
         public string ImportHistoryEventId { get; set; }
-        public List<string> LabAnalysisMethodIds { get; set; }
         public List<string> LabReportIds { get; set; }
+        public List<string> LabResultLabAnalysisMethodIds { get; set; }
         public List<string> LabResultLaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> Media { get; set; }
@@ -724,10 +723,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Instant? EndResultTime { get; set; }
         public Instant? EndModificationTime { get; set; }
         public string FieldVisitId { get; set; }
-        public List<string> Ids { get; set; }
         public string ImportHistoryEventId { get; set; }
-        public List<string> LabAnalysisMethodIds { get; set; }
         public List<string> LabReportIds { get; set; }
+        public List<string> LabResultLabAnalysisMethodIds { get; set; }
         public List<string> LabResultLaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> Media { get; set; }
@@ -813,10 +811,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Instant? EndResultTime { get; set; }
         public Instant? EndModificationTime { get; set; }
         public string FieldVisitId { get; set; }
-        public List<string> Ids { get; set; }
         public string ImportHistoryEventId { get; set; }
-        public List<string> LabAnalysisMethodIds { get; set; }
         public List<string> LabReportIds { get; set; }
+        public List<string> LabResultLabAnalysisMethodIds { get; set; }
         public List<string> LabResultLaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> Media { get; set; }
@@ -856,10 +853,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Instant? EndResultTime { get; set; }
         public Instant? EndModificationTime { get; set; }
         public string FieldVisitId { get; set; }
-        public List<string> Ids { get; set; }
         public string ImportHistoryEventId { get; set; }
-        public List<string> LabAnalysisMethodIds { get; set; }
         public List<string> LabReportIds { get; set; }
+        public List<string> LabResultLabAnalysisMethodIds { get; set; }
         public List<string> LabResultLaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> Media { get; set; }
@@ -904,6 +900,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Unit DefaultUnit { get; set; }
         public List<ImportHistoryEventSimple> ImportHistoryEventSimples { get; set; }
         public string CasNumber { get; set; }
+        public Quantity LowerLimit { get; set; }
+        public Quantity UpperLimit { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -926,6 +924,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Unit DefaultUnit { get; set; }
         public List<ImportHistoryEventSimple> ImportHistoryEventSimples { get; set; }
         public string CasNumber { get; set; }
+        public Quantity LowerLimit { get; set; }
+        public Quantity UpperLimit { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -1038,7 +1038,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     [Route("/v1/samplinglocations", "POST")]
     public class PostSamplingLocation : IReturn<SamplingLocation>
     {
-        public SamplingLocationType? Type { get; set; }
+        public LocationType Type { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string HorizontalDatum { get; set; }
@@ -1068,7 +1068,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class PutSparseSamplingLocation : IReturn<SamplingLocation>
     {
         public string Id { get; set; }
-        public SamplingLocationType? Type { get; set; }
+        public LocationType Type { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string HorizontalDatum { get; set; }
@@ -1111,6 +1111,46 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
     }
 
+    [Route("/v1/samplinglocationtypes", "GET")]
+    public class GetSamplingLocationTypes : IReturn<SearchResultLocationType>
+    {
+        
+    }
+
+    [Route("/v1/samplinglocationtypes", "POST")]
+    public class PostSamplingLocationType : IReturn<LocationType>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    [Route("/v1/samplinglocationtypes", "PUT")]
+    public class PutSamplingLocationTypes : IReturn<List<LocationType>>
+    {
+        
+    }
+
+    [Route("/v1/samplinglocationtypes/{id}", "GET")]
+    public class GetSamplingLocationType : IReturn<LocationType>
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/v1/samplinglocationtypes/{id}", "PUT")]
+    public class PutSparseSamplingLocationType : IReturn<LocationType>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    [Route("/v1/samplinglocationtypes/{id}", "DELETE")]
+    public class DeleteSamplingLocationTypeById : IReturnVoid
+    {
+        public string Id { get; set; }
+    }
+
     [Route("/v1/services/export/fieldsheets/{fieldVisitId}", "GET")]
     public class GetExportFieldSheet : IReturnVoid
     {
@@ -1136,10 +1176,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Instant? EndResultTime { get; set; }
         public Instant? EndModificationTime { get; set; }
         public string FieldVisitId { get; set; }
-        public List<string> Ids { get; set; }
         public string ImportHistoryEventId { get; set; }
-        public List<string> LabAnalysisMethodIds { get; set; }
         public List<string> LabReportIds { get; set; }
+        public List<string> LabResultLabAnalysisMethodIds { get; set; }
         public List<string> LabResultLaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> Media { get; set; }
@@ -1172,7 +1211,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Cursor { get; set; }
         public Instant? EndModificationTime { get; set; }
         public List<string> FieldTripIds { get; set; }
-        public List<string> Ids { get; set; }
         public List<string> LaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> SamplingLocationIds { get; set; }
@@ -1346,7 +1384,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Cursor { get; set; }
         public Instant? EndModificationTime { get; set; }
         public List<string> FieldTripIds { get; set; }
-        public List<string> Ids { get; set; }
         public List<string> LaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> SamplingLocationIds { get; set; }
@@ -1493,6 +1530,12 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
     }
 
+    [Route("/v1/status", "GET")]
+    public class GetStatus : IReturn<Status>
+    {
+        
+    }
+
     [Route("/v1/tags", "GET")]
     public class GetTags : IReturn<SearchResultSamplingContextTag>
     {
@@ -1592,7 +1635,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public bool? SupportsConversion { get; set; }
-        public UnitSimple BaseUnit { get; set; }
         public SystemCodeType? SystemCode { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -1609,7 +1651,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public bool? SupportsConversion { get; set; }
-        public UnitSimple BaseUnit { get; set; }
         public SystemCodeType? SystemCode { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -1633,7 +1674,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public bool? SupportsConversion { get; set; }
-        public UnitSimple BaseUnit { get; set; }
         public SystemCodeType? SystemCode { get; set; }
         public List<Unit> Units { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
@@ -1651,7 +1691,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public bool? SupportsConversion { get; set; }
-        public UnitSimple BaseUnit { get; set; }
         public SystemCodeType? SystemCode { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -1678,7 +1717,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? BaseMultiplier { get; set; }
         public double? BaseOffset { get; set; }
         public UnitGroup UnitGroup { get; set; }
-        public bool? BaseUnit { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -1697,7 +1735,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? BaseMultiplier { get; set; }
         public double? BaseOffset { get; set; }
         public UnitGroup UnitGroup { get; set; }
-        public bool? BaseUnit { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -2348,8 +2385,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemObject>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemObject>();
             ErrorImportItems = new List<ImportItemObject>();
+            NonErrorImportItems = new List<ImportItemObject>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -2362,8 +2399,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemObject> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemObject> NonErrorImportItems { get; set; }
         public List<ImportItemObject> ErrorImportItems { get; set; }
+        public List<ImportItemObject> NonErrorImportItems { get; set; }
     }
 
     public class ImportSummaryObservation
@@ -2372,8 +2409,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemObservation>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemObservation>();
             ErrorImportItems = new List<ImportItemObservation>();
+            NonErrorImportItems = new List<ImportItemObservation>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -2386,8 +2423,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemObservation> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemObservation> NonErrorImportItems { get; set; }
         public List<ImportItemObservation> ErrorImportItems { get; set; }
+        public List<ImportItemObservation> NonErrorImportItems { get; set; }
     }
 
     public class ImportSummarySpecimen
@@ -2396,8 +2433,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemSpecimen>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemSpecimen>();
             ErrorImportItems = new List<ImportItemSpecimen>();
+            NonErrorImportItems = new List<ImportItemSpecimen>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -2410,16 +2447,16 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemSpecimen> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemSpecimen> NonErrorImportItems { get; set; }
         public List<ImportItemSpecimen> ErrorImportItems { get; set; }
+        public List<ImportItemSpecimen> NonErrorImportItems { get; set; }
     }
 
     public class InputPart
     {
         public object Headers { get; set; }
+        public bool ContentTypeFromMessage { get; set; }
         public MediaType MediaType { get; set; }
         public string BodyAsString { get; set; }
-        public bool ContentTypeFromMessage { get; set; }
     }
 
     public class LabAnalysisMethod
@@ -2446,8 +2483,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemLabAnalysisMethod>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemLabAnalysisMethod>();
             ErrorImportItems = new List<ImportItemLabAnalysisMethod>();
+            NonErrorImportItems = new List<ImportItemLabAnalysisMethod>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -2460,12 +2497,13 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemLabAnalysisMethod> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemLabAnalysisMethod> NonErrorImportItems { get; set; }
         public List<ImportItemLabAnalysisMethod> ErrorImportItems { get; set; }
+        public List<ImportItemLabAnalysisMethod> NonErrorImportItems { get; set; }
     }
 
     public class LabAnalysisMethodMinimal
     {
+        public string Id { get; set; }
         public string Name { get; set; }
     }
 
@@ -2562,13 +2600,20 @@ namespace Aquarius.Samples.Client.ServiceModel
         public long TotalCount { get; set; }
     }
 
+    public class LocationType
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
     public class MediaType
     {
         public string Type { get; set; }
         public string Subtype { get; set; }
         public object Parameters { get; set; }
-        public bool WildcardType { get; set; }
         public bool WildcardSubtype { get; set; }
+        public bool WildcardType { get; set; }
     }
 
     public class MultiChartData
@@ -2641,8 +2686,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemObservation>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemObservation>();
             ErrorImportItems = new List<ImportItemObservation>();
+            NonErrorImportItems = new List<ImportItemObservation>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -2655,8 +2700,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemObservation> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemObservation> NonErrorImportItems { get; set; }
         public List<ImportItemObservation> ErrorImportItems { get; set; }
+        public List<ImportItemObservation> NonErrorImportItems { get; set; }
     }
 
     public class ObservationMinimal
@@ -2699,6 +2744,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Unit DefaultUnit { get; set; }
         public List<ImportHistoryEventSimple> ImportHistoryEventSimples { get; set; }
         public string CasNumber { get; set; }
+        public Quantity LowerLimit { get; set; }
+        public Quantity UpperLimit { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -2708,8 +2755,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemObservedProperty>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemObservedProperty>();
             ErrorImportItems = new List<ImportItemObservedProperty>();
+            NonErrorImportItems = new List<ImportItemObservedProperty>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -2722,8 +2769,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemObservedProperty> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemObservedProperty> NonErrorImportItems { get; set; }
         public List<ImportItemObservedProperty> ErrorImportItems { get; set; }
+        public List<ImportItemObservedProperty> NonErrorImportItems { get; set; }
     }
 
     public class Permission
@@ -2790,6 +2837,13 @@ namespace Aquarius.Samples.Client.ServiceModel
         public UnitSimple Unit { get; set; }
     }
 
+    public class ResultGrade
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
     public class Role
     {
         public string Id { get; set; }
@@ -2829,7 +2883,7 @@ namespace Aquarius.Samples.Client.ServiceModel
             SamplingLocationGroups = new List<SamplingLocationGroupSimple>();
         }
 
-        public SamplingLocationType Type { get; set; }
+        public LocationType Type { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string HorizontalDatum { get; set; }
@@ -2869,8 +2923,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemSamplingLocation>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemSamplingLocation>();
             ErrorImportItems = new List<ImportItemSamplingLocation>();
+            NonErrorImportItems = new List<ImportItemSamplingLocation>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -2883,8 +2937,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemSamplingLocation> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemSamplingLocation> NonErrorImportItems { get; set; }
         public List<ImportItemSamplingLocation> ErrorImportItems { get; set; }
+        public List<ImportItemSamplingLocation> NonErrorImportItems { get; set; }
     }
 
     public class SamplingLocationSimple
@@ -3093,6 +3147,18 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<LocationObservationsGroup> DomainObjects { get; set; }
     }
 
+    public class SearchResultLocationType : IPaginatedResponse<LocationType>
+    {
+        public SearchResultLocationType()
+        {
+            DomainObjects = new List<LocationType>();
+        }
+
+        public int TotalCount { get; set; }
+        public string Cursor { get; set; }
+        public List<LocationType> DomainObjects { get; set; }
+    }
+
     public class SearchResultObservation : IPaginatedResponse<Observation>
     {
         public SearchResultObservation()
@@ -3127,6 +3193,18 @@ namespace Aquarius.Samples.Client.ServiceModel
         public int TotalCount { get; set; }
         public string Cursor { get; set; }
         public List<Project> DomainObjects { get; set; }
+    }
+
+    public class SearchResultResultGrade : IPaginatedResponse<ResultGrade>
+    {
+        public SearchResultResultGrade()
+        {
+            DomainObjects = new List<ResultGrade>();
+        }
+
+        public int TotalCount { get; set; }
+        public string Cursor { get; set; }
+        public List<ResultGrade> DomainObjects { get; set; }
     }
 
     public class SearchResultSamplingContextTag : IPaginatedResponse<SamplingContextTag>
@@ -3308,6 +3386,9 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public PreservativeType Preservative { get; set; }
+        public bool Filtered { get; set; }
+        public string FiltrationComment { get; set; }
         public AnalyticalGroupSimple AnalyticalGroup { get; set; }
     }
 
@@ -3399,6 +3480,11 @@ namespace Aquarius.Samples.Client.ServiceModel
         public bool Active { get; set; }
     }
 
+    public class Status
+    {
+        public string ReleaseName { get; set; }
+    }
+
     public class Surrogate
     {
         public string Id { get; set; }
@@ -3436,8 +3522,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         {
             ImportItems = new List<ImportItemTaxon>();
             ImportJobErrors = new List<ImportError>();
-            NonErrorImportItems = new List<ImportItemTaxon>();
             ErrorImportItems = new List<ImportItemTaxon>();
+            NonErrorImportItems = new List<ImportItemTaxon>();
         }
 
         public ImportHistoryEventSimple ImportHistoryEventSimple { get; set; }
@@ -3450,8 +3536,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<ImportItemTaxon> ImportItems { get; set; }
         public List<ImportError> ImportJobErrors { get; set; }
         public string InvalidRowsCsvUrl { get; set; }
-        public List<ImportItemTaxon> NonErrorImportItems { get; set; }
         public List<ImportItemTaxon> ErrorImportItems { get; set; }
+        public List<ImportItemTaxon> NonErrorImportItems { get; set; }
     }
 
     public class TaxonomicResult
@@ -3469,7 +3555,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double BaseMultiplier { get; set; }
         public double BaseOffset { get; set; }
         public UnitGroup UnitGroup { get; set; }
-        public bool BaseUnit { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -3478,7 +3563,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public bool SupportsConversion { get; set; }
-        public UnitSimple BaseUnit { get; set; }
         public SystemCodeType SystemCode { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -3493,7 +3577,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public bool SupportsConversion { get; set; }
-        public UnitSimple BaseUnit { get; set; }
         public SystemCodeType SystemCode { get; set; }
         public List<Unit> Units { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
@@ -3506,7 +3589,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Name { get; set; }
         public double BaseMultiplier { get; set; }
         public double BaseOffset { get; set; }
-        public bool BaseUnit { get; set; }
     }
 
     public class User
@@ -3730,18 +3812,6 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         DISSOLVED,
         TOTAL
-    }
-
-    public enum SamplingLocationType
-    {
-        SPRING,
-        STREAM,
-        RIVER,
-        CANAL,
-        LAKE,
-        GROUNDWATER,
-        OCEAN,
-        RESERVOIR
     }
 
     public enum SystemCodeType
