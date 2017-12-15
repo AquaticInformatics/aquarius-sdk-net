@@ -52,5 +52,14 @@ namespace Aquarius.TimeSeries.Client
                 _connections.Clear();
             }
         }
+
+        public void Cleanup()
+        {
+            // ReSharper disable once InconsistentlySynchronizedField
+            foreach (var connection in _connections.Values)
+            {
+                connection.Close();
+            }
+        }
     }
 }

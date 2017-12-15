@@ -39,8 +39,20 @@ namespace Aquarius.TimeSeries.Client
 
                 ServiceStackConfig.ConfigureServiceStack();
 
+                EnableClientCleanupOnApplicationExit();
+
                 _serviceStackConfigured = true;
             }
+        }
+
+        private static void EnableClientCleanupOnApplicationExit()
+        {
+            AppDomain.CurrentDomain.ProcessExit += CleanupConnectionPool;
+        }
+
+        private static void CleanupConnectionPool(object sender, EventArgs eventArgs)
+        {
+            ConnectionPool.Instance.Cleanup();
         }
 
         public IServiceClient Publish => ServiceClients[ClientType.PublishJson];
