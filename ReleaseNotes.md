@@ -4,10 +4,15 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 17.4.11
+- Updated the service models for the 2017.14 release of AQUARIUS Time-Series
+- Added connection pooling support for AQTS connections, to minimize version-probes and authentication requests. When multiple threads are independently attempting to make authenticated requests, all threads will end up sharing the same authentication session. The last thread to exit will issue the `DELETE /session` requests to clean up server-side resources. This change is hidden behind the `AquariusClient.CreateConnectedClient()` factory method, so it should be transparent to consumers of the platform SDK.
+
 ### 17.4.9
 - Updated the service models for the 2017.4 release of AQUARIUS Time-Series
 - Fixed an enumeration deserialization bug, to make the SDK more robust if a new version of AQTS adds new value to an existing enumeration type.
 - Marked the `PublishClient`, `AcquisitionClient`, and `ProvisioningClient` properties as obsolete, replacing them with the more succinct `Publish`, `Acquisition`, and `Provisioning` properties. The obsolete properties will be removed in a future release of the SDK.
+
 ### 17.4.8
 - Added two build targets: .NET Standard and .NET Framework 4.5
 - Moved the legacy service models to separate NuGet package: `Aquarius.SDK.Legacy`. Most programs won't need these older service models, so now it is much more difficult to make the wrong choice by accident.
