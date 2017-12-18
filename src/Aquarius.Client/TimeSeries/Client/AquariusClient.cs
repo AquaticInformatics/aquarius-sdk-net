@@ -141,14 +141,14 @@ namespace Aquarius.TimeSeries.Client
             return new ScopeAction(() => Connection.RestartIdleTimer());
         }
 
-        private void SetAuthenticationTokenForConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
+        private void SetAuthenticationTokenForConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary, string sessionToken)
         {
             foreach (var client in clientDictionary.Values.Cast<ServiceClientBase>())
             {
                 if (client == null)
                     continue;
 
-                ClientHelper.SetAuthenticationToken(client, Connection.SessionToken);
+                ClientHelper.SetAuthenticationToken(client, sessionToken);
             }
         }
 
@@ -185,8 +185,8 @@ namespace Aquarius.TimeSeries.Client
         {
             var sessionToken = ClientHelper.Login(ServiceClients.First().Value, username, password);
 
-            SetAuthenticationTokenForConnectedClients(ServiceClients);
-            SetAuthenticationTokenForConnectedClients(CustomClients);
+            SetAuthenticationTokenForConnectedClients(ServiceClients, sessionToken);
+            SetAuthenticationTokenForConnectedClients(CustomClients, sessionToken);
 
             return sessionToken;
         }
