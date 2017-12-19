@@ -8,12 +8,18 @@ namespace Aquarius.TimeSeries.Client
         private readonly object _syncLock = new object();
         private readonly Stopwatch _idleTimer = Stopwatch.StartNew();
 
-        public Connection(string username, string password, Func<string, string, string> sessionTokenCreator, Action sessionDeleteAction)
+        public Connection(
+            string username,
+            string password,
+            Func<string, string, string> sessionTokenCreator,
+            Action sessionDeleteAction,
+            Action<Connection> connectionRemovalAction)
         {
             Username = username;
             Password = password;
             SessionTokenCreator = sessionTokenCreator;
             SessionDeleteAction = sessionDeleteAction;
+            ConnectionRemovalAction = connectionRemovalAction;
 
             CreateNewSession();
             ConnectionCount = 1;
@@ -29,6 +35,7 @@ namespace Aquarius.TimeSeries.Client
 
         private Func<string, string, string> SessionTokenCreator { get; }
         private Action SessionDeleteAction { get; }
+        private Action<Connection> ConnectionRemovalAction { get; }
         private string Username { get; }
         private string Password { get; }
 
@@ -65,9 +72,10 @@ namespace Aquarius.TimeSeries.Client
 
                 if (ConnectionCount != 0)
                     return;
-
-                SessionDeleteAction();
             }
+
+            SessionDeleteAction();
+            ConnectionRemovalAction(this);
         }
 
         public void IncrementConnectionCount()

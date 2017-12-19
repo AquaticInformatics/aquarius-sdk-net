@@ -13,6 +13,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         private Connection _connection;
         private int _sessionCreateCount;
         private int _sessionDeleteCount;
+        private int _connectionRemovalCount;
 
         [SetUp]
         public void BeforeEachTest()
@@ -20,8 +21,9 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             _fixture = new Fixture();
             _sessionCreateCount = 0;
             _sessionDeleteCount = 0;
+            _connectionRemovalCount = 0;
 
-            _connection = new Connection(_fixture.Create<string>(), _fixture.Create<string>(), SessionTokenCreator, DeleteSession);
+            _connection = new Connection(_fixture.Create<string>(), _fixture.Create<string>(), SessionTokenCreator, DeleteSession, RemoveConnection);
         }
 
         private string SessionTokenCreator(string username, string password)
@@ -36,12 +38,18 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             ++_sessionDeleteCount;
         }
 
+        private void RemoveConnection(Connection connection)
+        {
+            ++_connectionRemovalCount;
+        }
+
         [Test]
         public void NewlyConstructedConnection_TracksOneConnection()
         {
             AssertExpectedConnectionCount(1);
             AssertExpectedSessionCreateCount(1);
             AssertExpectedSessionDeleteCount(0);
+            AssertExpectedConnectionRemovalCount(0);
         }
 
         private void AssertExpectedConnectionCount(int expectedCount)
@@ -59,6 +67,11 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             _sessionDeleteCount.ShouldBeEquivalentTo(expectedCount, nameof(_sessionDeleteCount));
         }
 
+        private void AssertExpectedConnectionRemovalCount(int expectedCount)
+        {
+            _connectionRemovalCount.ShouldBeEquivalentTo(expectedCount, nameof(_connectionRemovalCount));
+        }
+
         [Test]
         public void IncrementConnectionCount_IncrementsConnectionCount()
         {
@@ -67,6 +80,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             AssertExpectedConnectionCount(2);
             AssertExpectedSessionCreateCount(1);
             AssertExpectedSessionDeleteCount(0);
+            AssertExpectedConnectionRemovalCount(0);
         }
 
         [Test]
@@ -78,6 +92,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
             AssertExpectedSessionCreateCount(1);
             AssertExpectedSessionDeleteCount(0);
+            AssertExpectedConnectionRemovalCount(0);
         }
 
         [Test]
@@ -87,6 +102,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
             AssertExpectedSessionCreateCount(1);
             AssertExpectedSessionDeleteCount(1);
+            AssertExpectedConnectionRemovalCount(1);
         }
 
         [Test]
@@ -98,6 +114,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
             AssertExpectedSessionCreateCount(1);
             AssertExpectedSessionDeleteCount(0);
+            AssertExpectedConnectionRemovalCount(0);
         }
 
         [Test]
@@ -109,6 +126,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
             AssertExpectedSessionCreateCount(1);
             AssertExpectedSessionDeleteCount(0);
+            AssertExpectedConnectionRemovalCount(0);
+
             sessionToken.ShouldBeEquivalentTo(_connection.SessionToken, "the same session token should be retained");
         }
 
@@ -121,6 +140,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
             AssertExpectedSessionCreateCount(2);
             AssertExpectedSessionDeleteCount(1);
+            AssertExpectedConnectionRemovalCount(0);
+
             sessionToken.Should().NotBe(_connection.SessionToken, "a new session token should be created");
         }
     }

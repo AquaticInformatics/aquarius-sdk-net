@@ -17,6 +17,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             _fixture = new Fixture();
 
             _connectionPool = ConnectionPool.Instance;
+            _connectionPool.Reset();
         }
 
         [Test]
@@ -29,7 +30,16 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private Connection GetConnection(string hostname, string username, string password)
         {
-            return _connectionPool.GetConnection(hostname, username, password, (username1, password1) => _fixture.Create<string>(), () => {});
+            return _connectionPool.GetConnection(hostname, username, password, CreateFakeSessionToken, DeleteSession);
+        }
+
+        private string CreateFakeSessionToken(string username, string password)
+        {
+            return $"Username={username} Password={password} Session={_fixture.Create<string>()}";
+        }
+
+        private void DeleteSession()
+        {
         }
 
         private void AssertConnectionCount(Connection connection, int expectedCount)
@@ -60,6 +70,25 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             AssertConnectionCount(actual1, 2);
             AssertConnectionCount(actual2, 2);
             actual1.ShouldBeEquivalentTo(actual2);
+        }
+
+        [Test]
+        public void GetConnection_TwoConsecutiveConnectionsToSameSystem_ConnectsTwice()
+        {
+            var hostname = _fixture.Create<string>();
+            var username = _fixture.Create<string>();
+            var password = _fixture.Create<string>();
+
+            var actual1 = GetConnection(hostname, username, password);
+            actual1.Close();
+
+            var actual2 = GetConnection(hostname, username, password);
+            actual2.Close();
+
+            AssertConnectionCount(actual1, 0);
+            AssertConnectionCount(actual2, 0);
+            actual1.ShouldBeEquivalentTo(actual2, options =>
+                options.Excluding(o => o.SessionToken));
         }
     }
 }
