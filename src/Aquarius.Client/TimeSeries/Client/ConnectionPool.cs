@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aquarius.TimeSeries.Client
 {
@@ -32,7 +33,7 @@ namespace Aquarius.TimeSeries.Client
                     return connection;
                 }
 
-                connection = new Connection(username, password, sessionTokenCreator, sessionDeleteAction);
+                connection = new Connection(username, password, sessionTokenCreator, sessionDeleteAction, Remove);
 
                 _connections.Add(connectionKey, connection);
 
@@ -59,6 +60,19 @@ namespace Aquarius.TimeSeries.Client
             foreach (var connection in _connections.Values)
             {
                 connection.Close();
+            }
+        }
+
+        private void Remove(Connection connection)
+        {
+            lock (_syncLock)
+            {
+                var itemToRemove = _connections.FirstOrDefault(kvp => kvp.Value == connection);
+
+                if (itemToRemove.Value != null)
+                {
+                    _connections.Remove(itemToRemove.Key);
+                }
             }
         }
     }

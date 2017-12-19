@@ -1,9 +1,12 @@
-﻿using Aquarius.TimeSeries.Client;
-using Aquarius.TimeSeries.Client.ServiceModels.Publish;
+﻿using System.Collections.Generic;
+using Aquarius.TimeSeries.Client;
+using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
+using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 using ServiceStack;
+using DeleteSession = Aquarius.TimeSeries.Client.ServiceModels.Publish.DeleteSession;
 
 namespace Aquarius.UnitTests.TimeSeries.Client
 {
@@ -43,7 +46,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
                 _fixture.Create<string>(),
                 _fixture.Create<string>(),
                 (username,password) => string.Join("/", username, password),
-                _client.DeleteSession);
+                _client.DeleteSession,
+                connection => { });
         }
 
         private AquariusServerVersion CreateDeveloperBuild()
@@ -81,6 +85,24 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             _client.Dispose();
 
             AssertExpectedDeleteSessionRequests(0);
+        }
+
+        [Ignore("This integration test should only be run from within the IDE, connecting to a live AQTS app server")]
+        [Test]
+        public void IntegrationTest_SequentialConnectionsToTheSameServer_Succeed()
+        {
+            var u1 = GetUnitsFromALiveServer();
+            var u2 = GetUnitsFromALiveServer();
+
+            u1.ShouldBeEquivalentTo(u2);
+        }
+
+        private List<PopulatedUnitGroup> GetUnitsFromALiveServer()
+        {
+            using (var client = AquariusClient.CreateConnectedClient("doug-vm2012r2", "admin", "admin"))
+            {
+                return client.Provisioning.Get(new GetUnits()).Results;
+            }
         }
     }
 }
