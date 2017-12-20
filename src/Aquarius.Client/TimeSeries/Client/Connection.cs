@@ -72,10 +72,10 @@ namespace Aquarius.TimeSeries.Client
 
                 if (ConnectionCount != 0)
                     return;
-            }
 
-            SessionDeleteAction();
-            ConnectionRemovalAction(this);
+                SessionDeleteAction();
+                ConnectionRemovalAction(this);
+            }
         }
 
         public void IncrementConnectionCount()

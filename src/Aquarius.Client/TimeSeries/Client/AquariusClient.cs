@@ -161,6 +161,14 @@ namespace Aquarius.TimeSeries.Client
             ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
 
             Connection = ConnectionPool.Instance.GetConnection(hostname, username, password, CreateSession, DeleteSession);
+
+            SetSessionToken(Connection.SessionToken);
+        }
+
+        private void SetSessionToken(string sessionToken)
+        {
+            SetAuthenticationTokenForConnectedClients(ServiceClients, sessionToken);
+            SetAuthenticationTokenForConnectedClients(CustomClients, sessionToken);
         }
 
         private void Disconnect()
@@ -183,22 +191,20 @@ namespace Aquarius.TimeSeries.Client
 
         internal string CreateSession(string username, string password)
         {
-            var sessionToken = ClientHelper.Login(ServiceClients.First().Value, username, password);
-
-            SetAuthenticationTokenForConnectedClients(ServiceClients, sessionToken);
-            SetAuthenticationTokenForConnectedClients(CustomClients, sessionToken);
-
-            return sessionToken;
+            return ClientHelper.Login(ServiceClients.First().Value, username, password);
         }
 
         internal void DeleteSession()
         {
             try
             {
-                if (FirstNgVersion.IsLessThan(ServerVersion))
-                {
-                    ClientHelper.Logout(ServiceClients.First().Value);
-                }
+                if (!FirstNgVersion.IsLessThan(ServerVersion)) return;
+
+                var serviceClient = ServiceClients.FirstOrDefault().Value;
+
+                if (serviceClient == null) return;
+
+                ClientHelper.Logout(serviceClient);
             }
             catch (Exception exception)
             {
