@@ -4,12 +4,12 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
-### 17.4.13
+### 17.4.14
 - Updated the service models for the 2017.14 release of AQUARIUS Samples
 - Added connection pooling support for AQTS connections, to minimize version-probes and authentication requests. When multiple threads are independently attempting to make authenticated requests, all threads will end up sharing the same authentication session. The last thread to exit will issue the `DELETE /session` requests to clean up server-side resources. This change is hidden behind the `AquariusClient.CreateConnectedClient()` factory method, so it should be transparent to consumers of the platform SDK.
 
-### 17.4.12 / 17.4.11
-- These versions broke the fundamental AQTS connection logic and have been pulled from NuGet. Please use a newer version of the SDK.
+### 17.4.13 / 17.4.12 / 17.4.11
+- These versions broke the fundamental AQTS connection logic and have been pulled from NuGet. Please use a newer version of the SDK to ensure reliable connections to your AQUARIUS Time-Series server.
 
 ### 17.4.9
 - Updated the service models for the 2017.4 release of AQUARIUS Time-Series
