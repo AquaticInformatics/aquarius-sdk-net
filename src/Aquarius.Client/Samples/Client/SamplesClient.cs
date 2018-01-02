@@ -51,7 +51,7 @@ namespace Aquarius.Samples.Client
         private IServiceClient _client;
 
         private SamplesClient(string baseUrl, string apiToken)
-            :this(new SdkServiceClient(UriHelper.ResolveEndpoint(baseUrl, "/api", Uri.UriSchemeHttps)), apiToken)
+            :this(new SamplesServiceClient(UriHelper.ResolveEndpoint(baseUrl, "/api", Uri.UriSchemeHttps)), apiToken)
         {
         }
 
