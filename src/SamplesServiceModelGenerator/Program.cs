@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using SamplesServiceModelGenerator.CodeGenerators;
 using SamplesServiceModelGenerator.Swagger;
-using ServiceStack.Logging;
-using ServiceStack.Logging.Log4Net;
+using log4net;
+using log4net.Config;
 using Enum = SamplesServiceModelGenerator.Swagger.Enum;
 using Path = System.IO.Path;
 
@@ -45,7 +45,9 @@ namespace SamplesServiceModelGenerator
 
         private static void ConfigureLogging()
         {
-            LogManager.LogFactory = new Log4NetFactory(configureLog4Net: true);
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var logRepository = LogManager.GetRepository(entryAssembly);
+            XmlConfigurator.Configure(logRepository, new FileInfo(Path.Combine(Path.GetDirectoryName(entryAssembly.Location), "log4net.config")));
 
             _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         }
