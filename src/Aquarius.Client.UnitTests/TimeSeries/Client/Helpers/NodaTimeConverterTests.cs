@@ -5,7 +5,7 @@ using Aquarius.UnitTests.TimeSeries.Client.TestHelpers;
 using FluentAssertions;
 using NodaTime;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
+using AutoFixture;
 
 namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
 {

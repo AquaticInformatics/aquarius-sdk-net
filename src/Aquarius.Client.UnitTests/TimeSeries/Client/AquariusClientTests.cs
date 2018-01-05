@@ -4,7 +4,7 @@ using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
+using AutoFixture;
 using ServiceStack;
 using DeleteSession = Aquarius.TimeSeries.Client.ServiceModels.Publish.DeleteSession;
 

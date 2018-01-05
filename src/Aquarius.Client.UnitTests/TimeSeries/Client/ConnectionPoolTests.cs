@@ -1,7 +1,7 @@
 ﻿using Aquarius.TimeSeries.Client;
 using FluentAssertions;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
+using AutoFixture;
 
 namespace Aquarius.UnitTests.TimeSeries.Client
 {

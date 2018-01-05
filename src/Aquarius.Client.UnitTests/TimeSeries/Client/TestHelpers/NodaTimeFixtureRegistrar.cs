@@ -2,7 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using NodaTime;
-using Ploeh.AutoFixture;
+using AutoFixture;
 
 namespace Aquarius.UnitTests.TimeSeries.Client.TestHelpers
 {

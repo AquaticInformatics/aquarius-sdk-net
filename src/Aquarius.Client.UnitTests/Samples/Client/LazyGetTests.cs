@@ -5,7 +5,7 @@ using Aquarius.Samples.Client;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
+using AutoFixture;
 using ServiceStack;
 
 namespace Aquarius.UnitTests.Samples.Client
