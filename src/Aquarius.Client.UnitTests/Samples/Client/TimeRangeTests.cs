@@ -45,7 +45,7 @@ namespace Aquarius.UnitTests.Samples.Client
             var timeRange = new TimeRange { StartTime = Instant.MinValue, EndTime = Instant.MinValue.PlusTicks(1) };
 
             timeRange.HasInterval().ShouldBeEquivalentTo(true);
-            timeRange.Interval().Duration.Ticks.ShouldBeEquivalentTo(1);
+            timeRange.Interval().Duration.BclCompatibleTicks.ShouldBeEquivalentTo(1);
         }
 
         [Test]

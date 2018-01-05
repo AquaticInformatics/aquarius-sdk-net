@@ -19,7 +19,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client.TestHelpers
 
         private static Instant GetBaseInstant()
         {
-            return Instant.FromTicksSinceUnixEpoch(0);
+            return Instant.FromUnixTimeTicks(0);
         }
 
         private static readonly Duration BaseDuration = GetBaseDuration();
@@ -27,7 +27,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client.TestHelpers
         private static Duration GetBaseDuration()
         {
             var longestDurationRepresentedByInt32 = Duration.FromTicks(Int32.MaxValue);
-            var secondsInLogestDuration = longestDurationRepresentedByInt32.Ticks / Duration.FromSeconds(1).Ticks;
+            var secondsInLogestDuration = longestDurationRepresentedByInt32.BclCompatibleTicks / Duration.FromSeconds(1).BclCompatibleTicks;
             var durationNotRepresentableByInt32 = Duration.FromSeconds(secondsInLogestDuration + 1);
             return durationNotRepresentableByInt32;
         }

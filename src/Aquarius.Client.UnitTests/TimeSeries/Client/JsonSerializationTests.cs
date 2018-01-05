@@ -17,7 +17,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
     {
         private static readonly DateTime ArbitraryUtcDate = new DateTime(1901, 02, 03, 04, 05, 06, DateTimeKind.Utc).AddMilliseconds(789);
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void BeforeAnyTests()
         {
             ServiceStackConfig.ConfigureServiceStack();
@@ -352,7 +352,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new object[] {Duration.FromTimeSpan(ArbitraryTimeSpan).Plus(Duration.FromTicks(1)), "\"P1DT2H3M4.5670001S\""},
             new object[] {Duration.FromTimeSpan(-ArbitraryTimeSpan), "\"-P1DT2H3M4.567S\""},
             new object[] {Duration.FromTimeSpan(-ArbitraryTimeSpan).Minus(Duration.FromTicks(1)), "\"-P1DT2H3M4.5670001S\""},
-            new object[] {Duration.FromStandardDays(1), "\"P1D\""},
+            new object[] {Duration.FromDays(1), "\"P1D\""},
             new object[] {Duration.FromMinutes(15), "\"PT15M\""},
             new object[] {Duration.FromMinutes(-15), "\"-PT15M\""},
             new object[] {Duration.Zero, "\"PT0S\""},
@@ -391,7 +391,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new TestCaseData(new NodaTimeDto
             {
                 Instant = Instant.FromDateTimeUtc(ArbitraryUtcDate),
-                Interval = new Interval(Instant.FromDateTimeUtc(ArbitraryUtcDate), Instant.FromDateTimeUtc(ArbitraryUtcDate).Plus(Duration.FromStandardDays(1))),
+                Interval = new Interval(Instant.FromDateTimeUtc(ArbitraryUtcDate), Instant.FromDateTimeUtc(ArbitraryUtcDate).Plus(Duration.FromDays(1))),
                 Duration = Duration.FromTimeSpan(ArbitraryTimeSpan),
                 Offset = ArbitraryOffset
             }),

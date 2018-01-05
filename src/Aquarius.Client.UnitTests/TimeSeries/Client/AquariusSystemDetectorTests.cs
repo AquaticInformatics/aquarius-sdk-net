@@ -189,7 +189,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             overrideSetting.Contains(mockHostname).ShouldBeEquivalentTo(false, "Invalid test data");
             overrideSetting.Contains(expectedMockVersion.ToString()).ShouldBeEquivalentTo(false, "Invalid test data");
 
-            ConfigurationManager.AppSettings["SystemDetectorOverrides"] = overrideSetting;
+            // TODO: Fix this? ConfigurationManager.AppSettings["SystemDetectorOverrides"] = overrideSetting;
 
             var detector = CreateDetector();
             detector.InitializeOverrides();

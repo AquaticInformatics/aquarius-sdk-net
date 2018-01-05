@@ -17,7 +17,7 @@ namespace Aquarius.UnitTests.Samples.Client
     [TestFixture]
     public class FileUploaderTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void BeforeAnyTests()
         {
             ServiceStackConfig.ConfigureServiceStack();
