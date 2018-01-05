@@ -106,7 +106,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             }
         }
 
-        public readonly object[][] ExpectedNodaTimeInstantJson =
+        public static readonly object[][] ExpectedNodaTimeInstantJson =
         {
             new object[] {Instant.FromDateTimeUtc(ArbitraryUtcDate), "\"1901-02-03T04:05:06.789Z\""},
             new object[] {Instant.FromDateTimeUtc(ArbitraryUtcDate).PlusTicks(1), "\"1901-02-03T04:05:06.7890001Z\""},
@@ -131,7 +131,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
-        public readonly object[][] ExpectedJsonNodaTimeInstants =
+        public static readonly object[][] ExpectedJsonNodaTimeInstants =
         {
             new object[] {"\"1901-02-03T04:05:06.789Z\"", Instant.FromDateTimeUtc(ArbitraryUtcDate)},
             new object[] {"\"1901-02-03T08:05:06.789+04:00\"", Instant.FromDateTimeUtc(ArbitraryUtcDate)},
@@ -288,7 +288,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
-        public readonly object[][] ExpectedJsonNodaTimeIntervals =
+        public static readonly object[][] ExpectedJsonNodaTimeIntervals =
         {
             new object[] {"{\"Start\":\"MinInstant\",\"End\":\"MaxInstant\"}", Instant.MinValue, Instant.MaxValue},
             new object[] {"{\"stART\":\"minINSTAnt\",\"eND\":\"MAxinSTANT\"}", Instant.MinValue, Instant.MaxValue},
@@ -346,7 +346,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private static readonly TimeSpan ArbitraryTimeSpan = new TimeSpan(1, 2, 3, 4, 567);
 
-        public readonly object[][] ExpectedNodaTimeDurationJson =
+        public static readonly object[][] ExpectedNodaTimeDurationJson =
         {
             new object[] {Duration.FromTimeSpan(ArbitraryTimeSpan), "\"P1DT2H3M4.567S\""},
             new object[] {Duration.FromTimeSpan(ArbitraryTimeSpan).Plus(Duration.FromTicks(1)), "\"P1DT2H3M4.5670001S\""},
@@ -386,7 +386,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
-        public readonly IEnumerable<TestCaseData> ExpectedNodaTimeDto = new[]
+        public static readonly IEnumerable<TestCaseData> ExpectedNodaTimeDto = new[]
         {
             new TestCaseData(new NodaTimeDto
             {
@@ -496,7 +496,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         public static readonly Offset ArbitraryOffset = Offset.FromHoursAndMinutes(8, 30);
 
-        public readonly object[][] ExpectedNodaTimeOffsetJson =
+        public static readonly object[][] ExpectedNodaTimeOffsetJson =
         {
             new object[] {ArbitraryOffset, "\"PT8H30M\""},
             new object[] {-ArbitraryOffset, "\"-PT8H30M\""},
