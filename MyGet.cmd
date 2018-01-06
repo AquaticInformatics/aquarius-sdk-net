@@ -14,13 +14,6 @@ if not "%PackageVersion%" == "" (
    powershell -Command "foreach ($path in dir -Filter Aquarius.Client.Legacy.csproj -Recurse | %%{$_.FullName}){ (gc $path) -replace '0.0.0', '%PackageVersion%' | Out-File -Encoding utf8 $path }"
 )
 
-rem Package restore
-echo Restoring packages ...
-call "%NuGet%" restore src
-if not "%errorlevel%"=="0" goto failure
-dotnet restore src
-if not "%errorlevel%"=="0" goto failure
-
 rem Build
 echo Building project ...
 dotnet build --configuration "%config%" src
