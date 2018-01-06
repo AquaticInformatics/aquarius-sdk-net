@@ -22,7 +22,7 @@
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0;NODATIME2</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="NodaTime" Version="2.2.3" />
@@ -34,7 +34,7 @@
 
   <!-- .NET 4.5 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
-    <DefineConstants>NET45;NETFULL</DefineConstants>
+    <DefineConstants>NET45;NETFULL;NODATIME1</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />

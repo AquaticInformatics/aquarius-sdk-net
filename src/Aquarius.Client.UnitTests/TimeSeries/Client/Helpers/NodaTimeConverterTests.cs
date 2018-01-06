@@ -5,18 +5,23 @@ using Aquarius.UnitTests.TimeSeries.Client.TestHelpers;
 using FluentAssertions;
 using NodaTime;
 using NUnit.Framework;
+
+#if AUTOFIXTURE4
 using AutoFixture;
+#else
+using Ploeh.AutoFixture;
+#endif
 
 namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
 {
     [TestFixture]
     public class NodaTimeConverterTests
     {
-        private static readonly DateTime MinDateTimeUtc = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-        private static readonly DateTime MaxDateTimeUtc = DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc);
+        private static readonly DateTime MinDateTimeUtc = NodaTimeConverter.MinDateTimeUtc;
+        private static readonly DateTime MaxDateTimeUtc = NodaTimeConverter.MaxDateTimeUtc;
 
-        private static readonly Instant MinDateTimeInstant = Instant.FromDateTimeUtc(MinDateTimeUtc);
-        private static readonly Instant MaxDateTimeInstant = Instant.FromDateTimeUtc(MaxDateTimeUtc);
+        private static readonly Instant MinDateTimeInstant = NodaTimeConverter.MinDateTimeInstant;
+        private static readonly Instant MaxDateTimeInstant = NodaTimeConverter.MaxDateTimeInstant;
 
         private static readonly DateTime DateTimeUtc0101 = new DateTime(2000, 01, 01, 0, 0, 0, DateTimeKind.Utc);
         private static readonly Instant Instant0101 = Instant.FromDateTimeUtc(DateTimeUtc0101);
@@ -46,8 +51,11 @@ namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
         {
             MinDateTimeInstant,
             MaxDateTimeInstant,
+#if NODATIME1
+            // NodaTime 2.x doesn't allow you construct out-of-range instants
             MinDateTimeInstant.Minus(Duration.FromSeconds(1)),
             MaxDateTimeInstant.Plus(Duration.FromSeconds(1))
+#endif
         };
 
         [TestCaseSource("_nonConvertibleInstants")]

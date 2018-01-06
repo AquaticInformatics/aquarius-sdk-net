@@ -24,7 +24,7 @@ namespace Aquarius.UnitTests.Samples.Client
         private static readonly Instant AprilFools2014 = Instant.FromDateTimeUtc(new DateTime(2014, 4, 1, 0, 0, 0, DateTimeKind.Utc));
         private static readonly Instant AprilFools2015 = Instant.FromDateTimeUtc(new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc));
 
-        public static readonly object[][] ValidTimeRanges =
+        private static readonly object[][] ValidTimeRanges =
         {
             new object[]
             {

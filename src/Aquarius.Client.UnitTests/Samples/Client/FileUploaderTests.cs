@@ -9,8 +9,13 @@ using Aquarius.TimeSeries.Client;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
-using AutoFixture;
 using ServiceStack;
+
+#if AUTOFIXTURE4
+using AutoFixture;
+#else
+using Ploeh.AutoFixture;
+#endif
 
 namespace Aquarius.UnitTests.Samples.Client
 {

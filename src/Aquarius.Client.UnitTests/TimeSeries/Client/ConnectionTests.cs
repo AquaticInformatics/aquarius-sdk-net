@@ -2,7 +2,12 @@
 using Aquarius.TimeSeries.Client;
 using FluentAssertions;
 using NUnit.Framework;
+
+#if AUTOFIXTURE4
 using AutoFixture;
+#else
+using Ploeh.AutoFixture;
+#endif
 
 namespace Aquarius.UnitTests.TimeSeries.Client
 {
@@ -30,9 +35,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         {
             ++_sessionCreateCount;
 
-            return _fixture.Build<string>()
-                .With(s => string.Join("/", username, password, _fixture.Create<string>()))
-                .Create();
+            return string.Join("/", username, password, _fixture.Create<string>());
         }
 
         private void DeleteSession()
