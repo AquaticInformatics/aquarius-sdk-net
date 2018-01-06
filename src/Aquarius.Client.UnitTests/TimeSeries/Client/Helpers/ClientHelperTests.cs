@@ -3,8 +3,13 @@ using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
 using ServiceStack;
+
+#if AUTOFIXTURE4
+using AutoFixture;
+#else
+using Ploeh.AutoFixture;
+#endif
 
 namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
 {

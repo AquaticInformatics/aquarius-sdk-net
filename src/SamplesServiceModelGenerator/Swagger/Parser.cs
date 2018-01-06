@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Humanizer;
 using ServiceStack;
-using ServiceStack.Logging;
+using log4net;
 using ServiceStack.Text;
 
 namespace SamplesServiceModelGenerator.Swagger

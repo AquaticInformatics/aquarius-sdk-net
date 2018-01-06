@@ -174,12 +174,13 @@ namespace Aquarius.TimeSeries.Client.Helpers
         public static Instant Iso8601ToInstant(string value, Iso8601ParseOptions options)
         {
             var result = OffsetDateTimePattern
-#if NETCORE
+#if NODATIME2
                 .ExtendedIso			// NodaTime 2.x
 #else
                 .ExtendedIsoPattern		// NodaTime 1.x
 #endif
                 .Parse(value);
+
             if (result.Success)
                 return result.Value.ToInstant();
 

@@ -1,8 +1,14 @@
 ﻿using System;
+using Aquarius.Client.UnitTests.TestHelpers;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using NodaTime;
+
+#if AUTOFIXTURE4
+using AutoFixture;
+#else
 using Ploeh.AutoFixture;
+#endif
 
 namespace Aquarius.UnitTests.TimeSeries.Client.TestHelpers
 {
@@ -19,7 +25,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client.TestHelpers
 
         private static Instant GetBaseInstant()
         {
-            return Instant.FromTicksSinceUnixEpoch(0);
+            return NodaTimeHelpers.InstantFromUnixTimeTicks(0);
         }
 
         private static readonly Duration BaseDuration = GetBaseDuration();
@@ -27,7 +33,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client.TestHelpers
         private static Duration GetBaseDuration()
         {
             var longestDurationRepresentedByInt32 = Duration.FromTicks(Int32.MaxValue);
-            var secondsInLogestDuration = longestDurationRepresentedByInt32.Ticks / Duration.FromSeconds(1).Ticks;
+            var secondsInLogestDuration = longestDurationRepresentedByInt32.Ticks() / Duration.FromSeconds(1).Ticks();
             var durationNotRepresentableByInt32 = Duration.FromSeconds(secondsInLogestDuration + 1);
             return durationNotRepresentableByInt32;
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net;
 using Aquarius.TimeSeries.Client;
 using FluentAssertions;
@@ -33,7 +32,6 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
             detector.ServiceClientFactory = s => _mockServiceClient;
             detector.Reset();
-            detector.InitializeOverrides();
 
             return detector;
         }
@@ -189,10 +187,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             overrideSetting.Contains(mockHostname).ShouldBeEquivalentTo(false, "Invalid test data");
             overrideSetting.Contains(expectedMockVersion.ToString()).ShouldBeEquivalentTo(false, "Invalid test data");
 
-            ConfigurationManager.AppSettings["SystemDetectorOverrides"] = overrideSetting;
-
             var detector = CreateDetector();
-            detector.InitializeOverrides();
+            detector.SetOverrides(overrideSetting);
 
             var mockVersion = detector.GetAquariusServerVersion(mockHostname);
             var overrideVersion = detector.GetAquariusServerVersion(overrideHostname);

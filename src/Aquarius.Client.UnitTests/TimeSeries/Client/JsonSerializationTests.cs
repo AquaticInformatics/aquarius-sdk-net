@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Aquarius.Client.UnitTests.TestHelpers;
 using Aquarius.TimeSeries.Client;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
@@ -9,15 +10,14 @@ using NodaTime;
 using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Text;
-using static System.FormattableString;
 
 namespace Aquarius.UnitTests.TimeSeries.Client
 {
-    class JsonSerializationTests
+    public class JsonSerializationTests
     {
         private static readonly DateTime ArbitraryUtcDate = new DateTime(1901, 02, 03, 04, 05, 06, DateTimeKind.Utc).AddMilliseconds(789);
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void BeforeAnyTests()
         {
             ServiceStackConfig.ConfigureServiceStack();
@@ -106,7 +106,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             }
         }
 
-        public readonly object[][] ExpectedNodaTimeInstantJson =
+        private static readonly object[][] ExpectedNodaTimeInstantJson =
         {
             new object[] {Instant.FromDateTimeUtc(ArbitraryUtcDate), "\"1901-02-03T04:05:06.789Z\""},
             new object[] {Instant.FromDateTimeUtc(ArbitraryUtcDate).PlusTicks(1), "\"1901-02-03T04:05:06.7890001Z\""},
@@ -131,7 +131,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
-        public readonly object[][] ExpectedJsonNodaTimeInstants =
+        private static readonly object[][] ExpectedJsonNodaTimeInstants =
         {
             new object[] {"\"1901-02-03T04:05:06.789Z\"", Instant.FromDateTimeUtc(ArbitraryUtcDate)},
             new object[] {"\"1901-02-03T08:05:06.789+04:00\"", Instant.FromDateTimeUtc(ArbitraryUtcDate)},
@@ -288,7 +288,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
-        public readonly object[][] ExpectedJsonNodaTimeIntervals =
+        private static readonly object[][] ExpectedJsonNodaTimeIntervals =
         {
             new object[] {"{\"Start\":\"MinInstant\",\"End\":\"MaxInstant\"}", Instant.MinValue, Instant.MaxValue},
             new object[] {"{\"stART\":\"minINSTAnt\",\"eND\":\"MAxinSTANT\"}", Instant.MinValue, Instant.MaxValue},
@@ -346,13 +346,13 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private static readonly TimeSpan ArbitraryTimeSpan = new TimeSpan(1, 2, 3, 4, 567);
 
-        public readonly object[][] ExpectedNodaTimeDurationJson =
+        private static readonly object[][] ExpectedNodaTimeDurationJson =
         {
             new object[] {Duration.FromTimeSpan(ArbitraryTimeSpan), "\"P1DT2H3M4.567S\""},
             new object[] {Duration.FromTimeSpan(ArbitraryTimeSpan).Plus(Duration.FromTicks(1)), "\"P1DT2H3M4.5670001S\""},
             new object[] {Duration.FromTimeSpan(-ArbitraryTimeSpan), "\"-P1DT2H3M4.567S\""},
             new object[] {Duration.FromTimeSpan(-ArbitraryTimeSpan).Minus(Duration.FromTicks(1)), "\"-P1DT2H3M4.5670001S\""},
-            new object[] {Duration.FromStandardDays(1), "\"P1D\""},
+            new object[] {NodaTimeHelpers.DurationFromDays(1), "\"P1D\""},
             new object[] {Duration.FromMinutes(15), "\"PT15M\""},
             new object[] {Duration.FromMinutes(-15), "\"-PT15M\""},
             new object[] {Duration.Zero, "\"PT0S\""},
@@ -386,12 +386,12 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
-        public readonly IEnumerable<TestCaseData> ExpectedNodaTimeDto = new[]
+        private static readonly IEnumerable<TestCaseData> ExpectedNodaTimeDto = new[]
         {
             new TestCaseData(new NodaTimeDto
             {
                 Instant = Instant.FromDateTimeUtc(ArbitraryUtcDate),
-                Interval = new Interval(Instant.FromDateTimeUtc(ArbitraryUtcDate), Instant.FromDateTimeUtc(ArbitraryUtcDate).Plus(Duration.FromStandardDays(1))),
+                Interval = new Interval(Instant.FromDateTimeUtc(ArbitraryUtcDate), Instant.FromDateTimeUtc(ArbitraryUtcDate).Plus(NodaTimeHelpers.DurationFromDays(1))),
                 Duration = Duration.FromTimeSpan(ArbitraryTimeSpan),
                 Offset = ArbitraryOffset
             }),
@@ -494,14 +494,19 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             }
         }
 
-        public static readonly Offset ArbitraryOffset = Offset.FromHoursAndMinutes(8, 30);
+        private static readonly Offset ArbitraryOffset = Offset.FromHoursAndMinutes(8, 30);
 
-        public readonly object[][] ExpectedNodaTimeOffsetJson =
+        private static readonly object[][] ExpectedNodaTimeOffsetJson =
         {
             new object[] {ArbitraryOffset, "\"PT8H30M\""},
             new object[] {-ArbitraryOffset, "\"-PT8H30M\""},
+#if NET45
+            // NodaTime 2.x has dropped support for subsecond precision
             new object[] {Offset.FromMilliseconds(1), "\"PT0.001S\""},
             new object[] {Offset.FromMilliseconds(-1), "\"-PT0.001S\""},
+#endif
+            new object[] {Offset.FromMilliseconds(1000), "\"PT1S\""},
+            new object[] {Offset.FromMilliseconds(-1000), "\"-PT1S\""},
             new object[] {Offset.Zero, "\"PT0S\""}
         };
 
@@ -509,7 +514,6 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         public void NodaTimeOffset_SerializesToExpectedText(Offset input, string expected)
         {
             var actual = input.ToJson();
-
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -559,7 +563,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private static string GetJsonForDtoWithValue(string value)
         {
-            return Invariant($"{{\"Value\":{value}}}");
+            return $"{{\"Value\":{value}}}";
         }
 
         private static readonly List<TestCaseData> DoubleValues = new List<TestCaseData>
@@ -635,7 +639,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             var dto = new TestDto<double> { Value = input };
 
             Assert.That(() => dto.ToJson(), Throws.InstanceOf<ArgumentException>()
-                .With.Property("ParamName").StringContaining("value"));
+                .With.Property("ParamName").Contains("value"));
         }
 
         [Test]
@@ -720,7 +724,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             var dto = new TestDto<double?> { Value = input };
 
             Assert.That(() => dto.ToJson(), Throws.InstanceOf<ArgumentException>()
-                .With.Property("ParamName").StringContaining("value"));
+                .With.Property("ParamName").Contains("value"));
         }
 
         [Test]

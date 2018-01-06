@@ -9,15 +9,20 @@ using Aquarius.TimeSeries.Client;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
 using ServiceStack;
+
+#if AUTOFIXTURE4
+using AutoFixture;
+#else
+using Ploeh.AutoFixture;
+#endif
 
 namespace Aquarius.UnitTests.Samples.Client
 {
     [TestFixture]
     public class FileUploaderTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void BeforeAnyTests()
         {
             ServiceStackConfig.ConfigureServiceStack();

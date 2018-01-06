@@ -64,16 +64,20 @@ namespace Aquarius.TimeSeries.Client
             };
         }
 
-        internal void InitializeOverrides()
+        private void InitializeOverrides()
         {
             var overridesValue =
 #if NETFULL
                 ConfigurationManager.AppSettings["SystemDetectorOverrides"];
 #else
-                // TODO: Figure out .NET Config API
+// TODO: Figure out .NET Config API
                 string.Empty;
 #endif
+            SetOverrides(overridesValue);
+        }
 
+        public void SetOverrides(string overridesValue)
+        {
             if (string.IsNullOrEmpty(overridesValue))
                 return;
 
