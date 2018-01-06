@@ -27,9 +27,8 @@ dotnet build --configuration "%config%" src
 if not "%errorlevel%"=="0" goto failure
 
 rem Tests
-set NUnitRunner=src\packages\NUnit.Runners.2.6.3\tools\nunit-console.exe
 echo Running tests ...
-call "%NUnitRunner%" /config:%config% /framework:net-4.5 src\Aquarius.Client.UnitTests\bin\%config%\Aquarius.Client.UnitTests.dll
+dotnet test --configuration "%config%" src/Aquarius.Client.UnitTests/Aquarius.Client.UnitTests.csproj
 if not "%errorlevel%"=="0" goto failure
 
 rem Package create

@@ -10,7 +10,7 @@ please read the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Building
 
-Either build from within Visual Studio, or run `msbuild build.proj` from the root of the repo.
+Either build from within Visual Studio, or run `dotnet build src` from the root of the repo.
 
 ## Testing
 
