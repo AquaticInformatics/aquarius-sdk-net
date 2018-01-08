@@ -7,7 +7,7 @@ exit_abort () {
 	[ ! -z "$1" ] && echo ERROR: "$1"
 	echo
 	echo 'ABORTED!'
-	exit $ERRCODE
+	exit 1
 }
 
 show_usage() {
