@@ -8,21 +8,25 @@ exit_abort () {
 	exit 1
 }
 
+[ -f "Aquarius.SDK.sln" ] || exit_abort "This script must be run from <repo>/src folder."
+
 ServerName=$1
+Configuration=$2
 [ ! -z "$ServerName" ] || ServerName=https://test.gaiaserve.net
+[ ! -z "$Configuration" ] || Configuration=Release
 
 echo Building SamplesServiceModelGenerator ...
-dotnet build --configuration Release || exit_abort "Can't build SamplesServiceModelGenerator"
+dotnet build --configuration $Configuration || exit_abort "Can't build SamplesServiceModelGenerator."
 
 echo Creating new Samples service model from $ServerName ...
-curl -f "$ServerName/api/v1/status" || exit_abort "Can't fetch API status from $ServerName"
-echo
 pushd Aquarius.Client/Samples/Client
-./create_service_models.sh $ServerName || exit_abort "Can't create Samples service model"
+./create_service_models.sh $ServerName || exit_abort "Can't create Samples service model."
 popd
 
 echo Rebuilding SDK ...
-dotnet build --configuration Release || exit_abort "Can't rebuild SDK with regenerated Samples client"
+dotnet build --configuration $Configuration || exit_abort "Can't rebuild SDK with regenerated Samples client"
 
 echo Running unit tests ...
-dotnet test --configuration Release `find . -iname *.UnitTests.csproj` || exit_abort "Unit tests failed."
+dotnet test --configuration $Configuration `find . -iname *.UnitTests.csproj` || exit_abort "Unit tests failed."
+
+exit 0
