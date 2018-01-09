@@ -27,6 +27,6 @@ echo Rebuilding SDK ...
 dotnet build --configuration $Configuration || exit_abort "Can't rebuild SDK with regenerated Samples client"
 
 echo Running unit tests ...
-dotnet test --configuration $Configuration `find . -iname *.UnitTests.csproj` || exit_abort "Unit tests failed."
+dotnet test --configuration $Configuration Aquarius.Client.UnitTests/Aquarius.Client.UnitTests.csproj || exit_abort "Unit tests failed."
 
 exit 0
