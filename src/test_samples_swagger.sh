@@ -23,6 +23,9 @@ pushd Aquarius.Client/Samples/Client
 ./create_service_models.sh $ServerName || exit_abort "Can't create Samples service model."
 popd
 
+echo Showing service model diff ...
+git diff
+
 echo Rebuilding SDK ...
 dotnet build --configuration $Configuration || exit_abort "Can't rebuild SDK with regenerated Samples client"
 
