@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-12-12 16:27:40
+Date: 2018-03-09 13:01:50
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver12/AQUARIUS/Publish/v2
@@ -3574,6 +3574,39 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DoubleWithDisplay GageHeight { get; set; }
     }
 
+    public class GroundWaterMeasurement
+    {
+        ///<summary>
+        ///Stability
+        ///</summary>
+        [ApiMember(Description="Stability")]
+        public string Stability { get; set; }
+
+        ///<summary>
+        ///Cut
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Cut")]
+        public DoubleWithDisplay Cut { get; set; }
+
+        ///<summary>
+        ///Hold
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Hold")]
+        public DoubleWithDisplay Hold { get; set; }
+
+        ///<summary>
+        ///Tape correction
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Tape correction")]
+        public DoubleWithDisplay TapeCorrection { get; set; }
+
+        ///<summary>
+        ///Water level
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Water level")]
+        public DoubleWithDisplay WaterLevel { get; set; }
+    }
+
     public class IceCoveredData
     {
         ///<summary>
@@ -4088,6 +4121,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="Is valid")]
         public bool IsValid { get; set; }
+
+        ///<summary>
+        ///Groundwater measurements
+        ///</summary>
+        [ApiMember(DataType="GroundWaterMeasurement", Description="Groundwater measurements")]
+        public GroundWaterMeasurement GroundWaterMeasurement { get; set; }
     }
 
     public class StandardDetails
@@ -4675,6 +4714,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         MaximumMinimumGage,
         WaterQuality,
         FieldMeter,
+        Other,
     }
 
     public enum MeasurementGradeType
@@ -4738,7 +4778,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public enum ReadingType
     {
         Unknown,
+        RoutineBefore,
         Routine,
+        RoutineAfter,
         ResetBefore,
         ResetAfter,
         CleaningBefore,
@@ -6432,6 +6474,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.4.79.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.1.91.0");
     }
 }

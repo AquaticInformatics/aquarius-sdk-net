@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-12-12 16:27:42
+Date: 2018-03-09 13:01:54
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver12/AQUARIUS/Provisioning/v1
@@ -227,6 +227,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid LocationFolderUniqueId { get; set; }
     }
 
+    [Route("/locationfolders/{LocationFolderUniqueId}/userroles/{UserUniqueId}", "DELETE")]
+    public class DeleteLocationFolderUserRole
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique Id of the location folder
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the location folder", IsRequired=true, ParameterType="path")]
+        public Guid LocationFolderUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique Id of the user the role will be removed for
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the user the role will be removed for", IsRequired=true, ParameterType="path")]
+        public Guid UserUniqueId { get; set; }
+    }
+
     [Route("/locationtypes/{UniqueId}", "DELETE")]
     public class DeleteLocationType
         : IReturnVoid
@@ -236,6 +253,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Unique ID of the location type", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/userroles/{UserUniqueId}", "DELETE")]
+    public class DeleteLocationUserRole
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique Id of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique Id of the user the role will be removed for
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the user the role will be removed for", IsRequired=true, ParameterType="path")]
+        public Guid UserUniqueId { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/referencepoints/{ReferencePointUniqueId}", "DELETE")]
@@ -283,6 +317,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
     }
 
+    [Route("/locationfolders/{LocationFolderUniqueId}/userroles", "GET")]
+    public class GetLocationFolderUserRoles
+        : IReturn<LocationFolderUserRoles>
+    {
+        ///<summary>
+        ///Unique ID of the location folder
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location folder", IsRequired=true, ParameterType="path")]
+        public Guid LocationFolderUniqueId { get; set; }
+    }
+
     [Route("/locations/{LocationUniqueId}/referencepoints/", "GET")]
     public class GetLocationReferencePoints
         : IReturn<ReferencePointResponse>
@@ -309,6 +354,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class GetLocationTypes
         : IReturn<LocationTypesResponse>
     {
+    }
+
+    [Route("/locations/{LocationUniqueId}/userroles", "GET")]
+    public class GetLocationUserRoles
+        : IReturn<LocationUserRoles>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
     }
 
     public class LocationBase
@@ -481,6 +537,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid LocationFolderUniqueId { get; set; }
     }
 
+    [Route("/locationfolders/{LocationFolderUniqueId}/userroles/{UserUniqueId}", "PUT")]
+    public class PutLocationFolderUserRole
+        : PutUserRoleBase, IReturn<LocationFolderUserRole>
+    {
+        ///<summary>
+        ///Unique Id of the location folder
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the location folder", IsRequired=true, ParameterType="path")]
+        public Guid LocationFolderUniqueId { get; set; }
+    }
+
     [Route("/locationtypes/{UniqueId}", "PUT")]
     public class PutLocationType
         : LocationTypeBase, IReturn<LocationType>
@@ -490,6 +557,32 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Unique ID of the location type", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/userroles/{UserUniqueId}", "PUT")]
+    public class PutLocationUserRole
+        : PutUserRoleBase, IReturn<LocationUserRole>
+    {
+        ///<summary>
+        ///Unique Id of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    public class PutUserRoleBase
+    {
+        ///<summary>
+        ///Unique Id of the user the role will apply to
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the user the role will apply to", IsRequired=true, ParameterType="path")]
+        public Guid UserUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique id of role to set
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique id of role to set", IsRequired=true)]
+        public Guid? RoleUniqueId { get; set; }
     }
 
     public class ReferencePointBase
@@ -850,6 +943,150 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Localized description")]
         public string Description { get; set; }
+    }
+
+    [Route("/reportplugins/{UniqueId}", "DELETE")]
+    public class DeleteReportPlugin
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the report plug-in
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the report plug-in", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/reportplugins", "GET")]
+    public class GetReportPlugins
+        : IReturn<ReportPluginResponse>
+    {
+    }
+
+    [Route("/reportplugins", "POST")]
+    public class PostReportPlugin
+        : ReportPluginBase, IReturn<ReportPlugin>
+    {
+    }
+
+    public class ReportPluginBase
+    {
+        ///<summary>
+        ///Assembly name
+        ///</summary>
+        [ApiMember(Description="Assembly name", IsRequired=true)]
+        public string AssemblyName { get; set; }
+
+        ///<summary>
+        ///Plug-in folder name
+        ///</summary>
+        [ApiMember(Description="Plug-in folder name", IsRequired=true)]
+        public string FolderName { get; set; }
+    }
+
+    [Route("/roles/{UniqueId}", "DELETE")]
+    public class DeleteRole
+    {
+        ///<summary>
+        ///Unique Id of the role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the role", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/roles/{UniqueId}", "GET")]
+    public class GetRole
+        : IReturn<Role>
+    {
+        ///<summary>
+        ///Unique Id of the role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the role", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/roles", "GET")]
+    public class GetRoles
+        : IReturn<RolesResponse>
+    {
+    }
+
+    [Route("/roles", "POST")]
+    public class PostRole
+        : RoleBase, IReturn<Role>
+    {
+    }
+
+    [Route("/roles/{UniqueId}", "PUT")]
+    public class PutRole
+        : RoleBase, IReturn<Role>
+    {
+        ///<summary>
+        ///Unique Id of the role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the role", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    public class RoleBase
+    {
+        public RoleBase()
+        {
+            RoleApprovalTransitions = new List<RoleApprovalTransition>{};
+        }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name", IsRequired=true)]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///List of approval transitions this role grants permission to perform.
+        ///</summary>
+        [ApiMember(DataType="Array<RoleApprovalTransition>", Description="List of approval transitions this role grants permission to perform.")]
+        public List<RoleApprovalTransition> RoleApprovalTransitions { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Read data and generate reports.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Read data and generate reports.")]
+        public bool CanReadData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add data. Includes appending logger data, creating/editing field visits, and uploading attachments.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add data. Includes appending logger data, creating/editing field visits, and uploading attachments.")]
+        public bool CanAddData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit data. Includes making corrections to time series; editing curves and shifts within a rating model.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit data. Includes making corrections to time series; editing curves and shifts within a rating model.")]
+        public bool CanEditData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit location properties and derivations. Includes creating and editing time series, rating models, process settings.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit location properties and derivations. Includes creating and editing time series, rating models, process settings.")]
+        public bool CanEditLocationDetails { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add and remove locations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add and remove locations.")]
+        public bool CanAddOrRemoveLocations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Assign user roles for folders and locations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Assign user roles for folders and locations.")]
+        public bool CanAssignUserRoles { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Remove field visits.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
+        public bool CanRemoveFieldVisits { get; set; }
     }
 
     [Route("/standarddatums/{Identifier}", "DELETE")]
@@ -2075,6 +2312,71 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<LocationFolder> Results { get; set; }
     }
 
+    public class LocationFolderUserRole
+    {
+        ///<summary>
+        ///Unique id of the location folder this role is applied to
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique id of the location folder this role is applied to")]
+        public Guid? AppliedToLocationFolderUniqueId { get; set; }
+
+        ///<summary>
+        ///Name of the location folder this role is applied to
+        ///</summary>
+        [ApiMember(Description="Name of the location folder this role is applied to")]
+        public string AppliedToLocationFolderName { get; set; }
+
+        ///<summary>
+        ///True if role is inherited from a parent location folder
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role is inherited from a parent location folder")]
+        public bool InheritedFromParentLocationFolder { get; set; }
+
+        ///<summary>
+        ///Unique id of user with this role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique id of user with this role")]
+        public Guid UserUniqueId { get; set; }
+
+        ///<summary>
+        ///Login name of user with this role
+        ///</summary>
+        [ApiMember(Description="Login name of user with this role")]
+        public string UserLoginName { get; set; }
+
+        ///<summary>
+        ///Unique id of the role this user has
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique id of the role this user has")]
+        public Guid RoleUniqueId { get; set; }
+
+        ///<summary>
+        ///Name of the role this user has
+        ///</summary>
+        [ApiMember(Description="Name of the role this user has")]
+        public string RoleName { get; set; }
+    }
+
+    public class LocationFolderUserRoles
+    {
+        public LocationFolderUserRoles()
+        {
+            Roles = new List<LocationFolderUserRole>{};
+        }
+
+        ///<summary>
+        ///Unique Id of the location folder
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the location folder")]
+        public Guid LocationFolderUniqueId { get; set; }
+
+        ///<summary>
+        ///List of user roles applicable to this location folder
+        ///</summary>
+        [ApiMember(DataType="Array<LocationFolderUserRole>", Description="List of user roles applicable to this location folder")]
+        public List<LocationFolderUserRole> Roles { get; set; }
+    }
+
     public class LocationType
     {
         ///<summary>
@@ -2120,6 +2422,36 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<LocationType>", Description="The list of location types")]
         public List<LocationType> Results { get; set; }
+    }
+
+    public class LocationUserRole
+        : LocationFolderUserRole
+    {
+        ///<summary>
+        ///Unique id of the location this role is applied to
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique id of the location this role is applied to")]
+        public Guid? AppliedToLocationUniqueId { get; set; }
+    }
+
+    public class LocationUserRoles
+    {
+        public LocationUserRoles()
+        {
+            Roles = new List<LocationUserRole>{};
+        }
+
+        ///<summary>
+        ///Unique Id of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the location")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///List of user roles applicable to this location
+        ///</summary>
+        [ApiMember(DataType="Array<LocationUserRole>", Description="List of user roles applicable to this location")]
+        public List<LocationUserRole> Roles { get; set; }
     }
 
     public class MonitoringMethod
@@ -2427,6 +2759,138 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<ReferencePoint>", Description="The list of reference points")]
         public List<ReferencePoint> Results { get; set; }
+    }
+
+    public class ReportPlugin
+    {
+        ///<summary>
+        ///Unique ID of the registered report plug-in
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the registered report plug-in")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Name of the assembly of the report plug-in
+        ///</summary>
+        [ApiMember(Description="Name of the assembly of the report plug-in")]
+        public string AssemblyName { get; set; }
+
+        ///<summary>
+        ///Plug-in folder name
+        ///</summary>
+        [ApiMember(Description="Plug-in folder name")]
+        public string FolderName { get; set; }
+    }
+
+    public class ReportPluginResponse
+    {
+        public ReportPluginResponse()
+        {
+            Results = new List<ReportPlugin>{};
+        }
+
+        ///<summary>
+        ///The list of registered reports
+        ///</summary>
+        [ApiMember(DataType="Array<ReportPlugin>", Description="The list of registered reports")]
+        public List<ReportPlugin> Results { get; set; }
+    }
+
+    public class Role
+    {
+        public Role()
+        {
+            RoleApprovalTransitions = new List<RoleApprovalTransition>{};
+        }
+
+        ///<summary>
+        ///Unique Id of the role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the role")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name")]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///List of approval transitions this role grants permission to perform.
+        ///</summary>
+        [ApiMember(DataType="Array<RoleApprovalTransition>", Description="List of approval transitions this role grants permission to perform.")]
+        public List<RoleApprovalTransition> RoleApprovalTransitions { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Read data and generate reports.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Read data and generate reports.")]
+        public bool CanReadData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add data. Includes appending logger data, creating/editing field visits, and uploading attachments.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add data. Includes appending logger data, creating/editing field visits, and uploading attachments.")]
+        public bool CanAddData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit data. Includes making corrections to time series; editing curves and shifts within a rating model.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit data. Includes making corrections to time series; editing curves and shifts within a rating model.")]
+        public bool CanEditData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit location properties and derivations. Includes creating and editing time series, rating models, process settings.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit location properties and derivations. Includes creating and editing time series, rating models, process settings.")]
+        public bool CanEditLocationDetails { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add and remove locations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add and remove locations.")]
+        public bool CanAddOrRemoveLocations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Assign user roles for folders and locations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Assign user roles for folders and locations.")]
+        public bool CanAssignUserRoles { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Remove field visits.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
+        public bool CanRemoveFieldVisits { get; set; }
+    }
+
+    public class RoleApprovalTransition
+    {
+        ///<summary>
+        ///Approval level of data before permitted transition.
+        ///</summary>
+        [ApiMember(DataType="long integer", Description="Approval level of data before permitted transition.", IsRequired=true)]
+        public long? FromApprovalLevel { get; set; }
+
+        ///<summary>
+        ///Approval level of data after permitted transition.
+        ///</summary>
+        [ApiMember(DataType="long integer", Description="Approval level of data after permitted transition.", IsRequired=true)]
+        public long? ToApprovalLevel { get; set; }
+    }
+
+    public class RolesResponse
+    {
+        public RolesResponse()
+        {
+            Results = new List<Role>{};
+        }
+
+        ///<summary>
+        ///The list of roles
+        ///</summary>
+        [ApiMember(DataType="Array<Role>", Description="The list of roles")]
+        public List<Role> Results { get; set; }
     }
 
     public class StandardDatum
@@ -2860,6 +3324,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.4.79.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.1.91.0");
     }
 }
