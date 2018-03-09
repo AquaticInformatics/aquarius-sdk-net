@@ -1,5 +1,5 @@
 /* Options:
-Date: 2017-12-12 16:27:56
+Date: 2018-03-09 13:02:20
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver12/AQUARIUS/Acquisition/v2
@@ -41,34 +41,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         Pending,
         Completed,
         Failed,
-    }
-
-    public class TimeSeriesAppendStatus
-    {
-        ///<summary>
-        ///Internal ID of the time series
-        ///</summary>
-        [ApiMember(Description="Internal ID of the time series")]
-        public long TimeSeriesId { get; set; }
-
-        public AppendStatusCode AppendStatus { get; set; }
-        ///<summary>
-        ///When AppendStatus=Completed: Version of the time series containing the appended points
-        ///</summary>
-        [ApiMember(Description="When AppendStatus=Completed: Version of the time series containing the appended points")]
-        public long AppendedVersion { get; set; }
-
-        ///<summary>
-        ///When AppendStatus=Completed: Number of points successfully appended
-        ///</summary>
-        [ApiMember(Description="When AppendStatus=Completed: Number of points successfully appended")]
-        public int NumberOfPointsAppended { get; set; }
-
-        ///<summary>
-        ///When AppendStatus=Completed: Number of points successfully deleted
-        ///</summary>
-        [ApiMember(Description="When AppendStatus=Completed: Number of points successfully deleted")]
-        public int NumberOfPointsDeleted { get; set; }
     }
 
     [Route("/attachments/reports/{ReportUniqueId}", "DELETE")]
@@ -226,7 +198,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Time range to delete before appending points
         ///</summary>
-        [ApiMember(DataType="Interval", Description="Time range to delete before appending points")]
+        [ApiMember(DataType="Interval", Description="Time range to delete before appending points", IsRequired=true)]
         public Interval TimeRange { get; set; }
     }
 
@@ -337,6 +309,34 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public FieldDataPlugin HandledByPlugin { get; set; }
     }
 
+    public class TimeSeriesAppendStatus
+    {
+        ///<summary>
+        ///Unique ID of the time series
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the time series")]
+        public Guid TimeSeriesUniqueId { get; set; }
+
+        public AppendStatusCode AppendStatus { get; set; }
+        ///<summary>
+        ///When AppendStatus=Completed: Version of the time series containing the appended points
+        ///</summary>
+        [ApiMember(DataType="Int64", Description="When AppendStatus=Completed: Version of the time series containing the appended points")]
+        public long AppendedVersion { get; set; }
+
+        ///<summary>
+        ///When AppendStatus=Completed: Number of points successfully appended
+        ///</summary>
+        [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully appended")]
+        public int NumberOfPointsAppended { get; set; }
+
+        ///<summary>
+        ///When AppendStatus=Completed: Number of points successfully deleted
+        ///</summary>
+        [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully deleted")]
+        public int NumberOfPointsDeleted { get; set; }
+    }
+
     [Route("/session", "DELETE")]
     public class DeleteSession
         : IReturnVoid
@@ -398,6 +398,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("17.4.79.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.1.91.0");
     }
 }

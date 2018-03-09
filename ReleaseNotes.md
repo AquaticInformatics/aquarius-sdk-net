@@ -4,11 +4,16 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 18.3.1
+- Updated the service models for the AQUARIUS Time-Series 2018.1 release.
+- Updated the service models for the AQUARIUS Samples 2018.03 release.
+- Note that some of the previous Samples request DTOs have been marked as `[Obsolete]` and will be removed in a future release of the SDK. Please update your code as needed.
+- 
 ### 18.2.1
-- Added support for the AQUARIUS Samples 2018.02 release
+- Updated the service models for the AQUARIUS Samples 2018.02 release.
 
 ### 18.1.1
-- Added support for the AQUARIUS Samples 2018.01 release
+- Updated the service models for the AQUARIUS Samples 2018.01 release.
 
 ### 17.4.18
 - Added unit tests for both .NET 45 and .NET Core 2.0
@@ -17,7 +22,7 @@ Not all changes will be listed, but you can always [compare by version tags](htt
 - Fixed a bug in Samples GET request URLs when an empty collection property was serialized.
 
 ### 17.4.14
-- Updated the service models for the 2017.14 release of AQUARIUS Samples
+- Updated the service models for the AQUARIUS Samples 2017.14 release
 - Added connection pooling support for AQTS connections, to minimize version-probes and authentication requests. When multiple threads are independently attempting to make authenticated requests, all threads will end up sharing the same authentication session. The last thread to exit will issue the `DELETE /session` requests to clean up server-side resources. This change is hidden behind the `AquariusClient.CreateConnectedClient()` factory method, so it should be transparent to consumers of the platform SDK.
 
 ### 17.4.13 / 17.4.12 / 17.4.11
