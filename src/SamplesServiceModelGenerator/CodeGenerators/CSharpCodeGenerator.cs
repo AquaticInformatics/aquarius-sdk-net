@@ -40,7 +40,14 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
         protected override string AllRequestDtos()
         {
-            return string.Join("\r\n", Api.Paths.Select(CreateRequestDtos));
+            var code = string.Join("\r\n", Api.Paths.Select(CreateRequestDtos));
+
+            if (ObsoleteDtos.Any())
+            {
+                code += "\r\n" + string.Join("\r\n", ObsoleteDtos.Select(p => $"    [Obsolete(\"Prefer the {p.Value} class instead\")] public class {p.Key} : {p.Value} {{}}"));
+            }
+
+            return code;
         }
 
         protected override string AllPocos()

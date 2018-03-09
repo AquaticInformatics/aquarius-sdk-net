@@ -23,6 +23,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
         public string[] UsingDirectives { get; set; }
         public Dictionary<string, string> Aliases { get; set; }
         public Dictionary<string, string> RequestDtoFixups { get; set; }
+        public Dictionary<string, string> ObsoleteDtos { get; set; }
 
         protected abstract string BeginFile();
         protected abstract string EndFile();
@@ -55,8 +56,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
         {
             var typeName = TypeMapper.Map(item);
 
-            string aliasedType;
-            return Aliases.TryGetValue(typeName, out aliasedType)
+            return Aliases.TryGetValue(typeName, out var aliasedType)
                 ? aliasedType
                 : typeName;
         }

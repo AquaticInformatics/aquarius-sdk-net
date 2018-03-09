@@ -84,8 +84,18 @@ namespace SamplesServiceModelGenerator
 
         private Dictionary<TargetLanguage, string> _usingDirectives = new Dictionary<TargetLanguage, string>
         {
-            {TargetLanguage.CSharp, "System.Collections.Generic;ServiceStack;NodaTime;Aquarius.TimeSeries.Client"},
-            {TargetLanguage.Java, "java.time.*;java.util.*;com.google.gson.annotations.SerializedName;net.servicestack.client.*;com.aquaticinformatics.aquarius.sdk.AquariusServerVersion"},
+            {TargetLanguage.CSharp, string.Join(";",
+                "System",
+                "System.Collections.Generic",
+                "ServiceStack",
+                "NodaTime",
+                "Aquarius.TimeSeries.Client")},
+            {TargetLanguage.Java, string.Join(";",
+                "java.time.*",
+                "java.util.*",
+                "com.google.gson.annotations.SerializedName",
+                "net.servicestack.client.*",
+                "com.aquaticinformatics.aquarius.sdk.AquariusServerVersion")},
         };
 
         private Dictionary<TargetLanguage, string> _filename = new Dictionary<TargetLanguage, string>
@@ -96,29 +106,106 @@ namespace SamplesServiceModelGenerator
 
         private Dictionary<TargetLanguage, string> _aliases = new Dictionary<TargetLanguage, string>
         {
-            {TargetLanguage.CSharp, "DomainDateTime=Instant?;DomainDateTimeRange=TimeRange"},
-            {TargetLanguage.Java, "DomainDateTime=Instant;DomainDateTimeRange=Interval"},
+            {TargetLanguage.CSharp, string.Join(";",
+                "DomainDateTime=Instant?",
+                "DomainDateTimeRange=TimeRange")},
+            {TargetLanguage.Java, string.Join(";",
+                "DomainDateTime=Instant",
+                "DomainDateTimeRange=Interval")},
         };
 
-        private string _fixups = "GET:/v1/samplinglocations/{id}/attachments=GetSamplingLocationAttachments;"
-                                 + "GET:/v1/fieldvisits/{id}/attachments=GetFieldVisitAttachments;"
-                                 + "GET:/v1/unitgroupwithunits=GetUnitGroupsWithUnits;"
-                                 + "GET:/v1/unitgroupwithunits/{id}=GetUnitGroupWithUnits;"
-                                 + "PUT:/v1/unitgroupwithunits/{id}=PutSparseUnitGroupWithUnits;"
-                                 + "DELETE:/v1/unitgroupwithunits/{id}=DeleteUnitGroupWithUnitsById;"
-                                 + "GET:/v1/units=GetUnits;"
-                                 + "POST:/v1/fieldvisits/{id}/activityfromplannedactivity=PostActivityFromPlannedActivity;"
-                                 + "POST:/v1/fieldvisits/{id}/activitywithtemplate=PostActivityWithTemplate;"
-                                 ;
+        private string _enums = string.Join(";",
+            "ActivityType=type.SAMPLE_INTEGRATED_VERTICAL_PROFILE,SAMPLE_ROUTINE,QC_SAMPLE_REPLICATE,QC_TRIP_BLANK,FIELD_SURVEY,NONE",
+            "AnalyticalGroupType=type.KNOWN,UNKNOWN",
+            "ImportItemStatusType=status.ERROR,NEW,UPDATE,EXPECTED,SKIPPED",
+            "SpecimenViewStatusType=status.REQUESTED,RECEIVED_SOME,RECEIVED_ALL");
 
-        private string _enums = "ActivityType=type.SAMPLE_INTEGRATED_VERTICAL_PROFILE,SAMPLE_ROUTINE,QC_SAMPLE_REPLICATE,QC_TRIP_BLANK,FIELD_SURVEY,NONE;"
-                                + "AnalyticalGroupType=type.KNOWN,UNKNOWN;"
-                                + "ImportItemStatusType=status.ERROR,NEW,UPDATE,EXPECTED,SKIPPED;"
-                                + "SpecimenViewStatusType=status.REQUESTED,RECEIVED_SOME,RECEIVED_ALL;"
-                                ;
+        private string _fixups = string.Join(";",
+            // These camelcase fixups are in anticipation of the 2018.4 deployment, after which no more fixups should be needed.
+            "POST:/v1/fieldvisits/{id}/activityfromplannedactivity=PostFieldVisitActivityFromPlannedActivity",
+            "POST:/v1/fieldvisits/{id}/activitywithtemplate=PostFieldVisitActivityWithTemplate",
+            "GET:/v1/samplinglocations/{id}/canedit=GetSamplingLocationCanEdit",
+            "POST:/v1/services/import/samplinglocations/dryrun=PostImportSamplingLocationsDryRun",
+            "POST:/v1/services/import/observedproperties/dryrun=PostImportObservedPropertiesDryRun",
+            "POST:/v1/services/import/labanalysismethods/dryrun=PostImportAnalysisMethodsDryRun",
+            "POST:/v1/services/import/observations/dryrun=PostImportObservationsDryRun");
+
+        private Dictionary<TargetLanguage, string> _obsoleteDtos = new Dictionary<TargetLanguage, string>
+        {
+            {
+                TargetLanguage.CSharp, string.Join(";",
+                    // These are a result of the manual fixups above.
+                    "PostActivityFromPlannedActivity:PostFieldVisitActivityFromPlannedActivity",
+                    "PostActivityWithTemplate:PostFieldVisitActivityWithTemplate",
+                    "GetCanUserEditSamplingLocationData:GetSamplingLocationCanEdit",
+                    "PostImportSamplingLocationsDryrun:PostImportSamplingLocationsDryRun",
+                    "PostImportObservedPropertiesDryrun:PostImportObservedPropertiesDryRun",
+                    "PostImportAnalysisMethodsDryrun:PostImportAnalysisMethodsDryRun",
+                    "PostImportObservationsDryrun:PostImportObservationsDryRun",
+                    // These obsolete DTOs come from the cleanup contained within the 2018.03 deployment
+                    "PutSparseAccessGroup:PutAccessGroup",
+                    "DeleteAccessGroupById:DeleteAccessGroup",
+                    "PutSparseActivity:PutActivity",
+                    "DeleteActivityById:DeleteActivity",
+                    "PostReplicateActivity:PostActivityReplicate",
+                    "PutSparseActivityTemplate:PutActivityTemplate",
+                    "DeleteActivityTemplateById:DeleteActivityTemplate",
+                    "PutSparseAnalyticalGroup:PutAnalyticalGroup",
+                    "DeleteAnalyticalGroupById:DeleteAnalyticalGroup",
+                    "GetAttachmentContent:GetAttachmentContents",
+                    "PutSparseCollectionMethod:PutCollectionMethod",
+                    "DeleteCollectionMethodById:DeleteCollectionMethod",
+                    "PutSparseFieldTrip:PutFieldTrip",
+                    "DeleteFieldTripById:DeleteFieldTrip",
+                    "PutSparseFieldVisit:PutFieldVisit",
+                    "DeleteFieldVisitById:DeleteFieldVisit",
+                    "PutSparseLabAnalysisMethod:PutLabAnalysisMethod",
+                    "DeleteLabAnalysisMethodById:DeleteLabAnalysisMethod",
+                    "PutSparseLaboratory:PutLaboratory",
+                    "DeleteLaboratoryById:DeleteLaboratory",
+                    "PutSparseLabReport:PutLabReport",
+                    "DeleteLabReportById:DeleteLabReport",
+                    "PutSparseObservation:PutObservation",
+                    "DeleteObservationById:DeleteObservation",
+                    "PutSparseObservedProperty:PutObservedProperty",
+                    "DeleteObservedPropertyById:DeleteObservedProperty",
+                    "PutSparseProject:PutProject",
+                    "DeleteProjectById:DeleteProject",
+                    "PutSparseSamplingLocationGroup:PutSamplingLocationGroup",
+                    "DeleteSamplingLocationGroupById:DeleteSamplingLocationGroup",
+                    "PutSparseSamplingLocation:PutSamplingLocation",
+                    "DeleteSamplingLocationById:DeleteSamplingLocation",
+                    "GetSummary:GetSamplingLocationSummary",
+                    "PutSparseShippingContainer:PutShippingContainer",
+                    "DeleteShippingContainerById:DeleteShippingContainer",
+                    "PutSparseSpecimen:PutSpecimen",
+                    "DeleteSpecimenById:DeleteSpecimen",
+                    "PutSparseSpreadsheetTemplate:PutSpreadsheetTemplate",
+                    "DeleteSpreadsheetTemplateById:DeleteSpreadsheetTemplate",
+                    "PutSparseStandard:PutStandard",
+                    "PutSparseTag:PutTag",
+                    "DeleteTagById:DeleteTag",
+                    "PutSparseTaxon:PutTaxon",
+                    "DeleteTaxonById:DeleteTaxon",
+                    "PutSparseUnitGroup:PutUnitGroup",
+                    "DeleteUnitGroupById:DeleteUnitGroup",
+                    "GetUnitGroupsWithUnits:GetUnitGroupWithUnit",
+                    "PutSparseUnitGroupWithUnits:PutUnitGroupWithUnit",
+                    "DeleteUnitGroupWithUnitsById:DeleteUnitGroupWithUnit",
+                    "PutSparseUnit:PutUnit",
+                    "DeleteUnitById:DeleteUnit",
+                    "Put:PutUser",
+                    "DeleteUserById:DeleteUser")
+            },
+            {TargetLanguage.Java, "" },
+        };
 
         private void ParseArgs(string[] args)
         {
+            var resolvedArgs = args
+                .SelectMany(ResolveOptionsFromFile)
+                .ToArray();
+
             var options = new[]
             {
                 new Option {Key = "Language", Setter = value => _targetLanguage = (TargetLanguage)System.Enum.Parse(typeof(TargetLanguage), value, true), Getter = () => _targetLanguage.ToString(), Description = $"Language for the generated service model code. One of: {string.Join(", ", System.Enum.GetNames(typeof(TargetLanguage)))}. This option should be set before setting any -Namespace, -UsingDirectives, or -Aliases options."},
@@ -127,17 +214,26 @@ namespace SamplesServiceModelGenerator
                 new Option {Key = "Namespace", Setter = value => _namespace[_targetLanguage] = value, Getter = () => _namespace[_targetLanguage], Description = "Namespace for the generated service model"},
                 new Option {Key = "UsingDirectives", Setter = value => _usingDirectives[_targetLanguage] = value, Getter = () => _usingDirectives[_targetLanguage], Description = "using directives (semicolon-separated) for the generated sevice model"},
                 new Option {Key = "Aliases", Setter = value => _aliases[_targetLanguage] = value, Getter = () => _aliases[_targetLanguage], Description = "Type aliases (semicolon-separated) in SwaggerType=AliasType format"},
+                new Option {Key = "Obsolete", Setter = value => _obsoleteDtos[_targetLanguage] = value, Getter = () => _obsoleteDtos[_targetLanguage], Description = "Obsolete DTOs (semicolon-separated) in ObsoleteDtoName=PreferredDtoName format"},
                 new Option {Key = "Fixups", Setter = value => _fixups = value, Getter = () => _fixups, Description = "Fixups (semicolon-separated) in Verb:Route=RequestDtoName format"},
                 new Option {Key = "Enums", Setter = value => _enums = value, Getter = () => _enums, Description = "Enum overrides (semicolon-separated) in EnumTypeName=fieldName.Value1,...,ValueN format"},
             };
 
             _usageMessage =
-                $"Clones an AQTS configuration (using TimeSeriesSupport) to an NG system (using public APIs)"
-                + $"\n\nusage: {Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location)} [-option=value] ... [commands ...]"
-                + $"\n\nSupported -option=value settings (/option=value works too):\n\n  -{string.Join("\n  -", options.Select(o => o.UsageText()))}"
+                $"Generates the Samples SDK service model DTOs from a Swagger 2.0 JSON spec."
+                + $"\n"
+                + $"\nusage: {Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location)} [-option=value] [@optionsFile] ... [commands ...]"
+                + $"\n"
+                + $"\nSupported -option=value settings (/option=value works too):\n\n  -{string.Join("\n  -", options.Select(o => o.UsageText()))}"
+                + $"\n"
+                + $"\nUse the @optionsFile syntax to read more options from a file."
+                + $"\n"
+                + $"\n  Each line in the file is treated as a command line option."
+                + $"\n  Blank lines and leading/trailing whitespace is ignored."
+                + $"\n  Comment lines begin with a # or // marker."
                 ;
 
-            foreach (var arg in args)
+            foreach (var arg in resolvedArgs)
             {
                 var match = ArgRegex.Match(arg);
 
@@ -159,6 +255,22 @@ namespace SamplesServiceModelGenerator
 
                 option.Setter(value);
             }
+        }
+
+        private static IEnumerable<string> ResolveOptionsFromFile(string arg)
+        {
+            if (!arg.StartsWith("@"))
+                return new[] { arg };
+
+            var path = arg.Substring(1);
+
+            if (!File.Exists(path))
+                throw new ExpectedException($"Options file '{path}' does not exist.");
+
+            return File.ReadAllLines(path)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(s => s.Trim())
+                .Where(s => !s.StartsWith("#") && !s.StartsWith("//"));
         }
 
         private void Run()
@@ -200,6 +312,7 @@ namespace SamplesServiceModelGenerator
         private static readonly Regex AliasRegex = new Regex(@"^\s*(?<swaggerType>[^= ]+)\s*=\s*(?<aliasType>[^ ]+)\s*$", RegexOptions.Compiled);
         private static readonly Regex FixupRegex = new Regex(@"^\s*(?<methodRoute>[^= ]+)\s*=\s*(?<requestDtoName>[^ ]+)\s*$", RegexOptions.Compiled);
         private static readonly Regex EnumRegex = new Regex(@"^\s*(?<enumName>[^= ]+)\s*=\s*(?<fieldName>[^. ]+)\s*\.\s*(?<valueList>[^ ]+)\s*$", RegexOptions.Compiled);
+        private static readonly Regex ObsoleteRegex = new Regex(@"^\s*(?<obsoleteDtoName>[^: ]+)\s*:\s*(?<preferredDtoName>[^ ]+)\s*$", RegexOptions.Compiled);
 
         private string LoadStringFromUrl(string url)
         {
@@ -237,6 +350,12 @@ namespace SamplesServiceModelGenerator
                 .Select(s => FixupRegex.Match(s))
                 .Where(m => m.Success)
                 .ToDictionary(m => m.Groups["methodRoute"].Value.Trim(), m => m.Groups["requestDtoName"].Value.Trim());
+
+            generator.ObsoleteDtos = _obsoleteDtos[_targetLanguage]
+                .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => ObsoleteRegex.Match(s))
+                    .Where(m => m.Success)
+                    .ToDictionary(m => m.Groups["obsoleteDtoName"].Value.Trim(), m => m.Groups["preferredDtoName"].Value.Trim());
 
             return generator;
         }
