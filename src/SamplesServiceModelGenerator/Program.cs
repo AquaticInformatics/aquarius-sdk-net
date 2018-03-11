@@ -94,6 +94,7 @@ namespace SamplesServiceModelGenerator
                 "java.time.*",
                 "java.util.*",
                 "com.google.gson.annotations.SerializedName",
+                "com.google.gson.reflect.TypeToken",
                 "net.servicestack.client.*",
                 "com.aquaticinformatics.aquarius.sdk.AquariusServerVersion")},
         };

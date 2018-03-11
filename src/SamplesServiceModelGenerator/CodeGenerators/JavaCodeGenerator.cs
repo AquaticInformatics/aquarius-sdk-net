@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using SamplesServiceModelGenerator.Swagger;
 using ServiceStack;
 using Enum = SamplesServiceModelGenerator.Swagger.Enum;
@@ -169,9 +170,18 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             if (string.IsNullOrEmpty(responseBaseType))
                 return string.Empty;
 
-            return $"        private static Object responseType = {responseBaseType}.class;\r\n"
+            return $"        private static Object responseType = {GetResponseTypeExpression(responseBaseType)};\r\n"
                    + "        public Object getResponseType() {{ return responseType; }}\r\n";
         }
+
+        private static string GetResponseTypeExpression(string responseBaseType)
+        {
+            return GenericRegex.IsMatch(responseBaseType)
+                ? $"new TypeToken<{responseBaseType}>(){{}}" // Thanks Java type-erasure!
+                : $"{responseBaseType}.class";
+        }
+
+        private static readonly Regex GenericRegex = new Regex(@"^\w+<\w+>$");
 
         private static string GetResponseDtoType(Operation operation)
         {
