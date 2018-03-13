@@ -153,8 +153,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
         private string CreateDtoProperty(string propertyName, string propertyTypeName)
         {
             // TODO: Add @ApiMember annotations to show parameter.Description if not empty
-            // TODO: Add @SerializeName
-            return $"@SerializedName(\"{propertyName.ToCamelCase()}\") public {propertyTypeName} {propertyName} = null;";
+            return $"public {propertyTypeName} {propertyName} = null;";
         }
 
         private string CreateDtoPropertyAccessors(string className, string propertyName, string propertyTypeName)
