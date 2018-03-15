@@ -4,11 +4,14 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 18.3.2
+- Improved the Samples file upload API to support extra multi-part content
+
 ### 18.3.1
 - Updated the service models for the AQUARIUS Time-Series 2018.1 release.
 - Updated the service models for the AQUARIUS Samples 2018.03 release.
 - Note that some of the previous Samples request DTOs have been marked as `[Obsolete]` and will be removed in a future release of the SDK. Please update your code as needed.
-- 
+
 ### 18.2.1
 - Updated the service models for the AQUARIUS Samples 2018.02 release.
 

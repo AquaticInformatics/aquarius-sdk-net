@@ -17,9 +17,7 @@ namespace Aquarius.Samples.Client
             var authHeader = string.Empty;
             var userAgent = string.Empty;
 
-            var jsonServiceClient = client as JsonServiceClient;
-
-            if (jsonServiceClient != null)
+            if (client is JsonServiceClient jsonServiceClient)
             {
                 baseUri = jsonServiceClient.BaseUri;
                 authHeader = jsonServiceClient.Headers[SamplesClient.AuthorizationHeaderKey];
@@ -40,11 +38,20 @@ namespace Aquarius.Samples.Client
             string relativeOrAbsoluteUri,
             Stream contentToUpload,
             string uploadedFileName,
-            IReturn<TResponse> requestDto)
+            IReturn<TResponse> requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null)
         {
+            var multipartContent = CreateMultipartContent(relativeOrAbsoluteUri, contentToUpload, uploadedFileName);
+
+            if (extraContent != null && extraContentName != null)
+            {
+                AddFormDataContent(multipartContent, extraContent, extraContentName);
+            }
+
             return _restClient.Post<TResponse>(
                 ComposePostUrlWithQueryParams(relativeOrAbsoluteUri, requestDto),
-                CreateMultipartContent(relativeOrAbsoluteUri, contentToUpload, uploadedFileName));
+                multipartContent);
         }
 
         private string ComposePostUrlWithQueryParams<TResponse>(
