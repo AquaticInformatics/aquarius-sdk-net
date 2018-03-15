@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 using Aquarius.TimeSeries.Client;
 using ServiceStack;
 using ServiceStack.Text;
@@ -23,8 +24,17 @@ namespace Aquarius.Samples.Client
         TResponse SparsePut<TResponse>(IReturn<TResponse> requestDto);
         void SparsePut(IReturnVoid requestDto);
 
-        TResponse PostFileWithRequest<TResponse>(string path, IReturn<TResponse> requestDto);
-        TResponse PostFileWithRequest<TResponse>(Stream contentToUpload, string uploadedFileName, IReturn<TResponse> requestDto);
+        TResponse PostFileWithRequest<TResponse>(
+            string path,
+            IReturn<TResponse> requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null);
+        TResponse PostFileWithRequest<TResponse>(
+            Stream contentToUpload,
+            string uploadedFileName,
+            IReturn<TResponse> requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null);
 
         LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto)
             where TRequest : IPaginatedRequest, IReturn<TResponse>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client;
@@ -176,28 +177,41 @@ namespace Aquarius.Samples.Client
             InvokeWebServiceMethod(() => _client.Put(requestDto), WithSparsePutScope);
         }
 
-        public TResponse PostFileWithRequest<TResponse>(string path, IReturn<TResponse> requestDto)
+        public TResponse PostFileWithRequest<TResponse>(
+            string path,
+            IReturn<TResponse> requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null)
         {
             var fileToUpload = new FileInfo(path);
 
             using (var stream = fileToUpload.OpenRead())
             {
-                return PostFileWithRequest(stream, fileToUpload.Name, requestDto);
+                return PostFileWithRequest(stream, fileToUpload.Name, requestDto, extraContent, extraContentName);
             }
         }
 
-        public TResponse PostFileWithRequest<TResponse>(Stream contentToUpload, string uploadedFileName, IReturn<TResponse> requestDto)
+        public TResponse PostFileWithRequest<TResponse>(
+            Stream contentToUpload,
+            string uploadedFileName,
+            IReturn<TResponse> requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null)
         {
             var fileUploader = FileUploader.Create(_client);
 
-            return InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(GetPostUrl(requestDto), contentToUpload, uploadedFileName, requestDto));
+            return InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(
+                GetPostUrl(requestDto),
+                contentToUpload,
+                uploadedFileName,
+                requestDto,
+                extraContent,
+                extraContentName));
         }
 
         private string GetPostUrl<TResponse>(IReturn<TResponse> requestDto)
         {
-            var jsonServiceClient = _client as JsonServiceClient;
-
-            if (jsonServiceClient != null)
+            if (_client is JsonServiceClient jsonServiceClient)
                 return jsonServiceClient.ResolveTypedUrl(HttpMethods.Post, requestDto);
 
             return requestDto.ToPostUrl();
