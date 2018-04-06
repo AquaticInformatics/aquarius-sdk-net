@@ -16,6 +16,12 @@ View the [Release Notes](ReleaseNotes.md) here.
 
 [![Download on NuGet](images/installfromnuget.png)](https://www.nuget.org/packages/Aquarius.SDK/)
 
+## Building from source
+
+Requires Visual Studio 2017+ (Community Edition is fine.)
+
+See the [Contributing](CONTRIBUTING.md) page for details.
+
 ## Getting Help
 
 See the [Wiki](https://github.com/AquaticInformatics/aquarius-sdk-net/wiki) for basic SDK concepts and examples.
