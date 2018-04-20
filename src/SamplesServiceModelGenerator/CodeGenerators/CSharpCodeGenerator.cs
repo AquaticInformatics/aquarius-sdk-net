@@ -44,7 +44,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
             if (ObsoleteDtos.Any())
             {
-                code += "\r\n" + string.Join("\r\n", ObsoleteDtos.Select(p => $"    [Obsolete(\"Prefer the {p.Value} class instead\")] public class {p.Key} : {p.Value} {{}}"));
+                code += "\r\n" + string.Join("\r\n", ObsoleteDtos.Select(p => $"    [Obsolete(\"Prefer the {p.Value} class instead\")] public class {p.Key} : {p.Value} {{}}")) + "\r\n";
             }
 
             return code;

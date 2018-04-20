@@ -142,6 +142,8 @@ namespace SamplesServiceModelGenerator
                     "PostImportObservedPropertiesDryrun:PostImportObservedPropertiesDryRun",
                     "PostImportAnalysisMethodsDryrun:PostImportAnalysisMethodsDryRun",
                     "PostImportObservationsDryrun:PostImportObservationsDryRun",
+                    // These obsolete DTOs come from the 2018.05 deployment
+                    "PutAddOrUpdateBioIndex:PutAddOrUpdateIndex",
                     // These obsolete DTOs come from the cleanup contained within the 2018.03 deployment
                     "PutSparseAccessGroup:PutAccessGroup",
                     "DeleteAccessGroupById:DeleteAccessGroup",
