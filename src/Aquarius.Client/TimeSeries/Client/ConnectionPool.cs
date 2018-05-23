@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 
 namespace Aquarius.TimeSeries.Client
@@ -12,9 +12,7 @@ namespace Aquarius.TimeSeries.Client
         {
         }
 
-        private readonly object _syncLock = new object();
-
-        private readonly Dictionary<string, Connection> _connections = new Dictionary<string, Connection>();
+        private readonly ConcurrentDictionary<string, Connection> _connections = new ConcurrentDictionary<string, Connection>();
 
         public Connection GetConnection(
             string hostname,
@@ -23,22 +21,14 @@ namespace Aquarius.TimeSeries.Client
             Func<string, string, string> sessionTokenCreator,
             Action sessionDeleteAction)
         {
-            var connectionKey = CreateConnectionKey(hostname, username, password);
-
-            lock (_syncLock)
-            {
-                if (_connections.TryGetValue(connectionKey, out var connection))
+            return _connections.AddOrUpdate(
+                CreateConnectionKey(hostname, username, password),
+                key => new Connection(username, password, sessionTokenCreator, sessionDeleteAction, Remove),
+                (key, connection) =>
                 {
                     connection.IncrementConnectionCount();
                     return connection;
-                }
-
-                connection = new Connection(username, password, sessionTokenCreator, sessionDeleteAction, Remove);
-
-                _connections.Add(connectionKey, connection);
-
-                return connection;
-            }
+                });
         }
 
         private static string CreateConnectionKey(string hostname, string username, string password)
@@ -48,15 +38,11 @@ namespace Aquarius.TimeSeries.Client
 
         public void Reset()
         {
-            lock (_syncLock)
-            {
-                _connections.Clear();
-            }
+            _connections.Clear();
         }
 
         public void Cleanup()
         {
-            // ReSharper disable once InconsistentlySynchronizedField
             foreach (var connection in _connections.Values)
             {
                 connection.Close();
@@ -65,14 +51,11 @@ namespace Aquarius.TimeSeries.Client
 
         private void Remove(Connection connection)
         {
-            lock (_syncLock)
-            {
-                var itemToRemove = _connections.FirstOrDefault(kvp => kvp.Value == connection);
+            var itemToRemove = _connections.FirstOrDefault(kvp => kvp.Value == connection);
 
-                if (itemToRemove.Value != null)
-                {
-                    _connections.Remove(itemToRemove.Key);
-                }
+            if (itemToRemove.Value != null)
+            {
+                _connections.TryRemove(itemToRemove.Key, out var _);
             }
         }
     }
