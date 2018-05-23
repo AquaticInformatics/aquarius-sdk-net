@@ -4,6 +4,11 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 18.5.2
+- Fixed a potential deadlock in the connection-pooling logic for AQTS connections.
+
+This deadlock could occur when a heavily-threaded process was making many parallel connections to the AQTS app server. The bug was introduced in SDK v17.4.14, released on 2017-Dec-20, so all consumers of the .NET SDK are encouraged to upgrade to the latest SDK version to avoid this deadlock.
+
 ### 18.5.1
 - Updated the service models for the AQUARIUS Samples 2018.05 release.
 
