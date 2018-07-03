@@ -1,5 +1,5 @@
 /* Options:
-Date: 2018-03-09 13:01:54
+Date: 2018-06-27 13:56:30
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver12/AQUARIUS/Provisioning/v1
@@ -548,6 +548,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid LocationFolderUniqueId { get; set; }
     }
 
+    [Route("/locations/{LocationUniqueId}/tags", "PUT")]
+    public class PutLocationTags
+        : IReturn<Location>
+    {
+        public PutLocationTags()
+        {
+            TagIdentifiers = new List<string>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique Identifiers of all tags to be assigned to the location; an empty list means the location will have no tags assigned to it
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Unique Identifiers of all tags to be assigned to the location; an empty list means the location will have no tags assigned to it", IsRequired=true)]
+        public List<string> TagIdentifiers { get; set; }
+    }
+
     [Route("/locationtypes/{UniqueId}", "PUT")]
     public class PutLocationType
         : LocationTypeBase, IReturn<LocationType>
@@ -873,6 +895,162 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
     }
 
+    [Route("/qualifiers/{UniqueId}", "DELETE")]
+    public class DeleteQualifier
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the qualifier 
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the qualifier ", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/qualifiergroups/{UniqueId}", "DELETE")]
+    public class DeleteQualifierGroup
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the qualifier group
+        ///</summary>
+        [ApiMember(Description="Unique ID of the qualifier group", IsRequired=true, ParameterType="path")]
+        public string UniqueId { get; set; }
+    }
+
+    [Route("/qualifiers/{UniqueId}", "GET")]
+    public class GetQualifier
+        : IReturn<QualifierResponse>
+    {
+        ///<summary>
+        ///Unique ID of the qualifier 
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the qualifier ", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/qualifiergroups", "GET")]
+    public class GetQualifierGroups
+        : IReturn<QualifierGroupsResponse>
+    {
+    }
+
+    [Route("/qualifiers", "GET")]
+    public class GetQualifiers
+        : IReturn<QualifiersResponse>
+    {
+    }
+
+    [Route("/qualifiers", "POST")]
+    public class PostQualifier
+        : QualifierBase, IReturn<QualifierResponse>
+    {
+    }
+
+    [Route("/qualifiergroups", "POST")]
+    public class PostQualifierGroup
+        : IReturn<QualifierGroupResponse>
+    {
+        ///<summary>
+        ///Qualifier group identifier
+        ///</summary>
+        [ApiMember(Description="Qualifier group identifier", IsRequired=true)]
+        public string Identifier { get; set; }
+    }
+
+    [Route("/qualifiers/{UniqueId}", "PUT")]
+    public class PutQualifier
+        : IReturn<QualifierResponse>
+    {
+        public PutQualifier()
+        {
+            GroupIdentifiers = new List<string>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the qualifier 
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the qualifier ", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Public identifier
+        ///</summary>
+        [ApiMember(Description="Public identifier", IsRequired=true)]
+        public string PublicIdentifier { get; set; }
+
+        ///<summary>
+        ///Display name
+        ///</summary>
+        [ApiMember(Description="Display name")]
+        public string DisplayName { get; set; }
+
+        ///<summary>
+        ///Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group", IsRequired=true)]
+        public List<string> GroupIdentifiers { get; set; }
+    }
+
+    [Route("/qualifiergroups/{UniqueId}", "PUT")]
+    public class PutQualifierGroup
+        : IReturn<QualifierGroupResponse>
+    {
+        public PutQualifierGroup()
+        {
+            QualifierCodeList = new List<string>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the qualifier group
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the qualifier group", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier", IsRequired=true)]
+        public string Identifier { get; set; }
+
+        ///<summary>
+        ///Qualifier codes contained in this group 
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Qualifier codes contained in this group ", IsRequired=true)]
+        public List<string> QualifierCodeList { get; set; }
+    }
+
+    public class QualifierBase
+    {
+        public QualifierBase()
+        {
+            GroupIdentifiers = new List<string>{};
+        }
+
+        ///<summary>
+        ///Public identifier
+        ///</summary>
+        [ApiMember(Description="Public identifier", IsRequired=true)]
+        public string PublicIdentifier { get; set; }
+
+        ///<summary>
+        ///Qualifier code
+        ///</summary>
+        [ApiMember(Description="Qualifier code", IsRequired=true)]
+        public string QualifierCode { get; set; }
+
+        ///<summary>
+        ///Display name
+        ///</summary>
+        [ApiMember(Description="Display name")]
+        public string DisplayName { get; set; }
+
+        ///<summary>
+        ///Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group")]
+        public List<string> GroupIdentifiers { get; set; }
+    }
+
     [Route("/grades/{GradeCode}", "DELETE")]
     public class DeleteQualityCode
         : IReturnVoid
@@ -1191,6 +1369,51 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="StandardIdentifier", IsRequired=true)]
         public string StandardIdentifier { get; set; }
+    }
+
+    [Route("/tags/{Identifier}", "DELETE")]
+    public class DeleteTag
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Identifier of the tag
+        ///</summary>
+        [ApiMember(Description="Identifier of the tag", IsRequired=true, ParameterType="path")]
+        public string Identifier { get; set; }
+    }
+
+    [Route("/tags", "GET")]
+    public class GetTags
+        : IReturn<TagsResponse>
+    {
+    }
+
+    [Route("/tags", "POST")]
+    public class PostTag
+        : IReturn<Tag>
+    {
+        ///<summary>
+        ///Identifier of the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'
+        ///</summary>
+        [ApiMember(Description="Identifier of the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'", IsRequired=true)]
+        public string Identifier { get; set; }
+    }
+
+    [Route("/tags/{Identifier}", "PUT")]
+    public class PutTag
+        : IReturn<Tag>
+    {
+        ///<summary>
+        ///Original identifier of the tag
+        ///</summary>
+        [ApiMember(Description="Original identifier of the tag", IsRequired=true, ParameterType="path")]
+        public string Identifier { get; set; }
+
+        ///<summary>
+        ///Updated identifier for the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'
+        ///</summary>
+        [ApiMember(Description="Updated identifier for the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'", IsRequired=true)]
+        public string UpdatedIdentifier { get; set; }
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}", "DELETE")]
@@ -2111,6 +2334,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     public class Location
     {
+        public Location()
+        {
+            Tags = new List<Tag>{};
+        }
+
         ///<summary>
         ///Unique ID of the location
         ///</summary>
@@ -2188,6 +2416,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Description")]
         public string Description { get; set; }
+
+        ///<summary>
+        ///Tags applied to this location
+        ///</summary>
+        [ApiMember(DataType="Array<Tag>", Description="Tags applied to this location")]
+        public List<Tag> Tags { get; set; }
 
         ///<summary>
         ///Extended attribute values
@@ -2665,6 +2899,76 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<PopulatedUnitGroup> Results { get; set; }
     }
 
+    public class QualifierGroupResponse
+    {
+        public QualifierGroupResponse()
+        {
+            QualifierCodeList = new List<string>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the qualifier group
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the qualifier group")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier")]
+        public string Identifier { get; set; }
+
+        ///<summary>
+        ///Qualifier codes in group
+        ///</summary>
+        [ApiMember(DataType="string", Description="Qualifier codes in group")]
+        public List<string> QualifierCodeList { get; set; }
+    }
+
+    public class QualifierGroupsResponse
+    {
+        public QualifierGroupsResponse()
+        {
+            Results = new List<QualifierGroupResponse>{};
+        }
+
+        ///<summary>
+        ///The list of qualifier groups
+        ///</summary>
+        [ApiMember(DataType="Array<QualifierGroupResponse>", Description="The list of qualifier groups")]
+        public List<QualifierGroupResponse> Results { get; set; }
+    }
+
+    public class QualifierResponse
+        : QualifierBase
+    {
+        ///<summary>
+        ///Unique ID of the qualifier 
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the qualifier ")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///True if the qualifier is required by the system
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if the qualifier is required by the system")]
+        public bool IsSystem { get; set; }
+    }
+
+    public class QualifiersResponse
+    {
+        public QualifiersResponse()
+        {
+            Results = new List<QualifierResponse>{};
+        }
+
+        ///<summary>
+        ///The list of qualifiers
+        ///</summary>
+        [ApiMember(DataType="Array<QualifierResponse>", Description="The list of qualifiers")]
+        public List<QualifierResponse> Results { get; set; }
+    }
+
     public class ReferencePoint
         : ReferencePointBase
     {
@@ -2955,6 +3259,29 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<StandardReferenceDatum>", Description="The list of Standard Reference Datums")]
         public List<StandardReferenceDatum> Results { get; set; }
+    }
+
+    public class Tag
+    {
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier")]
+        public string Identifier { get; set; }
+    }
+
+    public class TagsResponse
+    {
+        public TagsResponse()
+        {
+            Results = new List<Tag>{};
+        }
+
+        ///<summary>
+        ///The list of tags
+        ///</summary>
+        [ApiMember(DataType="Array<Tag>", Description="The list of tags")]
+        public List<Tag> Results { get; set; }
     }
 
     public class TimeSeries
@@ -3324,6 +3651,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.1.91.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.2.99.0");
     }
 }

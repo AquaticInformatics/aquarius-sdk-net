@@ -1,5 +1,5 @@
 /* Options:
-Date: 2018-03-09 13:01:50
+Date: 2018-06-27 13:56:28
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver12/AQUARIUS/Publish/v2
@@ -35,7 +35,6 @@ using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 
 namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
-
 
     public enum FlowDirectionType
     {
@@ -3577,12 +3576,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class GroundWaterMeasurement
     {
         ///<summary>
-        ///Stability
-        ///</summary>
-        [ApiMember(Description="Stability")]
-        public string Stability { get; set; }
-
-        ///<summary>
         ///Cut
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Cut")]
@@ -4123,6 +4116,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public bool IsValid { get; set; }
 
         ///<summary>
+        ///Reference point unique ID
+        ///</summary>
+        [ApiMember(DataType="string", Description="Reference point unique ID")]
+        public Guid? ReferencePointUniqueId { get; set; }
+
+        ///<summary>
+        ///ReadingQualifier
+        ///</summary>
+        [ApiMember(Description="ReadingQualifier")]
+        public string ReadingQualifier { get; set; }
+
+        ///<summary>
         ///Groundwater measurements
         ///</summary>
         [ApiMember(DataType="GroundWaterMeasurement", Description="Groundwater measurements")]
@@ -4535,6 +4540,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         Inspection,
         InventoryControl,
         LevelSurvey,
+        Report,
     }
 
     public enum AttachmentType
@@ -6474,6 +6480,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.1.91.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.2.99.0");
     }
 }
