@@ -17,6 +17,12 @@ namespace Aquarius.TimeSeries.Client.Helpers
             client.Headers.Add(AuthenticationHeaders.AuthenticationHeaderNameKey, authenticationToken);
         }
 
+        public static void ClearAuthenticationToken(ServiceClientBase client)
+        {
+            client.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
+            client.ClearCookies();
+        }
+
         public static string Login(IServiceClient client, string username, string password)
         {
             var publicKey = client.Get(new GetPublicKey());
@@ -85,8 +91,10 @@ namespace Aquarius.TimeSeries.Client.Helpers
             if (client == null)
                 throw new ArgumentNullException(nameof(client));
 
-            var builder = new UriBuilder(client.BaseUri);
-            builder.Path = baseUri;
+            var builder = new UriBuilder(client.BaseUri)
+            {
+                Path = baseUri
+            };
 
             var clone = new SdkServiceClient(builder.ToString());
 
@@ -95,6 +103,10 @@ namespace Aquarius.TimeSeries.Client.Helpers
                 clone.Headers.Remove(headerKey);
                 clone.Headers.Add(headerKey, client.Headers[headerKey]);
             }
+
+            clone.Timeout = client.Timeout;
+            clone.ReadWriteTimeout = client.ReadWriteTimeout;
+            clone.OnAuthenticationRequired = client.OnAuthenticationRequired;
 
             return clone;
         }

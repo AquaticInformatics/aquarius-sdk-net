@@ -53,6 +53,14 @@ namespace Aquarius.TimeSeries.Client
             }
         }
 
+        public void ReAuthenticate()
+        {
+            lock (_syncLock)
+            {
+                CreateNewSession();
+            }
+        }
+
         public void RestartIdleTimer()
         {
             lock (_syncLock)

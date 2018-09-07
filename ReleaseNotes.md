@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 18.6.2
+- Automatically re-authenticate an AQTS session if it expires. This means the `SessionKeepAlive()` method becomes obsolete.
+
 ### 18.6.1
 - Updated the service models for the AQUARIUS Time-Series 2018.2 release.
 

@@ -72,7 +72,7 @@ namespace Aquarius.TimeSeries.Client
             if (CustomClients.TryGetValue(baseUri, out var client))
                 return client;
 
-            client = ClientHelper.CloneAuthenticatedClient(PublishClient as JsonServiceClient, baseUri);
+            client = ClientHelper.CloneAuthenticatedClient(Publish as JsonServiceClient, baseUri);
             CustomClients.Add(baseUri, client);
 
             return client;
@@ -148,7 +148,10 @@ namespace Aquarius.TimeSeries.Client
                 if (client == null)
                     continue;
 
-                ClientHelper.SetAuthenticationToken(client, sessionToken);
+                if (string.IsNullOrEmpty(sessionToken))
+                    ClientHelper.ClearAuthenticationToken(client);
+                else
+                    ClientHelper.SetAuthenticationToken(client, sessionToken);
             }
         }
 
@@ -163,12 +166,44 @@ namespace Aquarius.TimeSeries.Client
             Connection = ConnectionPool.Instance.GetConnection(hostname, username, password, CreateSession, DeleteSession);
 
             SetSessionToken(Connection.SessionToken);
+
+            SetAutomaticReAuthentication();
         }
 
         private void SetSessionToken(string sessionToken)
         {
             SetAuthenticationTokenForConnectedClients(ServiceClients, sessionToken);
             SetAuthenticationTokenForConnectedClients(CustomClients, sessionToken);
+        }
+
+        private void SetAutomaticReAuthentication()
+        {
+            SetAutomaticReAuthenticationForConnectedClients(ServiceClients);
+            SetAutomaticReAuthenticationForConnectedClients(CustomClients);
+        }
+
+        private void SetAutomaticReAuthenticationForConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
+        {
+            foreach (var client in clientDictionary.Values.Cast<ServiceClientBase>())
+            {
+                if (client == null)
+                    continue;
+
+                client.OnAuthenticationRequired = () => ReAuthenticate(client);
+            }
+        }
+
+        private void ReAuthenticate(ServiceClientBase client)
+        {
+            var expiredToken = Connection.SessionToken;
+
+            SetSessionToken(null);
+
+            Connection.ReAuthenticate();
+
+            Log.Info($"Re-authenticated with {client.BaseUri} (v{ServerVersion}). Replaced expiredToken={expiredToken} with newToken={Connection.SessionToken}");
+
+            SetSessionToken(Connection.SessionToken);
         }
 
         private void Disconnect()
