@@ -28,6 +28,7 @@ namespace Aquarius.TimeSeries.Client
         IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, CancellationToken? cancellationToken = null)
             where TRequest : IReturn<TResponse>;
 
+        [Obsolete("Sessions will now re-authenticate automatically if they expire.")]
         ScopeAction SessionKeepAlive();
     }
 }
