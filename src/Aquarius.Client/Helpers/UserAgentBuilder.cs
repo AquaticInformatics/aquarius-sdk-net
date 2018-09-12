@@ -12,7 +12,7 @@ namespace Aquarius.Helpers
     {
         public static string GetSdkComponent()
         {
-            return GetAgentComponent(GetSdkAssemblyPath());
+            return GetAgentComponent(GetSdkAssemblyName());
         }
 
         public static string GetApplicationComponent()
@@ -28,6 +28,11 @@ namespace Aquarius.Helpers
             return GetAgentComponent(path);
         }
 
+        private static string GetAgentComponent(AssemblyName assemblyName)
+        {
+            return $"{assemblyName.Name} {assemblyName.Version}";
+        }
+
         private static string GetAgentComponent(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -36,9 +41,9 @@ namespace Aquarius.Helpers
             return $"{Path.GetFileNameWithoutExtension(path)} {FileVersionInfo.GetVersionInfo(path).FileVersion}";
         }
 
-        private static string GetSdkAssemblyPath()
+        private static AssemblyName GetSdkAssemblyName()
         {
-            return GetTrueAssemblyPath(typeof(SdkServiceClient).Assembly);
+            return typeof(SdkServiceClient).Assembly.GetName();
         }
 
         private static string GetExecutingAssemblyPath()
