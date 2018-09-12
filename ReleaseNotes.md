@@ -4,7 +4,10 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
-### 18.6.2
+### 18.6.4
+- Fixed a bug in the auto-generated user-agent header. Now the SDK version is reported correctly, even from single-EXE deployments.
+
+### 18.6.3
 - Automatically re-authenticate an AQTS session if it expires. This means the `SessionKeepAlive()` method becomes obsolete.
 
 ### 18.6.1
