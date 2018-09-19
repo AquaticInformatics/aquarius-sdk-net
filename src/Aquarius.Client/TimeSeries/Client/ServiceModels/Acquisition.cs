@@ -1,8 +1,8 @@
 /* Options:
-Date: 2018-06-27 13:56:45
+Date: 2018-09-19 11:44:50
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver12/AQUARIUS/Acquisition/v2
+BaseUrl: http://autoserver15/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
@@ -43,6 +43,44 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         Failed,
     }
 
+    public enum AttachmentCategory
+    {
+        None,
+        LocationPhoto,
+        Notes,
+        Site,
+        Channel,
+        Measurement,
+        CrossSection,
+        Inspection,
+        InventoryControl,
+        LevelSurvey,
+    }
+
+    public enum AttachmentType
+    {
+        Binary,
+        Swami,
+        Image,
+        Video,
+        Audio,
+        Pdf,
+        Xml,
+        Text,
+        Zip,
+        HistoricalSwami,
+        AquaCalc,
+        FlowTracker,
+        HFC,
+        ScotLogger,
+        SonTek,
+        WinRiver,
+        LoggerFile,
+        GeneratedReport,
+        Csv,
+        FieldDataPlugin,
+    }
+
     [Route("/attachments/reports/{ReportUniqueId}", "DELETE")]
     public class DeleteReportAttachment
         : IReturnVoid
@@ -63,6 +101,36 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(Description="Identifier returned from a previous append request", IsRequired=true, ParameterType="path")]
         public string AppendRequestIdentifier { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/attachments", "POST")]
+    public class PostLocationAttachment
+        : IReturn<PostLocationAttachmentResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location to add the attachment to
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location to add the attachment to", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///If not specified, defaults to None
+        ///</summary>
+        [ApiMember(DataType="AttachmentCategory", Description="If not specified, defaults to None")]
+        public AttachmentCategory AttachmentCategory { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///File
+        ///</summary>
+        [Ignore]
+        [ApiMember(DataType="file", Description="File", IsRequired=true, ParameterType="form")]
+        public IHttpFile File { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/reflected", "POST")]
@@ -280,6 +348,41 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public Guid UniqueId { get; set; }
     }
 
+    public class PostLocationAttachmentResponse
+    {
+        ///<summary>
+        ///Attachment URL
+        ///</summary>
+        [ApiMember(Description="Attachment URL")]
+        public string Url { get; set; }
+
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///File name
+        ///</summary>
+        [ApiMember(Description="File name")]
+        public string FileName { get; set; }
+
+        ///<summary>
+        ///Attachment category
+        ///</summary>
+        [ApiMember(DataType="AttachmentCategory", Description="Attachment category")]
+        public AttachmentCategory AttachmentCategory { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comments { get; set; }
+
+        public AttachmentType AttachmentType { get; set; }
+    }
+
     public class PostReportResponse
     {
         ///<summary>
@@ -398,6 +501,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.2.99.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.3.84.0");
     }
 }

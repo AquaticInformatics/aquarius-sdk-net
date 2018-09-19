@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 18.7.1
+- Updated the service models for the AQUARIUS Time-Series 2018.3 release.
+
 ### 18.6.4
 - Fixed a bug in the auto-generated user-agent header. Now the SDK version is reported correctly, even from single-EXE deployments.
 
