@@ -1,8 +1,8 @@
 /* Options:
-Date: 2018-06-27 13:56:30
+Date: 2018-09-19 11:44:49
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver12/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver15/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -128,6 +128,67 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     [Route("/interpolationtypes", "GET")]
     public class GetInterpolationTypes
         : IReturn<InterpolationTypesResponse>
+    {
+    }
+
+    public class ApprovalLevelBase
+    {
+        ///<summary>
+        ///Approval Level. Values >=1000 are locking levels
+        ///</summary>
+        [ApiMember(DataType="long integer", Description="Approval Level. Values >=1000 are locking levels", IsRequired=true)]
+        public long? ApprovalLevel { get; set; }
+
+        ///<summary>
+        ///Color value in #RRGGBB hexadecimal
+        ///</summary>
+        [ApiMember(Description="Color value in #RRGGBB hexadecimal", IsRequired=true)]
+        public string Color { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description", IsRequired=true)]
+        public string Description { get; set; }
+    }
+
+    [Route("/approvallevels/{ApprovalLevel}", "DELETE")]
+    public class DeleteApprovalLevel
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Approval level
+        ///</summary>
+        [ApiMember(DataType="long integer", Description="Approval level", IsRequired=true, ParameterType="path")]
+        public long? ApprovalLevel { get; set; }
+    }
+
+    [Route("/approvallevels/{ApprovalLevel}", "GET")]
+    public class GetApprovalLevel
+        : IReturn<ApprovalLevel>
+    {
+        ///<summary>
+        ///Approval level
+        ///</summary>
+        [ApiMember(DataType="long integer", Description="Approval level", IsRequired=true, ParameterType="path")]
+        public long ApprovalLevel { get; set; }
+    }
+
+    [Route("/approvallevels", "GET")]
+    public class GetApprovalLevels
+        : IReturn<ApprovalLevelsResponse>
+    {
+    }
+
+    [Route("/approvallevels", "POST")]
+    public class PostApprovalLevel
+        : ApprovalLevelBase, IReturn<ApprovalLevel>
+    {
+    }
+
+    [Route("/approvallevels/{ApprovalLevel}", "PUT")]
+    public class PutApprovalLevel
+        : ApprovalLevelBase, IReturn<ApprovalLevel>
     {
     }
 
@@ -554,7 +615,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
         public PutLocationTags()
         {
-            TagIdentifiers = new List<string>{};
+            TagUniqueIds = new List<Guid>{};
         }
 
         ///<summary>
@@ -564,10 +625,10 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
-        ///Unique Identifiers of all tags to be assigned to the location; an empty list means the location will have no tags assigned to it
+        ///UniqueId of each tag to be assigned to the location; an empty list means the location will have no tags assigned to it
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Unique Identifiers of all tags to be assigned to the location; an empty list means the location will have no tags assigned to it", IsRequired=true)]
-        public List<string> TagIdentifiers { get; set; }
+        [ApiMember(DataType="Array<string>", Description="UniqueId of each tag to be assigned to the location; an empty list means the location will have no tags assigned to it", IsRequired=true)]
+        public List<Guid> TagUniqueIds { get; set; }
     }
 
     [Route("/locationtypes/{UniqueId}", "PUT")]
@@ -1371,49 +1432,89 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string StandardIdentifier { get; set; }
     }
 
-    [Route("/tags/{Identifier}", "DELETE")]
-    public class DeleteTag
-        : IReturnVoid
+    public class DeleteTagBase
     {
         ///<summary>
-        ///Identifier of the tag
+        ///Unique ID of the tag
         ///</summary>
-        [ApiMember(Description="Identifier of the tag", IsRequired=true, ParameterType="path")]
-        public string Identifier { get; set; }
+        [ApiMember(DataType="string", Description="Unique ID of the tag", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
     }
 
-    [Route("/tags", "GET")]
-    public class GetTags
-        : IReturn<TagsResponse>
+    public class GetTagsBase
     {
     }
 
-    [Route("/tags", "POST")]
-    public class PostTag
-        : IReturn<Tag>
+    public class PostTagBase
     {
         ///<summary>
-        ///Identifier of the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'
+        ///Tag name
         ///</summary>
-        [ApiMember(Description="Identifier of the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'", IsRequired=true)]
-        public string Identifier { get; set; }
+        [ApiMember(Description="Tag name", IsRequired=true)]
+        public string Name { get; set; }
     }
 
-    [Route("/tags/{Identifier}", "PUT")]
-    public class PutTag
-        : IReturn<Tag>
+    public class PutTagBase
     {
         ///<summary>
-        ///Original identifier of the tag
+        ///Unique ID of the tag
         ///</summary>
-        [ApiMember(Description="Original identifier of the tag", IsRequired=true, ParameterType="path")]
-        public string Identifier { get; set; }
+        [ApiMember(DataType="string", Description="Unique ID of the tag", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
 
         ///<summary>
-        ///Updated identifier for the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'
+        ///Tag name
         ///</summary>
-        [ApiMember(Description="Updated identifier for the tag. Cannot contain any of the following characters: '<', '>', '%', '+', '&', ':', '@', '*', '\', '?', '/', '\r', '\n'", IsRequired=true)]
-        public string UpdatedIdentifier { get; set; }
+        [ApiMember(Description="Tag name", IsRequired=true)]
+        public string Name { get; set; }
+    }
+
+    [Route("/tags/location/{UniqueId}", "DELETE")]
+    public class DeleteLocationTag
+        : DeleteTagBase, IReturnVoid
+    {
+    }
+
+    [Route("/tags/location", "GET")]
+    public class GetLocationTags
+        : GetTagsBase, IReturn<TagsResponse>
+    {
+    }
+
+    [Route("/tags/location", "POST")]
+    public class PostLocationTag
+        : PostTagBase, IReturn<Tag>
+    {
+    }
+
+    [Route("/tags/location/{UniqueId}", "PUT")]
+    public class PutLocationTag
+        : PutTagBase, IReturn<Tag>
+    {
+    }
+
+    [Route("/tags/note/{UniqueId}", "DELETE")]
+    public class DeleteNoteTag
+        : DeleteTagBase, IReturnVoid
+    {
+    }
+
+    [Route("/tags/note", "GET")]
+    public class GetNoteTags
+        : GetTagsBase, IReturn<TagsResponse>
+    {
+    }
+
+    [Route("/tags/note", "POST")]
+    public class PostNoteTag
+        : PostTagBase, IReturn<Tag>
+    {
+    }
+
+    [Route("/tags/note/{UniqueId}", "PUT")]
+    public class PutNoteTag
+        : PutTagBase, IReturn<Tag>
+    {
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}", "DELETE")]
@@ -2113,6 +2214,41 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Email { get; set; }
     }
 
+    public class ApprovalLevel
+    {
+        ///<summary>
+        ///Approval Level. Values >=1000 are locking levels
+        ///</summary>
+        [ApiMember(DataType="long integer", Description="Approval Level. Values >=1000 are locking levels", IsRequired=true)]
+        public long Level { get; set; }
+
+        ///<summary>
+        ///Color in #RRGGBB hexadecimal
+        ///</summary>
+        [ApiMember(Description="Color in #RRGGBB hexadecimal", IsRequired=true)]
+        public string Color { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description", IsRequired=true)]
+        public string Description { get; set; }
+    }
+
+    public class ApprovalLevelsResponse
+    {
+        public ApprovalLevelsResponse()
+        {
+            Results = new List<ApprovalLevel>{};
+        }
+
+        ///<summary>
+        ///The list of approval levels
+        ///</summary>
+        [ApiMember(DataType="Array<ApprovalLevel>", Description="The list of approval levels")]
+        public List<ApprovalLevel> Results { get; set; }
+    }
+
     public class ExtendedAttributeField
     {
         ///<summary>
@@ -2148,14 +2284,14 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Numeric precision
         ///</summary>
-        [ApiMember(DataType="short", Description="Numeric precision")]
-        public short? NumericPrecision { get; set; }
+        [ApiMember(DataType="integer", Description="Numeric precision")]
+        public int? NumericPrecision { get; set; }
 
         ///<summary>
         ///Numeric scale
         ///</summary>
-        [ApiMember(DataType="short", Description="Numeric scale")]
-        public short? NumericScale { get; set; }
+        [ApiMember(DataType="integer", Description="Numeric scale")]
+        public int? NumericScale { get; set; }
 
         ///<summary>
         ///Column size
@@ -2921,7 +3057,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Qualifier codes in group
         ///</summary>
-        [ApiMember(DataType="string", Description="Qualifier codes in group")]
+        [ApiMember(DataType="Array<string>", Description="Qualifier codes in group")]
         public List<string> QualifierCodeList { get; set; }
     }
 
@@ -3264,10 +3400,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class Tag
     {
         ///<summary>
-        ///Identifier
+        ///Unique ID of the tag
         ///</summary>
-        [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        [ApiMember(DataType="string", Description="Unique ID of the tag")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name")]
+        public string Name { get; set; }
     }
 
     public class TagsResponse
@@ -3651,6 +3793,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.2.99.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.3.84.0");
     }
 }
