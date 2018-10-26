@@ -19,12 +19,6 @@ namespace Aquarius.Helpers
         {
             var path = GetExecutingAssemblyPath();
 
-            if (string.IsNullOrEmpty(path))
-            {
-                // When all else fails, just use the process info to identify the application
-                path = Process.GetCurrentProcess().MainModule.FileName;
-            }
-
             return GetAgentComponent(path);
         }
 
@@ -46,9 +40,17 @@ namespace Aquarius.Helpers
             return typeof(SdkServiceClient).Assembly.GetName();
         }
 
-        private static string GetExecutingAssemblyPath()
+        public static string GetExecutingAssemblyPath()
         {
-            return GetTrueAssemblyPath(GetEntryAssembly());
+            var path = GetTrueAssemblyPath(GetEntryAssembly());
+
+            if (string.IsNullOrEmpty(path))
+            {
+                // When all else fails, just use the process info to identify the application
+                path = Process.GetCurrentProcess().MainModule.FileName;
+            }
+
+            return path;
         }
 
         private static Assembly GetEntryAssembly()
