@@ -11,7 +11,7 @@ namespace Aquarius.Helpers
         static SdkServiceClient()
         {
             FirstByteReceivedTimeout = AppSettings.Get<TimeSpan?>(nameof(FirstByteReceivedTimeout), TimeSpan.FromMinutes(3));
-            ReadEntireResponseTimeout = AppSettings.Get<TimeSpan?>(nameof(ReadEntireResponseTimeout), TimeSpan.FromMinutes(4));
+            ReadEntireResponseTimeout = AppSettings.Get<TimeSpan?>(nameof(ReadEntireResponseTimeout), TimeSpan.FromMinutes(5));
         }
 
         public SdkServiceClient(string baseUri)

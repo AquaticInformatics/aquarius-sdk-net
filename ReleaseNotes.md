@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 18.7.3
+- `ReadEntireResponseTimeout` now actually defaults to 5 minutes as documented, instead of 4 minutes.
+
 ### 18.7.2
 - Added configurable timeout properties for `SdkServiceClient` requests.
 - `FirstByteReceivedTimeout` defaults to 3 minutes.
