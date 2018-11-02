@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Linq;
 
 namespace Aquarius.TimeSeries.Client
@@ -7,6 +6,8 @@ namespace Aquarius.TimeSeries.Client
     public class ConnectionPool
     {
         public static readonly ConnectionPool Instance = new ConnectionPool();
+
+        private readonly object _syncLock = new object();
 
         private ConnectionPool()
         {
@@ -18,17 +19,19 @@ namespace Aquarius.TimeSeries.Client
             string hostname,
             string username,
             string password,
-            Func<string, string, string> sessionTokenCreator,
-            Action sessionDeleteAction)
+            IAuthenticator authenticator)
         {
-            return _connections.AddOrUpdate(
-                CreateConnectionKey(hostname, username, password),
-                key => new Connection(username, password, sessionTokenCreator, sessionDeleteAction, Remove),
-                (key, connection) =>
-                {
-                    connection.IncrementConnectionCount();
-                    return connection;
-                });
+            lock (_syncLock)
+            {
+                return _connections.AddOrUpdate(
+                    CreateConnectionKey(hostname, username, password),
+                    key => new Connection(hostname, username, password, authenticator, Remove),
+                    (key, connection) =>
+                    {
+                        connection.IncrementConnectionCount();
+                        return connection;
+                    });
+            }
         }
 
         private static string CreateConnectionKey(string hostname, string username, string password)
@@ -38,11 +41,13 @@ namespace Aquarius.TimeSeries.Client
 
         public void Reset()
         {
+            // ReSharper disable once InconsistentlySynchronizedField
             _connections.Clear();
         }
 
         public void Cleanup()
         {
+            // ReSharper disable once InconsistentlySynchronizedField
             foreach (var connection in _connections.Values)
             {
                 connection.Close();
