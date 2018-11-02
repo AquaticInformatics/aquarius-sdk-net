@@ -13,7 +13,7 @@ using AutoFixture;
 using Ploeh.AutoFixture;
 #endif
 
-namespace Aquarius.UnitTests.TimeSeries.Client
+namespace Aquarius.Client.UnitTests.TimeSeries.Client
 {
     [TestFixture]
     public class AquariusClientTests
@@ -23,6 +23,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         private IServiceClient _mockPublish;
         private IServiceClient _mockAcquisition;
         private IServiceClient _mockProvisioning;
+        private IAuthenticator _mockAuthenticator;
 
         [SetUp]
         public void BeforeEachTest()
@@ -42,6 +43,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             _mockPublish = CreateMockServiceClient();
             _mockAcquisition = CreateMockServiceClient();
             _mockProvisioning = CreateMockServiceClient();
+            _mockAuthenticator = CreateMockAuthenticator();
 
             _client.ServiceClients.Add(AquariusClient.ClientType.PublishJson, _mockPublish);
             _client.ServiceClients.Add(AquariusClient.ClientType.AcquisitionJson, _mockAcquisition);
@@ -50,8 +52,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             _client.Connection = new Connection(
                 _fixture.Create<string>(),
                 _fixture.Create<string>(),
-                (username,password) => string.Join("/", username, password),
-                _client.DeleteSession,
+                _fixture.Create<string>(),
+                _mockAuthenticator,
                 connection => { });
         }
 
@@ -67,29 +69,11 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             return mockServiceClient;
         }
 
-        [Test]
-        public void Dispose_WithNgConnection_CallDeleteSession()
+        private IAuthenticator CreateMockAuthenticator()
         {
-            _client.Dispose();
+            var mockAuthenticator = Substitute.For<IAuthenticator>();
 
-            AssertExpectedDeleteSessionRequests(1);
-        }
-
-        private void AssertExpectedDeleteSessionRequests(int count)
-        {
-            _mockPublish
-                .Received(count)
-                .Delete(Arg.Any<DeleteSession>());
-        }
-
-        [Test]
-        public void Dispose_With3xConnection_DoesNotCallDeleteSession()
-        {
-            _client.ServerVersion = AquariusServerVersion.Create("3.10");
-
-            _client.Dispose();
-
-            AssertExpectedDeleteSessionRequests(0);
+            return mockAuthenticator;
         }
 
         [Ignore("This integration test should only be run from within the IDE, connecting to a live AQTS app server")]

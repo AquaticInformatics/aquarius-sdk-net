@@ -1,5 +1,6 @@
 ﻿using Aquarius.TimeSeries.Client;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 
 #if AUTOFIXTURE4
@@ -8,7 +9,7 @@ using AutoFixture;
 using Ploeh.AutoFixture;
 #endif
 
-namespace Aquarius.UnitTests.TimeSeries.Client
+namespace Aquarius.Client.UnitTests.TimeSeries.Client
 {
     [TestFixture]
     public class ConnectionPoolTests
@@ -35,16 +36,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private Connection GetConnection(string hostname, string username, string password)
         {
-            return _connectionPool.GetConnection(hostname, username, password, CreateFakeSessionToken, DeleteSession);
-        }
-
-        private string CreateFakeSessionToken(string username, string password)
-        {
-            return $"Username={username} Password={password} Session={_fixture.Create<string>()}";
-        }
-
-        private void DeleteSession()
-        {
+            return _connectionPool.GetConnection(hostname, username, password, Substitute.For<IAuthenticator>());
         }
 
         private void AssertConnectionCount(Connection connection, int expectedCount)

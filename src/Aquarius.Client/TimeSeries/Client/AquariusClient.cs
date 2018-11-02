@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using Aquarius.Helpers;
@@ -28,7 +29,6 @@ namespace Aquarius.TimeSeries.Client
         private static readonly object SyncLock = new object();
 
         private static bool _serviceStackConfigured;
-        private static readonly TimeSpan IdleConnectionTimeSpan = TimeSpan.FromMinutes(10);
 
         private static void SetupServiceStack()
         {
@@ -104,7 +104,13 @@ namespace Aquarius.TimeSeries.Client
         {
             var clone = (JsonServiceClient)CloneAuthenticatedClient(client);
 
-            clone.RequestFilter = req => req.Headers[HttpHeaders.XHttpMethodOverride] = overrideMethod;
+            clone.RequestFilter = req =>
+            {
+                // Keep calling any existing request filter
+                ((JsonServiceClient) client)?.RequestFilter?.Invoke(req);
+
+                req.Headers[HttpHeaders.XHttpMethodOverride] = overrideMethod;
+            };
 
             return clone;
         }
@@ -136,44 +142,41 @@ namespace Aquarius.TimeSeries.Client
 
         public ScopeAction SessionKeepAlive()
         {
-            Connection.ReconnectIfIdle(IdleConnectionTimeSpan);
-
-            return new ScopeAction(() => Connection.RestartIdleTimer());
-        }
-
-        private void SetAuthenticationTokenForConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary, string sessionToken)
-        {
-            foreach (var client in clientDictionary.Values.Cast<ServiceClientBase>())
-            {
-                if (client == null)
-                    continue;
-
-                if (string.IsNullOrEmpty(sessionToken))
-                    ClientHelper.ClearAuthenticationToken(client);
-                else
-                    ClientHelper.SetAuthenticationToken(client, sessionToken);
-            }
+            // This is now a no-op
+            return new ScopeAction(null);
         }
 
         private void Connect(string hostname, string username, string password)
         {
-            ServiceClients.Add(ClientType.PublishJson, new SdkServiceClient(PublishV2.ResolveEndpoint(hostname)));
-            ServiceClients.Add(ClientType.AcquisitionJson, new SdkServiceClient(AcquisitionV2.ResolveEndpoint(hostname)));
-            ServiceClients.Add(ClientType.ProvisioningJson, new SdkServiceClient(ProvisioningV1.ResolveEndpoint(hostname)));
+            ServiceClients.Add(ClientType.PublishJson, CreateClient(PublishV2.ResolveEndpoint(hostname)));
+            ServiceClients.Add(ClientType.AcquisitionJson, CreateClient(AcquisitionV2.ResolveEndpoint(hostname)));
+            ServiceClients.Add(ClientType.ProvisioningJson, CreateClient(ProvisioningV1.ResolveEndpoint(hostname)));
 
             ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
 
-            Connection = ConnectionPool.Instance.GetConnection(hostname, username, password, CreateSession, DeleteSession);
-
-            SetSessionToken(Connection.SessionToken);
+            Connection = ConnectionPool.Instance.GetConnection(hostname, username, password, Authenticator.Create(hostname));
 
             SetAutomaticReAuthentication();
         }
 
-        private void SetSessionToken(string sessionToken)
+        private SdkServiceClient CreateClient(string baseUri)
         {
-            SetAuthenticationTokenForConnectedClients(ServiceClients, sessionToken);
-            SetAuthenticationTokenForConnectedClients(CustomClients, sessionToken);
+            return new SdkServiceClient(baseUri)
+            {
+                RequestFilter = CommonRequestFilter
+            };
+        }
+
+        private void CommonRequestFilter(HttpWebRequest request)
+        {
+            if (string.IsNullOrEmpty(Connection.SessionToken))
+            {
+                request.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
+            }
+            else
+            {
+                request.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey] = Connection.SessionToken;
+            }
         }
 
         private void SetAutomaticReAuthentication()
@@ -197,13 +200,9 @@ namespace Aquarius.TimeSeries.Client
         {
             var expiredToken = Connection.SessionToken;
 
-            SetSessionToken(null);
-
             Connection.ReAuthenticate();
 
             Log.Info($"Re-authenticated with {client.BaseUri} (v{ServerVersion}). Replaced expiredToken={expiredToken} with newToken={Connection.SessionToken}");
-
-            SetSessionToken(Connection.SessionToken);
         }
 
         private void Disconnect()
@@ -223,30 +222,5 @@ namespace Aquarius.TimeSeries.Client
 
             clientDictionary.Clear();
         }
-
-        internal string CreateSession(string username, string password)
-        {
-            return ClientHelper.Login(ServiceClients.First().Value, username, password);
-        }
-
-        internal void DeleteSession()
-        {
-            try
-            {
-                if (!FirstNgVersion.IsLessThan(ServerVersion)) return;
-
-                var serviceClient = ServiceClients.FirstOrDefault().Value;
-
-                if (serviceClient == null) return;
-
-                ClientHelper.Logout(serviceClient);
-            }
-            catch (Exception exception)
-            {
-                Log.Warn("Ignoring exception during disconnect", exception);
-            }
-        }
-
-        private static readonly AquariusServerVersion FirstNgVersion = AquariusServerVersion.Create("14");
     }
 }

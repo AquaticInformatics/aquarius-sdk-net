@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+#if NETSTANDARD
 using System.Xml;
+#endif
 using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using ServiceStack;
@@ -15,16 +17,33 @@ namespace Aquarius.TimeSeries.Client.Helpers
         {
             client.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
             client.Headers.Add(AuthenticationHeaders.AuthenticationHeaderNameKey, authenticationToken);
+
+            ExpireExistingAuthenticationCookie(client);
         }
 
-        public static void ClearAuthenticationToken(ServiceClientBase client)
+        private static void ExpireExistingAuthenticationCookie(ServiceClientBase client)
         {
+            if (client.BaseUri == null) return;
+
+            var existingAuthCookie = client.CookieContainer.GetCookies(new Uri(client.BaseUri))[AuthenticationHeaders.AuthenticationCookieName];
+
+            if (existingAuthCookie == null) return;
+
+            existingAuthCookie.Expired = true;
+        }
+
+        private static void ClearAuthenticationToken(ServiceClientBase client)
+        {
+            if (client == null) return;
+
             client.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
             client.ClearCookies();
         }
 
         public static string Login(IServiceClient client, string username, string password)
         {
+            ClearAuthenticationToken(client as ServiceClientBase);
+
             var publicKey = client.Get(new GetPublicKey());
             var encryptedPassword = EncryptPassword(publicKey.Xml, password);
             return client.Post(new PostSession {EncryptedPassword = encryptedPassword, Username = username});
@@ -60,6 +79,7 @@ namespace Aquarius.TimeSeries.Client.Helpers
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(publicKeyXml);
 
+            // ReSharper disable once PossibleNullReferenceException
             if (xmlDoc.DocumentElement.Name.Equals("RSAKeyValue"))
             {
                 foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes)
@@ -107,6 +127,8 @@ namespace Aquarius.TimeSeries.Client.Helpers
             clone.Timeout = client.Timeout;
             clone.ReadWriteTimeout = client.ReadWriteTimeout;
             clone.OnAuthenticationRequired = client.OnAuthenticationRequired;
+            clone.RequestFilter = client.RequestFilter;
+            clone.ResponseFilter = client.ResponseFilter;
 
             return clone;
         }

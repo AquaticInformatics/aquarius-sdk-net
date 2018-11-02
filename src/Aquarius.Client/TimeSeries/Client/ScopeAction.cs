@@ -13,10 +13,7 @@ namespace Aquarius.TimeSeries.Client
 
         public void Dispose()
         {
-            if (_actionOnDispose != null)
-            {
-                _actionOnDispose();
-            }
+            _actionOnDispose?.Invoke();
         }
     }
 }

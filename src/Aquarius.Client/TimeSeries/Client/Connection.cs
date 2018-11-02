@@ -1,71 +1,80 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Reflection;
+using Aquarius.Helpers;
+using ServiceStack.Logging;
 
 namespace Aquarius.TimeSeries.Client
 {
     public class Connection
     {
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        private static readonly bool TraceEnabled;
+
         private readonly object _syncLock = new object();
-        private readonly Stopwatch _idleTimer = Stopwatch.StartNew();
+
+        static Connection()
+        {
+            TraceEnabled = AppSettings.Get("TraceConnectionPool", false);
+        }
 
         public Connection(
+            string hostname,
             string username,
             string password,
-            Func<string, string, string> sessionTokenCreator,
-            Action sessionDeleteAction,
+            IAuthenticator authenticator,
             Action<Connection> connectionRemovalAction)
         {
+            Hostname = hostname;
             Username = username;
             Password = password;
-            SessionTokenCreator = sessionTokenCreator;
-            SessionDeleteAction = sessionDeleteAction;
+            Authenticator = authenticator;
             ConnectionRemovalAction = connectionRemovalAction;
 
-            CreateNewSession();
             ConnectionCount = 1;
+
+            Trace("Created");
+
+            CreateNewSession();
+        }
+
+        private void Trace(string message)
+        {
+            if (!TraceEnabled) return;
+
+            Log.Info($"{GetHashCode()}: {Hostname}/{Username}/***: ConnectionCount={ConnectionCount} {message}");
         }
 
         private void CreateNewSession()
         {
-            SessionToken = SessionTokenCreator(Username, Password);
-            RestartIdleTimer();
+            SessionToken = Authenticator.Login(Username, Password);
+
+            Trace($"NewSession SessionToken={SessionToken}");
+        }
+
+        private void DeleteCurrentSession()
+        {
+            Trace($"Deleting SessionToken={SessionToken}");
+
+            Authenticator.Logout();
+            SessionToken = null;
         }
 
         public string SessionToken { get; private set; }
 
-        private Func<string, string, string> SessionTokenCreator { get; }
-        private Action SessionDeleteAction { get; }
+        private IAuthenticator Authenticator { get; }
         private Action<Connection> ConnectionRemovalAction { get; }
+        private string Hostname { get; }
         private string Username { get; }
         private string Password { get; }
 
         internal int ConnectionCount { get; set; }
-
-        public void ReconnectIfIdle(TimeSpan idleTimeSpan)
-        {
-            lock (_syncLock)
-            {
-                if (_idleTimer.Elapsed < idleTimeSpan)
-                    return;
-
-                SessionDeleteAction();
-                CreateNewSession();
-            }
-        }
 
         public void ReAuthenticate()
         {
             lock (_syncLock)
             {
                 CreateNewSession();
-            }
-        }
-
-        public void RestartIdleTimer()
-        {
-            lock (_syncLock)
-            {
-                _idleTimer.Restart();
             }
         }
 
@@ -78,11 +87,15 @@ namespace Aquarius.TimeSeries.Client
 
                 --ConnectionCount;
 
+                Trace("Decreased connection count.");
+
                 if (ConnectionCount != 0)
                     return;
 
-                SessionDeleteAction();
+                DeleteCurrentSession();
                 ConnectionRemovalAction(this);
+
+                Trace("Closed");
             }
         }
 
@@ -91,6 +104,8 @@ namespace Aquarius.TimeSeries.Client
             lock (_syncLock)
             {
                 ++ConnectionCount;
+
+                Trace("Increased connection count.");
             }
         }
     }

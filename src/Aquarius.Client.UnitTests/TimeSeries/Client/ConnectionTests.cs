@@ -1,6 +1,6 @@
-﻿using System;
-using Aquarius.TimeSeries.Client;
+﻿using Aquarius.TimeSeries.Client;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 
 #if AUTOFIXTURE4
@@ -9,38 +9,36 @@ using AutoFixture;
 using Ploeh.AutoFixture;
 #endif
 
-namespace Aquarius.UnitTests.TimeSeries.Client
+namespace Aquarius.Client.UnitTests.TimeSeries.Client
 {
     [TestFixture]
     public class ConnectionTests
     {
         private IFixture _fixture;
         private Connection _connection;
-        private int _sessionCreateCount;
-        private int _sessionDeleteCount;
         private int _connectionRemovalCount;
+        private IAuthenticator _mockAuthenticator;
 
         [SetUp]
         public void BeforeEachTest()
         {
             _fixture = new Fixture();
-            _sessionCreateCount = 0;
-            _sessionDeleteCount = 0;
             _connectionRemovalCount = 0;
 
-            _connection = new Connection(_fixture.Create<string>(), _fixture.Create<string>(), SessionTokenCreator, DeleteSession, RemoveConnection);
+            _mockAuthenticator = CreateMockAuthenticator();
+
+            _connection = new Connection(_fixture.Create<string>(), _fixture.Create<string>(), _fixture.Create<string>(), _mockAuthenticator, RemoveConnection);
         }
 
-        private string SessionTokenCreator(string username, string password)
+        private IAuthenticator CreateMockAuthenticator()
         {
-            ++_sessionCreateCount;
+            var mockAuthenticator = Substitute.For<IAuthenticator>();
 
-            return string.Join("/", username, password, _fixture.Create<string>());
-        }
+            mockAuthenticator
+                .Login(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(x => _fixture.Create<string>());
 
-        private void DeleteSession()
-        {
-            ++_sessionDeleteCount;
+            return mockAuthenticator;
         }
 
         private void RemoveConnection(Connection connection)
@@ -64,12 +62,12 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private void AssertExpectedSessionCreateCount(int expectedCount)
         {
-            _sessionCreateCount.ShouldBeEquivalentTo(expectedCount, nameof(_sessionCreateCount));
+            _mockAuthenticator.Received(expectedCount).Login(Arg.Any<string>(), Arg.Any<string>());
         }
 
         private void AssertExpectedSessionDeleteCount(int expectedCount)
         {
-            _sessionDeleteCount.ShouldBeEquivalentTo(expectedCount, nameof(_sessionDeleteCount));
+            _mockAuthenticator.Received(expectedCount).Logout();
         }
 
         private void AssertExpectedConnectionRemovalCount(int expectedCount)
@@ -120,34 +118,6 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             AssertExpectedSessionCreateCount(1);
             AssertExpectedSessionDeleteCount(0);
             AssertExpectedConnectionRemovalCount(0);
-        }
-
-        [Test]
-        public void ReconnectIfIdle_WithoutExpiring_DoesNotReconnect()
-        {
-            var sessionToken = _connection.SessionToken;
-
-            _connection.ReconnectIfIdle(TimeSpan.MaxValue);
-
-            AssertExpectedSessionCreateCount(1);
-            AssertExpectedSessionDeleteCount(0);
-            AssertExpectedConnectionRemovalCount(0);
-
-            sessionToken.ShouldBeEquivalentTo(_connection.SessionToken, "the same session token should be retained");
-        }
-
-        [Test]
-        public void ReconnectIfIdle_AfterExpiring_ReconnectsWithNewSession()
-        {
-            var sessionToken = _connection.SessionToken;
-
-            _connection.ReconnectIfIdle(TimeSpan.Zero);
-
-            AssertExpectedSessionCreateCount(2);
-            AssertExpectedSessionDeleteCount(1);
-            AssertExpectedConnectionRemovalCount(0);
-
-            sessionToken.Should().NotBe(_connection.SessionToken, "a new session token should be created");
         }
 
         [Test]
