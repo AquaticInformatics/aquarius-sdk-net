@@ -44,6 +44,6 @@ deploy:
     api_key:
       secure: 2ysF04mVlBnibe56a/2jETvgEkTCV/ReYVdG8SmlKdlziv7STEEMYtenRU/jDyEa
     skip_symbols: false
-    artifact: AllPackages
+    artifact: AllPackages2
     on:
       is_not_pr: true
