@@ -1,8 +1,8 @@
 /* Options:
-Date: 2018-09-19 11:44:48
+Date: 2018-12-22 16:23:50
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver15/AQUARIUS/Publish/v2
+BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -784,12 +784,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="Array<TagMetadata>", Description="Location note tags")]
         public List<TagMetadata> Tags { get; set; }
-
-        ///<summary>
-        ///Title
-        ///</summary>
-        [ApiMember(Description="Title")]
-        public string Title { get; set; }
 
         ///<summary>
         ///User who last modified this note
@@ -3046,8 +3040,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Control condition
         ///</summary>
-        [ApiMember(DataType="ControlConditionType", Description="Control condition")]
-        public ControlConditionType ControlCondition { get; set; }
+        [ApiMember(Description="Control condition")]
+        public string ControlCondition { get; set; }
 
         ///<summary>
         ///Date cleaned
@@ -3078,6 +3072,101 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="Is valid")]
         public bool IsValid { get; set; }
+    }
+
+    public class CrossSectionPoint
+    {
+        ///<summary>
+        ///Point order
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Point order")]
+        public int PointOrder { get; set; }
+
+        ///<summary>
+        ///Distance
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Distance")]
+        public QuantityWithDisplay Distance { get; set; }
+
+        ///<summary>
+        ///Elevation
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Elevation")]
+        public QuantityWithDisplay Elevation { get; set; }
+
+        ///<summary>
+        ///Depth
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Depth")]
+        public QuantityWithDisplay Depth { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+    }
+
+    public class CrossSectionSurveyActivity
+    {
+        public CrossSectionSurveyActivity()
+        {
+            CrossSectionPoints = new List<CrossSectionPoint>{};
+        }
+
+        ///<summary>
+        ///Start time
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        public DateTimeOffset StartTime { get; set; }
+
+        ///<summary>
+        ///End time
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        public DateTimeOffset EndTime { get; set; }
+
+        ///<summary>
+        ///Party
+        ///</summary>
+        [ApiMember(Description="Party")]
+        public string Party { get; set; }
+
+        ///<summary>
+        ///Channel
+        ///</summary>
+        [ApiMember(Description="Channel")]
+        public string Channel { get; set; }
+
+        ///<summary>
+        ///Relative location
+        ///</summary>
+        [ApiMember(Description="Relative location")]
+        public string RelativeLocation { get; set; }
+
+        ///<summary>
+        ///Starting point
+        ///</summary>
+        [ApiMember(DataType="StartPointType", Description="Starting point")]
+        public StartPointType StartingPoint { get; set; }
+
+        ///<summary>
+        ///Stage
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Stage")]
+        public QuantityWithDisplay Stage { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Cross-section points
+        ///</summary>
+        [ApiMember(DataType="Array<CrossSectionPoint>", Description="Cross-section points")]
+        public List<CrossSectionPoint> CrossSectionPoints { get; set; }
     }
 
     public class CurrentMeter
@@ -3446,6 +3535,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         {
             Attachments = new List<Attachment>{};
             DischargeActivities = new List<DischargeActivity>{};
+            CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
         }
 
         ///<summary>
@@ -3477,6 +3567,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="InspectionActivity", Description="Inspection activity")]
         public InspectionActivity InspectionActivity { get; set; }
+
+        ///<summary>
+        ///Cross-section survey activity
+        ///</summary>
+        [ApiMember(DataType="Array<CrossSectionSurveyActivity>", Description="Cross-section survey activity")]
+        public List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
 
         ///<summary>
         ///Level survey activity
@@ -4084,9 +4180,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string SoftwareVersion { get; set; }
 
         ///<summary>
-        ///Start point
+        ///Starting point
         ///</summary>
-        [ApiMember(DataType="StartPointType", Description="Start point")]
+        [ApiMember(DataType="StartPointType", Description="Starting point")]
         public StartPointType StartPoint { get; set; }
 
         ///<summary>
@@ -4629,6 +4725,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         DischargeOtherMethod,
         GageHeightAtZeroFlow,
         ControlCondition,
+        CrossSectionSurvey,
         LevelSurvey,
         Attachment,
     }
@@ -4733,26 +4830,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         Unspecified,
         ControlCleaned,
         ControlNotCleaned,
-    }
-
-    public enum ControlConditionType
-    {
-        Unknown,
-        Unspecifed,
-        Clear,
-        FillControlChanged,
-        ScourControlChanged,
-        DebrisLight,
-        DebrisModerate,
-        DebrisHeavy,
-        VegetationLight,
-        VegetationModerate,
-        VegetationHeavy,
-        IceAnchor,
-        IceCover,
-        IceShore,
-        Submerged,
-        NoFlow,
     }
 
     public enum CurrentMeterType
@@ -5158,9 +5235,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string LocationIdentifier { get; set; }
 
         ///<summary>
-        ///If set, only return specified activity types, selected from: VisitSummary, Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, LevelSurvey, Attachment
+        ///If set, only return specified activity types, selected from: VisitSummary, Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="Array<ActivityType>", Description="If set, only return specified activity types, selected from: VisitSummary, Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, LevelSurvey, Attachment")]
+        [ApiMember(AllowMultiple=true, DataType="Array<ActivityType>", Description="If set, only return specified activity types, selected from: VisitSummary, Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment")]
         public List<ActivityType> Activities { get; set; }
 
         ///<summary>
@@ -5198,6 +5275,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if point velocity discharge activities should include verticals")]
         public bool? IncludeVerticals { get; set; }
+
+        ///<summary>
+        ///True if cross-section survey activities should include cross-section profile
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if cross-section survey activities should include cross-section profile")]
+        public bool? IncludeCrossSectionSurveyProfile { get; set; }
     }
 
     [Route("/GetFieldVisitData", "GET")]
@@ -5211,9 +5294,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string FieldVisitIdentifier { get; set; }
 
         ///<summary>
-        ///If set, only report the specific activity type: One of DischargeSummary, DischargeVolumetric, DischargeEngineeredStructure, DischargePointVelocity, DischargeAdcp, GageHeightAtZeroFlow, ControlCondition, DischargeOtherMethod, Inspection, or LevelSurvey
+        ///If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey or LevelSurvey
         ///</summary>
-        [ApiMember(Description="If set, only report the specific activity type: One of DischargeSummary, DischargeVolumetric, DischargeEngineeredStructure, DischargePointVelocity, DischargeAdcp, GageHeightAtZeroFlow, ControlCondition, DischargeOtherMethod, Inspection, or LevelSurvey")]
+        [ApiMember(Description="If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey or LevelSurvey")]
         public string DiscreteMeasurementActivity { get; set; }
 
         ///<summary>
@@ -5239,6 +5322,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if point velocity discharge activities should include verticals")]
         public bool? IncludeVerticals { get; set; }
+
+        ///<summary>
+        ///True if cross-section survey activities should include cross-section profile
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if cross-section survey activities should include cross-section profile")]
+        public bool? IncludeCrossSectionSurveyProfile { get; set; }
     }
 
     [Route("/GetFieldVisitDescriptionList", "GET")]
@@ -5478,6 +5567,34 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DateTime", Description="Filter results to items modified at or after the ChangesSinceToken time")]
         public DateTime? ChangesSinceToken { get; set; }
+    }
+
+    [Route("/GetRatingModelEffectiveShiftsByStageValues", "GET")]
+    public class RatingModelEffectiveShiftsByStageValuesServiceRequest
+        : IReturn<RatingModelEffectiveShiftsByStageValuesServiceResponse>
+    {
+        public RatingModelEffectiveShiftsByStageValuesServiceRequest()
+        {
+            StageValues = new List<double>{};
+        }
+
+        ///<summary>
+        ///Rating model identifier
+        ///</summary>
+        [ApiMember(Description="Rating model identifier", IsRequired=true)]
+        public string RatingModelIdentifier { get; set; }
+
+        ///<summary>
+        ///The time at which the shift is to be applied
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="The time at which the shift is to be applied", IsRequired=true)]
+        public DateTimeOffset? MeasurementTime { get; set; }
+
+        ///<summary>
+        ///The input stage values to which the shift is to be applied
+        ///</summary>
+        [ApiMember(DataType="Array<double>", Description="The input stage values to which the shift is to be applied", IsRequired=true)]
+        public List<double> StageValues { get; set; }
     }
 
     [Route("/GetRatingModelEffectiveShifts", "GET")]
@@ -6058,6 +6175,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         {
             Attachments = new List<Attachment>{};
             DischargeActivities = new List<DischargeActivity>{};
+            CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
         }
 
         ///<summary>
@@ -6095,6 +6213,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="InspectionActivity", Description="Inspection activity")]
         public InspectionActivity InspectionActivity { get; set; }
+
+        ///<summary>
+        ///Cross-section survey activity
+        ///</summary>
+        [ApiMember(DataType="Array<CrossSectionSurveyActivity>", Description="Cross-section survey activity")]
+        public List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
 
         ///<summary>
         ///Level survey activity
@@ -6466,6 +6590,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DateTime? NextToken { get; set; }
     }
 
+    public class RatingModelEffectiveShiftsByStageValuesServiceResponse
+        : PublishServiceResponse
+    {
+        public RatingModelEffectiveShiftsByStageValuesServiceResponse()
+        {
+            EffectiveShiftValues = new List<Nullable<Double>>{};
+        }
+
+        ///<summary>
+        ///Timestamp
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Timestamp")]
+        public DateTimeOffset? Timestamp { get; set; }
+
+        ///<summary>
+        ///Effective shift values
+        ///</summary>
+        [ApiMember(DataType="Array<double>", Description="Effective shift values")]
+        public List<Nullable<Double>> EffectiveShiftValues { get; set; }
+    }
+
     public class RatingModelEffectiveShiftsServiceResponse
         : PublishServiceResponse
     {
@@ -6768,6 +6913,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.3.84.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.4.72.0");
     }
 }
