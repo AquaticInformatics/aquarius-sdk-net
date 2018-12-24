@@ -1,6 +1,6 @@
 # AQUARIUS SDK for .NET 
 
-[![aquarius-sdk MyGet Build Status](https://www.myget.org/BuildSource/Badge/aquarius-sdk?identifier=5e7ad6e4-fa42-468c-abb3-7f26d7380aed)](https://www.myget.org/)
+[![Build status](https://ci.appveyor.com/api/projects/status/n92nyb7xbosplh9q/branch/develop?svg=true)](https://ci.appveyor.com/project/SystemsAdministrator/aquarius-sdk-net/branch/develop)
 
 The **AQUARIUS SDK for .NET** enables .NET developers to easily work with the [AQUARIUS Platform](http://aquaticinformatics.com/products/) of environmental monitoring products.
 
