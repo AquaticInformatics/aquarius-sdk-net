@@ -9,6 +9,7 @@ using FluentAssertions;
 using NodaTime;
 using NUnit.Framework;
 using ServiceStack;
+using ServiceStack.Logging;
 using ServiceStack.Text;
 
 namespace Aquarius.UnitTests.TimeSeries.Client
@@ -20,8 +21,126 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         [OneTimeSetUp]
         public void BeforeAnyTests()
         {
+            SetupLogging();
+
             ServiceStackConfig.ConfigureServiceStack();
         }
+
+        private class MyLogger : ILog
+        {
+            private void Write(string prefix, object message)
+            {
+                Console.WriteLine($"{prefix}: {message}");
+            }
+
+            private void Write(string prefix, string format, params object[] args)
+            {
+                Console.WriteLine($"{prefix}: {string.Format(format, args)}");
+            }
+
+            private void Write(string prefix, object message, Exception exception)
+            {
+                Console.WriteLine($"{prefix}: {message}: {exception.Message}\n{exception.StackTrace}");
+            }
+
+            public void Debug(object message)
+            {
+                Write("DEBUG", message);
+            }
+
+            public void Debug(object message, Exception exception)
+            {
+                Write("DEBUG", message, exception);
+            }
+
+            public void DebugFormat(string format, params object[] args)
+            {
+                Write("DEBUG", format, args);
+            }
+
+            public void Error(object message)
+            {
+                Write("ERROR", message);
+            }
+
+            public void Error(object message, Exception exception)
+            {
+                Write("ERROR", message, exception);
+            }
+
+            public void ErrorFormat(string format, params object[] args)
+            {
+                Write("ERROR", format, args);
+            }
+
+            public void Fatal(object message)
+            {
+                Write("FATAL", message);
+            }
+
+            public void Fatal(object message, Exception exception)
+            {
+                Write("FATAL", message, exception);
+            }
+
+            public void FatalFormat(string format, params object[] args)
+            {
+                Write("FATAL", format, args);
+            }
+
+            public void Info(object message)
+            {
+                Write("INFO", message);
+            }
+
+            public void Info(object message, Exception exception)
+            {
+                Write("INFO", message, exception);
+            }
+
+            public void InfoFormat(string format, params object[] args)
+            {
+                Write("INFO", format, args);
+            }
+
+            public void Warn(object message)
+            {
+                Write("WARN", message);
+            }
+
+            public void Warn(object message, Exception exception)
+            {
+                Write("WARN", message, exception);
+            }
+
+            public void WarnFormat(string format, params object[] args)
+            {
+                Write("WARN", format, args);
+            }
+
+            public bool IsDebugEnabled { get; } = true;
+        }
+
+        private class MyLoggerFactory : ILogFactory
+        {
+            private static readonly ILog Logger = new MyLogger();
+            public ILog GetLogger(Type type)
+            {
+                return Logger;
+            }
+
+            public ILog GetLogger(string typeName)
+            {
+                return Logger;
+            }
+        }
+
+        private void SetupLogging()
+        {
+            LogManager.LogFactory = new MyLoggerFactory();
+
+        }
+
 
         [Test]
         public void DateTime_SerializesToExpectedText()
@@ -788,13 +907,19 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         [Test]
         public void EnumWithoutUnknownDefault_WithUnexpectedValue_Throws()
         {
+
             AssertEnumDoesNotHaveUnknownDefault<CorrectionProcessingOrder>();
 
             var jsonText = $"\"{GetDefaultEnumValue<CorrectionProcessingOrder>()}_SomeValueThatWontBeExpected\"";
 
+            var log = LogManager.GetLogger("thing");
+
+            log.Info($"jsonText={jsonText}");
             Action action = () => jsonText.FromJson<CorrectionProcessingOrder>();
 
             action.ShouldThrow<ArgumentException>();
+
+            log.Info("Test completed");
         }
 
 
@@ -807,9 +932,15 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
             var jsonText = $"\"{defaultValue}_SomeValueThatWontBeExpected\"";
 
+            var log = LogManager.GetLogger("thing");
+
+            log.Info($"jsonText={jsonText}");
+
             var actual = jsonText.FromJson<FlowDirectionType>();
 
             actual.ShouldBeEquivalentTo(defaultValue);
+
+            log.Info("Test completed");
         }
 
         private void AssertEnumHasUnknownDefault<TEnum>() where TEnum : struct
