@@ -1,0 +1,49 @@
+image: Visual Studio 2017
+
+platform: Any CPU
+configuration: Release
+
+shallow_clone: true
+skip_tags: true
+
+pull_requests:
+  do_not_increment_build_number: true
+
+nuget:
+  disable_publish_on_pr: true
+
+environment:
+  GITHUB_AUTH_TOKEN:
+    secure: e24gj/T2VZ5R4XwbNUwj+eu4FbHEqWKUhuvNKXcp4dRPxj8lgW3AbWgSitK5kzek
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: "1.0.0.0"
+  file_version: '{version}'
+  informational_version: '{version}'
+  
+init:
+  - ps: |
+      If (-Not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
+        $env:IS_NOT_PR = "true"
+      }
+
+build:
+  project: src\Aquarius.SDK.sln
+
+artifacts:
+  - path: '**\*.nupkg'
+    name: AllPackages
+    type: NuGetPackage
+	
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: 2ysF04mVlBnibe56a/2jETvgEkTCV/ReYVdG8SmlKdlziv7STEEMYtenRU/jDyEa
+    skip_symbols: false
+    artifact: AllPackages2
+    on:
+      is_not_pr: true

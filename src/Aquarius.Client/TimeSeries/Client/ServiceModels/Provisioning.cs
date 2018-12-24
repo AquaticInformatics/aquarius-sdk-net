@@ -1,8 +1,8 @@
 /* Options:
-Date: 2018-09-19 11:44:49
+Date: 2018-12-22 16:24:35
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver15/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -210,32 +210,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     }
 
     [Route("/fielddataplugins", "POST")]
-    public class PostFieldDataPlugin
+    public class PostFieldDataPluginFile
         : IReturn<FieldDataPlugin>
     {
         ///<summary>
-        ///Plug-in folder name
+        ///File
         ///</summary>
-        [ApiMember(Description="Plug-in folder name", IsRequired=true)]
-        public string PluginFolderName { get; set; }
+        [Ignore]
+        [ApiMember(DataType="file", Description="File", IsRequired=true, ParameterType="form")]
+        public IHttpFile File { get; set; }
 
         ///<summary>
-        ///Assembly qualified type name
+        ///Plug-in priority; 1 has highest priority; omitted or 0 means use package priority; default is to make this plug-in the highest priority
         ///</summary>
-        [ApiMember(Description="Assembly qualified type name", IsRequired=true)]
-        public string AssemblyQualifiedTypeName { get; set; }
-
-        ///<summary>
-        ///Plug-in priority; 1 has highest priority
-        ///</summary>
-        [ApiMember(DataType="integer", Description="Plug-in priority; 1 has highest priority", IsRequired=true)]
+        [ApiMember(DataType="integer", Description="Plug-in priority; 1 has highest priority; omitted or 0 means use package priority; default is to make this plug-in the highest priority")]
         public int PluginPriority { get; set; }
-
-        ///<summary>
-        ///Description
-        ///</summary>
-        [ApiMember(Description="Description")]
-        public string Description { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/datumperiods", "DELETE")]
@@ -3793,6 +3782,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.3.84.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.4.72.0");
     }
 }
