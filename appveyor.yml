@@ -31,6 +31,9 @@ init:
         $env:IS_NOT_PR = "true"
       }
 
+before_build:
+  - nuget restore src\Aquarius.SDK.sln
+
 build:
   project: src\Aquarius.SDK.sln
 
