@@ -1,5 +1,5 @@
 /* Options:
-Date: 2018-12-22 16:24:35
+Date: 2019-04-25 08:42:02
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
@@ -134,9 +134,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class ApprovalLevelBase
     {
         ///<summary>
-        ///Approval Level. Values >=1000 are locking levels
+        ///Approval Level. Values &gt;=1000 are locking levels
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval Level. Values >=1000 are locking levels", IsRequired=true)]
+        [ApiMember(DataType="long integer", Description="Approval Level. Values &gt;=1000 are locking levels", IsRequired=true)]
         public long? ApprovalLevel { get; set; }
 
         ///<summary>
@@ -1232,6 +1232,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
     }
 
+    [Route("/roles/{UniqueId}/flattened", "GET")]
+    public class GetRoleFlattened
+        : IReturn<RoleFlattened>
+    {
+        ///<summary>
+        ///Unique Id of the role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the role", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
     [Route("/roles", "GET")]
     public class GetRoles
         : IReturn<RolesResponse>
@@ -1244,9 +1255,26 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
     }
 
+    [Route("/roles/flattened", "POST")]
+    public class PostRoleFlattened
+        : RoleFlattenedBase, IReturn<RoleFlattened>
+    {
+    }
+
     [Route("/roles/{UniqueId}", "PUT")]
     public class PutRole
         : RoleBase, IReturn<Role>
+    {
+        ///<summary>
+        ///Unique Id of the role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the role", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/roles/{UniqueId}/flattened", "PUT")]
+    public class PutRoleFlattened
+        : RoleFlattenedBase, IReturn<RoleFlattened>
     {
         ///<summary>
         ///Unique Id of the role
@@ -1315,6 +1343,177 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
         public bool CanRemoveFieldVisits { get; set; }
+    }
+
+    public class RoleFlattenedBase
+    {
+        public RoleFlattenedBase()
+        {
+            RoleApprovalTransitions = new List<string>{};
+        }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name", IsRequired=true)]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'")]
+        public List<string> RoleApprovalTransitions { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Read data and generate reports.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Read data and generate reports.")]
+        public bool CanReadData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add data. Includes appending logger data, creating/editing field visits, and uploading attachments.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add data. Includes appending logger data, creating/editing field visits, and uploading attachments.")]
+        public bool CanAddData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit data. Includes making corrections to time series; editing curves and shifts within a rating model.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit data. Includes making corrections to time series; editing curves and shifts within a rating model.")]
+        public bool CanEditData { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit location properties and derivations. Includes creating and editing time series, rating models, process settings.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit location properties and derivations. Includes creating and editing time series, rating models, process settings.")]
+        public bool CanEditLocationDetails { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add and remove locations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add and remove locations.")]
+        public bool CanAddOrRemoveLocations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Assign user roles for folders and locations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Assign user roles for folders and locations.")]
+        public bool CanAssignUserRoles { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Remove field visits.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
+        public bool CanRemoveFieldVisits { get; set; }
+    }
+
+    [Route("/settings/{Group}/{Key}", "DELETE")]
+    public class DeleteSetting
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Setting group
+        ///</summary>
+        [ApiMember(Description="Setting group", IsRequired=true, ParameterType="path")]
+        public string Group { get; set; }
+
+        ///<summary>
+        ///Setting key
+        ///</summary>
+        [ApiMember(Description="Setting key", IsRequired=true, ParameterType="path")]
+        public string Key { get; set; }
+    }
+
+    [Route("/settings/{Group}/{Key}", "GET")]
+    public class GetSetting
+        : IReturn<Setting>
+    {
+        ///<summary>
+        ///Setting group
+        ///</summary>
+        [ApiMember(Description="Setting group", IsRequired=true, ParameterType="path")]
+        public string Group { get; set; }
+
+        ///<summary>
+        ///Setting key
+        ///</summary>
+        [ApiMember(Description="Setting key", IsRequired=true, ParameterType="path")]
+        public string Key { get; set; }
+    }
+
+    [Route("/settings/{Group}", "GET")]
+    public class GetSettingGroup
+        : IReturn<SettingsResponse>
+    {
+        ///<summary>
+        ///Setting group
+        ///</summary>
+        [ApiMember(Description="Setting group", IsRequired=true, ParameterType="path")]
+        public string Group { get; set; }
+    }
+
+    [Route("/settings", "GET")]
+    public class GetSettings
+        : IReturn<SettingsResponse>
+    {
+    }
+
+    [Route("/settings", "POST")]
+    public class PostSetting
+        : IReturn<Setting>
+    {
+        ///<summary>
+        ///Setting group
+        ///</summary>
+        [ApiMember(Description="Setting group", IsRequired=true)]
+        public string Group { get; set; }
+
+        ///<summary>
+        ///Setting key
+        ///</summary>
+        [ApiMember(Description="Setting key", IsRequired=true)]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Setting value
+        ///</summary>
+        [ApiMember(Description="Setting value")]
+        public string Value { get; set; }
+
+        ///<summary>
+        ///Setting description
+        ///</summary>
+        [ApiMember(Description="Setting description")]
+        public string Description { get; set; }
+    }
+
+    [Route("/settings/{Group}/{Key}", "PUT")]
+    public class PutSetting
+        : IReturn<Setting>
+    {
+        ///<summary>
+        ///Setting group
+        ///</summary>
+        [ApiMember(Description="Setting group", IsRequired=true, ParameterType="path")]
+        public string Group { get; set; }
+
+        ///<summary>
+        ///Setting key
+        ///</summary>
+        [ApiMember(Description="Setting key", IsRequired=true, ParameterType="path")]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Setting value
+        ///</summary>
+        [ApiMember(Description="Setting value")]
+        public string Value { get; set; }
+
+        ///<summary>
+        ///Setting description
+        ///</summary>
+        [ApiMember(Description="Setting description")]
+        public string Description { get; set; }
     }
 
     [Route("/standarddatums/{Identifier}", "DELETE")]
@@ -2038,6 +2237,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class GetUsers
         : IReturn<UsersResponse>
     {
+        ///<summary>
+        ///If specified, only users with a matching Authentication Type will be returned
+        ///</summary>
+        [ApiMember(Description="If specified, only users with a matching Authentication Type will be returned")]
+        public string AuthenticationType { get; set; }
     }
 
     [Route("/users/activedirectory", "POST")]
@@ -2111,9 +2315,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : PutUserBase, IReturn<User>
     {
         ///<summary>
-        ///Password
+        ///If provided, will override password for user
         ///</summary>
-        [ApiMember(Description="Password", IsRequired=true)]
+        [ApiMember(Description="If provided, will override password for user")]
         public string Password { get; set; }
     }
 
@@ -2206,9 +2410,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class ApprovalLevel
     {
         ///<summary>
-        ///Approval Level. Values >=1000 are locking levels
+        ///Approval Level. Values &gt;=1000 are locking levels
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval Level. Values >=1000 are locking levels", IsRequired=true)]
+        [ApiMember(DataType="long integer", Description="Approval Level. Values &gt;=1000 are locking levels", IsRequired=true)]
         public long Level { get; set; }
 
         ///<summary>
@@ -3308,6 +3512,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public long? ToApprovalLevel { get; set; }
     }
 
+    public class RoleFlattened
+        : RoleFlattenedBase
+    {
+        ///<summary>
+        ///Unique Id of the role
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique Id of the role")]
+        public Guid UniqueId { get; set; }
+    }
+
     public class RolesResponse
     {
         public RolesResponse()
@@ -3320,6 +3534,59 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<Role>", Description="The list of roles")]
         public List<Role> Results { get; set; }
+    }
+
+    public class Setting
+    {
+        ///<summary>
+        ///Setting group
+        ///</summary>
+        [ApiMember(Description="Setting group")]
+        public string Group { get; set; }
+
+        ///<summary>
+        ///Setting key
+        ///</summary>
+        [ApiMember(Description="Setting key")]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Setting value
+        ///</summary>
+        [ApiMember(Description="Setting value")]
+        public string Value { get; set; }
+
+        ///<summary>
+        ///Setting description
+        ///</summary>
+        [ApiMember(Description="Setting description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///True if the unit is required by the system
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if the unit is required by the system")]
+        public bool IsSystem { get; set; }
+
+        ///<summary>
+        ///Last modified time
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Last modified time")]
+        public Instant LastModifiedTime { get; set; }
+    }
+
+    public class SettingsResponse
+    {
+        public SettingsResponse()
+        {
+            Results = new List<Setting>{};
+        }
+
+        ///<summary>
+        ///The list of settings
+        ///</summary>
+        [ApiMember(DataType="Array<Setting>", Description="The list of settings")]
+        public List<Setting> Results { get; set; }
     }
 
     public class StandardDatum
@@ -3782,6 +4049,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.4.72.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.1.110.0");
     }
 }
