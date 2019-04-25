@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 19.1.0
+- Updated the service models for the AQUARIUS Time-Series 2019.1 release.
+
 ### 18.8.1
 - Updated the service models for the AQUARIUS Time-Series 2018.4 release.
 - Integrations consuming the `GET /Publish/v2/GetFieldDataByLocation` response should update to the 18.8 SDK as soon as possible, to avoid `ArgumentException` errors when deserializing the new `CrossSectionSurvey` activity type introduced in AQTS 2018.4.

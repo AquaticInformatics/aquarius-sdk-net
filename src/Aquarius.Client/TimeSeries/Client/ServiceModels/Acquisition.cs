@@ -1,5 +1,5 @@
 /* Options:
-Date: 2018-12-22 16:25:02
+Date: 2019-04-25 08:42:21
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Acquisition/v2
@@ -79,6 +79,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         GeneratedReport,
         Csv,
         FieldDataPlugin,
+    }
+
+    public enum PointType
+    {
+        Unknown,
+        Point,
+        Gap,
     }
 
     [Route("/attachments/reports/{ReportUniqueId}", "DELETE")]
@@ -312,16 +319,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class TimeSeriesPoint
     {
         ///<summary>
-        ///ISO 8601 timestamp
+        ///ISO 8601 timestamp. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="Instant", Description="ISO 8601 timestamp", IsRequired=true)]
+        [ApiMember(DataType="Instant", Description="ISO 8601 timestamp. Must not be specified if Type is 'Gap'.")]
         public Instant? Time { get; set; }
 
         ///<summary>
-        ///The value of the point. Null or empty to represent a NaN
+        ///The value of the point. Null or empty to represent a NaN. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="double", Description="The value of the point. Null or empty to represent a NaN")]
+        [ApiMember(DataType="double", Description="The value of the point. Null or empty to represent a NaN. Must not be specified if Type is 'Gap'.")]
         public double? Value { get; set; }
+
+        ///<summary>
+        ///The type of the point: 'Point' or 'Gap'. Defaults to 'Point' if null or empty.
+        ///</summary>
+        [ApiMember(DataType="PointType", Description="The type of the point: 'Point' or 'Gap'. Defaults to 'Point' if null or empty.")]
+        public PointType? Type { get; set; }
     }
 
     public class AppendResponse
@@ -501,6 +514,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.4.72.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.1.110.0");
     }
 }

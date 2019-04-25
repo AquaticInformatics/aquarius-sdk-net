@@ -1,5 +1,5 @@
 /* Options:
-Date: 2018-12-22 16:23:50
+Date: 2019-04-25 08:41:42
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
@@ -2355,6 +2355,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DateTimeOffset? RawEndTime { get; set; }
 
         ///<summary>
+        ///Corrected start time
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Corrected start time")]
+        public DateTimeOffset? CorrectedStartTime { get; set; }
+
+        ///<summary>
+        ///Corrected end time
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Corrected end time")]
+        public DateTimeOffset? CorrectedEndTime { get; set; }
+
+        ///<summary>
         ///Time series type
         ///</summary>
         [ApiMember(Description="Time series type")]
@@ -2548,6 +2560,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class UnitMetadata
     {
+        ///<summary>
+        ///UniqueId
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId")]
+        public Guid UniqueId { get; set; }
+
         ///<summary>
         ///Identifier
         ///</summary>
@@ -3190,6 +3208,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string Manufacturer { get; set; }
     }
 
+    public class DatumConversionResult
+    {
+        ///<summary>
+        ///True if values are converted to the target reference datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if values are converted to the target reference datum")]
+        public bool ValuesConverted { get; set; }
+
+        ///<summary>
+        ///The reason, if any, that values could not be converted to the target reference datum
+        ///</summary>
+        [ApiMember(Description="The reason, if any, that values could not be converted to the target reference datum")]
+        public string FailureReason { get; set; }
+
+        ///<summary>
+        ///Target reference datum
+        ///</summary>
+        [ApiMember(Description="Target reference datum")]
+        public string TargetDatum { get; set; }
+    }
+
     public class DischargeActivity
     {
         public DischargeActivity()
@@ -3417,6 +3456,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public QuantityWithDisplay MeanGageHeight { get; set; }
 
         ///<summary>
+        ///True if the mean gage height was converted to the target datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if the mean gage height was converted to the target datum")]
+        public bool? MeanGageHeightWasDatumConverted { get; set; }
+
+        ///<summary>
         ///Mean gage height method
         ///</summary>
         [ApiMember(Description="Mean gage height method")]
@@ -3585,6 +3630,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="FieldVisitApproval", Description="Approval")]
         public FieldVisitApproval Approval { get; set; }
+
+        ///<summary>
+        ///Summary results for a requested datum conversion
+        ///</summary>
+        [ApiMember(DataType="DatumConversionResult", Description="Summary results for a requested datum conversion")]
+        public DatumConversionResult DatumConversionResult { get; set; }
     }
 
     public class FieldVisitApproval
@@ -3903,6 +3954,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<Reading> Readings { get; set; }
 
         ///<summary>
+        ///Number of readings which could not be converted to the target datum
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Number of readings which could not be converted to the target datum")]
+        public int? NumberOfReadingsNotDatumConverted { get; set; }
+
+        ///<summary>
         ///Calibration checks
         ///</summary>
         [ApiMember(DataType="Array<CalibrationCheck>", Description="Calibration checks")]
@@ -3953,9 +4010,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string Comments { get; set; }
 
         ///<summary>
-        ///Level survey measurments
+        ///Level survey measurements
         ///</summary>
-        [ApiMember(DataType="Array<LevelSurveyMeasurement>", Description="Level survey measurments")]
+        [ApiMember(DataType="Array<LevelSurveyMeasurement>", Description="Level survey measurements")]
         public List<LevelSurveyMeasurement> LevelMeasurements { get; set; }
     }
 
@@ -4713,7 +4770,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public enum ActivityType
     {
-        VisitSummary,
         Reading,
         Inspection,
         CalibrationCheck,
@@ -5235,9 +5291,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string LocationIdentifier { get; set; }
 
         ///<summary>
-        ///If set, only return specified activity types, selected from: VisitSummary, Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment
+        ///If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="Array<ActivityType>", Description="If set, only return specified activity types, selected from: VisitSummary, Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment")]
+        [ApiMember(AllowMultiple=true, DataType="Array<ActivityType>", Description="If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment")]
         public List<ActivityType> Activities { get; set; }
 
         ///<summary>
@@ -5281,6 +5337,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if cross-section survey activities should include cross-section profile")]
         public bool? IncludeCrossSectionSurveyProfile { get; set; }
+
+        ///<summary>
+        ///True if length reading values should be converted to the Local Assumed Datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if length reading values should be converted to the Local Assumed Datum")]
+        public bool? ConvertToLocalAssumedDatum { get; set; }
+
+        ///<summary>
+        ///If set, length reading values will be converted to the specified Standard Reference Datum
+        ///</summary>
+        [ApiMember(Description="If set, length reading values will be converted to the specified Standard Reference Datum")]
+        public string ConvertToStandardReferenceDatum { get; set; }
     }
 
     [Route("/GetFieldVisitData", "GET")]
@@ -5328,6 +5396,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if cross-section survey activities should include cross-section profile")]
         public bool? IncludeCrossSectionSurveyProfile { get; set; }
+
+        ///<summary>
+        ///True if length reading values should be converted to the Local Assumed Datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if length reading values should be converted to the Local Assumed Datum")]
+        public bool? ConvertToLocalAssumedDatum { get; set; }
+
+        ///<summary>
+        ///If set, length reading values will be converted to the specified Standard Reference Datum
+        ///</summary>
+        [ApiMember(Description="If set, length reading values will be converted to the specified Standard Reference Datum")]
+        public string ConvertToStandardReferenceDatum { get; set; }
     }
 
     [Route("/GetFieldVisitDescriptionList", "GET")]
@@ -6051,6 +6131,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class UnitListServiceRequest
         : IReturn<UnitListServiceResponse>
     {
+        ///<summary>
+        ///Filter results to the given Unit Group
+        ///</summary>
+        [ApiMember(Description="Filter results to the given Unit Group")]
+        public string GroupIdentifier { get; set; }
     }
 
     [Route("/GetUpchainProcessorListByTimeSeries", "GET")]
@@ -6231,6 +6316,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="FieldVisitApproval", Description="Approval")]
         public FieldVisitApproval Approval { get; set; }
+
+        ///<summary>
+        ///Summary results for a requested datum conversion
+        ///</summary>
+        [ApiMember(DataType="DatumConversionResult", Description="Summary results for a requested datum conversion")]
+        public DatumConversionResult DatumConversionResult { get; set; }
     }
 
     public class FieldVisitDescriptionListServiceResponse
@@ -6913,6 +7004,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("18.4.72.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.1.110.0");
     }
 }
