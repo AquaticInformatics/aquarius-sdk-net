@@ -1,5 +1,5 @@
 /* Options:
-Date: 2019-04-25 08:42:02
+Date: 2019-07-16 13:42:19
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
@@ -48,11 +48,10 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     public enum TimeSeriesType
     {
-        Unknown,
-        ProcessorBasic,
-        ProcessorDerived,
-        External,
-        Reflected,
+        Unknown = 0,
+        ProcessorBasic = 1,
+        ProcessorDerived = 2,
+        Reflected = 4,
     }
 
     [Route("/session", "DELETE")]
@@ -111,6 +110,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Xml { get; set; }
     }
 
+    public enum DropDownListType
+    {
+        Unspecified,
+        Configurable,
+        Fixed,
+    }
+
     public enum MeasurementDirection
     {
         Unknown,
@@ -123,6 +129,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         Unknown,
         Start,
         End,
+    }
+
+    public enum TagValueType
+    {
+        Unknown,
+        None,
+        PickList,
+    }
+
+    public enum ThresholdBehavior
+    {
+        Unknown,
+        ThresholdAbove,
+        ThresholdBelow,
+        None,
+    }
+
+    public enum ThresholdSuppressionOption
+    {
+        Unknown,
+        Editable,
+        On,
+        Off,
+    }
+
+    public enum ThresholdTypeSeverity
+    {
+        Unknown,
+        Info,
+        Warning,
+        Error,
     }
 
     [Route("/interpolationtypes", "GET")]
@@ -190,6 +227,189 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class PutApprovalLevel
         : ApprovalLevelBase, IReturn<ApprovalLevel>
     {
+    }
+
+    public class CodeTable
+        : CodeTableRequestBase
+    {
+        ///<summary>
+        ///True if item is required by the system.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if item is required by the system.")]
+        public bool IsSystem { get; set; }
+
+        ///<summary>
+        ///Used by the system to identify items with specific meanings.
+        ///</summary>
+        [ApiMember(Description="Used by the system to identify items with specific meanings.")]
+        public string SystemCode { get; set; }
+    }
+
+    public class CodeTableRequestBase
+    {
+        ///<summary>
+        ///Public Identifier
+        ///</summary>
+        [ApiMember(Description="Public Identifier", IsRequired=true)]
+        public string PublicIdentifier { get; set; }
+
+        ///<summary>
+        ///Display Name
+        ///</summary>
+        [ApiMember(Description="Display Name")]
+        public string DisplayName { get; set; }
+
+        ///<summary>
+        ///Formal Name
+        ///</summary>
+        [ApiMember(Description="Formal Name")]
+        public string FormalName { get; set; }
+    }
+
+    public class DeleteCodeTableBase
+    {
+        ///<summary>
+        ///Public identifier
+        ///</summary>
+        [ApiMember(Description="Public identifier", IsRequired=true)]
+        public string PublicIdentifier { get; set; }
+    }
+
+    [Route("/computationperiods/{PublicIdentifier}", "DELETE")]
+    public class DeleteComputationPeriod
+        : DeleteCodeTableBase, IReturnVoid
+    {
+    }
+
+    [Route("/computationtypes/{PublicIdentifier}", "DELETE")]
+    public class DeleteComputationType
+        : DeleteCodeTableBase, IReturnVoid
+    {
+    }
+
+    public class GetCodeTableBase
+    {
+    }
+
+    [Route("/computationperiods", "GET")]
+    public class GetComputationPeriods
+        : GetCodeTableBase, IReturn<CodeTableResponse>
+    {
+    }
+
+    [Route("/computationtypes", "GET")]
+    public class GetComputationTypes
+        : GetCodeTableBase, IReturn<CodeTableResponse>
+    {
+    }
+
+    [Route("/computationperiods", "POST")]
+    public class PostComputationPeriod
+        : CodeTableRequestBase, IReturn<CodeTable>
+    {
+    }
+
+    [Route("/computationtypes", "POST")]
+    public class PostComputationType
+        : CodeTableRequestBase, IReturn<CodeTable>
+    {
+    }
+
+    [Route("/computationperiods/{PublicIdentifier}", "PUT")]
+    public class PutComputationPeriod
+        : CodeTableRequestBase, IReturn<CodeTable>
+    {
+    }
+
+    [Route("/computationtypes/{PublicIdentifier}", "PUT")]
+    public class PutComputationType
+        : CodeTableRequestBase, IReturn<CodeTable>
+    {
+    }
+
+    public class ConfigurableDropDownListItemBase
+    {
+        ///<summary>
+        ///Id of the configurable drop-down list
+        ///</summary>
+        [ApiMember(Description="Id of the configurable drop-down list", IsRequired=true, ParameterType="path")]
+        public string DropDownListId { get; set; }
+
+        ///<summary>
+        ///Id of the drop-down list item to update
+        ///</summary>
+        [ApiMember(Description="Id of the drop-down list item to update", IsRequired=true, ParameterType="path")]
+        public string Id { get; set; }
+
+        ///<summary>
+        ///The that will be shown for the item in drop-down lists
+        ///</summary>
+        [ApiMember(Description="The that will be shown for the item in drop-down lists", IsRequired=true)]
+        public string DisplayName { get; set; }
+
+        ///<summary>
+        ///A value used to control the order of items in lists. Items with lower numbers will appear before items with higher numbers.
+        ///</summary>
+        [ApiMember(DataType="integer", Description="A value used to control the order of items in lists. Items with lower numbers will appear before items with higher numbers.", IsRequired=true)]
+        public int DisplayOrder { get; set; }
+    }
+
+    [Route("/dropdownlists/configurable/items", "GET")]
+    public class GetConfigurableDropDownListItems
+        : IReturn<ConfigurableDropDownListItemsResponse>
+    {
+    }
+
+    [Route("/dropdownlists/{Type}", "GET")]
+    public class GetDropDownListsByType
+        : IReturn<DropDownListResponse>
+    {
+        ///<summary>
+        ///The type of drop-down list to return.
+        ///</summary>
+        [ApiMember(DataType="DropDownListType", Description="The type of drop-down list to return.", IsRequired=true, ParameterType="path")]
+        public DropDownListType Type { get; set; }
+    }
+
+    [Route("/dropdownlists/fixed/items", "GET")]
+    public class GetFixedDropDownListItems
+        : IReturn<FixedDropDownListItemsResponse>
+    {
+    }
+
+    [Route("/dropdownlists/configurable/{DropDownListId}/{Id}", "POST")]
+    public class PostConfigurableDropDownListItem
+        : ConfigurableDropDownListItemBase, IReturn<ConfigurableDropDownListItem>
+    {
+    }
+
+    [Route("/dropdownlists/configurable/{DropDownListId}/{Id}", "PUT")]
+    public class PutConfigurableDropDownListItem
+        : ConfigurableDropDownListItemBase, IReturn<ConfigurableDropDownListItem>
+    {
+    }
+
+    [Route("/dropdownlists/fixed/{DropDownListId}/{Id}", "PUT")]
+    public class PutFixedDropDownListItem
+        : IReturn<FixedDropDownListItem>
+    {
+        ///<summary>
+        ///Id of the fixed drop-down list
+        ///</summary>
+        [ApiMember(Description="Id of the fixed drop-down list", IsRequired=true, ParameterType="path")]
+        public string DropDownListId { get; set; }
+
+        ///<summary>
+        ///Id of the drop-down list item to update
+        ///</summary>
+        [ApiMember(Description="Id of the drop-down list item to update", IsRequired=true, ParameterType="path")]
+        public string Id { get; set; }
+
+        ///<summary>
+        ///The that will be shown for the item in drop-down lists
+        ///</summary>
+        [ApiMember(Description="The that will be shown for the item in drop-down lists", IsRequired=true)]
+        public string DisplayName { get; set; }
     }
 
     [Route("/fielddataplugins/{UniqueId}", "DELETE")]
@@ -605,6 +825,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public PutLocationTags()
         {
             TagUniqueIds = new List<Guid>{};
+            Tags = new List<ApplyTagRequest>{};
         }
 
         ///<summary>
@@ -614,10 +835,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
-        ///UniqueId of each tag to be assigned to the location; an empty list means the location will have no tags assigned to it
+        ///DEPRECATED: use Tags instead
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="UniqueId of each tag to be assigned to the location; an empty list means the location will have no tags assigned to it", IsRequired=true)]
+        [ApiMember(DataType="Array<string>", Description="DEPRECATED: use Tags instead")]
         public List<Guid> TagUniqueIds { get; set; }
+
+        ///<summary>
+        ///Tags to be assigned to the location with optional values; an empty list means the location will have no tags assigned to it.
+        ///</summary>
+        [ApiMember(DataType="Array<ApplyTagRequest>", Description="Tags to be assigned to the location with optional values; an empty list means the location will have no tags assigned to it.")]
+        public List<ApplyTagRequest> Tags { get; set; }
     }
 
     [Route("/locationtypes/{UniqueId}", "PUT")]
@@ -1620,7 +1847,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string StandardIdentifier { get; set; }
     }
 
-    public class DeleteTagBase
+    public class ApplyTagRequest
+    {
+        ///<summary>
+        ///UniqueId of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId of the tag", IsRequired=true)]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Optional value of the tag
+        ///</summary>
+        [ApiMember(Description="Optional value of the tag")]
+        public string Value { get; set; }
+    }
+
+    [Route("/tags/{UniqueId}", "DELETE")]
+    public class DeleteTag
+        : IReturnVoid
     {
         ///<summary>
         ///Unique ID of the tag
@@ -1629,11 +1873,80 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
     }
 
-    public class GetTagsBase
+    [Route("/tags/{UniqueId}", "GET")]
+    public class GetTag
+        : IReturn<Tag>
+    {
+        ///<summary>
+        ///Unique ID of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the tag", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/tags", "GET")]
+    public class GetTags
+        : IReturn<TagsResponse>
     {
     }
 
-    public class PostTagBase
+    [Route("/tags", "POST")]
+    public class PostTag
+        : TagRequestBase, IReturn<Tag>
+    {
+    }
+
+    [Route("/tags/{UniqueId}", "PUT")]
+    public class PutTag
+        : TagRequestBase, IReturn<Tag>
+    {
+        ///<summary>
+        ///Unique ID of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the tag", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    public class TagRequestBase
+    {
+        public TagRequestBase()
+        {
+            PickListValues = new List<string>{};
+        }
+
+        ///<summary>
+        ///Unique tag key
+        ///</summary>
+        [ApiMember(Description="Unique tag key", IsRequired=true)]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Value type of the tag. Defaults to None.
+        ///</summary>
+        [ApiMember(DataType="TagValueType", Description="Value type of the tag. Defaults to None.")]
+        public TagValueType? ValueType { get; set; }
+
+        ///<summary>
+        ///Set of pick-list values. Required if ValueType is PickList. Values must be distinct.
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Set of pick-list values. Required if ValueType is PickList. Values must be distinct.")]
+        public List<string> PickListValues { get; set; }
+    }
+
+    public class DeleteNameTagBase
+    {
+        ///<summary>
+        ///Unique ID of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the tag", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    public class GetNameTagsBase
+    {
+    }
+
+    public class PostNameTagBase
     {
         ///<summary>
         ///Tag name
@@ -1642,7 +1955,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Name { get; set; }
     }
 
-    public class PutTagBase
+    public class PutNameTagBase
     {
         ///<summary>
         ///Unique ID of the tag
@@ -1659,50 +1972,116 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/tags/location/{UniqueId}", "DELETE")]
     public class DeleteLocationTag
-        : DeleteTagBase, IReturnVoid
+        : DeleteNameTagBase, IReturnVoid
     {
     }
 
     [Route("/tags/location", "GET")]
     public class GetLocationTags
-        : GetTagsBase, IReturn<TagsResponse>
+        : GetNameTagsBase, IReturn<NameTagsResponse>
     {
     }
 
     [Route("/tags/location", "POST")]
     public class PostLocationTag
-        : PostTagBase, IReturn<Tag>
+        : PostNameTagBase, IReturn<NameTag>
     {
     }
 
     [Route("/tags/location/{UniqueId}", "PUT")]
     public class PutLocationTag
-        : PutTagBase, IReturn<Tag>
+        : PutNameTagBase, IReturn<NameTag>
     {
     }
 
     [Route("/tags/note/{UniqueId}", "DELETE")]
     public class DeleteNoteTag
-        : DeleteTagBase, IReturnVoid
+        : DeleteNameTagBase, IReturnVoid
     {
     }
 
     [Route("/tags/note", "GET")]
     public class GetNoteTags
-        : GetTagsBase, IReturn<TagsResponse>
+        : GetNameTagsBase, IReturn<NameTagsResponse>
     {
     }
 
     [Route("/tags/note", "POST")]
     public class PostNoteTag
-        : PostTagBase, IReturn<Tag>
+        : PostNameTagBase, IReturn<NameTag>
     {
     }
 
     [Route("/tags/note/{UniqueId}", "PUT")]
     public class PutNoteTag
-        : PutTagBase, IReturn<Tag>
+        : PutNameTagBase, IReturn<NameTag>
     {
+    }
+
+    [Route("/thresholdtypes/{ReferenceValueCode}", "DELETE")]
+    public class DeleteThresholdType
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Reference value code
+        ///</summary>
+        [ApiMember(Description="Reference value code", IsRequired=true, ParameterType="path")]
+        public string ReferenceValueCode { get; set; }
+    }
+
+    [Route("/thresholdtypes", "GET")]
+    public class GetThresholdTypes
+        : IReturn<ThresholdTypesResponse>
+    {
+    }
+
+    [Route("/thresholdtypes", "POST")]
+    public class PostThresholdType
+        : ThresholdTypeRequestBase, IReturn<ThresholdType>
+    {
+        ///<summary>
+        ///Reference value code
+        ///</summary>
+        [ApiMember(Description="Reference value code", IsRequired=true)]
+        public string ReferenceValueCode { get; set; }
+
+        ///<summary>
+        ///Severity
+        ///</summary>
+        [ApiMember(DataType="ThresholdTypeSeverity", Description="Severity", IsRequired=true)]
+        public ThresholdTypeSeverity Severity { get; set; }
+
+        ///<summary>
+        ///Behavior to trigger thresholds of this type
+        ///</summary>
+        [ApiMember(DataType="ThresholdBehavior", Description="Behavior to trigger thresholds of this type", IsRequired=true)]
+        public ThresholdBehavior CheckForBehavior { get; set; }
+
+        ///<summary>
+        ///Allow thresholds of this type to suppress data
+        ///</summary>
+        [ApiMember(DataType="ThresholdSuppressionOption", Description="Allow thresholds of this type to suppress data", IsRequired=true)]
+        public ThresholdSuppressionOption ThresholdSuppressionOption { get; set; }
+    }
+
+    [Route("/thresholdtypes/{ReferenceValueCode}", "PUT")]
+    public class PutThresholdType
+        : ThresholdTypeRequestBase, IReturn<ThresholdType>
+    {
+        ///<summary>
+        ///Reference value code
+        ///</summary>
+        [ApiMember(Description="Reference value code", IsRequired=true, ParameterType="path")]
+        public string ReferenceValueCode { get; set; }
+    }
+
+    public class ThresholdTypeRequestBase
+    {
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description", IsRequired=true)]
+        public string Description { get; set; }
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}", "DELETE")]
@@ -2222,6 +2601,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
     }
 
+    [Route("/users/activedirectory/{UniqueId}", "GET")]
+    public class GetActiveDirectoryUser
+        : IReturn<ActiveDirectoryUser>
+    {
+        ///<summary>
+        ///Unique ID of the user
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the user", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/users/openidconnect/{UniqueId}", "GET")]
+    public class GetOpenIdConnectUser
+        : IReturn<OpenIdConnectUser>
+    {
+        ///<summary>
+        ///Unique ID of the user
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the user", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
     [Route("/users/{UniqueId}", "GET")]
     public class GetUser
         : IReturn<User>
@@ -2251,8 +2652,14 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format", IsRequired=true)]
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
+
+        ///<summary>
+        ///The domain user's security identifier (SID)
+        ///</summary>
+        [ApiMember(Description="The domain user's security identifier (SID)")]
+        public string ActiveDirectorySid { get; set; }
     }
 
     [Route("/users/credentials", "POST")]
@@ -2284,8 +2691,14 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format", IsRequired=true)]
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
+
+        ///<summary>
+        ///The domain user's security identifier (SID)
+        ///</summary>
+        [ApiMember(Description="The domain user's security identifier (SID)")]
+        public string ActiveDirectorySid { get; set; }
     }
 
     [Route("/users/activedirectory/{UniqueId}", "PUT")]
@@ -2295,8 +2708,14 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format", IsRequired=true)]
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
+
+        ///<summary>
+        ///The domain user's security identifier (SID)
+        ///</summary>
+        [ApiMember(Description="The domain user's security identifier (SID)")]
+        public string ActiveDirectorySid { get; set; }
     }
 
     [Route("/users/{UniqueId}/credentials", "PUT")]
@@ -2407,6 +2826,49 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Email { get; set; }
     }
 
+    public class ActiveDirectoryUser
+        : User
+    {
+        ///<summary>
+        ///The user's domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value
+        ///</summary>
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value")]
+        public string UserPrincipalName { get; set; }
+
+        ///<summary>
+        ///The domain user's security identifier (SID)
+        ///</summary>
+        [ApiMember(Description="The domain user's security identifier (SID)")]
+        public string ActiveDirectorySid { get; set; }
+    }
+
+    public class AppliedTag
+    {
+        ///<summary>
+        ///UniqueId of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId of the tag")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///DEPRECATED: renamed to Key
+        ///</summary>
+        [ApiMember(Description="DEPRECATED: renamed to Key")]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///Key of the tag
+        ///</summary>
+        [ApiMember(Description="Key of the tag")]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Value of the applied tag, if the tag's ValueType is PickList
+        ///</summary>
+        [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
+        public string Value { get; set; }
+    }
+
     public class ApprovalLevel
     {
         ///<summary>
@@ -2442,6 +2904,73 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<ApprovalLevel> Results { get; set; }
     }
 
+    public class CodeTableResponse
+    {
+        public CodeTableResponse()
+        {
+            Results = new List<CodeTable>{};
+        }
+
+        ///<summary>
+        ///The list of codes
+        ///</summary>
+        [ApiMember(DataType="Array<CodeTable>", Description="The list of codes")]
+        public List<CodeTable> Results { get; set; }
+    }
+
+    public class ConfigurableDropDownListItem
+        : FixedDropDownListItem
+    {
+        ///<summary>
+        ///A value used to control the order of items in lists. Items with lower numbers will appear before items with higher numbers.
+        ///</summary>
+        [ApiMember(DataType="integer", Description="A value used to control the order of items in lists. Items with lower numbers will appear before items with higher numbers.")]
+        public int DisplayOrder { get; set; }
+    }
+
+    public class ConfigurableDropDownListItemsResponse
+    {
+        public ConfigurableDropDownListItemsResponse()
+        {
+            Results = new List<ConfigurableDropDownListItem>{};
+        }
+
+        ///<summary>
+        ///The list of configurable drop-down list items
+        ///</summary>
+        [ApiMember(DataType="Array<ConfigurableDropDownListItem>", Description="The list of configurable drop-down list items")]
+        public List<ConfigurableDropDownListItem> Results { get; set; }
+    }
+
+    public class DropDownList
+    {
+        ///<summary>
+        ///Key for the drop-down list.
+        ///</summary>
+        [ApiMember(Description="Key for the drop-down list.")]
+        public string Id { get; set; }
+
+        ///<summary>
+        ///Display name for the drop-down list.
+        ///</summary>
+        [ApiMember(Description="Display name for the drop-down list.")]
+        public string DisplayName { get; set; }
+    }
+
+    public class DropDownListResponse
+    {
+        public DropDownListResponse()
+        {
+            Results = new List<DropDownList>{};
+        }
+
+        ///<summary>
+        ///The list of drop-down lists
+        ///</summary>
+        [ApiMember(DataType="Array<DropDownList>", Description="The list of drop-down lists")]
+        public List<DropDownList> Results { get; set; }
+    }
+
     public class ExtendedAttributeField
     {
         ///<summary>
@@ -2461,6 +2990,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="ExtendedAttributeFieldType", Description="Field type")]
         public ExtendedAttributeFieldType FieldType { get; set; }
+
+        ///<summary>
+        ///Numeric type
+        ///</summary>
+        [ApiMember(Description="Numeric type")]
+        public string NumericType { get; set; }
 
         ///<summary>
         ///Can be empty
@@ -2579,6 +3114,47 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<FieldDataPlugin> Results { get; set; }
     }
 
+    public class FixedDropDownListItem
+    {
+        ///<summary>
+        ///Key for the list the item belongs to.
+        ///</summary>
+        [ApiMember(Description="Key for the list the item belongs to.")]
+        public string DropDownListId { get; set; }
+
+        ///<summary>
+        ///Display name for the list the item belongs to.
+        ///</summary>
+        [ApiMember(Description="Display name for the list the item belongs to.")]
+        public string DropDownListDisplayName { get; set; }
+
+        ///<summary>
+        ///Key for the list item.
+        ///</summary>
+        [ApiMember(Description="Key for the list item.")]
+        public string Id { get; set; }
+
+        ///<summary>
+        ///Display name for the list item.
+        ///</summary>
+        [ApiMember(Description="Display name for the list item.")]
+        public string DisplayName { get; set; }
+    }
+
+    public class FixedDropDownListItemsResponse
+    {
+        public FixedDropDownListItemsResponse()
+        {
+            Results = new List<FixedDropDownListItem>{};
+        }
+
+        ///<summary>
+        ///The list of fixed drop-down list items
+        ///</summary>
+        [ApiMember(DataType="Array<FixedDropDownListItem>", Description="The list of fixed drop-down list items")]
+        public List<FixedDropDownListItem> Results { get; set; }
+    }
+
     public class Grade
     {
         ///<summary>
@@ -2665,7 +3241,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
         public Location()
         {
-            Tags = new List<Tag>{};
+            Tags = new List<AppliedTag>{};
         }
 
         ///<summary>
@@ -2749,8 +3325,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Tags applied to this location
         ///</summary>
-        [ApiMember(DataType="Array<Tag>", Description="Tags applied to this location")]
-        public List<Tag> Tags { get; set; }
+        [ApiMember(DataType="Array<AppliedTag>", Description="Tags applied to this location")]
+        public List<AppliedTag> Tags { get; set; }
 
         ///<summary>
         ///Extended attribute values
@@ -3082,6 +3658,35 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<MonitoringMethod> Results { get; set; }
     }
 
+    public class NameTag
+    {
+        ///<summary>
+        ///Unique ID of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the tag")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name")]
+        public string Name { get; set; }
+    }
+
+    public class NameTagsResponse
+    {
+        public NameTagsResponse()
+        {
+            Results = new List<NameTag>{};
+        }
+
+        ///<summary>
+        ///The list of tags
+        ///</summary>
+        [ApiMember(DataType="Array<NameTag>", Description="The list of tags")]
+        public List<NameTag> Results { get; set; }
+    }
+
     public class OpenIdConnectRelyingPartyConfiguration
     {
         public OpenIdConnectRelyingPartyConfiguration()
@@ -3119,6 +3724,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<string>", Description="Hosted domains")]
         public List<string> HostedDomains { get; set; }
+    }
+
+    public class OpenIdConnectUser
+        : User
+    {
+        ///<summary>
+        ///Unique identifier within the issuer for the end-user
+        ///</summary>
+        [ApiMember(Description="Unique identifier within the issuer for the end-user")]
+        public string SubjectIdentifier { get; set; }
     }
 
     public class Parameter
@@ -3655,6 +4270,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     public class Tag
     {
+        public Tag()
+        {
+            PickListValues = new List<string>{};
+        }
+
         ///<summary>
         ///Unique ID of the tag
         ///</summary>
@@ -3662,10 +4282,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
 
         ///<summary>
-        ///Name
+        ///Unique tag key
         ///</summary>
-        [ApiMember(Description="Name")]
-        public string Name { get; set; }
+        [ApiMember(Description="Unique tag key")]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Value type
+        ///</summary>
+        [ApiMember(DataType="TagValueType", Description="Value type")]
+        public TagValueType? ValueType { get; set; }
+
+        ///<summary>
+        ///Set of pick-list values if ValueType is PickList
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Set of pick-list values if ValueType is PickList")]
+        public List<string> PickListValues { get; set; }
     }
 
     public class TagsResponse
@@ -3680,6 +4312,53 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<Tag>", Description="The list of tags")]
         public List<Tag> Results { get; set; }
+    }
+
+    public class ThresholdType
+    {
+        ///<summary>
+        ///Reference Value Code
+        ///</summary>
+        [ApiMember(Description="Reference Value Code")]
+        public string ReferenceValueCode { get; set; }
+
+        ///<summary>
+        ///Severity
+        ///</summary>
+        [ApiMember(DataType="ThresholdTypeSeverity", Description="Severity")]
+        public ThresholdTypeSeverity Severity { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Direction of positive elevations in relation to the reference standard
+        ///</summary>
+        [ApiMember(DataType="ThresholdBehavior", Description="Direction of positive elevations in relation to the reference standard")]
+        public ThresholdBehavior CheckForBehavior { get; set; }
+
+        ///<summary>
+        ///Direction of positive elevations in relation to the reference standard
+        ///</summary>
+        [ApiMember(DataType="ThresholdSuppressionOption", Description="Direction of positive elevations in relation to the reference standard")]
+        public ThresholdSuppressionOption ThresholdSuppressionOption { get; set; }
+    }
+
+    public class ThresholdTypesResponse
+    {
+        public ThresholdTypesResponse()
+        {
+            Results = new List<ThresholdType>{};
+        }
+
+        ///<summary>
+        ///The list of threshold types
+        ///</summary>
+        [ApiMember(DataType="Array<ThresholdType>", Description="The list of threshold types")]
+        public List<ThresholdType> Results { get; set; }
     }
 
     public class TimeSeries
@@ -4018,9 +4697,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public bool CanConfigureSystem { get; set; }
 
         ///<summary>
-        ///True if the user is licenced to launch the Rating Development toolbox
+        ///True if the user is licensed to launch the Rating Development toolbox
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if the user is licenced to launch the Rating Development toolbox")]
+        [ApiMember(DataType="boolean", Description="True if the user is licensed to launch the Rating Development toolbox")]
         public bool CanLaunchRatingDevelopmentToolbox { get; set; }
 
         ///<summary>
@@ -4049,6 +4728,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.1.110.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.2.77.0");
     }
 }

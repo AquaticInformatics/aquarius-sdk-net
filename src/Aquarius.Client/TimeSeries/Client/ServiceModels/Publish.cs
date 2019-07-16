@@ -1,5 +1,5 @@
 /* Options:
-Date: 2019-04-25 08:41:42
+Date: 2019-07-16 13:41:27
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
@@ -724,10 +724,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string Method { get; set; }
 
         ///<summary>
-        ///Parameter
+        ///Parameter Name
         ///</summary>
-        [ApiMember(Description="Parameter")]
+        [ApiMember(Description="Parameter Name")]
         public string Parameter { get; set; }
+
+        ///<summary>
+        ///Parameter Id
+        ///</summary>
+        [ApiMember(Description="Parameter Id")]
+        public string ParameterId { get; set; }
+
+        ///<summary>
+        ///Parameter Unique Id
+        ///</summary>
+        [ApiMember(DataType="string", Description="Parameter Unique Id")]
+        public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
         ///Sub location identifier
@@ -746,7 +758,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     {
         public LocationNote()
         {
-            Tags = new List<TagMetadata>{};
+            Tags = new List<NoteTagMetadata>{};
         }
 
         ///<summary>
@@ -782,8 +794,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Location note tags
         ///</summary>
-        [ApiMember(DataType="Array<TagMetadata>", Description="Location note tags")]
-        public List<TagMetadata> Tags { get; set; }
+        [ApiMember(DataType="Array<NoteTagMetadata>", Description="Location note tags")]
+        public List<NoteTagMetadata> Tags { get; set; }
 
         ///<summary>
         ///User who last modified this note
@@ -1040,6 +1052,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
+    }
+
+    public class NoteTagMetadata
+    {
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name")]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///UniqueId
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId")]
+        public Guid UniqueId { get; set; }
     }
 
     public class OffsetPoint
@@ -1720,19 +1747,76 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public StatisticalDateTimeOffset EndTime { get; set; }
     }
 
-    public class TagMetadata
+    public class TagDefinition
     {
+        public TagDefinition()
+        {
+            PickListValues = new List<string>{};
+        }
+
         ///<summary>
-        ///Name
+        ///DEPRECATED: renamed to Key
         ///</summary>
-        [ApiMember(Description="Name")]
+        [ApiMember(Description="DEPRECATED: renamed to Key")]
         public string Name { get; set; }
+
+        ///<summary>
+        ///Key of the tag
+        ///</summary>
+        [ApiMember(Description="Key of the tag")]
+        public string Key { get; set; }
 
         ///<summary>
         ///UniqueId
         ///</summary>
         [ApiMember(DataType="string", Description="UniqueId")]
         public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Value type
+        ///</summary>
+        [ApiMember(DataType="TagValueType", Description="Value type")]
+        public TagValueType? ValueType { get; set; }
+
+        ///<summary>
+        ///Set of pick-list values if ValueType is PickList
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Set of pick-list values if ValueType is PickList")]
+        public List<string> PickListValues { get; set; }
+    }
+
+    public class TagMetadata
+    {
+        ///<summary>
+        ///UniqueId of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId of the tag")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///DEPRECATED: renamed to Key
+        ///</summary>
+        [ApiMember(Description="DEPRECATED: renamed to Key")]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///Key of the tag
+        ///</summary>
+        [ApiMember(Description="Key of the tag")]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Value of the applied tag, if the tag's ValueType is PickList
+        ///</summary>
+        [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
+        public string Value { get; set; }
+    }
+
+    public enum TagValueType
+    {
+        Unknown,
+        None,
+        PickList,
     }
 
     public enum ThresholdType
@@ -3510,10 +3594,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DoubleWithDisplay DurationInHours { get; set; }
 
         ///<summary>
-        ///Measurement grade
+        ///Quality Assurance Comments
         ///</summary>
-        [ApiMember(DataType="MeasurementGradeType", Description="Measurement grade")]
+        [ApiMember(Description="Quality Assurance Comments")]
+        public string QualityAssuranceComments { get; set; }
+
+        ///<summary>
+        ///Discharge Uncertainty
+        ///</summary>
+        [ApiMember(DataType="DischargeUncertainty", Description="Discharge Uncertainty")]
+        public DischargeUncertainty DischargeUncertainty { get; set; }
+
+        ///<summary>
+        ///DEPRECATED: Use DischargeUncertainty.QualitativeUncertainty instead.
+        ///</summary>
+        [ApiMember(DataType="MeasurementGradeType", Description="DEPRECATED: Use DischargeUncertainty.QualitativeUncertainty instead.")]
         public MeasurementGradeType MeasurementGrade { get; set; }
+
+        ///<summary>
+        ///Grade code
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code")]
+        public int? GradeCode { get; set; }
 
         ///<summary>
         ///Measurement id
@@ -3538,6 +3640,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="Publish")]
         public bool Publish { get; set; }
+    }
+
+    public class DischargeUncertainty
+    {
+        ///<summary>
+        ///Active Uncertainty Type in use
+        ///</summary>
+        [ApiMember(DataType="UncertaintyType", Description="Active Uncertainty Type in use")]
+        public UncertaintyType ActiveUncertaintyType { get; set; }
+
+        ///<summary>
+        ///Quantitative (Type A) Uncertainty
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Quantitative (Type A) Uncertainty")]
+        public DoubleWithDisplay QuantitativeUncertainty { get; set; }
+
+        ///<summary>
+        ///Qualitative (Type B) Uncertainty
+        ///</summary>
+        [ApiMember(DataType="QualitativeUncertaintyType", Description="Qualitative (Type B) Uncertainty")]
+        public QualitativeUncertaintyType QualitativeUncertainty { get; set; }
     }
 
     public class EngineeredStructureDischargeActivity
@@ -5054,6 +5177,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         Surface,
     }
 
+    public enum QualitativeUncertaintyType
+    {
+        Unknown,
+        Unspecified,
+        Excellent,
+        Good,
+        Fair,
+        Poor,
+    }
+
     public enum ReadingType
     {
         Unknown,
@@ -5089,6 +5222,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         Unspecified,
         LeftEdgeOfWater,
         RightEdgeOfWater,
+    }
+
+    public enum UncertaintyType
+    {
+        None,
+        Quantitative,
+        Qualitative,
     }
 
     public enum VelocityVariationType
@@ -5498,6 +5638,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public LocationDescriptionListServiceRequest()
         {
             TagNames = new List<string>{};
+            TagKeys = new List<string>{};
+            TagValues = new List<string>{};
             ExtendedFilters = new List<ExtendedAttributeFilter>{};
         }
 
@@ -5520,10 +5662,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string LocationFolder { get; set; }
 
         ///<summary>
-        ///Filter results to locations matching all tags (supports *partialname* pattern)
+        ///DEPRECATED: renamed to TagKeys
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Filter results to locations matching all tags (supports *partialname* pattern)")]
+        [ApiMember(DataType="Array<string>", Description="DEPRECATED: renamed to TagKeys")]
         public List<string> TagNames { get; set; }
+
+        ///<summary>
+        ///Filter results to locations matching all tags by key (supports *partialname* pattern)
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Filter results to locations matching all tags by key (supports *partialname* pattern)")]
+        public List<string> TagKeys { get; set; }
+
+        ///<summary>
+        ///Filter results to locations matching all tags by value (supports *partialname* pattern)
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Filter results to locations matching all tags by value (supports *partialname* pattern)")]
+        public List<string> TagValues { get; set; }
 
         ///<summary>
         ///Filter results to items matching the given extended attribute values
@@ -6513,7 +6667,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     {
         public LocationTagListServiceResponse()
         {
-            Tags = new List<TagMetadata>{};
+            Tags = new List<TagDefinition>{};
         }
 
         ///<summary>
@@ -6537,8 +6691,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Tags
         ///</summary>
-        [ApiMember(DataType="Array<TagMetadata>", Description="Tags")]
-        public List<TagMetadata> Tags { get; set; }
+        [ApiMember(DataType="Array<TagDefinition>", Description="Tags")]
+        public List<TagDefinition> Tags { get; set; }
     }
 
     public class MetadataChangeTransactionListServiceResponse
@@ -7004,6 +7158,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.1.110.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.2.77.0");
     }
 }
