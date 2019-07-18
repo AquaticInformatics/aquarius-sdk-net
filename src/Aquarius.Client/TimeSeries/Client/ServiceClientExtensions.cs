@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Aquarius.TimeSeries.Client.NativeTypes;
 using ServiceStack;
 
 namespace Aquarius.TimeSeries.Client
@@ -34,6 +36,9 @@ namespace Aquarius.TimeSeries.Client
             }
         }
 
+        private static readonly ConcurrentDictionary<IServiceClient, ServerRequestNameResolver>
+            EndpointRequestNameResolvers = new ConcurrentDictionary<IServiceClient, ServerRequestNameResolver>();
+
         public static IEnumerable<TResponse> SendAll<TRequest, TResponse>(
             this IServiceClient client,
             int batchSize,
@@ -47,13 +52,33 @@ namespace Aquarius.TimeSeries.Client
 
             foreach (var requestBatch in requestBatches)
             {
-                responses.AddRange(client.SendAll<TResponse>(requestBatch.Cast<object>()));
+                var firstRequest = requestBatch.First();
+
+                var requestNameResolver = EndpointRequestNameResolvers
+                    .GetOrAdd(client, serviceClient => new ServerRequestNameResolver());
+
+                var serverRequestName = requestNameResolver.ResolveRequestName(client, firstRequest);
+
+                responses.AddRange(SendBatch<TResponse>(client, serverRequestName, requestBatch.Cast<object>()));
 
                 if (cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested)
                     break;
             }
 
             return responses;
+        }
+
+        private static List<TResponse> SendBatch<TResponse>(IServiceClient client, string requestName, IEnumerable<object> requests)
+        {
+            // Monkey-patched from ServiceStack\src\ServiceStack.Client\ServiceClientBase.cs SendAll<TResponse>(requests)
+            if (!(client is ServiceClientBase serviceClient))
+                return client.SendAll<TResponse>(requests);
+
+            var requestUri = serviceClient.SyncReplyBaseUri.WithTrailingSlash() + requestName + "[]";
+
+            var response = serviceClient.Send<List<TResponse>>(HttpMethods.Post, requestUri, requests);
+
+            return response;
         }
 
         private static IEnumerable<T[]> BatchesOf<T>(IEnumerable<T> sequence, int batchSize)
