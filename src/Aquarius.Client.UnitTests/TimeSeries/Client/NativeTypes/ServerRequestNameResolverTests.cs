@@ -35,6 +35,11 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client.NativeTypes
         {
         }
 
+        [Route(KnownRoute, HttpMethods.Put)]
+        public class ClientPutRequest : IReturn<DummyResponse>
+        {
+        }
+
         [Route(KnownRoute, HttpMethods.Get)]
         public class RenamedServerGetRequest : IReturn<DummyResponse>
         {
@@ -101,6 +106,21 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client.NativeTypes
             SetupMockEndpointWithRenamedMetadata();
 
             var request = new ClientGetRequest();
+            var clientRequestName = request.GetType().Name;
+
+            var actual = _resolver.ResolveRequestName(_mockEndpointClient, request);
+            var expected = typeof(RenamedServerGetRequest).Name;
+
+            actual.Should().NotBe(clientRequestName);
+            actual.ShouldBeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void ResolveRequestName_WithPutRequestClass_ReturnsRenamedServerRequestName()
+        {
+            SetupMockEndpointWithRenamedMetadata();
+
+            var request = new ClientPutRequest();
             var clientRequestName = request.GetType().Name;
 
             var actual = _resolver.ResolveRequestName(_mockEndpointClient, request);
