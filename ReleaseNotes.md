@@ -4,7 +4,7 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
-### 19.2.2
+### 19.2.3
 - An internal change to improve the robustness of the `SendBatchRequests` helper method. Now it will continue to work even if a server version renames an internal request DTO class.
 
 ### 19.2.0

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using ServiceStack;
@@ -9,7 +10,8 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
     {
         private readonly object _syncLock = new object();
 
-        private Dictionary<string, MetadataType> RequestsByRoute { get; set; }
+        private ConcurrentDictionary<string, MetadataType> RequestsByRoute { get; set; }
+        private ConcurrentDictionary<Type, List<RestRoute>> RoutesByType { get; } = new ConcurrentDictionary<Type, List<RestRoute>>();
 
         public string ResolveRequestName<TRequest>(IServiceClient client, TRequest request)
         {
@@ -30,7 +32,7 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
                 if (RequestsByRoute != null)
                     return;
 
-                RequestsByRoute = new Dictionary<string, MetadataType>(StringComparer.InvariantCultureIgnoreCase);
+                RequestsByRoute = new ConcurrentDictionary<string, MetadataType>(StringComparer.InvariantCultureIgnoreCase);
 
                 try
                 {
@@ -63,10 +65,12 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
 
         private MetadataType FindMetadataType<TRequest>(TRequest request)
         {
-            var routes = GetRoutesForType(request.GetType());
+            var requestType = request.GetType();
+
+            var routes = RoutesByType.GetOrAdd(requestType, GetRoutesForType);
 
             if (!routes.Any())
-                throw new InvalidOperationException($"No routes found for '{request.GetType().Name}' request");
+                throw new InvalidOperationException($"No routes found for '{requestType.Name}' request");
 
             var httpMethod = routes.First().HttpMethods.First();
 
