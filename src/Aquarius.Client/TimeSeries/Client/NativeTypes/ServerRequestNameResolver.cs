@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ServiceStack;
 
 namespace Aquarius.TimeSeries.Client.NativeTypes
@@ -51,10 +52,26 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
             }
         }
 
+        private static List<RestRoute> GetRoutesForType(Type requestType)
+        {
+            var restRoutes = requestType.AllAttributes<RouteAttribute>()
+                .Select(attr => new RestRoute(requestType, attr.Path, attr.Verbs, attr.Priority))
+                .ToList();
+
+            return restRoutes;
+        }
+
         private MetadataType FindMetadataType<TRequest>(TRequest request)
         {
+            var routes = GetRoutesForType(request.GetType());
+
+            if (!routes.Any())
+                throw new InvalidOperationException($"No routes found for '{request.GetType().Name}' request");
+
+            var httpMethod = routes.First().HttpMethods.First();
+
             var route = request
-                .ToRelativeUri(HttpMethods.Get)
+                .ToRelativeUri(httpMethod)
                 .Split('?')[0];
 
             if (RequestsByRoute.TryGetValue(route, out var metadataType))
