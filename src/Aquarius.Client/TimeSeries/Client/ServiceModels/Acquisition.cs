@@ -1,5 +1,5 @@
 /* Options:
-Date: 2019-07-16 13:42:39
+Date: 2019-08-13 20:19:14
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Acquisition/v2
@@ -99,6 +99,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public Guid ReportUniqueId { get; set; }
     }
 
+    [Route("/timeseries/{UniqueId}/metadata/notes", "DELETE")]
+    public class DeleteTimeSeriesNotes
+        : IReturn<DeleteTimeSeriesNotesResponse>
+    {
+        ///<summary>
+        ///The unique ID (from Publish API) of the time-series
+        ///</summary>
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Time range. Only appended notes that are fully contained within the time range will be deleted.
+        ///</summary>
+        [ApiMember(DataType="Interval", Description="Time range. Only appended notes that are fully contained within the time range will be deleted.", IsRequired=true)]
+        public Interval? TimeRange { get; set; }
+    }
+
     [Route("/timeseries/appendstatus/{AppendRequestIdentifier}", "GET")]
     public class GetTimeSeriesAppendStatus
         : IReturn<TimeSeriesAppendStatus>
@@ -146,20 +163,20 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     {
         public PostReflectedTimeSeries()
         {
-            Points = new List<ReflectedTimeSeriesPoint>{};
+            Points = new List<TimeSeriesPoint>{};
         }
 
         ///<summary>
-        ///The unique ID (from Publish API) of the reflected time series to receive points
+        ///The unique ID (from Publish API) of the reflected time-series to receive points
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the reflected time series to receive points", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the reflected time-series to receive points", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
-        [ApiMember(DataType="Array<ReflectedTimeSeriesPoint>", Description="Points to append (can be empty). All points must lie within the time range")]
-        public List<ReflectedTimeSeriesPoint> Points { get; set; }
+        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points to append (can be empty). All points must lie within the time range")]
+        public List<TimeSeriesPoint> Points { get; set; }
 
         ///<summary>
         ///Time range to update. Any existing points in the time range will be overwritten
@@ -237,9 +254,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         }
 
         ///<summary>
-        ///The unique ID (from Publish API) of the time series to receive points
+        ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time series to receive points", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series to receive points", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -247,6 +264,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points to append (can be empty)")]
         public List<TimeSeriesPoint> Points { get; set; }
+    }
+
+    [Route("/timeseries/{UniqueId}/metadata", "POST")]
+    public class PostTimeSeriesMetadata
+        : IReturn<PostTimeSeriesMetadataResponse>
+    {
+        public PostTimeSeriesMetadata()
+        {
+            Notes = new List<TimeSeriesNote>{};
+        }
+
+        ///<summary>
+        ///The unique ID (from Publish API) of the time-series
+        ///</summary>
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Notes to append
+        ///</summary>
+        [ApiMember(DataType="Array<TimeSeriesNote>", Description="Notes to append", IsRequired=true)]
+        public List<TimeSeriesNote> Notes { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/overwriteappend", "POST")]
@@ -259,9 +298,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         }
 
         ///<summary>
-        ///The unique ID (from Publish API) of the time series to receive points
+        ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time series to receive points", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series to receive points", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -295,29 +334,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public IHttpFile File { get; set; }
     }
 
-    public class ReflectedTimeSeriesPoint
-        : TimeSeriesPoint
+    public class TimeSeriesNote
     {
-        public ReflectedTimeSeriesPoint()
-        {
-            Qualifiers = new List<string>{};
-        }
+        ///<summary>
+        ///Time range of the note
+        ///</summary>
+        [ApiMember(DataType="Interval", Description="Time range of the note", IsRequired=true)]
+        public Interval? TimeRange { get; set; }
 
         ///<summary>
-        ///Grade code
+        ///Content of the note
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code")]
-        public int? GradeCode { get; set; }
-
-        ///<summary>
-        ///Qualifier codes
-        ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Qualifier codes")]
-        public List<string> Qualifiers { get; set; }
+        [ApiMember(Description="Content of the note", IsRequired=true)]
+        public string NoteText { get; set; }
     }
 
     public class TimeSeriesPoint
     {
+        public TimeSeriesPoint()
+        {
+            Qualifiers = new List<string>{};
+        }
+
         ///<summary>
         ///ISO 8601 timestamp. Must not be specified if Type is 'Gap'.
         ///</summary>
@@ -335,6 +373,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(DataType="PointType", Description="The type of the point: 'Point' or 'Gap'. Defaults to 'Point' if null or empty.")]
         public PointType? Type { get; set; }
+
+        ///<summary>
+        ///Grade code
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code")]
+        public int? GradeCode { get; set; }
+
+        ///<summary>
+        ///Qualifier codes
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Qualifier codes")]
+        public List<string> Qualifiers { get; set; }
     }
 
     public class AppendResponse
@@ -344,6 +394,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(Description="A token to use in subsequent GetTimeSeriesAppendStatus calls")]
         public string AppendRequestIdentifier { get; set; }
+    }
+
+    public class DeleteTimeSeriesNotesResponse
+    {
+        ///<summary>
+        ///Notes deleted
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Notes deleted")]
+        public int NotesDeleted { get; set; }
     }
 
     public class FieldDataPlugin
@@ -403,6 +462,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(DataType="string", Description="Unique ID of the created report")]
         public Guid ReportUniqueId { get; set; }
+    }
+
+    public class PostTimeSeriesMetadataResponse
+    {
+        ///<summary>
+        ///Notes created
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Notes created")]
+        public int NotesCreated { get; set; }
     }
 
     public class PostVisitFileResponse
@@ -514,6 +582,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.2.77.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.2.185.0");
     }
 }

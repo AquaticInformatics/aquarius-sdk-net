@@ -4,6 +4,13 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 19.2.4
+- Updated the service models for the AQUARIUS Time-Series 2019.2 Update 1 release. (Build 19.2.185) This update allows grades and qualifiers to be appended to basic time-series points, in addition to values.
+- **Source code change required:** Replace "ReflectedTimeSeriesPoint" with "TimeSeriesPoint"
+    - The `ReflectedTimeSeriesPoint` request DTO class has been removed, since its parent class `TimeSeriesPoint` can now be used for both appends to basic or reflected time-series.
+    - If your integration was appending to reflect time-series, just rename all instances of `ReflectedTimeSeriesPoint` to `TimeSeriesPoint`.
+    - Code compiled against SDK 19.2.4 continues to be compatible with earlier versions of AQTS.
+
 ### 19.2.3
 - An internal change to improve the robustness of the `SendBatchRequests` helper method. Now it will continue to work even if a server version renames an internal request DTO class.
 
