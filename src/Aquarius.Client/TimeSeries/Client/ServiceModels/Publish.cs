@@ -1,8 +1,8 @@
 /* Options:
-Date: 2019-08-13 20:18:28
+Date: 2019-10-09 09:32:28
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
+BaseUrl: http://aqts-ora/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -711,6 +711,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LocationMonitoringMethod
     {
+        public LocationMonitoringMethod()
+        {
+            Tags = new List<TagMetadata>{};
+        }
+
+        ///<summary>
+        ///UniqueId
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Location Identifier
+        ///</summary>
+        [ApiMember(Description="Location Identifier")]
+        public string LocationIdentifier { get; set; }
+
         ///<summary>
         ///Name
         ///</summary>
@@ -718,9 +735,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string Name { get; set; }
 
         ///<summary>
-        ///Method
+        ///Method Code
         ///</summary>
-        [ApiMember(Description="Method")]
+        [ApiMember(Description="Method Code")]
+        public string MethodCode { get; set; }
+
+        ///<summary>
+        ///Method Display Name
+        ///</summary>
+        [ApiMember(Description="Method Display Name")]
         public string Method { get; set; }
 
         ///<summary>
@@ -752,6 +775,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Comment")]
         public string Comment { get; set; }
+
+        ///<summary>
+        ///Last modified time (UTC)
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Last modified time (UTC)")]
+        public DateTimeOffset LastModifiedUtc { get; set; }
+
+        ///<summary>
+        ///Tags
+        ///</summary>
+        [ApiMember(DataType="Array<TagMetadata>", Description="Tags")]
+        public List<TagMetadata> Tags { get; set; }
     }
 
     public class LocationNote
@@ -3060,6 +3095,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="Is valid")]
         public bool IsValid { get; set; }
+
+        ///<summary>
+        ///Sensor unique ID
+        ///</summary>
+        [ApiMember(DataType="string", Description="Sensor unique ID")]
+        public Guid? SensorUniqueId { get; set; }
     }
 
     public class CompletedWork
@@ -4396,6 +4437,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Reading
     {
+        public Reading()
+        {
+            ReadingQualifiers = new List<string>{};
+        }
+
         ///<summary>
         ///Parameter
         ///</summary>
@@ -4493,16 +4539,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public Guid? ReferencePointUniqueId { get; set; }
 
         ///<summary>
-        ///ReadingQualifier
+        ///Reading Qualifier
         ///</summary>
-        [ApiMember(Description="ReadingQualifier")]
+        [ApiMember(Description="Reading Qualifier")]
         public string ReadingQualifier { get; set; }
+
+        ///<summary>
+        ///Reading Qualifiers
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Reading Qualifiers")]
+        public List<string> ReadingQualifiers { get; set; }
 
         ///<summary>
         ///Groundwater measurements
         ///</summary>
         [ApiMember(DataType="GroundWaterMeasurement", Description="Groundwater measurements")]
         public GroundWaterMeasurement GroundWaterMeasurement { get; set; }
+
+        ///<summary>
+        ///Sensor unique ID
+        ///</summary>
+        [ApiMember(DataType="string", Description="Sensor unique ID")]
+        public Guid? SensorUniqueId { get; set; }
     }
 
     public class StandardDetails
@@ -5900,13 +5958,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Rating model identifier
         ///</summary>
-        [ApiMember(Description="Rating model identifier")]
+        [ApiMember(Description="Rating model identifier", IsRequired=true)]
         public string RatingModelIdentifier { get; set; }
 
         ///<summary>
         ///Input values
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="Input values")]
+        [ApiMember(DataType="Array<double>", Description="Input values", IsRequired=true)]
         public List<double> InputValues { get; set; }
 
         ///<summary>
@@ -5968,15 +6026,108 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public int? MaxResults { get; set; }
     }
 
-    [Route("/GetSensorsAndGauges", "GET")]
+    [Route("/Round/ByParameter", "PUT")]
+    public class RoundServiceRequest
+        : IReturn<RoundServiceResponse>
+    {
+        public RoundServiceRequest()
+        {
+            Data = new List<double>{};
+        }
+
+        ///<summary>
+        ///The data is for this parameter
+        ///</summary>
+        [ApiMember(Description="The data is for this parameter", IsRequired=true)]
+        public string ParameterDisplayId { get; set; }
+
+        ///<summary>
+        ///The data is in this unit. Used to modify rounding spec to maintain precision
+        ///</summary>
+        [ApiMember(Description="The data is in this unit. Used to modify rounding spec to maintain precision", IsRequired=true)]
+        public string UnitId { get; set; }
+
+        ///<summary>
+        ///The data was measured using this method. Specify only if known
+        ///</summary>
+        [ApiMember(Description="The data was measured using this method. Specify only if known")]
+        public string MethodCode { get; set; }
+
+        ///<summary>
+        ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs
+        ///</summary>
+        [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs")]
+        public string ValueForNaN { get; set; }
+
+        ///<summary>
+        ///A list of data values to be rounded and returned as strings
+        ///</summary>
+        [ApiMember(DataType="Array<double>", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
+        public List<double> Data { get; set; }
+    }
+
+    [Route("/Round/ToSpec", "PUT")]
+    public class RoundServiceSpecRequest
+        : IReturn<RoundServiceResponse>
+    {
+        public RoundServiceSpecRequest()
+        {
+            Data = new List<double>{};
+        }
+
+        ///<summary>
+        ///Use this rounding specification to round the data
+        ///</summary>
+        [ApiMember(Description="Use this rounding specification to round the data", IsRequired=true)]
+        public string RoundingSpec { get; set; }
+
+        ///<summary>
+        ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs
+        ///</summary>
+        [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs")]
+        public string ValueForNaN { get; set; }
+
+        ///<summary>
+        ///A list of data values to be rounded and returned as strings
+        ///</summary>
+        [ApiMember(DataType="Array<double>", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
+        public List<double> Data { get; set; }
+    }
+
+    [Route("/GetSensorsAndGauges", "GET,POST")]
     public class SensorsAndGaugesServiceRequest
         : IReturn<SensorsAndGaugesServiceResponse>
     {
+        public SensorsAndGaugesServiceRequest()
+        {
+            LocationUniqueIds = new List<Guid>{};
+            TagKeys = new List<string>{};
+            TagValues = new List<string>{};
+        }
+
         ///<summary>
-        ///Location identifier
+        ///Filter results to sensors and gauges for this location
         ///</summary>
-        [ApiMember(Description="Location identifier", IsRequired=true)]
+        [ApiMember(Description="Filter results to sensors and gauges for this location")]
         public string LocationIdentifier { get; set; }
+
+        ///<summary>
+        ///Filter results to sensors and gauges for these locations. Limited to roughly 60 items for a GET request; use POST to avoid this limit.
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Filter results to sensors and gauges for these locations. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
+        public List<Guid> LocationUniqueIds { get; set; }
+
+        ///<summary>
+        ///Filter results to sensors and gauges matching all tags by key (supports *partialname* pattern)
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Filter results to sensors and gauges matching all tags by key (supports *partialname* pattern)")]
+        public List<string> TagKeys { get; set; }
+
+        ///<summary>
+        ///Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)")]
+        public List<string> TagValues { get; set; }
     }
 
     [Route("/GetTimeSeriesData", "GET")]
@@ -6161,7 +6312,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public bool? ApplyRounding { get; set; }
     }
 
-    [Route("/GetTimeSeriesDescriptionListByUniqueId", "GET")]
+    [Route("/GetTimeSeriesDescriptionListByUniqueId", "GET,POST")]
     public class TimeSeriesDescriptionListByUniqueIdServiceRequest
         : IReturn<TimeSeriesDescriptionListByUniqueIdServiceResponse>
     {
@@ -6171,9 +6322,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         }
 
         ///<summary>
-        ///A collection of time series unique IDs to query. Limited to roughly 60 items per request.
+        ///A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="A collection of time series unique IDs to query. Limited to roughly 60 items per request.")]
+        [ApiMember(DataType="Array<string>", Description="A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
         public List<Guid> TimeSeriesUniqueIds { get; set; }
     }
 
@@ -6916,6 +7067,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<Report> Reports { get; set; }
     }
 
+    public class RoundServiceResponse
+        : PublishServiceResponse
+    {
+        public RoundServiceResponse()
+        {
+            Data = new List<string>{};
+        }
+
+        ///<summary>
+        ///Values rounded as requested
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Values rounded as requested")]
+        public List<string> Data { get; set; }
+    }
+
     public class SensorsAndGaugesServiceResponse
         : PublishServiceResponse
     {
@@ -7158,6 +7324,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.2.185.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.3.70.0");
     }
 }

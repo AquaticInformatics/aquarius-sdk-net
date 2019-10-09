@@ -1,8 +1,8 @@
 /* Options:
-Date: 2019-08-13 20:18:50
+Date: 2019-10-09 09:32:43
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
+BaseUrl: http://aqts-ora/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -1632,6 +1632,95 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
         public bool CanRemoveFieldVisits { get; set; }
+    }
+
+    [Route("/sensors/{UniqueId}", "DELETE")]
+    public class DeleteSensor
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the sensor
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the sensor", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/sensors/{UniqueId}", "GET")]
+    public class GetSensor
+        : IReturn<Sensor>
+    {
+        ///<summary>
+        ///Unique ID of the sensor
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the sensor", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/sensors", "POST")]
+    public class PostSensor
+        : SensorBase, IReturn<Sensor>
+    {
+    }
+
+    [Route("/sensors/{UniqueId}", "PUT")]
+    public class PutSensor
+        : SensorBase, IReturn<Sensor>
+    {
+        ///<summary>
+        ///Unique ID of the sensor
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the sensor", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    public class SensorBase
+    {
+        public SensorBase()
+        {
+            Tags = new List<ApplyTagRequest>{};
+        }
+
+        ///<summary>
+        ///Location Unique ID
+        ///</summary>
+        [ApiMember(DataType="string", Description="Location Unique ID", IsRequired=true)]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Parameter ID
+        ///</summary>
+        [ApiMember(Description="Parameter ID", IsRequired=true)]
+        public string ParameterId { get; set; }
+
+        ///<summary>
+        ///Monitoring method code
+        ///</summary>
+        [ApiMember(Description="Monitoring method code", IsRequired=true)]
+        public string MethodCode { get; set; }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name")]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Tags to be assigned to the sensor with optional values
+        ///</summary>
+        [ApiMember(DataType="Array<ApplyTagRequest>", Description="Tags to be assigned to the sensor with optional values")]
+        public List<ApplyTagRequest> Tags { get; set; }
     }
 
     [Route("/settings/{Group}/{Key}", "DELETE")]
@@ -4151,6 +4240,68 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<Role> Results { get; set; }
     }
 
+    public class Sensor
+    {
+        public Sensor()
+        {
+            Tags = new List<AppliedTag>{};
+        }
+
+        ///<summary>
+        ///Unique ID
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Location Unique ID
+        ///</summary>
+        [ApiMember(DataType="string", Description="Location Unique ID")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Name
+        ///</summary>
+        [ApiMember(Description="Name")]
+        public string Name { get; set; }
+
+        ///<summary>
+        ///Parameter ID
+        ///</summary>
+        [ApiMember(Description="Parameter ID")]
+        public string ParameterId { get; set; }
+
+        ///<summary>
+        ///Monitoring method code
+        ///</summary>
+        [ApiMember(Description="Monitoring method code")]
+        public string MethodCode { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Last modified time (UTC)
+        ///</summary>
+        [ApiMember(DataType="Instant", Description="Last modified time (UTC)")]
+        public Instant LastModifiedUtc { get; set; }
+
+        ///<summary>
+        ///Tags
+        ///</summary>
+        [ApiMember(DataType="Array<AppliedTag>", Description="Tags")]
+        public List<AppliedTag> Tags { get; set; }
+    }
+
     public class Setting
     {
         ///<summary>
@@ -4728,6 +4879,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.2.185.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.3.70.0");
     }
 }
