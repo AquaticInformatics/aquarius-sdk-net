@@ -1,8 +1,8 @@
 /* Options:
-Date: 2019-10-09 09:32:43
+Date: 2020-01-13 13:19:33
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-ora/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -35,6 +35,13 @@ using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
 
 namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
+
+    public enum TagApplicability
+    {
+        AppliesToLocations,
+        AppliesToLocationNotes,
+        AppliesToSensorsGauges,
+    }
 
     public enum InterpolationType
     {
@@ -471,6 +478,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/locations/{LocationUniqueId}/datumperiods", "POST")]
     public class PostLocationDatumPeriod
+        : LocationDatumPeriodBase, IReturn<LocationDatumResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Reference standard this period is related to, which must be a standard reference datum for the location
+        ///</summary>
+        [ApiMember(Description="Reference standard this period is related to, which must be a standard reference datum for the location", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/datumperiods/{ValidFrom}", "PUT")]
+    public class PutLocationDatumPeriod
         : LocationDatumPeriodBase, IReturn<LocationDatumResponse>
     {
         ///<summary>
@@ -1035,22 +1059,34 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string ClientSecret { get; set; }
 
         ///<summary>
-        ///The redirection URI for the authorization response; e.g. http://my-domain/AQUARIUS/apps/v1/auth/openidconnect
+        ///The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.
         ///</summary>
-        [ApiMember(Description="The redirection URI for the authorization response; e.g. http://my-domain/AQUARIUS/apps/v1/auth/openidconnect", IsRequired=true)]
+        [ApiMember(Description="The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.", IsRequired=true)]
         public string RedirectUri { get; set; }
 
         ///<summary>
-        ///If not specified, defaults to openid
+        ///If not specified, defaults to 'openid', the standard scope required by the protocol.
         ///</summary>
-        [ApiMember(DataType="IList", Description="If not specified, defaults to openid")]
+        [ApiMember(DataType="Array<string>", Description="If not specified, defaults to 'openid', the standard scope required by the protocol.")]
         public IList<string> Scopes { get; set; }
 
         ///<summary>
-        ///Hosted domains
+        ///Optional list of hosted domains, supported for Google only
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Hosted domains")]
+        [ApiMember(DataType="Array<string>", Description="Optional list of hosted domains, supported for Google only")]
         public IList<string> HostedDomains { get; set; }
+
+        ///<summary>
+        ///Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.
+        ///</summary>
+        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
+        public string IdentifierClaim { get; set; }
+
+        ///<summary>
+        ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
+        ///</summary>
+        [ApiMember(Description="Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.")]
+        public string DisplayName { get; set; }
     }
 
     [Route("/openidconnect/relyingpartyconfiguration", "POST")]
@@ -1058,9 +1094,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : OpenIdConnectRelyingPartyConfigurationBase, IReturn<OpenIdConnectRelyingPartyConfiguration>
     {
         ///<summary>
-        ///An https URI specifying the fully qualified host name of the issuer
+        ///The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the 'issuer' field of the OpenID Connect discovery document published by the provider.
         ///</summary>
-        [ApiMember(Description="An https URI specifying the fully qualified host name of the issuer", IsRequired=true)]
+        [ApiMember(Description="The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the 'issuer' field of the OpenID Connect discovery document published by the provider.", IsRequired=true)]
         public string IssuerIdentifier { get; set; }
     }
 
@@ -1717,6 +1753,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Comments { get; set; }
 
         ///<summary>
+        ///Manufacturer
+        ///</summary>
+        [ApiMember(Description="Manufacturer")]
+        public string Manufacturer { get; set; }
+
+        ///<summary>
+        ///Model
+        ///</summary>
+        [ApiMember(Description="Model")]
+        public string Model { get; set; }
+
+        ///<summary>
+        ///Serial Number
+        ///</summary>
+        [ApiMember(Description="Serial Number")]
+        public string SerialNumber { get; set; }
+
+        ///<summary>
         ///Tags to be assigned to the sensor with optional values
         ///</summary>
         [ApiMember(DataType="Array<ApplyTagRequest>", Description="Tags to be assigned to the sensor with optional values")]
@@ -2001,6 +2055,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public TagRequestBase()
         {
             PickListValues = new List<string>{};
+            Applicability = new List<TagApplicability>{};
         }
 
         ///<summary>
@@ -2020,6 +2075,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<string>", Description="Set of pick-list values. Required if ValueType is PickList. Values must be distinct.")]
         public List<string> PickListValues { get; set; }
+
+        ///<summary>
+        ///If set, create tag with specified applicability, selected from one or more: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges.  When omitted, the tag is applicable to all.
+        ///</summary>
+        [ApiMember(DataType="Array<TagApplicability>", Description="If set, create tag with specified applicability, selected from one or more: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges.  When omitted, the tag is applicable to all.")]
+        public List<TagApplicability> Applicability { get; set; }
     }
 
     public class DeleteNameTagBase
@@ -2767,10 +2828,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : UserBase, IReturn<User>
     {
         ///<summary>
+        ///DEPRECATED: Use Identifier instead.
+        ///</summary>
+        [ApiMember(Description="DEPRECATED: Use Identifier instead.")]
+        public string SubjectIdentifier { get; set; }
+
+        ///<summary>
         ///Unique identifier within the issuer for the end-user
         ///</summary>
         [ApiMember(Description="Unique identifier within the issuer for the end-user", IsRequired=true)]
-        public string SubjectIdentifier { get; set; }
+        public string Identifier { get; set; }
     }
 
     [Route("/users/{UniqueId}/activedirectory", "PUT")]
@@ -2834,10 +2901,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : PutUserAuthBase, IReturn<User>
     {
         ///<summary>
+        ///DEPRECATED: Use Identifier instead.
+        ///</summary>
+        [ApiMember(Description="DEPRECATED: Use Identifier instead.")]
+        public string SubjectIdentifier { get; set; }
+
+        ///<summary>
         ///Unique identifier within the issuer for the end-user
         ///</summary>
         [ApiMember(Description="Unique identifier within the issuer for the end-user", IsRequired=true)]
-        public string SubjectIdentifier { get; set; }
+        public string Identifier { get; set; }
     }
 
     [Route("/users/openidconnect/{UniqueId}", "PUT")]
@@ -2845,10 +2918,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         : PutUserBase, IReturn<User>
     {
         ///<summary>
+        ///DEPRECATED: Use Identifier instead.
+        ///</summary>
+        [ApiMember(Description="DEPRECATED: Use Identifier instead.")]
+        public string SubjectIdentifier { get; set; }
+
+        ///<summary>
         ///Unique identifier within the issuer for the end-user
         ///</summary>
         [ApiMember(Description="Unique identifier within the issuer for the end-user", IsRequired=true)]
-        public string SubjectIdentifier { get; set; }
+        public string Identifier { get; set; }
     }
 
     public class PutUserAuthBase
@@ -3471,6 +3550,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Comment")]
         public string Comment { get; set; }
+
+        ///<summary>
+        ///Optional uncertainty of elevation difference
+        ///</summary>
+        [ApiMember(DataType="double", Description="Optional uncertainty of elevation difference")]
+        public double? Uncertainty { get; set; }
     }
 
     public class LocationDatumResponse
@@ -3778,12 +3863,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     public class OpenIdConnectRelyingPartyConfiguration
     {
-        public OpenIdConnectRelyingPartyConfiguration()
-        {
-            Scopes = new List<string>{};
-            HostedDomains = new List<string>{};
-        }
-
         ///<summary>
         ///Issuer identifier
         ///</summary>
@@ -3791,38 +3870,56 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string IssuerIdentifier { get; set; }
 
         ///<summary>
-        ///Client identifier
+        ///The Relying Party client identifier
         ///</summary>
-        [ApiMember(Description="Client identifier")]
+        [ApiMember(Description="The Relying Party client identifier")]
         public string ClientIdentifier { get; set; }
 
         ///<summary>
-        ///Redirect uri
+        ///The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.
         ///</summary>
-        [ApiMember(Description="Redirect uri")]
+        [ApiMember(Description="The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.")]
         public string RedirectUri { get; set; }
 
         ///<summary>
-        ///Scopes
+        ///If not specified, defaults to 'openid', the standard scope required by the protocol.
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Scopes")]
-        public List<string> Scopes { get; set; }
+        [ApiMember(DataType="Array<string>", Description="If not specified, defaults to 'openid', the standard scope required by the protocol.")]
+        public IList<string> Scopes { get; set; }
 
         ///<summary>
-        ///Hosted domains
+        ///Optional list of hosted domains, supported for Google only
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Hosted domains")]
-        public List<string> HostedDomains { get; set; }
+        [ApiMember(DataType="Array<string>", Description="Optional list of hosted domains, supported for Google only")]
+        public IList<string> HostedDomains { get; set; }
+
+        ///<summary>
+        ///Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.
+        ///</summary>
+        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
+        public string IdentifierClaim { get; set; }
+
+        ///<summary>
+        ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
+        ///</summary>
+        [ApiMember(Description="Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.")]
+        public string DisplayName { get; set; }
     }
 
     public class OpenIdConnectUser
         : User
     {
         ///<summary>
+        ///DEPRECATED: Use Identifier instead.
+        ///</summary>
+        [ApiMember(Description="DEPRECATED: Use Identifier instead.")]
+        public string SubjectIdentifier { get; set; }
+
+        ///<summary>
         ///Unique identifier within the issuer for the end-user
         ///</summary>
         [ApiMember(Description="Unique identifier within the issuer for the end-user")]
-        public string SubjectIdentifier { get; set; }
+        public string Identifier { get; set; }
     }
 
     public class Parameter
@@ -4290,6 +4387,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Comments { get; set; }
 
         ///<summary>
+        ///Manufacturer
+        ///</summary>
+        [ApiMember(Description="Manufacturer")]
+        public string Manufacturer { get; set; }
+
+        ///<summary>
+        ///Model
+        ///</summary>
+        [ApiMember(Description="Model")]
+        public string Model { get; set; }
+
+        ///<summary>
+        ///Serial Number
+        ///</summary>
+        [ApiMember(Description="Serial Number")]
+        public string SerialNumber { get; set; }
+
+        ///<summary>
         ///Last modified time (UTC)
         ///</summary>
         [ApiMember(DataType="Instant", Description="Last modified time (UTC)")]
@@ -4449,6 +4564,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="Array<string>", Description="Set of pick-list values if ValueType is PickList")]
         public List<string> PickListValues { get; set; }
+
+        ///<summary>
+        ///True if tag is applicable to Locations
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Locations")]
+        public bool AppliesToLocations { get; set; }
+
+        ///<summary>
+        ///True if tag is applicable to Location Notes
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Location Notes")]
+        public bool AppliesToLocationNotes { get; set; }
+
+        ///<summary>
+        ///True if tag is applicable to Sensors and Gauges
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Sensors and Gauges")]
+        public bool AppliesToSensorsGauges { get; set; }
     }
 
     public class TagsResponse
@@ -4879,6 +5012,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.3.70.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.4.63.0");
     }
 }
