@@ -1,8 +1,8 @@
 /* Options:
-Date: 2019-10-09 09:32:28
+Date: 2020-01-13 13:19:13
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-ora/AQUARIUS/Publish/v2
+BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -35,6 +35,13 @@ using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 
 namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
+
+    public enum TagApplicability
+    {
+        AppliesToLocations,
+        AppliesToLocationNotes,
+        AppliesToSensorsGauges,
+    }
 
     [Route("/session", "DELETE")]
     public class DeleteSession
@@ -628,6 +635,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public double OffsetToStandard { get; set; }
 
         ///<summary>
+        ///Uncertainty of offset to standard if any
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty of offset to standard if any")]
+        public double? Uncertainty { get; set; }
+
+        ///<summary>
         ///Direction that positive measurements are taken in relation to the reference point
         ///</summary>
         [ApiMember(DataType="MeasurementDirection", Description="Direction that positive measurements are taken in relation to the reference point")]
@@ -777,6 +790,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string Comment { get; set; }
 
         ///<summary>
+        ///Manufacturer
+        ///</summary>
+        [ApiMember(Description="Manufacturer")]
+        public string Manufacturer { get; set; }
+
+        ///<summary>
+        ///Model
+        ///</summary>
+        [ApiMember(Description="Model")]
+        public string Model { get; set; }
+
+        ///<summary>
+        ///Serial Number
+        ///</summary>
+        [ApiMember(Description="Serial Number")]
+        public string SerialNumber { get; set; }
+
+        ///<summary>
         ///Last modified time (UTC)
         ///</summary>
         [ApiMember(DataType="DateTimeOffset", Description="Last modified time (UTC)")]
@@ -793,7 +824,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     {
         public LocationNote()
         {
-            Tags = new List<NoteTagMetadata>{};
+            Tags = new List<TagMetadata>{};
         }
 
         ///<summary>
@@ -829,8 +860,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Location note tags
         ///</summary>
-        [ApiMember(DataType="Array<NoteTagMetadata>", Description="Location note tags")]
-        public List<NoteTagMetadata> Tags { get; set; }
+        [ApiMember(DataType="Array<TagMetadata>", Description="Location note tags")]
+        public List<TagMetadata> Tags { get; set; }
 
         ///<summary>
         ///User who last modified this note
@@ -1057,6 +1088,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string RoundingSpec { get; set; }
     }
 
+    public class NameTagDefinition
+        : TagDefinition
+    {
+        ///<summary>
+        ///DEPRECATED: renamed to Key
+        ///</summary>
+        [ApiMember(Description="DEPRECATED: renamed to Key")]
+        public string Name { get; set; }
+    }
+
     public class Note
         : TimeRange
     {
@@ -1087,21 +1128,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
-    }
-
-    public class NoteTagMetadata
-    {
-        ///<summary>
-        ///Name
-        ///</summary>
-        [ApiMember(Description="Name")]
-        public string Name { get; set; }
-
-        ///<summary>
-        ///UniqueId
-        ///</summary>
-        [ApiMember(DataType="string", Description="UniqueId")]
-        public Guid UniqueId { get; set; }
     }
 
     public class OffsetPoint
@@ -1790,12 +1816,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         }
 
         ///<summary>
-        ///DEPRECATED: renamed to Key
-        ///</summary>
-        [ApiMember(Description="DEPRECATED: renamed to Key")]
-        public string Name { get; set; }
-
-        ///<summary>
         ///Key of the tag
         ///</summary>
         [ApiMember(Description="Key of the tag")]
@@ -1818,6 +1838,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="Array<string>", Description="Set of pick-list values if ValueType is PickList")]
         public List<string> PickListValues { get; set; }
+
+        ///<summary>
+        ///True if tag is applicable to Locations
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Locations")]
+        public bool AppliesToLocations { get; set; }
+
+        ///<summary>
+        ///True if tag is applicable to Location Notes
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Location Notes")]
+        public bool AppliesToLocationNotes { get; set; }
+
+        ///<summary>
+        ///True if tag is applicable to Sensors and Gauges
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Sensors and Gauges")]
+        public bool AppliesToSensorsGauges { get; set; }
     }
 
     public class TagMetadata
@@ -4539,6 +4577,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public Guid? ReferencePointUniqueId { get; set; }
 
         ///<summary>
+        ///Indicates if this reading is measured against the local assumed datum of the reading's location
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading's location")]
+        public bool UseLocationDatumAsReference { get; set; }
+
+        ///<summary>
         ///Reading Qualifier
         ///</summary>
         [ApiMember(Description="Reading Qualifier")]
@@ -6054,9 +6098,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string MethodCode { get; set; }
 
         ///<summary>
-        ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs
+        ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.
         ///</summary>
-        [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs")]
+        [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.")]
         public string ValueForNaN { get; set; }
 
         ///<summary>
@@ -6082,9 +6126,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string RoundingSpec { get; set; }
 
         ///<summary>
-        ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs
+        ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.
         ///</summary>
-        [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs. Note that JSON encoding does not support NaNs, so you must use MsgPack encoding if the input includes NaNs")]
+        [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.")]
         public string ValueForNaN { get; set; }
 
         ///<summary>
@@ -6128,6 +6172,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="Array<string>", Description="Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)")]
         public List<string> TagValues { get; set; }
+    }
+
+    [Route("/GetTagList", "GET")]
+    public class TagListServiceRequest
+        : IReturn<TagListServiceResponse>
+    {
+        public TagListServiceRequest()
+        {
+            Applicability = new List<TagApplicability>{};
+        }
+
+        ///<summary>
+        ///If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges
+        ///</summary>
+        [ApiMember(AllowMultiple=true, DataType="Array<TagApplicability>", Description="If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges")]
+        public List<TagApplicability> Applicability { get; set; }
     }
 
     [Route("/GetTimeSeriesData", "GET")]
@@ -6818,7 +6878,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     {
         public LocationTagListServiceResponse()
         {
-            Tags = new List<TagDefinition>{};
+            Tags = new List<NameTagDefinition>{};
         }
 
         ///<summary>
@@ -6842,8 +6902,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Tags
         ///</summary>
-        [ApiMember(DataType="Array<TagDefinition>", Description="Tags")]
-        public List<TagDefinition> Tags { get; set; }
+        [ApiMember(DataType="Array<NameTagDefinition>", Description="Tags")]
+        public List<NameTagDefinition> Tags { get; set; }
     }
 
     public class MetadataChangeTransactionListServiceResponse
@@ -7097,6 +7157,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<LocationMonitoringMethod> MonitoringMethods { get; set; }
     }
 
+    public class TagListServiceResponse
+        : PublishServiceResponse
+    {
+        public TagListServiceResponse()
+        {
+            Tags = new List<TagDefinition>{};
+        }
+
+        ///<summary>
+        ///Tags
+        ///</summary>
+        [ApiMember(DataType="Array<TagDefinition>", Description="Tags")]
+        public List<TagDefinition> Tags { get; set; }
+    }
+
     public class TimeAlignedDataServiceResponse
         : PublishServiceResponse
     {
@@ -7324,6 +7399,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.3.70.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.4.63.0");
     }
 }
