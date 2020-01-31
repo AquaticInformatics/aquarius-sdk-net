@@ -1,8 +1,8 @@
 /* Options:
-Date: 2020-01-13 13:19:13
+Date: 2020-01-31 15:46:12
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
+BaseUrl: http://aqts-rel-sql.aquaticinformatics.com/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -4605,6 +4605,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="string", Description="Sensor unique ID")]
         public Guid? SensorUniqueId { get; set; }
+
+        ///<summary>
+        ///Grade code
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code")]
+        public int? GradeCode { get; set; }
     }
 
     public class StandardDetails
@@ -7399,6 +7405,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.4.63.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.4.169.0");
     }
 }
