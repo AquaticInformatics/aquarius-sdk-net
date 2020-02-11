@@ -160,8 +160,23 @@ namespace Aquarius.TimeSeries.Client
         {
             dateTime = ForceKindToUtc(dateTime);
 
-            return DateTimeSerializer.ToXsdDateTimeString(dateTime);
+            var timeOfDay = dateTime.TimeOfDay;
+
+            var hasMilliseconds = timeOfDay.Milliseconds != 0;
+            var hasFractionalSeconds = timeOfDay.Ticks % TimeSpan.TicksPerMillisecond != 0;
+
+            if (!hasMilliseconds && !hasFractionalSeconds)
+                return dateTime.ToString(ShortUtcDateTimeFormat, CultureInfo.InvariantCulture);
+
+            if (hasMilliseconds && !hasFractionalSeconds)
+                return dateTime.ToString(MillisecondUtcDateTimeFormat, CultureInfo.InvariantCulture);
+
+            return dateTime.ToString(FullPrecisionUtcDateTimeFormat, CultureInfo.InvariantCulture);
         }
+
+        private const string ShortUtcDateTimeFormat = "yyyy-MM-ddTHH:mm:ssZ";
+        private const string MillisecondUtcDateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
+        private const string FullPrecisionUtcDateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
 
         private static DateTime AlwaysDeserializeDateTimeAsUtc(string s)
         {
@@ -185,9 +200,11 @@ namespace Aquarius.TimeSeries.Client
         {
             if (value == Instant.MinValue)
                 return "MinInstant";
+
             if (value == Instant.MaxValue)
                 return "MaxInstant";
-            return DateTimeSerializer.ToXsdDateTimeString(value.ToDateTimeUtc());
+
+            return AlwaysSerializeDateTimeAsUtc(value.ToDateTimeUtc());
         }
 
         private static string SerializeInstant(Instant? value)
@@ -300,7 +317,7 @@ namespace Aquarius.TimeSeries.Client
         }
     }
 
-    // Lifted from Server.Services.PublishService.ServiceInterface, and modified to inclde a deserializer
+    // Lifted from Server.Services.PublishService.ServiceInterface, and modified to include a deserializer
     public static class DateTimeOffsetSerializer
     {
         private const string EndOfDayMidnightLiteral = "T24:00:00.0000000";
