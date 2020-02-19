@@ -11,6 +11,7 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Logging;
 using ServiceStack.Text;
+using ServiceStack.Text.Common;
 
 namespace Aquarius.UnitTests.TimeSeries.Client
 {
@@ -142,15 +143,19 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         }
 
 
-        [Test]
-        public void DateTime_SerializesToExpectedText()
+        private static readonly IEnumerable<TestCaseData> FractionalSecondsTestCases = new[]
         {
-            var input = ArbitraryUtcDate;
-            const string expected = "\"1901-02-03T04:05:06.789Z\"";
+            new TestCaseData(ArbitraryUtcDate.Subtract(TimeSpan.FromMilliseconds(ArbitraryUtcDate.Millisecond)), "\"1901-02-03T04:05:06Z\"", "No fractional seconds"),
+            new TestCaseData(ArbitraryUtcDate, "\"1901-02-03T04:05:06.789Z\"", "3-fractional second precision"),
+            new TestCaseData(ArbitraryUtcDate.AddTicks(1234), "\"1901-02-03T04:05:06.7891234Z\"", "7-fractional second precision"),
+        };
 
-            var actual = input.ToJson();
+        [TestCaseSource(nameof(FractionalSecondsTestCases))]
+        public void DateTime_SerializesToExpectedText(DateTime dateTime, string expected, string reason)
+        {
+            var actual = dateTime.ToJson();
 
-            Assert.That(actual, Is.EqualTo(expected));
+            actual.ShouldBeEquivalentTo(expected, reason);
         }
 
         [Test]
