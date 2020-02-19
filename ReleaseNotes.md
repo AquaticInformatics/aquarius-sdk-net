@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 20.0.3
+- Updated the internal ServiceStack libraries to v5.8.0, for both .NET Framework and .NET Core.
+
 ### 20.0.1
 - Updated the service models for the AQUARIUS Samples 2020.1 release.
 
