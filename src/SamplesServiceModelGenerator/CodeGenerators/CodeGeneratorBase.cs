@@ -140,7 +140,17 @@ namespace SamplesServiceModelGenerator.CodeGenerators
                         //     public MyOperationName(IEnumerable<T> items):base(items){}
                         // }
                         if (operation.Parameters.Length == 1)
+                        {
                             return new OperationParameter[0];
+                        } 
+                        else
+                        {
+                            // If body is not the only parameter allow parameter parsing to continue on
+                            // Example case where this is needed: 
+                            //   POST /v1/observedproperties/{id}/categoricalvalues
+                            //   Body: Array<CategoricalValues>
+                            continue;
+                        }
                     }
 
                     var typeName = TypeMapper.Map(parameter.Schema);
