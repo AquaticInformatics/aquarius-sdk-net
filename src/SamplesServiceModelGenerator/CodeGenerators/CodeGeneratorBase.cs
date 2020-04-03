@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ServiceStack;
 using SamplesServiceModelGenerator.Swagger;
 using Type = SamplesServiceModelGenerator.Swagger.Type;
@@ -115,11 +116,47 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
         protected string GetOperationName(Operation operation)
         {
-            var fixupKey = $"{operation.Method}:{operation.Route}";
+            string operationName = GetUnversionedOperationName(operation);
 
-            return RequestDtoFixups.TryGetValue(fixupKey, out var fixupName)
+            if (IsOperationV1Endpoint(operation))
+            {
+                return operationName;
+            }
+            else
+            {
+                return operationName + GetOperationRouteVersion(operation).ToPascalCase();
+            }
+
+        }
+
+        private string GetUnversionedOperationName(Operation operation)
+        {
+            var fixupKey = $"{operation.Method}:{operation.Route}";
+            var operationId = operation.OperationId.ToPascalCase();
+            var operationName = RequestDtoFixups.TryGetValue(fixupKey, out var fixupName)
                 ? fixupName
-                : operation.OperationId.ToPascalCase();
+                : operationId;
+            return operationName;
+        }
+
+
+
+        private static bool IsOperationV1Endpoint(Operation o)
+        {
+            return GetOperationRouteVersion(o) == "v1";
+        }
+
+        private static string GetOperationRouteVersion(Operation o)
+        {
+            string versionStringPattern = @"^/(v\d)/";
+            Regex r = new Regex(versionStringPattern);
+            var m = r.Match(o.Route);
+            if (!m.Success)
+            {
+                throw new ArgumentException($"Could not extract version from {o.Route}");
+            }
+            var versionString = m.Groups[1];
+            return versionString.Value;
         }
 
         protected IEnumerable<OperationParameter> GetOperationParameters(Operation operation)
