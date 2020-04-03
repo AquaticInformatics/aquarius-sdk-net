@@ -127,7 +127,8 @@ namespace SamplesServiceModelGenerator
             "GET:/v1/samplinglocations/{id}/canedit=GetSamplingLocationCanEdit",
             "POST:/v1/services/import/samplinglocations/dryrun=PostImportSamplingLocationsDryRun",
             "POST:/v1/services/import/observedproperties/dryrun=PostImportObservedPropertiesDryRun",
-            "POST:/v1/services/import/labanalysismethods/dryrun=PostImportAnalysisMethodsDryRun",
+            "POST:/v1/services/import/labanalysismethods/dryrun=PostImportLabAnalysisMethodsDryRun",
+            "POST:/v1/services/import/analysismethods/dryrun=PostImportAnalysisMethodsDryRun",
             "POST:/v1/services/import/observations/dryrun=PostImportObservationsDryRun");
 
         private Dictionary<TargetLanguage, string> _obsoleteDtos = new Dictionary<TargetLanguage, string>
@@ -140,7 +141,7 @@ namespace SamplesServiceModelGenerator
                     "GetCanUserEditSamplingLocationData:GetSamplingLocationCanEdit",
                     "PostImportSamplingLocationsDryrun:PostImportSamplingLocationsDryRun",
                     "PostImportObservedPropertiesDryrun:PostImportObservedPropertiesDryRun",
-                    "PostImportAnalysisMethodsDryrun:PostImportAnalysisMethodsDryRun",
+                    "PostImportLabAnalysisMethodsDryrun:PostImportAnalysisMethodsDryRun",
                     "PostImportObservationsDryrun:PostImportObservationsDryRun",
                     // These obsolete DTOs come from the 2018.05 deployment
                     "PutAddOrUpdateBioIndex:PutAddOrUpdateIndex",
@@ -161,8 +162,8 @@ namespace SamplesServiceModelGenerator
                     "DeleteFieldTripById:DeleteFieldTrip",
                     "PutSparseFieldVisit:PutFieldVisit",
                     "DeleteFieldVisitById:DeleteFieldVisit",
-                    "PutSparseLabAnalysisMethod:PutLabAnalysisMethod",
-                    "DeleteLabAnalysisMethodById:DeleteLabAnalysisMethod",
+                    "PutSparseLabAnalysisMethod:PutAnalysisMethod",
+                    "DeleteLabAnalysisMethodById:DeleteAnalysisMethod",
                     "PutSparseLaboratory:PutLaboratory",
                     "DeleteLaboratoryById:DeleteLaboratory",
                     "PutSparseLabReport:PutLabReport",
