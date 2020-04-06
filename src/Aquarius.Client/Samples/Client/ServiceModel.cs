@@ -1,4 +1,4 @@
-// Date: 2020-04-06T16:02:35.8785855-07:00
+// Date: 2020-04-06T16:11:57.5676624-07:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
 // Source: AQUARIUS Samples API (2020.03.3591)
 

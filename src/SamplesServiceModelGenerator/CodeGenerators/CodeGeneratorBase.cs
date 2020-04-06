@@ -116,17 +116,14 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
         protected string GetOperationName(Operation operation)
         {
-            string operationName = GetUnversionedOperationName(operation);
+            var operationName = GetUnversionedOperationName(operation);
 
             if (IsOperationV1Endpoint(operation))
             {
                 return operationName;
             }
-            else
-            {
-                return operationName + GetOperationRouteVersion(operation).ToPascalCase();
-            }
 
+            return operationName + GetOperationRouteVersion(operation).ToPascalCase();
         }
 
         private string GetUnversionedOperationName(Operation operation)
@@ -139,25 +136,24 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             return operationName;
         }
 
-
-
-        private static bool IsOperationV1Endpoint(Operation o)
+        private static bool IsOperationV1Endpoint(Operation operation)
         {
-            return GetOperationRouteVersion(o) == "v1";
+            return GetOperationRouteVersion(operation) == "v1";
         }
 
-        private static string GetOperationRouteVersion(Operation o)
+        private static string GetOperationRouteVersion(Operation operation)
         {
-            string versionStringPattern = @"^/(v\d)/";
-            Regex r = new Regex(versionStringPattern);
-            var m = r.Match(o.Route);
-            if (!m.Success)
+            var match = VersionedRouteRegex.Match(operation.Route);
+
+            if (!match.Success)
             {
-                throw new ArgumentException($"Could not extract version from {o.Route}");
+                throw new ArgumentException($"Could not extract version from {operation.Route}");
             }
-            var versionString = m.Groups[1];
-            return versionString.Value;
+
+            return match.Groups["version"].Value;
         }
+
+        private static readonly Regex VersionedRouteRegex = new Regex(@"^/(?<version>v\d+)/");
 
         protected IEnumerable<OperationParameter> GetOperationParameters(Operation operation)
         {
