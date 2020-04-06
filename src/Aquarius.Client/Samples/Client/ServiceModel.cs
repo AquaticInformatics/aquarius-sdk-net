@@ -1,4 +1,4 @@
-// Date: 2020-04-03T15:49:26.3019303-07:00
+// Date: 2020-04-06T15:38:30.4613379-07:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
 // Source: AQUARIUS Samples API (2020.03.3591)
 
@@ -657,14 +657,14 @@ namespace Aquarius.Samples.Client.ServiceModel
     }
 
     [Route("/v1/labanalysismethods", "GET")]
-    public class GetLabanalysismethods : IReturn<SearchResultAnalysisMethod>
+    public class GetLabAnalysisMethods : IReturn<SearchResultAnalysisMethod>
     {
         public string Context { get; set; }
         public List<string> ObservedPropertyIds { get; set; }
     }
 
     [Route("/v1/labanalysismethods", "POST")]
-    public class PostLabanalysismethod : IReturn<AnalysisMethod>
+    public class PostLabAnalysisMethod : IReturn<AnalysisMethod>
     {
         public List<ObservedProperty> ObservedProperties { get; set; }
         public string Id { get; set; }
@@ -677,13 +677,13 @@ namespace Aquarius.Samples.Client.ServiceModel
     }
 
     [Route("/v1/labanalysismethods/{id}", "GET")]
-    public class GetLabanalysismethod : IReturn<AnalysisMethod>
+    public class GetLabAnalysisMethod : IReturn<AnalysisMethod>
     {
         public string Id { get; set; }
     }
 
     [Route("/v1/labanalysismethods/{id}", "PUT")]
-    public class PutLabanalysismethod : IReturn<AnalysisMethod>
+    public class PutLabAnalysisMethod : IReturn<AnalysisMethod>
     {
         public string Id { get; set; }
         public List<ObservedProperty> ObservedProperties { get; set; }
@@ -696,7 +696,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     }
 
     [Route("/v1/labanalysismethods/{id}", "DELETE")]
-    public class DeleteLabanalysismethod : IReturnVoid
+    public class DeleteLabAnalysisMethod : IReturnVoid
     {
         public string Id { get; set; }
     }
