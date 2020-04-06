@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ServiceStack;
 using SamplesServiceModelGenerator.Swagger;
 using Type = SamplesServiceModelGenerator.Swagger.Type;
@@ -115,12 +116,44 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
         protected string GetOperationName(Operation operation)
         {
-            var fixupKey = $"{operation.Method}:{operation.Route}";
+            var operationName = GetUnversionedOperationName(operation);
 
-            return RequestDtoFixups.TryGetValue(fixupKey, out var fixupName)
-                ? fixupName
-                : operation.OperationId.ToPascalCase();
+            if (IsOperationV1Endpoint(operation))
+            {
+                return operationName;
+            }
+
+            return operationName + GetOperationRouteVersion(operation).ToPascalCase();
         }
+
+        private string GetUnversionedOperationName(Operation operation)
+        {
+            var fixupKey = $"{operation.Method}:{operation.Route}";
+            var operationId = operation.OperationId.ToPascalCase();
+            var operationName = RequestDtoFixups.TryGetValue(fixupKey, out var fixupName)
+                ? fixupName
+                : operationId;
+            return operationName;
+        }
+
+        private static bool IsOperationV1Endpoint(Operation operation)
+        {
+            return GetOperationRouteVersion(operation) == "v1";
+        }
+
+        private static string GetOperationRouteVersion(Operation operation)
+        {
+            var match = VersionedRouteRegex.Match(operation.Route);
+
+            if (!match.Success)
+            {
+                throw new ArgumentException($"Could not extract version from {operation.Route}");
+            }
+
+            return match.Groups["version"].Value;
+        }
+
+        private static readonly Regex VersionedRouteRegex = new Regex(@"^/(?<version>v\d+)/");
 
         protected IEnumerable<OperationParameter> GetOperationParameters(Operation operation)
         {
@@ -140,7 +173,17 @@ namespace SamplesServiceModelGenerator.CodeGenerators
                         //     public MyOperationName(IEnumerable<T> items):base(items){}
                         // }
                         if (operation.Parameters.Length == 1)
+                        {
                             return new OperationParameter[0];
+                        } 
+                        else
+                        {
+                            // If body is not the only parameter allow parameter parsing to continue on
+                            // Example case where this is needed: 
+                            //   POST /v1/observedproperties/{id}/categoricalvalues
+                            //   Body: Array<CategoricalValues>
+                            continue;
+                        }
                     }
 
                     var typeName = TypeMapper.Map(parameter.Schema);
