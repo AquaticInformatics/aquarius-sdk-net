@@ -131,12 +131,18 @@ namespace SamplesServiceModelGenerator
             "POST:/v1/services/import/analysismethods/dryrun=PostImportAnalysisMethodsDryRun",
             "POST:/v1/services/import/observations/dryrun=PostImportObservationsDryRun",
 
-            // More camelcase fixups for the 2020.03 deployment. I guess some more were actually necessary
+            // More PascalCase fixups for the 2020.03 deployment. I guess some more were actually necessary
             "GET:/v1/labanalysismethods=GetLabAnalysisMethods",
             "POST:/v1/labanalysismethods=PostLabAnalysisMethod",
             "GET:/v1/labanalysismethods/{id}=GetLabAnalysisMethod",
             "PUT:/v1/labanalysismethods/{id}=PutLabAnalysisMethod",
-            "DELETE:/v1/labanalysismethods/{id}=DeleteLabAnalysisMethod");
+            "DELETE:/v1/labanalysismethods/{id}=DeleteLabAnalysisMethod",
+
+            // More V2 PascalCase fixups.
+            "POST:/v2/observationimports=PostObservationImport",
+            "GET:/v2/observationimports/{id}/result=GetObservationImportResult",
+            "GET:/v2/observationimports/{id}/status=GetObservationImportStatus",
+            "POST:/v2/observationimports/dryrun=PostObservationsDryRun");
 
         private Dictionary<TargetLanguage, string> _obsoleteDtos = new Dictionary<TargetLanguage, string>
         {

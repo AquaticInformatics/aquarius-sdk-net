@@ -1,4 +1,4 @@
-// Date: 2020-04-06T15:38:30.4613379-07:00
+// Date: 2020-04-06T16:02:35.8785855-07:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
 // Source: AQUARIUS Samples API (2020.03.3591)
 
@@ -2109,7 +2109,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     }
 
     [Route("/v2/observationimports", "POST")]
-    public class PostObservationimportV2 : IReturnVoid
+    public class PostObservationImportV2 : IReturnVoid
     {
         public string FileType { get; set; }
         public string TimeZoneOffset { get; set; }
@@ -2117,19 +2117,19 @@ namespace Aquarius.Samples.Client.ServiceModel
     }
 
     [Route("/v2/observationimports/{id}/result", "GET")]
-    public class GetObservationimportResultV2 : IReturn<ObservationImportSummary>
+    public class GetObservationImportResultV2 : IReturn<ObservationImportSummary>
     {
         public string Id { get; set; }
     }
 
     [Route("/v2/observationimports/{id}/status", "GET")]
-    public class GetObservationimportStatusV2 : IReturn<ImportProcessorTransactionStatusResponse>
+    public class GetObservationImportStatusV2 : IReturn<ImportProcessorTransactionStatusResponse>
     {
         public string Id { get; set; }
     }
 
     [Route("/v2/observationimports/dryrun", "POST")]
-    public class PostImportObservationsDryrunV2 : IReturnVoid
+    public class PostObservationsDryRunV2 : IReturnVoid
     {
         public string FileType { get; set; }
         public string TimeZoneOffset { get; set; }
