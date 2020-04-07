@@ -11,6 +11,7 @@ namespace Aquarius.Samples.Client
     {
         IServiceClient Client { get; }
         AquariusServerVersion ServerVersion { get; }
+        string LocationResponseHeader { get; }
 
         TResponse Get<TResponse>(IReturn<TResponse> requestDto);
         void Get(IReturnVoid requestDto);
@@ -24,11 +25,25 @@ namespace Aquarius.Samples.Client
         TResponse SparsePut<TResponse>(IReturn<TResponse> requestDto);
         void SparsePut(IReturnVoid requestDto);
 
+        void PostFileWithRequest<TRequest>(
+            string path,
+            TRequest requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null) where TRequest : IReturnVoid;
+
+        void PostFileWithRequest<TRequest>(
+            Stream contentToUpload,
+            string uploadedFileName,
+            TRequest requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null) where TRequest : IReturnVoid;
+
         TResponse PostFileWithRequest<TResponse>(
             string path,
             IReturn<TResponse> requestDto,
             HttpContent extraContent = null,
             string extraContentName = null);
+
         TResponse PostFileWithRequest<TResponse>(
             Stream contentToUpload,
             string uploadedFileName,

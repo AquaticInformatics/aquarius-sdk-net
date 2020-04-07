@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using ServiceStack;
@@ -10,6 +12,8 @@ namespace Aquarius.Samples.Client
     public class FileUploader
     {
         private readonly IRestClient _restClient;
+
+        public string LocationResponseHeader { get; private set; } 
 
         public static FileUploader Create(IServiceClient client)
         {
@@ -32,6 +36,32 @@ namespace Aquarius.Samples.Client
             _restClient = restClient;
             _restClient.AddHeader(SamplesClient.AuthorizationHeaderKey, authorizationHeader);
             _restClient.AddHeader("User-Agent", userAgent);
+
+            if (_restClient is JsonHttpClient jhc)
+            {
+                jhc.ResultsFilterResponse = (response, o, method, uri, request) =>
+                    LocationResponseHeader = response.Headers?.Location.ToString();
+            }
+        }
+
+        public void PostFileWithRequest<TRequest>(
+            string relativeOrAbsoluteUri,
+            Stream contentToUpload,
+            string uploadedFileName,
+            TRequest requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null) where TRequest : IReturnVoid
+        {
+            var multipartContent = CreateMultipartContent(relativeOrAbsoluteUri, contentToUpload, uploadedFileName);
+
+            if (extraContent != null && extraContentName != null)
+            {
+                AddFormDataContent(multipartContent, extraContent, extraContentName);
+            }
+
+            _restClient.Post<IReturnVoid>(
+                ComposePostUrlWithQueryParams(relativeOrAbsoluteUri, requestDto),
+                multipartContent);
         }
 
         public TResponse PostFileWithRequest<TResponse>(
@@ -54,16 +84,42 @@ namespace Aquarius.Samples.Client
                 multipartContent);
         }
 
-        private string ComposePostUrlWithQueryParams<TResponse>(
+        private string ComposePostUrlWithQueryParams(
             string relativeOrAbsoluteUri,
-            IReturn<TResponse> requestDto)
+            object requestDto)
         {
-            var queryString = QueryStringSerializer.SerializeToString(requestDto);
+            var queryString = ComposeCamelCaseQueryString(requestDto);
 
             var uriBuilder = new UriBuilder(relativeOrAbsoluteUri) {Query = queryString};
 
             return uriBuilder.ToString();
         }
+
+        private string ComposeCamelCaseQueryString(object requestDto)
+        {
+            var queryString = QueryStringSerializer.SerializeToString(requestDto);
+
+            if (string.IsNullOrWhiteSpace(queryString))
+                return queryString;
+
+            var x = queryString
+                .Split(ParameterSeparators)
+                .Select(SplitPair)
+                .ToList();
+
+            return string.Join("&", x.Select(p => $"{p.Key.ToCamelCase()}={p.Value}"));
+        }
+
+        private static (string Key, string Value) SplitPair(string parameter)
+        {
+            var parts = parameter.Split(PairSeparators, 2);
+
+            return (parts[0], parts.Length > 1 ? parts[1] : null);
+
+        }
+
+        private static readonly char[] ParameterSeparators = {'&'};
+        private static readonly char[] PairSeparators = { '=' };
 
         private MultipartContent CreateMultipartContent(
             string relativeOrAbsoluteUri,
@@ -77,11 +133,17 @@ namespace Aquarius.Samples.Client
 
         internal static bool IsImportServiceUpload(string relativeOrAbsoluteUri)
         {
-            // TODO: We need a better way to distinguish between file upload request types
-            const string importServiceRoute = "/services/import/";
+            var lowercaseRoute = relativeOrAbsoluteUri.ToLowerInvariant();
 
-            return relativeOrAbsoluteUri.ToLowerInvariant().Contains(importServiceRoute);
+            return KnownImportServiceRoutes
+                .Any(route => lowercaseRoute.Contains(route));
         }
+
+        private static readonly List<string> KnownImportServiceRoutes = new List<string>
+        {
+            "/services/import/",
+            "/v2/observationimports"
+        };
 
         private static MultipartFormDataContent CreateImportServiceUploadContent(Stream contentToUpload, string uploadedFilename)
         {
