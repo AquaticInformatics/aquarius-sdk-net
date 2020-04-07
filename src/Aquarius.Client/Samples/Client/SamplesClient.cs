@@ -49,6 +49,8 @@ namespace Aquarius.Samples.Client
 
         public AquariusServerVersion ServerVersion { get; }
 
+        public string LocationResponseHeader { get; private set; }
+
         private IServiceClient _client;
 
         private SamplesClient(string baseUrl, string apiToken)
@@ -177,6 +179,21 @@ namespace Aquarius.Samples.Client
             InvokeWebServiceMethod(() => _client.Put(requestDto), WithSparsePutScope);
         }
 
+
+        public void PostFileWithRequest<TRequest>(
+            string path,
+            TRequest requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null) where TRequest : IReturnVoid
+        {
+            var fileToUpload = new FileInfo(path);
+
+            using (var stream = fileToUpload.OpenRead())
+            {
+                PostFileWithRequest(stream, fileToUpload.Name, requestDto, extraContent, extraContentName);
+            }
+        }
+
         public TResponse PostFileWithRequest<TResponse>(
             string path,
             IReturn<TResponse> requestDto,
@@ -191,6 +208,26 @@ namespace Aquarius.Samples.Client
             }
         }
 
+        public void PostFileWithRequest<TRequest>(
+            Stream contentToUpload,
+            string uploadedFileName,
+            TRequest requestDto,
+            HttpContent extraContent = null,
+            string extraContentName = null) where TRequest : IReturnVoid
+        {
+            var fileUploader = FileUploader.Create(_client);
+
+            InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(
+                GetPostUrl(requestDto),
+                contentToUpload,
+                uploadedFileName,
+                requestDto,
+                extraContent,
+                extraContentName));
+
+            LocationResponseHeader = fileUploader.LocationResponseHeader;
+        }
+
         public TResponse PostFileWithRequest<TResponse>(
             Stream contentToUpload,
             string uploadedFileName,
@@ -200,16 +237,20 @@ namespace Aquarius.Samples.Client
         {
             var fileUploader = FileUploader.Create(_client);
 
-            return InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(
+            var response = InvokeWebServiceMethod(() => fileUploader.PostFileWithRequest(
                 GetPostUrl(requestDto),
                 contentToUpload,
                 uploadedFileName,
                 requestDto,
                 extraContent,
                 extraContentName));
+
+            LocationResponseHeader = fileUploader.LocationResponseHeader;
+
+            return response;
         }
 
-        private string GetPostUrl<TResponse>(IReturn<TResponse> requestDto)
+        private string GetPostUrl(object requestDto)
         {
             if (_client is JsonServiceClient jsonServiceClient)
                 return jsonServiceClient.ResolveTypedUrl(HttpMethods.Post, requestDto);

@@ -4,6 +4,10 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 20.0.5
+- Samples API: Query parameters for file uplaod requests are now properly camelCased.
+- Added ISamplesClient.LocationResponseHeader string to reflect the last received Location header response (useful for tracking file upload URL responses)
+
 ### 20.0.4
 - Updated the service models for the AQUARIUS Samples 2020.03 release.
 
