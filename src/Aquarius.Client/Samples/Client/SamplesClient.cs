@@ -64,6 +64,12 @@ namespace Aquarius.Samples.Client
 
             _client = client;
 
+            if (_client is SamplesServiceClient ssc)
+            {
+                ssc.ResultsFilterResponse = (response, o, method, uri, request) =>
+                    LocationResponseHeader = response.Headers[HttpResponseHeader.Location];
+            }
+
             Client.AddHeader(AuthorizationHeaderKey, $"token {apiToken}");
 
             ServerVersion = GetServerVersion();

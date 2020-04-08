@@ -11,6 +11,7 @@ namespace Aquarius.Samples.Client
         public SamplesServiceClient(string baseUri)
             : base(baseUri)
         {
+            AllowAutoRedirect = false;
         }
 
         public override string ResolveTypedUrl(string httpMethod, object requestDto)
