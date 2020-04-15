@@ -1,8 +1,8 @@
 /* Options:
-Date: 2020-01-31 15:46:52
+Date: 2020-04-15 12:02:50
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-rel-sql.aquaticinformatics.com/AQUARIUS/Provisioning/v1
+BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -454,6 +454,29 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public int PluginPriority { get; set; }
     }
 
+    [Route("/fielddataplugins/{UniqueId}", "PUT")]
+    public class PutFieldDataPlugin
+        : IReturn<FieldDataPlugin>
+    {
+        ///<summary>
+        ///Unique ID of the field data plug-in
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the field data plug-in", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Plug-in priority; 1 has highest priority. Priority must be greater than zero.
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Plug-in priority; 1 has highest priority. Priority must be greater than zero.", IsRequired=true)]
+        public int PluginPriority { get; set; }
+
+        ///<summary>
+        ///Is enabled
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Is enabled", IsRequired=true)]
+        public bool IsEnabled { get; set; }
+    }
+
     [Route("/locations/{LocationUniqueId}/datumperiods", "DELETE")]
     public class DeleteLocationDatum
         : IReturnVoid
@@ -718,6 +741,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public double? Elevation { get; set; }
 
         ///<summary>
+        ///Publish
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish")]
+        public bool Publish { get; set; }
+
+        ///<summary>
         ///Extended attribute values
         ///</summary>
         [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
@@ -891,6 +920,33 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Unique Id of the location", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/referencepoints/{ReferencePointUniqueId}", "PUT")]
+    public class PutReferencePoint
+        : ReferencePointBase, IReturn<ReferencePoint>
+    {
+        public PutReferencePoint()
+        {
+            ReferencePointPeriods = new List<PutReferencePointPeriod>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the Reference Point
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the Reference Point", IsRequired=true, ParameterType="path")]
+        public Guid ReferencePointUniqueId { get; set; }
+
+        ///<summary>
+        ///Periods of applicablity for this reference point. Must have at least one period
+        ///</summary>
+        [ApiMember(DataType="Array<PutReferencePointPeriod>", Description="Periods of applicablity for this reference point. Must have at least one period", IsRequired=true)]
+        public List<PutReferencePointPeriod> ReferencePointPeriods { get; set; }
+    }
+
+    public class PutReferencePointPeriod
+        : ReferencePointPeriodBase
+    {
     }
 
     public class PutUserRoleBase
@@ -1457,6 +1513,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class PostReportPlugin
         : ReportPluginBase, IReturn<ReportPlugin>
     {
+    }
+
+    [Route("/reportplugins/{UniqueId}", "PUT")]
+    public class PutReportPlugin
+        : IReturn<ReportPlugin>
+    {
+        ///<summary>
+        ///Unique ID of the report plug-in
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the report plug-in", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Is enabled
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Is enabled", IsRequired=true)]
+        public bool IsEnabled { get; set; }
     }
 
     public class ReportPluginBase
@@ -2331,6 +2404,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string ComputationIdentifier { get; set; }
 
         ///<summary>
+        ///Computation period identifier
+        ///</summary>
+        [ApiMember(Description="Computation period identifier", IsRequired=true)]
+        public string ComputationPeriodIdentifier { get; set; }
+
+        ///<summary>
         ///New value location
         ///</summary>
         [ApiMember(DataType="NewValueLocationType", Description="New value location")]
@@ -2390,9 +2469,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string SubLocationIdentifier { get; set; }
 
         ///<summary>
-        ///Publish
+        ///Publish. If set true, will force Location Publish true
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Publish")]
+        [ApiMember(DataType="boolean", Description="Publish. If set true, will force Location Publish true")]
         public bool Publish { get; set; }
 
         ///<summary>
@@ -2459,9 +2538,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Offset UtcOffset { get; set; }
 
         ///<summary>
-        ///Publish
+        ///Publish. If set true, will enforce that Location Publish is also true
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Publish")]
+        [ApiMember(DataType="boolean", Description="Publish. If set true, will enforce that Location Publish is also true")]
         public bool Publish { get; set; }
 
         ///<summary>
@@ -3266,6 +3345,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Description")]
         public string Description { get; set; }
+
+        ///<summary>
+        ///Is enabled
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Is enabled")]
+        public bool IsEnabled { get; set; }
     }
 
     public class FieldDataPluginsResponse
@@ -3489,6 +3574,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Description")]
         public string Description { get; set; }
+
+        ///<summary>
+        ///Publish
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish")]
+        public bool Publish { get; set; }
 
         ///<summary>
         ///Tags applied to this location
@@ -4214,6 +4305,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Plug-in folder name")]
         public string FolderName { get; set; }
+
+        ///<summary>
+        ///Is enabled
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Is enabled")]
+        public bool IsEnabled { get; set; }
     }
 
     public class ReportPluginResponse
@@ -4678,9 +4775,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
 
         ///<summary>
-        ///Publish
+        ///Publish. When true, Location Publish is also true
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Publish")]
+        [ApiMember(DataType="boolean", Description="Publish. When true, Location Publish is also true")]
         public bool Publish { get; set; }
 
         ///<summary>
@@ -5012,6 +5109,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.4.169.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.1.68.0");
     }
 }
