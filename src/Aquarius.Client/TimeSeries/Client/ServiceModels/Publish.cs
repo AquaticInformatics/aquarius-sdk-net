@@ -1,8 +1,8 @@
 /* Options:
-Date: 2020-01-31 15:46:12
+Date: 2020-04-15 12:02:32
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-rel-sql.aquaticinformatics.com/AQUARIUS/Publish/v2
+BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -714,6 +714,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DateTimeOffset", Description="Last modified")]
         public DateTimeOffset LastModified { get; set; }
+
+        ///<summary>
+        ///Publish
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish")]
+        public bool Publish { get; set; }
 
         ///<summary>
         ///Tags
@@ -2713,6 +2719,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="Has attribute change")]
         public bool? HasAttributeChange { get; set; }
+
+        ///<summary>
+        ///Time-series has been deleted
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Time-series has been deleted")]
+        public bool? IsDeleted { get; set; }
+
+        ///<summary>
+        ///Last time attributes on the time-series matched the given filters; null when time-series current attributes matched the given filters
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Last time attributes on the time-series matched the given filters; null when time-series current attributes matched the given filters")]
+        public DateTimeOffset? LastMatchedTime { get; set; }
     }
 
     public class UnitMetadata
@@ -5794,6 +5812,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
 
         ///<summary>
+        ///Filter results to items matching the Publish value
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Filter results to items matching the Publish value")]
+        public bool? Publish { get; set; }
+
+        ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
         ///</summary>
         [ApiMember(DataType="DateTime", Description="Filter results to items modified at or after the ChangesSinceToken time")]
@@ -7099,7 +7123,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input values
         ///</summary>
-        [ApiMember(DataType="double", Description="Input values")]
+        [ApiMember(DataType="Array<double>", Description="Input values")]
         public List<Nullable<Double>> InputValues { get; set; }
     }
 
@@ -7114,7 +7138,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Output values
         ///</summary>
-        [ApiMember(DataType="double", Description="Output values")]
+        [ApiMember(DataType="Array<double>", Description="Output values")]
         public List<Nullable<Double>> OutputValues { get; set; }
     }
 
@@ -7405,6 +7429,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.4.169.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.1.68.0");
     }
 }

@@ -1,8 +1,8 @@
 /* Options:
-Date: 2020-01-31 15:47:07
+Date: 2020-04-15 12:03:08
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-rel-sql.aquaticinformatics.com/AQUARIUS/Acquisition/v2
+BaseUrl: http://autoserver1/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
@@ -114,6 +114,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(DataType="Interval", Description="Time range. Only appended notes that are fully contained within the time range will be deleted.", IsRequired=true)]
         public Interval? TimeRange { get; set; }
+    }
+
+    [Route("/visits/{VisitIdentifier}", "DELETE")]
+    public class DeleteVisit
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Identifier of the existing visit to delete
+        ///</summary>
+        [ApiMember(Description="Identifier of the existing visit to delete", IsRequired=true, ParameterType="path")]
+        public string VisitIdentifier { get; set; }
     }
 
     [Route("/timeseries/appendstatus/{AppendRequestIdentifier}", "GET")]
@@ -316,22 +327,42 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public Interval TimeRange { get; set; }
     }
 
-    [Route("/locations/{LocationUniqueId}/visits/upload/plugins", "POST")]
+    [Route("/visits/upload/plugins", "POST")]
     public class PostVisitFile
-        : IReturn<PostVisitFileResponse>
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>
     {
-        ///<summary>
-        ///Unique ID of the location of visits in the file
-        ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location of visits in the file", IsRequired=true, ParameterType="path")]
-        public Guid LocationUniqueId { get; set; }
+    }
 
+    public class PostVisitFileBase
+    {
         ///<summary>
         ///File
         ///</summary>
         [Ignore]
         [ApiMember(DataType="file", Description="File", IsRequired=true, ParameterType="form")]
         public IHttpFile File { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/visits/upload/plugins", "POST")]
+    public class PostVisitFileToLocation
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location of visits in the file
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location of visits in the file", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/visits/{VisitIdentifier}/upload/plugins", "POST")]
+    public class PostVisitFileToVisit
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>
+    {
+        ///<summary>
+        ///Identifier of the existing visit to add the file's content to
+        ///</summary>
+        [ApiMember(Description="Identifier of the existing visit to add the file's content to", IsRequired=true, ParameterType="path")]
+        public string VisitIdentifier { get; set; }
     }
 
     public class TimeSeriesNote
@@ -478,13 +509,20 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public PostVisitFileResponse()
         {
             VisitUris = new List<string>{};
+            VisitIdentifiers = new List<string>{};
         }
 
         ///<summary>
-        ///Relative URIs of created visits
+        ///Relative URIs of created or modified visits
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Relative URIs of created visits")]
+        [ApiMember(DataType="Array<string>", Description="Relative URIs of created or modified visits")]
         public List<string> VisitUris { get; set; }
+
+        ///<summary>
+        ///Identifiers of created or modified visits
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Identifiers of created or modified visits")]
+        public List<string> VisitIdentifiers { get; set; }
 
         ///<summary>
         ///Registered field data plug-in that processed the file
@@ -582,6 +620,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("19.4.169.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.1.68.0");
     }
 }
