@@ -26,6 +26,15 @@ namespace Aquarius.TimeSeries.Client
             return client;
         }
 
+        public static IAquariusClient ClientFromExistingSession(string hostname, string existingSessionToken)
+        {
+            var client = new AquariusClient();
+
+            client.Connect(hostname, existingSessionToken);
+
+            return client;
+        }
+
         private static readonly object SyncLock = new object();
 
         private static bool _serviceStackConfigured;
@@ -148,13 +157,26 @@ namespace Aquarius.TimeSeries.Client
 
         private void Connect(string hostname, string username, string password)
         {
+            InternalConnect(hostname, () => ConnectionPool.Instance.GetConnection(hostname, username, password, Authenticator.Create(hostname)));
+        }
+
+        private void Connect(string hostname, string existingSessionToken)
+        {
+            const string fakeUsername = "!BrowserUser!";
+            const string fakePassword = "!BrowserPassword!";
+
+            InternalConnect(hostname, () => ConnectionPool.Instance.GetConnection(hostname, fakeUsername, fakePassword, ExistingSessionAuthenticator.Create(existingSessionToken)));
+        }
+
+        private void InternalConnect(string hostname, Func<Connection> connectionFactory)
+        {
             ServiceClients.Add(ClientType.PublishJson, CreateClient(PublishV2.ResolveEndpoint(hostname)));
             ServiceClients.Add(ClientType.AcquisitionJson, CreateClient(AcquisitionV2.ResolveEndpoint(hostname)));
             ServiceClients.Add(ClientType.ProvisioningJson, CreateClient(ProvisioningV1.ResolveEndpoint(hostname)));
 
             ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
 
-            Connection = ConnectionPool.Instance.GetConnection(hostname, username, password, Authenticator.Create(hostname));
+            Connection = connectionFactory();
 
             SetAutomaticReAuthentication();
         }
