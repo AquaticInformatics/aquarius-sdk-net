@@ -24,6 +24,7 @@ namespace Aquarius.TimeSeries.Client
         IServiceClient RegisterCustomClient(string baseUri);
         IServiceClient CloneAuthenticatedClient(IServiceClient client);
         IServiceClient CloneAuthenticatedClientWithOverrideMethod(IServiceClient client, string overrideMethod);
+        string GetBaseUri(IServiceClient client);
 
         IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, CancellationToken? cancellationToken = null)
             where TRequest : IReturn<TResponse>;
