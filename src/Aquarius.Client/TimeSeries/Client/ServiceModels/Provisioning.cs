@@ -1,5 +1,5 @@
 /* Options:
-Date: 2020-04-15 12:02:50
+Date: 2020-07-10 12:11:30
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
@@ -1679,6 +1679,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
         public bool CanRemoveFieldVisits { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add append configurations.")]
+        public bool CanAddAppendConfigurations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit append configurations.")]
+        public bool CanEditAppendConfigurations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Remove append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove append configurations.")]
+        public bool CanRemoveAppendConfigurations { get; set; }
     }
 
     public class RoleFlattenedBase
@@ -1741,6 +1759,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
         public bool CanRemoveFieldVisits { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add append configurations.")]
+        public bool CanAddAppendConfigurations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit append configurations.")]
+        public bool CanEditAppendConfigurations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Remove append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove append configurations.")]
+        public bool CanRemoveAppendConfigurations { get; set; }
     }
 
     [Route("/sensors/{UniqueId}", "DELETE")]
@@ -2377,6 +2413,41 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Formula", IsRequired=true)]
         public string Formula { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/timeseries/datumconverted", "POST")]
+    public class PostDatumConvertedTimeSeries
+        : TimeSeriesBase, IReturn<TimeSeries>
+    {
+        ///<summary>
+        ///Unique ID of the time-series
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the time-series", IsRequired=true)]
+        public Guid TimeSeriesUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique ID of the source reference point. Required if SourceIsLocalAssumedDatum is false; otherwise must not be specified
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the source reference point. Required if SourceIsLocalAssumedDatum is false; otherwise must not be specified")]
+        public Guid SourceReferencePointUniqueId { get; set; }
+
+        ///<summary>
+        ///Source is Local Assumed Datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Source is Local Assumed Datum")]
+        public bool SourceIsLocalAssumedDatum { get; set; }
+
+        ///<summary>
+        ///Identifier of the target reference datum. Required if TargetIsLocalAssumedDatum is false; otherwise must not be specified
+        ///</summary>
+        [ApiMember(Description="Identifier of the target reference datum. Required if TargetIsLocalAssumedDatum is false; otherwise must not be specified")]
+        public string TargetStandardReferenceDatumIdentifier { get; set; }
+
+        ///<summary>
+        ///Target is Local Assumed Datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Target is Local Assumed Datum")]
+        public bool TargetIsLocalAssumedDatum { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/reflected", "POST")]
@@ -4393,6 +4464,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove field visits.")]
         public bool CanRemoveFieldVisits { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Add append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Add append configurations.")]
+        public bool CanAddAppendConfigurations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Edit append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Edit append configurations.")]
+        public bool CanEditAppendConfigurations { get; set; }
+
+        ///<summary>
+        ///True if role grants permission to: Remove append configurations.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if role grants permission to: Remove append configurations.")]
+        public bool CanRemoveAppendConfigurations { get; set; }
     }
 
     public class RoleApprovalTransition
@@ -5109,6 +5198,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.1.68.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.2.85.0");
     }
 }
