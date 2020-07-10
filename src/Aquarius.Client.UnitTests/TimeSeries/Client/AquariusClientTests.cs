@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Aquarius.TimeSeries.Client;
+using Aquarius.TimeSeries.Client.EndPoints;
 using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using ServiceStack;
-using DeleteSession = Aquarius.TimeSeries.Client.ServiceModels.Publish.DeleteSession;
 
 #if AUTOFIXTURE4
 using AutoFixture;
@@ -45,9 +45,11 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             _mockProvisioning = CreateMockServiceClient();
             _mockAuthenticator = CreateMockAuthenticator();
 
-            _client.ServiceClients.Add(AquariusClient.ClientType.PublishJson, _mockPublish);
-            _client.ServiceClients.Add(AquariusClient.ClientType.AcquisitionJson, _mockAcquisition);
-            _client.ServiceClients.Add(AquariusClient.ClientType.ProvisioningJson, _mockProvisioning);
+            var mockHost = "http://example.com";
+
+            _client.AddServiceClient(AquariusClient.ClientType.PublishJson, _mockPublish, PublishV2.ResolveEndpoint(mockHost));
+            _client.AddServiceClient(AquariusClient.ClientType.AcquisitionJson, _mockAcquisition, AcquisitionV2.ResolveEndpoint(mockHost));
+            _client.AddServiceClient(AquariusClient.ClientType.ProvisioningJson, _mockProvisioning, Provisioning.ResolveEndpoint(mockHost));
 
             _client.Connection = new Connection(
                 _fixture.Create<string>(),
@@ -92,6 +94,41 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             {
                 return client.Provisioning.Get(new GetUnits()).Results;
             }
+        }
+
+        [Test]
+        public void Publish_HasBaseUri()
+        {
+            AssertClientHasBaseUri(_client.Publish);
+        }
+
+        [Test]
+        public void Acquisition_HasBaseUri()
+        {
+            AssertClientHasBaseUri(_client.Acquisition);
+        }
+
+        [Test]
+        public void Provisioning_HasBaseUri()
+        {
+            AssertClientHasBaseUri(_client.Provisioning);
+        }
+
+        private void AssertClientHasBaseUri(IServiceClient serviceClient)
+        {
+            var baseUri = _client.GetBaseUri(serviceClient);
+
+            baseUri.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Test]
+        public void UnregisteredServiceClient_HasNoBaseUri()
+        {
+            var otherClient = new JsonServiceClient();
+
+            var baseUri = _client.GetBaseUri(otherClient);
+
+            baseUri.Should().BeNullOrEmpty();
         }
     }
 }

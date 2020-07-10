@@ -1,5 +1,5 @@
 /* Options:
-Date: 2020-04-15 12:02:32
+Date: 2020-07-10 12:11:05
 Version: 4.512
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
@@ -840,6 +840,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public Guid UniqueId { get; set; }
 
         ///<summary>
+        ///Create time (UTC)
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Create time (UTC)")]
+        public DateTimeOffset CreateTimeUtc { get; set; }
+
+        ///<summary>
         ///Last modified time (UTC)
         ///</summary>
         [ApiMember(DataType="DateTimeOffset", Description="Last modified time (UTC)")]
@@ -852,9 +858,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DateTimeOffset? FromTimeUtc { get; set; }
 
         ///<summary>
-        ///Create time (UTC)
+        ///To time (UTC)
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Create time (UTC)")]
+        [ApiMember(DataType="DateTimeOffset", Description="To time (UTC)")]
         public DateTimeOffset? ToTimeUtc { get; set; }
 
         ///<summary>
@@ -862,6 +868,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Details")]
         public string Details { get; set; }
+
+        ///<summary>
+        ///Time-series unique id
+        ///</summary>
+        [ApiMember(DataType="string", Description="Time-series unique id")]
+        public Guid? TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Location note tags
@@ -2643,6 +2655,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public ThresholdType Type { get; set; }
 
         ///<summary>
+        ///Processing order
+        ///</summary>
+        [ApiMember(DataType="CorrectionProcessingOrder", Description="Processing order")]
+        public CorrectionProcessingOrder ProcessingOrder { get; set; }
+
+        ///<summary>
         ///Display color
         ///</summary>
         [ApiMember(Description="Display color")]
@@ -2731,6 +2749,104 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DateTimeOffset", Description="Last time attributes on the time-series matched the given filters; null when time-series current attributes matched the given filters")]
         public DateTimeOffset? LastMatchedTime { get; set; }
+    }
+
+    public class TrendLineAnalysis
+    {
+        ///<summary>
+        ///Type of regression analysis
+        ///</summary>
+        [ApiMember(DataType="TrendLineAnalysisType", Description="Type of regression analysis")]
+        public TrendLineAnalysisType Type { get; set; }
+
+        ///<summary>
+        ///Start point of period
+        ///</summary>
+        [ApiMember(DataType="TimeSeriesPoint", Description="Start point of period")]
+        public TimeSeriesPoint StartPoint { get; set; }
+
+        ///<summary>
+        ///End point of period
+        ///</summary>
+        [ApiMember(DataType="TimeSeriesPoint", Description="End point of period")]
+        public TimeSeriesPoint EndPoint { get; set; }
+
+        ///<summary>
+        ///Absolute change
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Absolute change")]
+        public DoubleWithDisplay AbsoluteChange { get; set; }
+
+        ///<summary>
+        ///Percentage change
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Percentage change")]
+        public DoubleWithDisplay PercentageChange { get; set; }
+
+        ///<summary>
+        ///Minimum value
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Minimum value")]
+        public DoubleWithDisplay MinValue { get; set; }
+
+        ///<summary>
+        ///Maximum value
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Maximum value")]
+        public DoubleWithDisplay MaxValue { get; set; }
+
+        ///<summary>
+        ///Lower Quartile (Q1) of residuals
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Lower Quartile (Q1) of residuals")]
+        public DoubleWithDisplay LowerQuartileOfResiduals { get; set; }
+
+        ///<summary>
+        ///Median (Q2) of residuals
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Median (Q2) of residuals")]
+        public DoubleWithDisplay MedianOfResiduals { get; set; }
+
+        ///<summary>
+        ///Upper Quartile (Q3) of residuals
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Upper Quartile (Q3) of residuals")]
+        public DoubleWithDisplay UpperQuartileOfResiduals { get; set; }
+
+        ///<summary>
+        ///Trend line slope measured in data units per year
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Trend line slope measured in data units per year")]
+        public DoubleWithDisplay Slope { get; set; }
+
+        ///<summary>
+        ///Trend line intercept, as the value of the trend line at the time of the StartPoint
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Trend line intercept, as the value of the trend line at the time of the StartPoint")]
+        public DoubleWithDisplay Intercept { get; set; }
+
+        ///<summary>
+        ///Standard error in trend line slope
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Standard error in trend line slope")]
+        public DoubleWithDisplay SlopeStandardError { get; set; }
+
+        ///<summary>
+        ///Standard deviation of results
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Standard deviation of results")]
+        public DoubleWithDisplay StandardDeviation { get; set; }
+
+        ///<summary>
+        ///Trend line correlation coefficient
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Trend line correlation coefficient")]
+        public DoubleWithDisplay CorrelationCoefficient { get; set; }
+    }
+
+    public enum TrendLineAnalysisType
+    {
+        Linear,
     }
 
     public class UnitMetadata
@@ -3410,6 +3526,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string TargetDatum { get; set; }
     }
 
+    public class DatumConvertedQuantityWithDisplay
+        : QuantityWithDisplay
+    {
+        ///<summary>
+        ///Target reference datum
+        ///</summary>
+        [ApiMember(Description="Target reference datum")]
+        public string TargetDatum { get; set; }
+    }
+
     public class DischargeActivity
     {
         public DischargeActivity()
@@ -3934,6 +4060,135 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DateTimeOffset", Description="Last modified")]
         public DateTimeOffset LastModified { get; set; }
+    }
+
+    public class FieldVisitReading
+    {
+        public FieldVisitReading()
+        {
+            DatumConvertedValues = new List<DatumConvertedQuantityWithDisplay>{};
+            Qualifiers = new List<string>{};
+        }
+
+        ///<summary>
+        ///Approval
+        ///</summary>
+        [ApiMember(DataType="FieldVisitApproval", Description="Approval")]
+        public FieldVisitApproval Approval { get; set; }
+
+        ///<summary>
+        ///Control condition
+        ///</summary>
+        [ApiMember(Description="Control condition")]
+        public string ControlCondition { get; set; }
+
+        ///<summary>
+        ///Field visit identifier
+        ///</summary>
+        [ApiMember(Description="Field visit identifier")]
+        public string FieldVisitIdentifier { get; set; }
+
+        ///<summary>
+        ///Value
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Value")]
+        public QuantityWithDisplay Value { get; set; }
+
+        ///<summary>
+        ///Uncertainty
+        ///</summary>
+        [ApiMember(DataType="Uncertainty", Description="Uncertainty")]
+        public Uncertainty Uncertainty { get; set; }
+
+        ///<summary>
+        ///Datum converted values where applicable.
+        ///</summary>
+        [ApiMember(DataType="Array<DatumConvertedQuantityWithDisplay>", Description="Datum converted values where applicable.")]
+        public List<DatumConvertedQuantityWithDisplay> DatumConvertedValues { get; set; }
+
+        ///<summary>
+        ///Parameter
+        ///</summary>
+        [ApiMember(Description="Parameter")]
+        public string Parameter { get; set; }
+
+        ///<summary>
+        ///Monitoring method
+        ///</summary>
+        [ApiMember(Description="Monitoring method")]
+        public string MonitoringMethod { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///Manufacturer
+        ///</summary>
+        [ApiMember(Description="Manufacturer")]
+        public string Manufacturer { get; set; }
+
+        ///<summary>
+        ///Model
+        ///</summary>
+        [ApiMember(Description="Model")]
+        public string Model { get; set; }
+
+        ///<summary>
+        ///Serial number
+        ///</summary>
+        [ApiMember(Description="Serial number")]
+        public string SerialNumber { get; set; }
+
+        ///<summary>
+        ///Time
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Time")]
+        public DateTimeOffset Time { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Publish
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///Grade code
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code")]
+        public int? GradeCode { get; set; }
+
+        ///<summary>
+        ///Qualifiers
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="Qualifiers")]
+        public List<string> Qualifiers { get; set; }
+
+        ///<summary>
+        ///Field visit reading type
+        ///</summary>
+        [ApiMember(DataType="FieldVisitReadingType", Description="Field visit reading type")]
+        public FieldVisitReadingType ReadingType { get; set; }
+
+        ///<summary>
+        ///Reference point unique ID
+        ///</summary>
+        [ApiMember(DataType="string", Description="Reference point unique ID")]
+        public Guid? ReferencePointUniqueId { get; set; }
+
+        ///<summary>
+        ///Indicates if this reading is measured against the local assumed datum of the reading's location
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading's location")]
+        public bool UseLocationDatumAsReference { get; set; }
     }
 
     public class GageHeightAtZeroFlowActivity
@@ -4658,6 +4913,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DateTimeOffset? ExpirationDate { get; set; }
     }
 
+    public class Uncertainty
+    {
+        ///<summary>
+        ///Uncertainty Type in use
+        ///</summary>
+        [ApiMember(DataType="UncertaintyType", Description="Uncertainty Type in use")]
+        public UncertaintyType UncertaintyType { get; set; }
+
+        ///<summary>
+        ///Quantitative (Type A) Uncertainty
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Quantitative (Type A) Uncertainty")]
+        public DoubleWithDisplay QuantitativeUncertainty { get; set; }
+
+        ///<summary>
+        ///Qualitative (Type B) Uncertainty
+        ///</summary>
+        [ApiMember(DataType="QualitativeUncertaintyType", Description="Qualitative (Type B) Uncertainty")]
+        public QualitativeUncertaintyType? QualitativeUncertainty { get; set; }
+    }
+
     public class VelocityDepthObservation
     {
         ///<summary>
@@ -5189,6 +5465,26 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         Unknown,
         MidSection,
         MeanSection,
+    }
+
+    public enum FieldVisitReadingType
+    {
+        Unknown,
+        RoutineBefore,
+        Routine,
+        RoutineAfter,
+        ResetBefore,
+        ResetAfter,
+        CleaningBefore,
+        CleaningAfter,
+        AfterCalibration,
+        ReferencePrimary,
+        Reference,
+        MeanGageHeight,
+        ExtremeMin,
+        ExtremeMax,
+        Discharge,
+        MeanIndexVelocity,
     }
 
     public enum FlowDirectionType
@@ -5732,6 +6028,52 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Locale")]
         public string Locale { get; set; }
+    }
+
+    [Route("/GetFieldVisitReadingsByLocation", "GET")]
+    public class GetFieldVisitReadingsByLocationServiceRequest
+        : IReturn<FieldVisitReadingsByLocationServiceResponse>
+    {
+        public GetFieldVisitReadingsByLocationServiceRequest()
+        {
+            Parameters = new List<string>{};
+        }
+
+        ///<summary>
+        ///Location identifier. Must be empty when LocationUniqueId is set.
+        ///</summary>
+        [ApiMember(Description="Location identifier. Must be empty when LocationUniqueId is set.")]
+        public string LocationIdentifier { get; set; }
+
+        ///<summary>
+        ///Location unique ID. Must be empty when LocationIdentifier is set.
+        ///</summary>
+        [ApiMember(DataType="string", Description="Location unique ID. Must be empty when LocationIdentifier is set.")]
+        public Guid? LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///If set, only return readings of the specified parameters
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="If set, only return readings of the specified parameters")]
+        public List<string> Parameters { get; set; }
+
+        ///<summary>
+        ///Filter results to items matching the Publish value
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Filter results to items matching the Publish value")]
+        public bool? Publish { get; set; }
+
+        ///<summary>
+        ///True if data values should have rounding rules applied
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if data values should have rounding rules applied")]
+        public bool? ApplyRounding { get; set; }
+
+        ///<summary>
+        ///True if length reading values should be converted to all configured vertical datums in the location
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if length reading values should be converted to all configured vertical datums in the location")]
+        public bool? ApplyDatumConversion { get; set; }
     }
 
     [Route("/GetGradeList", "GET")]
@@ -6522,6 +6864,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
     }
 
+    [Route("/GetTrendLineAnalysis", "POST")]
+    public class TrendLineAnalysisServiceRequest
+        : IReturn<TrendLineAnalysisServiceResponse>
+    {
+        public TrendLineAnalysisServiceRequest()
+        {
+            Points = new List<TimeSeriesPoint>{};
+        }
+
+        ///<summary>
+        ///Type of regression analysis
+        ///</summary>
+        [ApiMember(DataType="TrendLineAnalysisType", Description="Type of regression analysis", IsRequired=true)]
+        public TrendLineAnalysisType? Type { get; set; }
+
+        ///<summary>
+        ///List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.
+        ///</summary>
+        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.", IsRequired=true)]
+        public List<TimeSeriesPoint> Points { get; set; }
+    }
+
     [Route("/GetUnitList", "GET")]
     public class UnitListServiceRequest
         : IReturn<UnitListServiceResponse>
@@ -6738,6 +7102,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DateTime", Description="Next token")]
         public DateTime? NextToken { get; set; }
+    }
+
+    public class FieldVisitReadingsByLocationServiceResponse
+        : PublishServiceResponse
+    {
+        public FieldVisitReadingsByLocationServiceResponse()
+        {
+            FieldVisitReadings = new List<FieldVisitReading>{};
+        }
+
+        ///<summary>
+        ///Field visit readings
+        ///</summary>
+        [ApiMember(DataType="Array<FieldVisitReading>", Description="Field visit readings")]
+        public List<FieldVisitReading> FieldVisitReadings { get; set; }
     }
 
     public class GradeListServiceResponse
@@ -7409,6 +7788,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<TimeSeriesUniqueIds> TimeSeriesUniqueIds { get; set; }
     }
 
+    public class TrendLineAnalysisServiceResponse
+        : PublishServiceResponse
+    {
+        ///<summary>
+        ///Trend line analysis
+        ///</summary>
+        [ApiMember(DataType="TrendLineAnalysis", Description="Trend line analysis")]
+        public TrendLineAnalysis TrendLineAnalysis { get; set; }
+    }
+
     public class UnitListServiceResponse
         : PublishServiceResponse
     {
@@ -7429,6 +7818,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.1.68.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.2.85.0");
     }
 }

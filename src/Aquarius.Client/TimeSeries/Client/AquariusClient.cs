@@ -82,9 +82,16 @@ namespace Aquarius.TimeSeries.Client
                 return client;
 
             client = ClientHelper.CloneAuthenticatedClient(Publish as JsonServiceClient, baseUri);
-            CustomClients.Add(baseUri, client);
+            AddCustomClient(baseUri, client);
 
             return client;
+        }
+
+        public string GetBaseUri(IServiceClient client)
+        {
+            return BaseUris.TryGetValue(client, out var baseUri)
+                ? baseUri
+                : null;
         }
 
         public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, CancellationToken? cancellationToken = null)
@@ -135,6 +142,29 @@ namespace Aquarius.TimeSeries.Client
 
         internal readonly Dictionary<ClientType, IServiceClient> ServiceClients = new Dictionary<ClientType, IServiceClient>();
         internal readonly Dictionary<string, IServiceClient> CustomClients = new Dictionary<string, IServiceClient>();
+        private readonly Dictionary<IServiceClient,string> BaseUris = new Dictionary<IServiceClient, string>();
+
+        internal void AddServiceClient(ClientType clientType, IServiceClient serviceClient, string baseUri)
+        {
+            ServiceClients.Add(clientType, serviceClient);
+            AddBaseUri(serviceClient, baseUri);
+        }
+
+        internal void AddCustomClient(string baseUri, IServiceClient serviceClient)
+        {
+            CustomClients.Add(baseUri, serviceClient);
+            AddBaseUri(serviceClient, baseUri);
+        }
+
+        private void AddBaseUri(IServiceClient serviceClient, string baseUri)
+        {
+            BaseUris[serviceClient] = baseUri;
+        }
+
+        private void AddServiceClient(ClientType clientType, string baseUri)
+        {
+            AddServiceClient(clientType, CreateClient(baseUri), baseUri);
+        }
 
         internal AquariusClient()
         {
@@ -170,9 +200,9 @@ namespace Aquarius.TimeSeries.Client
 
         private void InternalConnect(string hostname, Func<Connection> connectionFactory)
         {
-            ServiceClients.Add(ClientType.PublishJson, CreateClient(PublishV2.ResolveEndpoint(hostname)));
-            ServiceClients.Add(ClientType.AcquisitionJson, CreateClient(AcquisitionV2.ResolveEndpoint(hostname)));
-            ServiceClients.Add(ClientType.ProvisioningJson, CreateClient(ProvisioningV1.ResolveEndpoint(hostname)));
+            AddServiceClient(ClientType.PublishJson, PublishV2.ResolveEndpoint(hostname));
+            AddServiceClient(ClientType.AcquisitionJson, AcquisitionV2.ResolveEndpoint(hostname));
+            AddServiceClient(ClientType.ProvisioningJson, ProvisioningV1.ResolveEndpoint(hostname));
 
             ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
 
@@ -233,13 +263,16 @@ namespace Aquarius.TimeSeries.Client
 
             ClearConnectedClients(ServiceClients);
             ClearConnectedClients(CustomClients);
+
+            BaseUris.Clear();
         }
 
-        private static void ClearConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
+        private void ClearConnectedClients<TKey>(Dictionary<TKey, IServiceClient> clientDictionary)
         {
             foreach (var client in clientDictionary.Values)
             {
                 client.Dispose();
+                BaseUris.Remove(client);
             }
 
             clientDictionary.Clear();
