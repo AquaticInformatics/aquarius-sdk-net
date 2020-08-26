@@ -277,6 +277,14 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         }
 
         [Test]
+        public void NodaTimeInstant_ParsesSamplesTimestampWithTimeCode()
+        {
+            NodaTimeInstant_ParsesVariousValues(
+                "\"1901-02-03T08:05:06.789+04:00[GST]\"", // Gulf Standard Time
+                Instant.FromDateTimeUtc(ArbitraryUtcDate));
+        }
+
+        [Test]
         public void NodaTimeInstant_UsingJsConfigThatOverridesDefaultIncludeNullValues_SerializesDefaultValue()
         {
             using (CreateJsConfigThatOverridesDefaultIncludeNullValuesSetting())

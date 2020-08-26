@@ -223,6 +223,13 @@ namespace Aquarius.TimeSeries.Client
                 case "maxinstant":
                     return Instant.MaxValue;
                 default:
+                    var timeCodeIndex = text.IndexOf('[');
+
+                    if (timeCodeIndex >= 0)
+                    {
+                        text = text.Substring(0, timeCodeIndex);
+                    }
+
                     var dateTimeOffset = DateTimeSerializer.ParseDateTimeOffset(text);
                     return Instant.FromDateTimeOffset(dateTimeOffset);
             }
