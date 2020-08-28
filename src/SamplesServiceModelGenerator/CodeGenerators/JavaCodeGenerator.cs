@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using SamplesServiceModelGenerator.Swagger;
-using ServiceStack;
 using Enum = SamplesServiceModelGenerator.Swagger.Enum;
 
 namespace SamplesServiceModelGenerator.CodeGenerators
@@ -88,7 +86,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             }
 
             var properties = definition.Properties
-                .Select(p => new Tuple<string, string>(ResolveName(p), ResolveTypeName(p)))
+                .Select(p => (Parameter: (OperationParameter)null, PropertyName: ResolveName(p), PropertyTypeName: ResolveTypeName(p)))
                 .ToList();
 
             builder
@@ -128,34 +126,47 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             var paginatedRequestType = GetPaginatedRequestType(operation, parameters);
 
             var properties = parameters
-                .Select(p => new Tuple<string,string>(ResolveName(p), ResolveTypeName(p)))
+                .Select(p => (Parameter: p, PropertyName: ResolveName(p), TypeName: ResolveTypeName(p)))
                 .ToList();
+
+            var needsDataAnnotation = IsMixedKebabCamelCase(parameters);
+
+            if (needsDataAnnotation)
+            {
+                builder
+                    .Append($"    @DataContract\r\n");
+            }
 
             builder
                 .Append($"    @Route(Path=\"{operation.Route}\", Verbs=\"{operation.Method}\")\r\n")
                 .Append($"    public static class {operationName} implements {responseDtoType}{PaginatedRequestConstraint(paginatedRequestType)}\r\n")
                 .Append($"    {{\r\n")
-                .Append(CreateDtoProperties(operationName, properties))
+                .Append(CreateDtoProperties(operationName, properties, needsDataAnnotation))
                 .Append(CreateSingletonResponseType(operation))
                 .Append($"    }}\r\n");
 
             return builder.ToString();
         }
 
-        private string CreateDtoProperties(string className, List<Tuple<string, string>> properties)
+        private string CreateDtoProperties(string className, List<(OperationParameter Parameter, string PropertyName, string PropertyTypeName)> properties, bool needsDataAnnotation = false)
         {
             if (!properties.Any())
                 return string.Empty;
 
-            return $"        {string.Join("\r\n        ", properties.Select(p => CreateDtoProperty(p.Item1, p.Item2)))}\r\n"
+            return $"        {string.Join("\r\n        ", properties.Select(p => CreateDtoProperty(p.Parameter, p.PropertyName, p.PropertyTypeName, needsDataAnnotation)))}\r\n"
                     + $"\r\n"
-                    + $"        {string.Join("\r\n        ", properties.Select(p => CreateDtoPropertyAccessors(className, p.Item1, p.Item2)))}\r\n";
+                    + $"        {string.Join("\r\n        ", properties.Select(p => CreateDtoPropertyAccessors(className, p.PropertyName, p.PropertyTypeName)))}\r\n";
         }
 
-        private string CreateDtoProperty(string propertyName, string propertyTypeName)
+        private string CreateDtoProperty(OperationParameter parameter, string propertyName, string propertyTypeName, bool needsDataAnnotation)
         {
+            var dataAnnotationPrefix = needsDataAnnotation && parameter != null
+                ? $"@DataMember(Name = \"{parameter.Name}\")\r\n        "
+                : null;
+
             // TODO: Add @ApiMember annotations to show parameter.Description if not empty
-            return $"public {propertyTypeName} {propertyName} = null;";
+
+            return $"{dataAnnotationPrefix}public {propertyTypeName} {propertyName} = null;";
         }
 
         private string CreateDtoPropertyAccessors(string className, string propertyName, string propertyTypeName)

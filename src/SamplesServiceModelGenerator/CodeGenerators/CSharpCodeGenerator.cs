@@ -136,17 +136,25 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
             var paginatedRequestType = GetPaginatedRequestType(operation, parameters);
 
+            var needsDataAnnotation = IsMixedKebabCamelCase(parameters);
+
+            if (needsDataAnnotation)
+            {
+                builder
+                    .Append($"    [DataContract]\r\n");
+            }
+
             builder
                 .Append($"    [Route(\"{operation.Route}\", \"{operation.Method}\")]\r\n")
                 .Append($"    public class {operationName} : {responseDtoType}{PaginatedRequestConstraint(paginatedRequestType)}\r\n")
                 .Append($"    {{\r\n")
-                .Append($"        {string.Join("\r\n        ", parameters.Select(CreateRequestDtoProperty))}\r\n")
+                .Append($"        {string.Join("\r\n        ", parameters.Select(p => CreateRequestDtoProperty(p, needsDataAnnotation)))}\r\n")
                 .Append($"    }}\r\n");
 
             return builder.ToString();
         }
 
-        private string CreateRequestDtoProperty(OperationParameter parameter)
+        private string CreateRequestDtoProperty(OperationParameter parameter, bool needsDataAnnotation)
         {
             var parameterTypeName = ResolveTypeName(parameter);
 
@@ -173,7 +181,11 @@ namespace SamplesServiceModelGenerator.CodeGenerators
                     parameterTypeName += "?";
             }
 
-            return $"public {parameterTypeName} {ResolveName(parameter)} {{ get; set; }}";
+            var dataAnnotationPrefix = needsDataAnnotation
+                ? $"[DataMember(Name = \"{parameter.Name}\")]\r\n        "
+                : null;
+
+            return $"{dataAnnotationPrefix}public {parameterTypeName} {ResolveName(parameter)} {{ get; set; }}";
         }
 
         private static string GetResponseDtoType(Operation operation)

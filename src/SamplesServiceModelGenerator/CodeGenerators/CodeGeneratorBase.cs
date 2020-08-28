@@ -247,7 +247,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             };
         }
 
-        protected static bool IsMixedKebabCamelCase(Property property)
+        private static bool IsMixedKebabCamelCase(Property property)
         {
             return property.Name.Contains('-');
         }
@@ -258,5 +258,14 @@ namespace SamplesServiceModelGenerator.CodeGenerators
                 throw new ExpectedException($"{definition.Name} is an invalid POCO because it cannot contain mixed kebab-camelCase property names: {string.Join(", ", definition.Properties.Where(IsMixedKebabCamelCase).Select(p => p.Name))}");
         }
 
+        protected static bool IsMixedKebabCamelCase(List<OperationParameter> parameters)
+        {
+            return parameters.Any(IsMixedKebabCamelCase);
+        }
+
+        private static bool IsMixedKebabCamelCase(OperationParameter parameter)
+        {
+            return parameter.Name.Contains('-');
+        }
     }
 }

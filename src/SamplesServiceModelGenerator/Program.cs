@@ -87,6 +87,7 @@ namespace SamplesServiceModelGenerator
             {TargetLanguage.CSharp, string.Join(";",
                 "System",
                 "System.Collections.Generic",
+                "System.Runtime.Serialization",
                 "ServiceStack",
                 "NodaTime",
                 "Aquarius.TimeSeries.Client")},
