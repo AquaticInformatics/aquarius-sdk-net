@@ -67,6 +67,8 @@ namespace SamplesServiceModelGenerator.CodeGenerators
 
         private string CreatePoco(Definition definition)
         {
+            ThrowIfInvalidPoco(definition);
+
             var builder = new StringBuilder();
 
             if (Aliases.ContainsKey(definition.Name))

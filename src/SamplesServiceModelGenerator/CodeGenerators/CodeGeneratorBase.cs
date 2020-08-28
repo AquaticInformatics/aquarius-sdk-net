@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ServiceStack;
 using SamplesServiceModelGenerator.Swagger;
+using Property = SamplesServiceModelGenerator.Swagger.Property;
 using Type = SamplesServiceModelGenerator.Swagger.Type;
 
 namespace SamplesServiceModelGenerator.CodeGenerators
@@ -226,7 +227,7 @@ namespace SamplesServiceModelGenerator.CodeGenerators
             return parameter != null;
         }
 
-        private static OperationParameter Map(Swagger.Property property)
+        private static OperationParameter Map(Property property)
         {
             if (property == null)
                 return null;
@@ -245,5 +246,17 @@ namespace SamplesServiceModelGenerator.CodeGenerators
                 Enum = property.Enum,
             };
         }
+
+        protected static bool IsMixedKebabCamelCase(Property property)
+        {
+            return property.Name.Contains('-');
+        }
+
+        protected static void ThrowIfInvalidPoco(Definition definition)
+        {
+            if (definition.Properties.Any(IsMixedKebabCamelCase))
+                throw new ExpectedException($"{definition.Name} is an invalid POCO because it cannot contain mixed kebab-camelCase property names: {string.Join(", ", definition.Properties.Where(IsMixedKebabCamelCase).Select(p => p.Name))}");
+        }
+
     }
 }
