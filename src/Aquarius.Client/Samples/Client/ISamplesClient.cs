@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using Aquarius.Samples.Client.ServiceModel;
 using Aquarius.TimeSeries.Client;
 using ServiceStack;
 using ServiceStack.Text;
@@ -12,6 +13,7 @@ namespace Aquarius.Samples.Client
         IServiceClient Client { get; }
         AquariusServerVersion ServerVersion { get; }
         string LocationResponseHeader { get; }
+        UserProfile AuthenticatedUser { get; }
 
         TResponse Get<TResponse>(IReturn<TResponse> requestDto);
         void Get(IReturnVoid requestDto);

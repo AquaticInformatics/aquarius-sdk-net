@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using Aquarius.Helpers;
+using Aquarius.Samples.Client.ServiceModel;
 using Aquarius.TimeSeries.Client;
 using ServiceStack;
 using ServiceStack.Logging;
@@ -49,6 +50,8 @@ namespace Aquarius.Samples.Client
 
         public AquariusServerVersion ServerVersion { get; }
 
+        public UserProfile AuthenticatedUser { get; }
+
         public string LocationResponseHeader { get; private set; }
 
         private IServiceClient _client;
@@ -73,8 +76,9 @@ namespace Aquarius.Samples.Client
             Client.AddHeader(AuthorizationHeaderKey, $"token {apiToken}");
 
             ServerVersion = GetServerVersion();
+            AuthenticatedUser = GetAuthenticatedUser();
 
-            Log.Info($"Connected to {GetBaseUri()} ({ServerVersion}) ...");
+            Log.Info($"Connected to {GetBaseUri()} ({ServerVersion}) as {AuthenticatedUser.FullName}");
         }
 
         private string GetBaseUri()
@@ -107,7 +111,12 @@ namespace Aquarius.Samples.Client
 
         private static JsConfigScope WithScope(bool includeNullValues)
         {
-            var scope = JsConfig.With(includeNullValues:includeNullValues, emitCamelCaseNames: true);
+            var scope = JsConfig.With(new Config
+            {
+                IncludeNullValues = includeNullValues,
+                TextCase = TextCase.CamelCase
+            });
+
             return scope;
         }
 
@@ -118,16 +127,22 @@ namespace Aquarius.Samples.Client
             return AquariusServerVersion.Create(response.ReleaseName);
         }
 
-        // TODO: The status request & response DTOs need to be added to the exposed Swagger methods
-        [Route("/v1/status", HttpMethods.Get)]
-        public class GetStatus : IReturn<StatusResponse>
+        private UserProfile GetAuthenticatedUser()
         {
-            
+            return Get(new GetUserTokens())
+                .User
+                .UserProfile;
         }
 
-        public class StatusResponse
+        // TODO: The authenticated user request & response DTOs need to be added to the exposed Swagger methods
+        [Route("/v1/usertokens")]
+        internal class GetUserTokens : IReturn<UserTokensResponse>
         {
-            public string ReleaseName { get; set; }
+        }
+
+        internal class UserTokensResponse
+        {
+            public User User { get; set; }
         }
 
         public TResponse Get<TResponse>(IReturn<TResponse> requestDto)
