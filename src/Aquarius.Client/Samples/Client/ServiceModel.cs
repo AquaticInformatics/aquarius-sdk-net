@@ -1,9 +1,10 @@
-// Date: 2020-07-10T13:39:47.8657616-07:00
-// Base URL: https://test.gaiaserve.net/api/swagger.json
-// Source: AQUARIUS Samples API (2020.05.3783)
+// Date: 2020-08-28T13:19:34.6085468-07:00
+// Base URL: https://ai.aqsamples.com/api/swagger.json
+// Source: AQUARIUS Samples API (2020.04.3767)
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ServiceStack;
 using NodaTime;
 using Aquarius.TimeSeries.Client;
@@ -14,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2020.05.3783");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2020.04.3767");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -491,17 +492,27 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
     }
 
+    [DataContract]
     [Route("/v1/fieldvisits", "GET")]
     public class GetFieldVisits : IReturn<SearchResultFieldVisitSimple>
     {
+        [DataMember(Name = "end-startTime")]
         public Instant? EndStartTime { get; set; }
+        [DataMember(Name = "fieldTripIds")]
         public List<string> FieldTripIds { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "planningStatuses")]
         public List<string> PlanningStatuses { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "scheduleIds")]
         public List<string> ScheduleIds { get; set; }
+        [DataMember(Name = "start-startTime")]
         public Instant? StartStartTime { get; set; }
     }
 
@@ -525,17 +536,27 @@ namespace Aquarius.Samples.Client.ServiceModel
         public AuditAttributes AuditAttributes { get; set; }
     }
 
+    [DataContract]
     [Route("/v1/fieldvisits", "DELETE")]
     public class DeleteFieldVisits : IReturnVoid
     {
+        [DataMember(Name = "end-startTime")]
         public Instant? EndStartTime { get; set; }
+        [DataMember(Name = "fieldTripIds")]
         public List<string> FieldTripIds { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "planningStatuses")]
         public List<string> PlanningStatuses { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "scheduleIds")]
         public List<string> ScheduleIds { get; set; }
+        [DataMember(Name = "start-startTime")]
         public Instant? StartStartTime { get; set; }
     }
 
@@ -821,51 +842,95 @@ namespace Aquarius.Samples.Client.ServiceModel
         
     }
 
+    [DataContract]
     [Route("/v1/observations", "GET")]
     public class GetObservations : IReturn<SearchResultObservation>, IPaginatedRequest
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
@@ -905,51 +970,95 @@ namespace Aquarius.Samples.Client.ServiceModel
         public AuditAttributes AuditAttributes { get; set; }
     }
 
+    [DataContract]
     [Route("/v1/observations", "DELETE")]
     public class DeleteObservations : IReturnVoid
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
@@ -1001,148 +1110,281 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
     }
 
+    [DataContract]
     [Route("/v1/observations/charts", "GET")]
     public class GetChartData : IReturn<MultiChartData>
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
+    [DataContract]
     [Route("/v1/observations/geographic", "GET")]
     public class GetGroupedObservations : IReturn<SearchResultLocationObservationsGroup>, IPaginatedRequest
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
+    [DataContract]
     [Route("/v1/observations/resultgrades", "PUT")]
     public class PutBulkEditResultGrades : IReturnVoid
     {
+        [DataMember(Name = "targetResultGrade")]
         public string TargetResultGrade { get; set; }
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
@@ -1525,52 +1767,97 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string FieldVisitId { get; set; }
     }
 
+    [DataContract]
     [Route("/v1/services/export/observations", "GET")]
     public class GetExportObservations : IReturnVoid
     {
+        [DataMember(Name = "format")]
         public FormatType? Format { get; set; }
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
@@ -2245,51 +2532,95 @@ namespace Aquarius.Samples.Client.ServiceModel
         public bool? LinkFieldVisitsForNewObservations { get; set; }
     }
 
+    [DataContract]
     [Route("/v2/observations", "GET")]
     public class GetObservationsV2 : IReturn<SearchResultObservation>, IPaginatedRequest
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
@@ -2329,51 +2660,95 @@ namespace Aquarius.Samples.Client.ServiceModel
         public AuditAttributes AuditAttributes { get; set; }
     }
 
+    [DataContract]
     [Route("/v2/observations", "DELETE")]
     public class DeleteObservationsV2 : IReturnVoid
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
@@ -2425,197 +2800,375 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
     }
 
+    [DataContract]
     [Route("/v2/observations/charts", "GET")]
     public class GetChartDataV2 : IReturn<MultiChartData>
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
+    [DataContract]
     [Route("/v2/observations/geographic", "GET")]
     public class GetGroupedObservationsV2 : IReturn<SearchResultLocationObservationsGroup>, IPaginatedRequest
     {
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
+    [DataContract]
     [Route("/v2/observations/resultgrades", "PUT")]
     public class PutBulkEditResultGradesV2 : IReturnVoid
     {
+        [DataMember(Name = "targetResultGrade")]
         public string TargetResultGrade { get; set; }
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
+    [DataContract]
     [Route("/v2/services/export/observations", "GET")]
     public class GetObservationExportIIV2 : IReturnVoid
     {
+        [DataMember(Name = "format")]
         public FormatType? Format { get; set; }
+        [DataMember(Name = "activityCustomId")]
         public string ActivityCustomId { get; set; }
+        [DataMember(Name = "activityIds")]
         public List<string> ActivityIds { get; set; }
+        [DataMember(Name = "activityTypes")]
         public List<string> ActivityTypes { get; set; }
+        [DataMember(Name = "analysisMethodIds")]
         public List<string> AnalysisMethodIds { get; set; }
+        [DataMember(Name = "analyticalGroupIds")]
         public List<string> AnalyticalGroupIds { get; set; }
+        [DataMember(Name = "collectionMethodIds")]
         public List<string> CollectionMethodIds { get; set; }
+        [DataMember(Name = "cursor")]
         public string Cursor { get; set; }
+        [DataMember(Name = "customId")]
         public string CustomId { get; set; }
+        [DataMember(Name = "dataClassifications")]
         public List<string> DataClassifications { get; set; }
+        [DataMember(Name = "depthUnitCustomId")]
         public string DepthUnitCustomId { get; set; }
+        [DataMember(Name = "depthUnitId")]
         public string DepthUnitId { get; set; }
+        [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
+        [DataMember(Name = "detectionCondition")]
         public DetectionConditionType? DetectionCondition { get; set; }
+        [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
+        [DataMember(Name = "end-resultTime")]
         public Instant? EndResultTime { get; set; }
+        [DataMember(Name = "endModificationTime")]
         public Instant? EndModificationTime { get; set; }
+        [DataMember(Name = "fieldResultType")]
         public FieldResultType? FieldResultType { get; set; }
+        [DataMember(Name = "fieldVisitId")]
         public string FieldVisitId { get; set; }
+        [DataMember(Name = "filterId")]
         public string FilterId { get; set; }
+        [DataMember(Name = "ids")]
         public List<string> Ids { get; set; }
+        [DataMember(Name = "importHistoryEventId")]
         public string ImportHistoryEventId { get; set; }
+        [DataMember(Name = "labReportIds")]
         public List<string> LabReportIds { get; set; }
+        [DataMember(Name = "labResultLabAnalysisMethodIds")]
         public List<string> LabResultLabAnalysisMethodIds { get; set; }
+        [DataMember(Name = "labResultLaboratoryIds")]
         public List<string> LabResultLaboratoryIds { get; set; }
+        [DataMember(Name = "limit")]
         public int? Limit { get; set; }
+        [DataMember(Name = "media")]
         public List<string> Media { get; set; }
+        [DataMember(Name = "observedPropertyIds")]
         public List<string> ObservedPropertyIds { get; set; }
+        [DataMember(Name = "projectIds")]
         public List<string> ProjectIds { get; set; }
+        [DataMember(Name = "qualityControlTypes")]
         public List<string> QualityControlTypes { get; set; }
+        [DataMember(Name = "resultGrades")]
         public List<string> ResultGrades { get; set; }
+        [DataMember(Name = "resultStatuses")]
         public List<string> ResultStatuses { get; set; }
+        [DataMember(Name = "sampleFraction")]
         public SampleFractionType? SampleFraction { get; set; }
+        [DataMember(Name = "samplingContextTagIds")]
         public List<string> SamplingContextTagIds { get; set; }
+        [DataMember(Name = "samplingLocationGroupIds")]
         public List<string> SamplingLocationGroupIds { get; set; }
+        [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "search")]
         public List<string> Search { get; set; }
+        [DataMember(Name = "sort")]
         public string Sort { get; set; }
+        [DataMember(Name = "specimenIds")]
         public List<string> SpecimenIds { get; set; }
+        [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
+        [DataMember(Name = "start-resultTime")]
         public Instant? StartResultTime { get; set; }
+        [DataMember(Name = "startModificationTime")]
         public Instant? StartModificationTime { get; set; }
+        [DataMember(Name = "taxonIds")]
         public List<string> TaxonIds { get; set; }
     }
 
