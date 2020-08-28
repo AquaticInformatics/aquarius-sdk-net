@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Aquarius.Samples.Client;
+using Aquarius.Samples.Client.ServiceModel;
 using FluentAssertions;
 using NSubstitute;
+using NSubstitute.Core;
 using NUnit.Framework;
 using ServiceStack;
 
@@ -55,8 +57,12 @@ namespace Aquarius.UnitTests.Samples.Client
         private void SetupMockClient()
         {
             _mockServiceClient
-                .Get(Arg.Any<SamplesClient.GetStatus>())
-                .Returns(new SamplesClient.StatusResponse {ReleaseName = "0.0"});
+                .Get(Arg.Any<GetStatus>())
+                .Returns(new Status { ReleaseName = "0.0"});
+
+            _mockServiceClient
+                .Get(Arg.Any<SamplesClient.GetUserTokens>())
+                .Returns(_fixture.Create<SamplesClient.UserTokensResponse>());
         }
 
         [Test]

@@ -3,6 +3,12 @@
 This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
+
+### 20.2.2
+- Fixed a bug in the AQUARIUS Samples start/end timerange filtering.
+- Added the AuthenticatedUser property to the ISamplesClient interface.
+- Updated the service models for the AQUARIUS Samples 2020.04 release.
+
 ### 20.2.1
 - Fixed a bug in the AQUARIUS Samples timestamp deserialization logic
 
