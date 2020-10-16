@@ -1,6 +1,6 @@
 /* Options:
-Date: 2020-07-10 12:11:57
-Version: 4.512
+Date: 2020-10-16 12:37:09
+Version: 5.80
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Acquisition/v2
 
@@ -138,9 +138,14 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public string AppendRequestIdentifier { get; set; }
     }
 
+    public interface IFileUploadRequest
+    {
+        IHttpFile File { get; set; }
+    }
+
     [Route("/locations/{LocationUniqueId}/attachments", "POST")]
     public class PostLocationAttachment
-        : IReturn<PostLocationAttachmentResponse>
+        : IReturn<PostLocationAttachmentResponse>, IFileUploadRequest
     {
         ///<summary>
         ///Unique ID of the location to add the attachment to
@@ -198,7 +203,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     [Route("/locations/{LocationUniqueId}/attachments/reports", "POST")]
     public class PostReportAttachment
-        : IReturn<PostReportResponse>
+        : IReturn<PostReportResponse>, IFileUploadRequest
     {
         public PostReportAttachment()
         {
@@ -329,11 +334,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     [Route("/visits/upload/plugins", "POST")]
     public class PostVisitFile
-        : PostVisitFileBase, IReturn<PostVisitFileResponse>
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>, IFileUploadRequest
     {
     }
 
     public class PostVisitFileBase
+        : IFileUploadRequest
     {
         ///<summary>
         ///File
@@ -345,7 +351,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     [Route("/locations/{LocationUniqueId}/visits/upload/plugins", "POST")]
     public class PostVisitFileToLocation
-        : PostVisitFileBase, IReturn<PostVisitFileResponse>
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>, IFileUploadRequest
     {
         ///<summary>
         ///Unique ID of the location of visits in the file
@@ -356,12 +362,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     [Route("/visits/{VisitIdentifier}/upload/plugins", "POST")]
     public class PostVisitFileToVisit
-        : PostVisitFileBase, IReturn<PostVisitFileResponse>
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>, IFileUploadRequest
     {
         ///<summary>
         ///Identifier of the existing visit to add the file's content to
         ///</summary>
-        [ApiMember(Description="Identifier of the existing visit to add the file's content to", IsRequired=true, ParameterType="path")]
+        [ApiMember(Description="Identifier of the existing visit to add the file\'s content to", IsRequired=true, ParameterType="path")]
         public string VisitIdentifier { get; set; }
     }
 
@@ -390,19 +396,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///ISO 8601 timestamp. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="Instant", Description="ISO 8601 timestamp. Must not be specified if Type is 'Gap'.")]
+        [ApiMember(DataType="Instant", Description="ISO 8601 timestamp. Must not be specified if Type is \'Gap\'.")]
         public Instant? Time { get; set; }
 
         ///<summary>
         ///The value of the point. Null or empty to represent a NaN. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="double", Description="The value of the point. Null or empty to represent a NaN. Must not be specified if Type is 'Gap'.")]
+        [ApiMember(DataType="double", Description="The value of the point. Null or empty to represent a NaN. Must not be specified if Type is \'Gap\'.")]
         public double? Value { get; set; }
 
         ///<summary>
         ///The type of the point: 'Point' or 'Gap'. Defaults to 'Point' if null or empty.
         ///</summary>
-        [ApiMember(DataType="PointType", Description="The type of the point: 'Point' or 'Gap'. Defaults to 'Point' if null or empty.")]
+        [ApiMember(DataType="PointType", Description="The type of the point: \'Point\' or \'Gap\'. Defaults to \'Point\' if null or empty.")]
         public PointType? Type { get; set; }
 
         ///<summary>
@@ -620,6 +626,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.2.85.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.3.84.0");
     }
 }

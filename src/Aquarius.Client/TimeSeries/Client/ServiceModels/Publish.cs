@@ -1,6 +1,6 @@
 /* Options:
-Date: 2020-07-10 12:11:05
-Version: 4.512
+Date: 2020-10-16 12:36:39
+Version: 5.80
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
 
@@ -206,7 +206,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class CorrectionOperation
-        : TimeRange
+        : TimeRange, IStackPositionMetadataOperation, IMetadataChangeOperation
     {
         ///<summary>
         ///Type
@@ -440,7 +440,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class GapToleranceOperation
-        : GapTolerance
+        : GapTolerance, IStackPositionMetadataOperation, IMetadataChangeOperation
     {
         ///<summary>
         ///Operation type
@@ -511,7 +511,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class GradeOperation
-        : Grade
+        : Grade, IStackPositionMetadataOperation, IMetadataChangeOperation
     {
         ///<summary>
         ///Date applied utc
@@ -542,6 +542,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Comments")]
         public string Comments { get; set; }
+    }
+
+    public interface IMetadataChangeOperation
+    {
+        DateTime DateAppliedUtc { get; set; }
+        string User { get; set; }
+        MetadataChangeOperationType OperationType { get; set; }
     }
 
     public class InterpolationType
@@ -555,7 +562,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class InterpolationTypeOperation
-        : InterpolationType
+        : InterpolationType, IStackPositionMetadataOperation, IMetadataChangeOperation
     {
         ///<summary>
         ///Date applied utc
@@ -586,6 +593,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Comments")]
         public string Comments { get; set; }
+    }
+
+    public interface IStackPositionMetadataOperation
+        : IMetadataChangeOperation
+    {
+        int StackPosition { get; set; }
+        string Comments { get; set; }
     }
 
     public class LocationDatum
@@ -639,6 +653,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="double", Description="Uncertainty of offset to standard if any")]
         public double? Uncertainty { get; set; }
+
+        ///<summary>
+        ///Method used to determine the offset
+        ///</summary>
+        [ApiMember(Description="Method used to determine the offset")]
+        public string Method { get; set; }
 
         ///<summary>
         ///Direction that positive measurements are taken in relation to the reference point
@@ -906,6 +926,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="Array<ReferenceStandardOffset>", Description="Reference standard offsets")]
         public List<ReferenceStandardOffset> ReferenceStandardOffsets { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Method
+        ///</summary>
+        [ApiMember(Description="Method")]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Uncertainty
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty")]
+        public double? Uncertainty { get; set; }
     }
 
     public class LocationRemark
@@ -1040,7 +1078,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class MethodOperation
-        : Method
+        : Method, IStackPositionMetadataOperation, IMetadataChangeOperation
     {
         ///<summary>
         ///Date applied utc
@@ -1127,7 +1165,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class NoteOperation
-        : Note
+        : Note, IMetadataChangeOperation
     {
         ///<summary>
         ///Date applied utc
@@ -1329,7 +1367,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class QualifierOperation
-        : TimeRange
+        : TimeRange, IMetadataChangeOperation
     {
         ///<summary>
         ///Identifier
@@ -1634,7 +1672,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///True if this period is measured against the location's local assumed datum instead of a standard datum
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if this period is measured against the location's local assumed datum instead of a standard datum")]
+        [ApiMember(DataType="boolean", Description="True if this period is measured against the location\'s local assumed datum instead of a standard datum")]
         public bool IsMeasuredAgainstLocalAssumedDatum { get; set; }
 
         ///<summary>
@@ -1654,6 +1692,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="double", Description="Elevation of the reference point relative to the standard or local assumed datum")]
         public double Elevation { get; set; }
+
+        ///<summary>
+        ///Optional uncertainty of elevation
+        ///</summary>
+        [ApiMember(DataType="double", Description="Optional uncertainty of elevation")]
+        public double? Uncertainty { get; set; }
+
+        ///<summary>
+        ///Optional method used to determine the elevation
+        ///</summary>
+        [ApiMember(Description="Optional method used to determine the elevation")]
+        public string Method { get; set; }
 
         ///<summary>
         ///Direction of positive elevations in relation to the reference point
@@ -1693,6 +1743,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="double", Description="Offset to reference standard")]
         public double OffsetToReferenceStandard { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Method
+        ///</summary>
+        [ApiMember(Description="Method")]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Uncertainty
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty")]
+        public double? Uncertainty { get; set; }
     }
 
     public class Report
@@ -1759,13 +1827,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Report creator's user unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Report creator's user unique ID")]
+        [ApiMember(DataType="string", Description="Report creator\'s user unique ID")]
         public Guid UserUniqueId { get; set; }
 
         ///<summary>
         ///Report creator's user name
         ///</summary>
-        [ApiMember(Description="Report creator's user name")]
+        [ApiMember(Description="Report creator\'s user name")]
         public string UserName { get; set; }
 
         ///<summary>
@@ -1899,7 +1967,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Value of the applied tag, if the tag's ValueType is PickList
         ///</summary>
-        [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
+        [ApiMember(Description="Value of the applied tag, if the tag\'s ValueType is PickList")]
         public string Value { get; set; }
     }
 
@@ -2772,16 +2840,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public TimeSeriesPoint EndPoint { get; set; }
 
         ///<summary>
-        ///Absolute change
+        ///Actual absolute change, as the difference between the first and last measurement values
         ///</summary>
-        [ApiMember(DataType="DoubleWithDisplay", Description="Absolute change")]
-        public DoubleWithDisplay AbsoluteChange { get; set; }
+        [ApiMember(DataType="DoubleWithDisplay", Description="Actual absolute change, as the difference between the first and last measurement values")]
+        public DoubleWithDisplay ActualAbsoluteChange { get; set; }
 
         ///<summary>
-        ///Percentage change
+        ///Modeled absolute change, as the difference between the first and last trend line values
         ///</summary>
-        [ApiMember(DataType="DoubleWithDisplay", Description="Percentage change")]
-        public DoubleWithDisplay PercentageChange { get; set; }
+        [ApiMember(DataType="DoubleWithDisplay", Description="Modeled absolute change, as the difference between the first and last trend line values")]
+        public DoubleWithDisplay ModeledAbsoluteChange { get; set; }
+
+        ///<summary>
+        ///Actual percentage change, as the actual absolute change relative to the first measurement value
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Actual percentage change, as the actual absolute change relative to the first measurement value")]
+        public DoubleWithDisplay ActualPercentageChange { get; set; }
+
+        ///<summary>
+        ///Modeled percentage change, as the modeled absolute change relative to the first trend line value
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="Modeled percentage change, as the modeled absolute change relative to the first trend line value")]
+        public DoubleWithDisplay ModeledPercentageChange { get; set; }
 
         ///<summary>
         ///Minimum value
@@ -2820,9 +2900,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DoubleWithDisplay Slope { get; set; }
 
         ///<summary>
-        ///Trend line intercept, as the value of the trend line at the time of the StartPoint
+        ///Trend line intercept, as the value of the trend line at the time of QueryFrom
         ///</summary>
-        [ApiMember(DataType="DoubleWithDisplay", Description="Trend line intercept, as the value of the trend line at the time of the StartPoint")]
+        [ApiMember(DataType="DoubleWithDisplay", Description="Trend line intercept, as the value of the trend line at the time of QueryFrom")]
         public DoubleWithDisplay Intercept { get; set; }
 
         ///<summary>
@@ -3920,7 +4000,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class FieldVisit
-        : FieldVisitDescription
+        : FieldVisitDescription, IFieldVisitData
     {
         public FieldVisit()
         {
@@ -4187,7 +4267,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Indicates if this reading is measured against the local assumed datum of the reading's location
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading's location")]
+        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading\'s location")]
         public bool UseLocationDatumAsReference { get; set; }
     }
 
@@ -4360,6 +4440,20 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="double", Description="Under ice coefficient")]
         public double? UnderIceCoefficient { get; set; }
+    }
+
+    public interface IFieldVisitData
+    {
+        string Identifier { get; set; }
+        List<Attachment> Attachments { get; set; }
+        List<DischargeActivity> DischargeActivities { get; set; }
+        GageHeightAtZeroFlowActivity GageHeightAtZeroFlowActivity { get; set; }
+        ControlConditionActivity ControlConditionActivity { get; set; }
+        InspectionActivity InspectionActivity { get; set; }
+        List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
+        LevelSurveyActivity LevelSurveyActivity { get; set; }
+        FieldVisitApproval Approval { get; set; }
+        DatumConversionResult DatumConversionResult { get; set; }
     }
 
     public class Inspection
@@ -4852,7 +4946,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Indicates if this reading is measured against the local assumed datum of the reading's location
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading's location")]
+        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading\'s location")]
         public bool UseLocationDatumAsReference { get; set; }
 
         ///<summary>
@@ -5837,7 +5931,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     [Route("/GetFieldVisitDataByLocation", "GET")]
     public class FieldVisitDataByLocationServiceRequest
-        : IReturn<FieldVisitDataByLocationServiceResponse>
+        : IReturn<FieldVisitDataByLocationServiceResponse>, IFieldVisitDataRequest
     {
         public FieldVisitDataByLocationServiceRequest()
         {
@@ -5915,7 +6009,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     [Route("/GetFieldVisitData", "GET")]
     public class FieldVisitDataServiceRequest
-        : IReturn<FieldVisitDataServiceResponse>
+        : IReturn<FieldVisitDataServiceResponse>, IFieldVisitDataRequest
     {
         ///<summary>
         ///Field visit identifier
@@ -6080,6 +6174,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class GradeListServiceRequest
         : IReturn<GradeListServiceResponse>
     {
+    }
+
+    public interface IFieldVisitDataRequest
+    {
+        bool? IncludeNodeDetails { get; set; }
+        bool? IncludeInvalidActivities { get; set; }
+        bool? ApplyRounding { get; set; }
+        bool? IncludeVerticals { get; set; }
+        bool? IncludeCrossSectionSurveyProfile { get; set; }
+        bool? ConvertToLocalAssumedDatum { get; set; }
+        string ConvertToStandardReferenceDatum { get; set; }
     }
 
     [Route("/GetLocationData", "GET")]
@@ -6663,7 +6768,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'
         ///</summary>
-        [ApiMember(Description="The level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'")]
+        [ApiMember(Description="The level of time series detail to report. One of \'All\', \'PointsOnly\', or \'MetadataOnly\'. Defaults to \'All\'")]
         public string GetParts { get; set; }
 
         ///<summary>
@@ -6722,7 +6827,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Sets the level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'
         ///</summary>
-        [ApiMember(Description="Sets the level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'")]
+        [ApiMember(Description="Sets the level of time series detail to report. One of \'All\', \'PointsOnly\', or \'MetadataOnly\'. Defaults to \'All\'")]
         public string GetParts { get; set; }
 
         ///<summary>
@@ -6824,7 +6929,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to a specific change event type: 'Data' or 'Attribute'
         ///</summary>
-        [ApiMember(Description="Filter results to a specific change event type: 'Data' or 'Attribute'")]
+        [ApiMember(Description="Filter results to a specific change event type: \'Data\' or \'Attribute\'")]
         public string ChangeEventType { get; set; }
 
         ///<summary>
@@ -6878,6 +6983,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="TrendLineAnalysisType", Description="Type of regression analysis", IsRequired=true)]
         public TrendLineAnalysisType? Type { get; set; }
+
+        ///<summary>
+        ///Start Time
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="Start Time", IsRequired=true)]
+        public DateTimeOffset? QueryFrom { get; set; }
+
+        ///<summary>
+        ///End Time
+        ///</summary>
+        [ApiMember(DataType="DateTimeOffset", Description="End Time", IsRequired=true)]
+        public DateTimeOffset? QueryTo { get; set; }
 
         ///<summary>
         ///List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.
@@ -7013,7 +7130,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class FieldVisitDataServiceResponse
-        : PublishServiceResponse
+        : PublishServiceResponse, IFieldVisitData
     {
         public FieldVisitDataServiceResponse()
         {
@@ -7818,6 +7935,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.2.85.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.3.84.0");
     }
 }
