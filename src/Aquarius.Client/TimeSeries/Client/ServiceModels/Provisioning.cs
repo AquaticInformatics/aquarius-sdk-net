@@ -1,6 +1,6 @@
 /* Options:
-Date: 2020-07-10 12:11:30
-Version: 4.512
+Date: 2020-10-16 12:36:53
+Version: 5.80
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://autoserver1/AQUARIUS/Provisioning/v1
 
@@ -173,6 +173,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class GetInterpolationTypes
         : IReturn<InterpolationTypesResponse>
     {
+    }
+
+    public interface IFileUploadRequest
+    {
+        IHttpFile File { get; set; }
     }
 
     public class ApprovalLevelBase
@@ -438,7 +443,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/fielddataplugins", "POST")]
     public class PostFieldDataPluginFile
-        : IReturn<FieldDataPlugin>
+        : IReturn<FieldDataPlugin>, IFileUploadRequest
     {
         ///<summary>
         ///File
@@ -1066,7 +1071,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the method's parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the method's parameter", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the method\'s parameter", IsRequired=true)]
         public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
@@ -1117,13 +1122,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.
         ///</summary>
-        [ApiMember(Description="The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.", IsRequired=true)]
+        [ApiMember(Description="The redirection URI for the authorization response; e.g. \'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect\'. Must exactly match what is specified in the OpenID Connect client for the provider used.", IsRequired=true)]
         public string RedirectUri { get; set; }
 
         ///<summary>
         ///If not specified, defaults to 'openid', the standard scope required by the protocol.
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="If not specified, defaults to 'openid', the standard scope required by the protocol.")]
+        [ApiMember(DataType="Array<string>", Description="If not specified, defaults to \'openid\', the standard scope required by the protocol.")]
         public IList<string> Scopes { get; set; }
 
         ///<summary>
@@ -1135,13 +1140,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.
         ///</summary>
-        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
+        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use \'sub\', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
         public string IdentifierClaim { get; set; }
 
         ///<summary>
         ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
         ///</summary>
-        [ApiMember(Description="Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.")]
+        [ApiMember(Description="Short display name of the identity provider. If \'Google\' or \'Microsoft\', an appropriate icon will be displayed on the sign-in page.")]
         public string DisplayName { get; set; }
     }
 
@@ -1152,7 +1157,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the 'issuer' field of the OpenID Connect discovery document published by the provider.
         ///</summary>
-        [ApiMember(Description="The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the 'issuer' field of the OpenID Connect discovery document published by the provider.", IsRequired=true)]
+        [ApiMember(Description="The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the \'issuer\' field of the OpenID Connect discovery document published by the provider.", IsRequired=true)]
         public string IssuerIdentifier { get; set; }
     }
 
@@ -1356,7 +1361,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group", IsRequired=true)]
+        [ApiMember(DataType="Array<string>", Description="Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the \'Default\' qualifier group", IsRequired=true)]
         public List<string> GroupIdentifiers { get; set; }
     }
 
@@ -1416,7 +1421,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group")]
+        [ApiMember(DataType="Array<string>", Description="Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the \'Default\' qualifier group")]
         public List<string> GroupIdentifiers { get; set; }
     }
 
@@ -1448,29 +1453,51 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
     }
 
+    public interface IQualityCodeRequest
+    {
+        int? GradeCode { get; set; }
+        string Color { get; set; }
+        string DisplayName { get; set; }
+        string Description { get; set; }
+    }
+
     [Route("/grades", "POST")]
     public class PostQualityCode
-        : QualityCodeBase, IReturn<Grade>
-    {
-    }
-
-    [Route("/grades/{GradeCode}", "PUT")]
-    public class PutQualityCode
-        : QualityCodeBase, IReturn<Grade>
-    {
-        ///<summary>
-        ///Grade code
-        ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code", IsRequired=true, ParameterType="path")]
-        public int? GradeCode { get; set; }
-    }
-
-    public class QualityCodeBase
+        : IReturn<Grade>, IQualityCodeRequest
     {
         ///<summary>
         ///Grade code
         ///</summary>
         [ApiMember(DataType="integer", Description="Grade code", IsRequired=true)]
+        public int? GradeCode { get; set; }
+
+        ///<summary>
+        ///Color value in #RRGGBB hexadecimal
+        ///</summary>
+        [ApiMember(Description="Color value in #RRGGBB hexadecimal", IsRequired=true)]
+        public string Color { get; set; }
+
+        ///<summary>
+        ///Localized short display name
+        ///</summary>
+        [ApiMember(Description="Localized short display name", IsRequired=true)]
+        public string DisplayName { get; set; }
+
+        ///<summary>
+        ///Localized description
+        ///</summary>
+        [ApiMember(Description="Localized description")]
+        public string Description { get; set; }
+    }
+
+    [Route("/grades/{GradeCode}", "PUT")]
+    public class PutQualityCode
+        : IReturn<Grade>, IQualityCodeRequest
+    {
+        ///<summary>
+        ///Grade code
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code", IsRequired=true, ParameterType="path")]
         public int? GradeCode { get; set; }
 
         ///<summary>
@@ -1549,6 +1576,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/roles/{UniqueId}", "DELETE")]
     public class DeleteRole
+        : IReturnVoid
     {
         ///<summary>
         ///Unique Id of the role
@@ -1715,7 +1743,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'")]
+        [ApiMember(DataType="Array<string>", Description="List of approval transitions this role grants permission to perform. Format: \'&lt;FromLevel&gt; &lt;ToLevel&gt;\'. Example: \'900 1200\'")]
         public List<string> RoleApprovalTransitions { get; set; }
 
         ///<summary>
@@ -1888,7 +1916,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/settings/{Group}/{Key}", "DELETE")]
     public class DeleteSetting
-        : IReturnVoid
+        : IReturnVoid, IIdentifySetting
     {
         ///<summary>
         ///Setting group
@@ -1905,7 +1933,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/settings/{Group}/{Key}", "GET")]
     public class GetSetting
-        : IReturn<Setting>
+        : IReturn<Setting>, IIdentifySetting
     {
         ///<summary>
         ///Setting group
@@ -1937,9 +1965,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
     }
 
+    public interface IIdentifySetting
+    {
+        string Group { get; set; }
+        string Key { get; set; }
+    }
+
+    public interface IModifySetting
+        : IIdentifySetting
+    {
+        string Value { get; set; }
+        string Description { get; set; }
+    }
+
     [Route("/settings", "POST")]
     public class PostSetting
-        : IReturn<Setting>
+        : IReturn<Setting>, IModifySetting, IIdentifySetting
     {
         ///<summary>
         ///Setting group
@@ -1968,7 +2009,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/settings/{Group}/{Key}", "PUT")]
     public class PutSetting
-        : IReturn<Setting>
+        : IReturn<Setting>, IModifySetting, IIdentifySetting
     {
         ///<summary>
         ///Setting group
@@ -2029,8 +2070,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/{StandardIdentifier}", "DELETE")]
     public class DeleteStandardReferenceDatum
-        : StandardReferenceDatumRequestBase, IReturnVoid
+        : IReturnVoid, IStandardReferenceDatumIdentity
     {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Standard identifier
+        ///</summary>
+        [ApiMember(Description="Standard identifier", IsRequired=true, ParameterType="path")]
+        public string StandardIdentifier { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums", "GET")]
@@ -2044,26 +2096,134 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid LocationUniqueId { get; set; }
     }
 
+    public interface ICreateStandardDatum
+        : IStandardReferenceDatumIdentity
+    {
+        string Comments { get; set; }
+        string Method { get; set; }
+        double? Uncertainty { get; set; }
+    }
+
+    public interface IStandardReferenceDatumIdentity
+    {
+        Guid LocationUniqueId { get; set; }
+        string StandardIdentifier { get; set; }
+    }
+
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereference", "POST")]
     public class PostBaseStandardReferenceDatum
-        : StandardReferenceDatumRequestBase, IReturn<StandardReferenceDatum>
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
     {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Standard identifier
+        ///</summary>
+        [ApiMember(Description="Standard identifier", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Method used to determine the base reference
+        ///</summary>
+        [ApiMember(Description="Method used to determine the base reference")]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Uncertainty for the base reference
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty for the base reference")]
+        public double? Uncertainty { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset", "POST")]
     public class PostBaseStandardReferenceDatumOffset
-        : StandardReferenceDatumRequestBase, IReturn<StandardReferenceDatum>
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
     {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Standard identifier
+        ///</summary>
+        [ApiMember(Description="Standard identifier", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
+
         ///<summary>
         ///Offset in relation to the base reference.
         ///</summary>
         [ApiMember(DataType="double", Description="Offset in relation to the base reference.", IsRequired=true)]
         public double OffsetToBaseReference { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Method used to determine the offset to the base reference
+        ///</summary>
+        [ApiMember(Description="Method used to determine the offset to the base reference")]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Uncertainty for the offset to the base reference
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty for the offset to the base reference")]
+        public double? Uncertainty { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereference", "PUT")]
+    public class PutBaseStandardReferenceDatum
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Standard identifier
+        ///</summary>
+        [ApiMember(Description="Standard identifier", IsRequired=true)]
+        public string StandardIdentifier { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Method used to determine the base reference
+        ///</summary>
+        [ApiMember(Description="Method used to determine the base reference")]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Uncertainty for the base reference
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty for the base reference")]
+        public double? Uncertainty { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset/{StandardIdentifier}", "PUT")]
     public class PutBaseStandardReferenceDatumOffset
-        : IReturn<StandardReferenceDatum>
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
     {
         ///<summary>
         ///Unique ID of the location
@@ -2082,21 +2242,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="double", Description="Offset in relation to the base reference.", IsRequired=true)]
         public double OffsetToBaseReference { get; set; }
-    }
-
-    public class StandardReferenceDatumRequestBase
-    {
-        ///<summary>
-        ///Unique ID of the location
-        ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location", IsRequired=true, ParameterType="path")]
-        public Guid LocationUniqueId { get; set; }
 
         ///<summary>
-        ///StandardIdentifier
+        ///Comments
         ///</summary>
-        [ApiMember(Description="StandardIdentifier", IsRequired=true)]
-        public string StandardIdentifier { get; set; }
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Method used to determine the offset to the base reference
+        ///</summary>
+        [ApiMember(Description="Method used to determine the offset to the base reference")]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Uncertainty for the offset to the base reference
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty for the offset to the base reference")]
+        public double? Uncertainty { get; set; }
     }
 
     public class ApplyTagRequest
@@ -2382,194 +2545,32 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
     }
 
+    public interface IPostTimeSeriesRequest
+    {
+        Guid LocationUniqueId { get; set; }
+        string Label { get; set; }
+        string Parameter { get; set; }
+        string Unit { get; set; }
+        InterpolationType InterpolationType { get; set; }
+        string SubLocationIdentifier { get; set; }
+        Offset UtcOffset { get; set; }
+        bool Publish { get; set; }
+        string Description { get; set; }
+        string Comment { get; set; }
+        string Method { get; set; }
+        string ComputationIdentifier { get; set; }
+        string ComputationPeriodIdentifier { get; set; }
+        IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+    }
+
     [Route("/locations/{LocationUniqueId}/timeseries/basic", "POST")]
     public class PostBasicTimeSeries
-        : TimeSeriesBase, IReturn<TimeSeries>
-    {
-        ///<summary>
-        ///ISO 8601 Duration Format
-        ///</summary>
-        [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
-        public Duration GapTolerance { get; set; }
-    }
-
-    [Route("/locations/{LocationUniqueId}/timeseries/calculated", "POST")]
-    public class PostCalculatedDerivedTimeSeries
-        : TimeSeriesBase, IReturn<TimeSeries>
-    {
-        public PostCalculatedDerivedTimeSeries()
-        {
-            TimeSeriesUniqueIds = new List<Guid>{};
-        }
-
-        ///<summary>
-        ///List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master
-        ///</summary>
-        [ApiMember(DataType="Array<string>", Description="List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master", IsRequired=true)]
-        public List<Guid> TimeSeriesUniqueIds { get; set; }
-
-        ///<summary>
-        ///Formula
-        ///</summary>
-        [ApiMember(Description="Formula", IsRequired=true)]
-        public string Formula { get; set; }
-    }
-
-    [Route("/locations/{LocationUniqueId}/timeseries/datumconverted", "POST")]
-    public class PostDatumConvertedTimeSeries
-        : TimeSeriesBase, IReturn<TimeSeries>
-    {
-        ///<summary>
-        ///Unique ID of the time-series
-        ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time-series", IsRequired=true)]
-        public Guid TimeSeriesUniqueId { get; set; }
-
-        ///<summary>
-        ///Unique ID of the source reference point. Required if SourceIsLocalAssumedDatum is false; otherwise must not be specified
-        ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the source reference point. Required if SourceIsLocalAssumedDatum is false; otherwise must not be specified")]
-        public Guid SourceReferencePointUniqueId { get; set; }
-
-        ///<summary>
-        ///Source is Local Assumed Datum
-        ///</summary>
-        [ApiMember(DataType="boolean", Description="Source is Local Assumed Datum")]
-        public bool SourceIsLocalAssumedDatum { get; set; }
-
-        ///<summary>
-        ///Identifier of the target reference datum. Required if TargetIsLocalAssumedDatum is false; otherwise must not be specified
-        ///</summary>
-        [ApiMember(Description="Identifier of the target reference datum. Required if TargetIsLocalAssumedDatum is false; otherwise must not be specified")]
-        public string TargetStandardReferenceDatumIdentifier { get; set; }
-
-        ///<summary>
-        ///Target is Local Assumed Datum
-        ///</summary>
-        [ApiMember(DataType="boolean", Description="Target is Local Assumed Datum")]
-        public bool TargetIsLocalAssumedDatum { get; set; }
-    }
-
-    [Route("/locations/{LocationUniqueId}/timeseries/reflected", "POST")]
-    public class PostReflectedTimeSeries
-        : TimeSeriesBase, IReturn<TimeSeries>
-    {
-        ///<summary>
-        ///ISO 8601 Duration Format
-        ///</summary>
-        [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
-        public Duration GapTolerance { get; set; }
-    }
-
-    [Route("/locations/{LocationUniqueId}/timeseries/statistical", "POST")]
-    public class PostStatisticalDerivedTimeSeries
-        : TimeSeriesBase, IReturn<TimeSeries>
-    {
-        ///<summary>
-        ///Unique ID of the time series
-        ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true)]
-        public Guid TimeSeriesUniqueId { get; set; }
-
-        [ApiMember(IsRequired=true)]
-        public string ComputationIdentifier { get; set; }
-
-        ///<summary>
-        ///Computation period identifier
-        ///</summary>
-        [ApiMember(Description="Computation period identifier", IsRequired=true)]
-        public string ComputationPeriodIdentifier { get; set; }
-
-        ///<summary>
-        ///New value location
-        ///</summary>
-        [ApiMember(DataType="NewValueLocationType", Description="New value location")]
-        public NewValueLocationType NewValueLocation { get; set; }
-
-        ///<summary>
-        ///Require minimum coverage
-        ///</summary>
-        [ApiMember(DataType="boolean", Description="Require minimum coverage")]
-        public bool? RequireMinimumCoverage { get; set; }
-
-        ///<summary>
-        ///Coverage minimum percentage
-        ///</summary>
-        [ApiMember(DataType="double", Description="Coverage minimum percentage")]
-        public double? CoverageMinimumPercentage { get; set; }
-
-        ///<summary>
-        ///Partial coverage grade
-        ///</summary>
-        [ApiMember(DataType="integer", Description="Partial coverage grade")]
-        public int? PartialCoverageGrade { get; set; }
-
-        ///<summary>
-        ///Observation offset in minutes
-        ///</summary>
-        [ApiMember(DataType="integer", Description="Observation offset in minutes")]
-        public int? ObservationOffsetInMinutes { get; set; }
-
-        ///<summary>
-        ///Time Step Count. Must be included for 'Statistic' derived time-series.
-        ///</summary>
-        [ApiMember(DataType="integer", Description="Time Step Count. Must be included for 'Statistic' derived time-series.")]
-        public int? TimeStepCount { get; set; }
-    }
-
-    [Route("/timeseries/{TimeSeriesUniqueId}", "PUT")]
-    public class PutTimeSeries
-        : IReturn<TimeSeries>
-    {
-        ///<summary>
-        ///Unique ID of the time series
-        ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true, ParameterType="path")]
-        public Guid TimeSeriesUniqueId { get; set; }
-
-        ///<summary>
-        ///Label
-        ///</summary>
-        [ApiMember(Description="Label", IsRequired=true)]
-        public string Label { get; set; }
-
-        ///<summary>
-        ///Sub location identifier
-        ///</summary>
-        [ApiMember(Description="Sub location identifier")]
-        public string SubLocationIdentifier { get; set; }
-
-        ///<summary>
-        ///Publish. If set true, will force Location Publish true
-        ///</summary>
-        [ApiMember(DataType="boolean", Description="Publish. If set true, will force Location Publish true")]
-        public bool Publish { get; set; }
-
-        ///<summary>
-        ///Description
-        ///</summary>
-        [ApiMember(Description="Description")]
-        public string Description { get; set; }
-
-        ///<summary>
-        ///Comment
-        ///</summary>
-        [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
-
-        ///<summary>
-        ///Extended attribute values
-        ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
-        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
-    }
-
-    public class TimeSeriesBase
+        : IReturn<TimeSeries>, IPostTimeSeriesRequest
     {
         ///<summary>
         ///Unique ID of the location for which a time series is to be created
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
@@ -2632,7 +2633,10 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         [ApiMember(Description="Monitoring method code", IsRequired=true)]
         public string Method { get; set; }
 
-        [ApiMember]
+        ///<summary>
+        ///Computation identifier
+        ///</summary>
+        [ApiMember(Description="Computation identifier")]
         public string ComputationIdentifier { get; set; }
 
         ///<summary>
@@ -2640,6 +2644,510 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Computation period identifier")]
         public string ComputationPeriodIdentifier { get; set; }
+
+        ///<summary>
+        ///Extended attribute values
+        ///</summary>
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///ISO 8601 Duration Format
+        ///</summary>
+        [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
+        public Duration GapTolerance { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/timeseries/calculated", "POST")]
+    public class PostCalculatedDerivedTimeSeries
+        : IReturn<TimeSeries>, IPostTimeSeriesRequest
+    {
+        public PostCalculatedDerivedTimeSeries()
+        {
+            TimeSeriesUniqueIds = new List<Guid>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the location for which a time series is to be created
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Label
+        ///</summary>
+        [ApiMember(Description="Label", IsRequired=true)]
+        public string Label { get; set; }
+
+        ///<summary>
+        ///The ID of the parameter
+        ///</summary>
+        [ApiMember(Description="The ID of the parameter", IsRequired=true)]
+        public string Parameter { get; set; }
+
+        ///<summary>
+        ///The ID of the unit
+        ///</summary>
+        [ApiMember(Description="The ID of the unit", IsRequired=true)]
+        public string Unit { get; set; }
+
+        ///<summary>
+        ///Interpolation type
+        ///</summary>
+        [ApiMember(DataType="InterpolationType", Description="Interpolation type", IsRequired=true)]
+        public InterpolationType InterpolationType { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///ISO 8601 Duration Format
+        ///</summary>
+        [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
+        public Offset UtcOffset { get; set; }
+
+        ///<summary>
+        ///Publish. If set true, will enforce that Location Publish is also true
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish. If set true, will enforce that Location Publish is also true")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+
+        ///<summary>
+        ///Monitoring method code
+        ///</summary>
+        [ApiMember(Description="Monitoring method code", IsRequired=true)]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Computation identifier
+        ///</summary>
+        [ApiMember(Description="Computation identifier")]
+        public string ComputationIdentifier { get; set; }
+
+        ///<summary>
+        ///Computation period identifier
+        ///</summary>
+        [ApiMember(Description="Computation period identifier")]
+        public string ComputationPeriodIdentifier { get; set; }
+
+        ///<summary>
+        ///Extended attribute values
+        ///</summary>
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master
+        ///</summary>
+        [ApiMember(DataType="Array<string>", Description="List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master", IsRequired=true)]
+        public List<Guid> TimeSeriesUniqueIds { get; set; }
+
+        ///<summary>
+        ///Formula
+        ///</summary>
+        [ApiMember(Description="Formula", IsRequired=true)]
+        public string Formula { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/timeseries/datumconverted", "POST")]
+    public class PostDatumConvertedTimeSeries
+        : IReturn<TimeSeries>, IPostTimeSeriesRequest
+    {
+        ///<summary>
+        ///Unique ID of the location for which a time series is to be created
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Label
+        ///</summary>
+        [ApiMember(Description="Label", IsRequired=true)]
+        public string Label { get; set; }
+
+        ///<summary>
+        ///The ID of the parameter
+        ///</summary>
+        [ApiMember(Description="The ID of the parameter", IsRequired=true)]
+        public string Parameter { get; set; }
+
+        ///<summary>
+        ///The ID of the unit
+        ///</summary>
+        [ApiMember(Description="The ID of the unit", IsRequired=true)]
+        public string Unit { get; set; }
+
+        ///<summary>
+        ///Interpolation type
+        ///</summary>
+        [ApiMember(DataType="InterpolationType", Description="Interpolation type", IsRequired=true)]
+        public InterpolationType InterpolationType { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///ISO 8601 Duration Format
+        ///</summary>
+        [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
+        public Offset UtcOffset { get; set; }
+
+        ///<summary>
+        ///Publish. If set true, will enforce that Location Publish is also true
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish. If set true, will enforce that Location Publish is also true")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+
+        ///<summary>
+        ///Monitoring method code
+        ///</summary>
+        [ApiMember(Description="Monitoring method code", IsRequired=true)]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Computation identifier
+        ///</summary>
+        [ApiMember(Description="Computation identifier")]
+        public string ComputationIdentifier { get; set; }
+
+        ///<summary>
+        ///Computation period identifier
+        ///</summary>
+        [ApiMember(Description="Computation period identifier")]
+        public string ComputationPeriodIdentifier { get; set; }
+
+        ///<summary>
+        ///Extended attribute values
+        ///</summary>
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///Unique ID of the time-series
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the time-series", IsRequired=true)]
+        public Guid TimeSeriesUniqueId { get; set; }
+
+        ///<summary>
+        ///Unique ID of the source reference point. Required if SourceIsLocalAssumedDatum is false; otherwise must not be specified
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the source reference point. Required if SourceIsLocalAssumedDatum is false; otherwise must not be specified")]
+        public Guid SourceReferencePointUniqueId { get; set; }
+
+        ///<summary>
+        ///Source is Local Assumed Datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Source is Local Assumed Datum")]
+        public bool SourceIsLocalAssumedDatum { get; set; }
+
+        ///<summary>
+        ///Identifier of the target reference datum. Required if TargetIsLocalAssumedDatum is false; otherwise must not be specified
+        ///</summary>
+        [ApiMember(Description="Identifier of the target reference datum. Required if TargetIsLocalAssumedDatum is false; otherwise must not be specified")]
+        public string TargetStandardReferenceDatumIdentifier { get; set; }
+
+        ///<summary>
+        ///Target is Local Assumed Datum
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Target is Local Assumed Datum")]
+        public bool TargetIsLocalAssumedDatum { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/timeseries/reflected", "POST")]
+    public class PostReflectedTimeSeries
+        : IReturn<TimeSeries>, IPostTimeSeriesRequest
+    {
+        ///<summary>
+        ///Unique ID of the location for which a time series is to be created
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Label
+        ///</summary>
+        [ApiMember(Description="Label", IsRequired=true)]
+        public string Label { get; set; }
+
+        ///<summary>
+        ///The ID of the parameter
+        ///</summary>
+        [ApiMember(Description="The ID of the parameter", IsRequired=true)]
+        public string Parameter { get; set; }
+
+        ///<summary>
+        ///The ID of the unit
+        ///</summary>
+        [ApiMember(Description="The ID of the unit", IsRequired=true)]
+        public string Unit { get; set; }
+
+        ///<summary>
+        ///Interpolation type
+        ///</summary>
+        [ApiMember(DataType="InterpolationType", Description="Interpolation type", IsRequired=true)]
+        public InterpolationType InterpolationType { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///ISO 8601 Duration Format
+        ///</summary>
+        [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
+        public Offset UtcOffset { get; set; }
+
+        ///<summary>
+        ///Publish. If set true, will enforce that Location Publish is also true
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish. If set true, will enforce that Location Publish is also true")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+
+        ///<summary>
+        ///Monitoring method code
+        ///</summary>
+        [ApiMember(Description="Monitoring method code", IsRequired=true)]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Computation identifier
+        ///</summary>
+        [ApiMember(Description="Computation identifier")]
+        public string ComputationIdentifier { get; set; }
+
+        ///<summary>
+        ///Computation period identifier
+        ///</summary>
+        [ApiMember(Description="Computation period identifier")]
+        public string ComputationPeriodIdentifier { get; set; }
+
+        ///<summary>
+        ///Extended attribute values
+        ///</summary>
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///ISO 8601 Duration Format
+        ///</summary>
+        [ApiMember(DataType="Duration", Description="ISO 8601 Duration Format", IsRequired=true)]
+        public Duration GapTolerance { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/timeseries/statistical", "POST")]
+    public class PostStatisticalDerivedTimeSeries
+        : IReturn<TimeSeries>, IPostTimeSeriesRequest
+    {
+        ///<summary>
+        ///Unique ID of the location for which a time series is to be created
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location for which a time series is to be created", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Label
+        ///</summary>
+        [ApiMember(Description="Label", IsRequired=true)]
+        public string Label { get; set; }
+
+        ///<summary>
+        ///The ID of the parameter
+        ///</summary>
+        [ApiMember(Description="The ID of the parameter", IsRequired=true)]
+        public string Parameter { get; set; }
+
+        ///<summary>
+        ///The ID of the unit
+        ///</summary>
+        [ApiMember(Description="The ID of the unit", IsRequired=true)]
+        public string Unit { get; set; }
+
+        ///<summary>
+        ///Interpolation type
+        ///</summary>
+        [ApiMember(DataType="InterpolationType", Description="Interpolation type", IsRequired=true)]
+        public InterpolationType InterpolationType { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///ISO 8601 Duration Format
+        ///</summary>
+        [ApiMember(DataType="Offset", Description="ISO 8601 Duration Format")]
+        public Offset UtcOffset { get; set; }
+
+        ///<summary>
+        ///Publish. If set true, will enforce that Location Publish is also true
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish. If set true, will enforce that Location Publish is also true")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
+
+        ///<summary>
+        ///Monitoring method code
+        ///</summary>
+        [ApiMember(Description="Monitoring method code", IsRequired=true)]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Extended attribute values
+        ///</summary>
+        [ApiMember(DataType="Array<ExtendedAttributeValue>", Description="Extended attribute values")]
+        public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///Unique ID of the time series
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true)]
+        public Guid TimeSeriesUniqueId { get; set; }
+
+        ///<summary>
+        ///Computation identifier
+        ///</summary>
+        [ApiMember(Description="Computation identifier", IsRequired=true)]
+        public string ComputationIdentifier { get; set; }
+
+        ///<summary>
+        ///Computation period identifier
+        ///</summary>
+        [ApiMember(Description="Computation period identifier", IsRequired=true)]
+        public string ComputationPeriodIdentifier { get; set; }
+
+        ///<summary>
+        ///New value location
+        ///</summary>
+        [ApiMember(DataType="NewValueLocationType", Description="New value location")]
+        public NewValueLocationType NewValueLocation { get; set; }
+
+        ///<summary>
+        ///Require minimum coverage
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Require minimum coverage")]
+        public bool? RequireMinimumCoverage { get; set; }
+
+        ///<summary>
+        ///Coverage minimum percentage
+        ///</summary>
+        [ApiMember(DataType="double", Description="Coverage minimum percentage")]
+        public double? CoverageMinimumPercentage { get; set; }
+
+        ///<summary>
+        ///Partial coverage grade
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Partial coverage grade")]
+        public int? PartialCoverageGrade { get; set; }
+
+        ///<summary>
+        ///Observation offset in minutes
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Observation offset in minutes")]
+        public int? ObservationOffsetInMinutes { get; set; }
+
+        ///<summary>
+        ///Time Step Count. Must be included for 'Statistic' derived time-series.
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Time Step Count. Must be included for \'Statistic\' derived time-series.")]
+        public int? TimeStepCount { get; set; }
+    }
+
+    [Route("/timeseries/{TimeSeriesUniqueId}", "PUT")]
+    public class PutTimeSeries
+        : IReturn<TimeSeries>
+    {
+        ///<summary>
+        ///Unique ID of the time series
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true, ParameterType="path")]
+        public Guid TimeSeriesUniqueId { get; set; }
+
+        ///<summary>
+        ///Label
+        ///</summary>
+        [ApiMember(Description="Label", IsRequired=true)]
+        public string Label { get; set; }
+
+        ///<summary>
+        ///Sub location identifier
+        ///</summary>
+        [ApiMember(Description="Sub location identifier")]
+        public string SubLocationIdentifier { get; set; }
+
+        ///<summary>
+        ///Publish. If set true, will force Location Publish true
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Publish. If set true, will force Location Publish true")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Comment
+        ///</summary>
+        [ApiMember(Description="Comment")]
+        public string Comment { get; set; }
 
         ///<summary>
         ///Extended attribute values
@@ -2945,6 +3453,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string AuthenticationType { get; set; }
     }
 
+    public interface IOpenIdConnectUserAuth
+    {
+        string SubjectIdentifier { get; set; }
+        string Identifier { get; set; }
+    }
+
     [Route("/users/activedirectory", "POST")]
     public class PostActiveDirectoryUser
         : UserBase, IReturn<User>
@@ -2952,13 +3466,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
+        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user's security identifier (SID)")]
+        [ApiMember(Description="The domain user\'s security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -2975,7 +3489,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/users/openidconnect", "POST")]
     public class PostOpenIdConnectUser
-        : UserBase, IReturn<User>
+        : UserBase, IReturn<User>, IOpenIdConnectUserAuth
     {
         ///<summary>
         ///DEPRECATED: Use Identifier instead.
@@ -2997,13 +3511,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
+        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user's security identifier (SID)")]
+        [ApiMember(Description="The domain user\'s security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -3014,13 +3528,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
+        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user's security identifier (SID)")]
+        [ApiMember(Description="The domain user\'s security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -3048,7 +3562,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/users/{UniqueId}/openidconnect", "PUT")]
     public class PutOpenIdConnectAuth
-        : PutUserAuthBase, IReturn<User>
+        : PutUserAuthBase, IReturn<User>, IOpenIdConnectUserAuth
     {
         ///<summary>
         ///DEPRECATED: Use Identifier instead.
@@ -3065,7 +3579,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/users/openidconnect/{UniqueId}", "PUT")]
     public class PutOpenIdConnectUser
-        : PutUserBase, IReturn<User>
+        : PutUserBase, IReturn<User>, IOpenIdConnectUserAuth
     {
         ///<summary>
         ///DEPRECATED: Use Identifier instead.
@@ -3150,13 +3664,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value
         ///</summary>
-        [ApiMember(Description="The user's domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value")]
+        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user's security identifier (SID)")]
+        [ApiMember(Description="The domain user\'s security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -3183,7 +3697,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Value of the applied tag, if the tag's ValueType is PickList
         ///</summary>
-        [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
+        [ApiMember(Description="Value of the applied tag, if the tag\'s ValueType is PickList")]
         public string Value { get; set; }
     }
 
@@ -3718,6 +4232,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="double", Description="Optional uncertainty of elevation difference")]
         public double? Uncertainty { get; set; }
+
+        ///<summary>
+        ///Optional method used to determine the elevation difference
+        ///</summary>
+        [ApiMember(Description="Optional method used to determine the elevation difference")]
+        public string Method { get; set; }
     }
 
     public class LocationDatumResponse
@@ -4040,13 +4560,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.
         ///</summary>
-        [ApiMember(Description="The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.")]
+        [ApiMember(Description="The redirection URI for the authorization response; e.g. \'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect\'. Must exactly match what is specified in the OpenID Connect client for the provider used.")]
         public string RedirectUri { get; set; }
 
         ///<summary>
         ///If not specified, defaults to 'openid', the standard scope required by the protocol.
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="If not specified, defaults to 'openid', the standard scope required by the protocol.")]
+        [ApiMember(DataType="Array<string>", Description="If not specified, defaults to \'openid\', the standard scope required by the protocol.")]
         public IList<string> Scopes { get; set; }
 
         ///<summary>
@@ -4058,13 +4578,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.
         ///</summary>
-        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
+        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use \'sub\', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
         public string IdentifierClaim { get; set; }
 
         ///<summary>
         ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
         ///</summary>
-        [ApiMember(Description="Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.")]
+        [ApiMember(Description="Short display name of the identity provider. If \'Google\' or \'Microsoft\', an appropriate icon will be displayed on the sign-in page.")]
         public string DisplayName { get; set; }
     }
 
@@ -4321,7 +4841,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if this period is measured against the location's local assumed datum instead of a standard datum
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if this period is measured against the location's local assumed datum instead of a standard datum", IsRequired=true)]
+        [ApiMember(DataType="boolean", Description="True if this period is measured against the location\'s local assumed datum instead of a standard datum", IsRequired=true)]
         public bool IsMeasuredAgainstLocalAssumedDatum { get; set; }
 
         ///<summary>
@@ -4329,6 +4849,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="double", Description="Elevation of the reference point relative to the standard or local assumed datum", IsRequired=true)]
         public double Elevation { get; set; }
+
+        ///<summary>
+        ///Optional uncertainty of elevation
+        ///</summary>
+        [ApiMember(DataType="double", Description="Optional uncertainty of elevation")]
+        public double? Uncertainty { get; set; }
+
+        ///<summary>
+        ///Optional method used to determine the elevation
+        ///</summary>
+        [ApiMember(Description="Optional method used to determine the elevation")]
+        public string Method { get; set; }
 
         ///<summary>
         ///Direction of positive elevations in relation to the reference point
@@ -4704,6 +5236,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="double", Description="Offset in relation to the Base Reference. Not used if IsBaseReference is set to true")]
         public double? OffsetToBaseReference { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
+
+        ///<summary>
+        ///Method
+        ///</summary>
+        [ApiMember(Description="Method")]
+        public string Method { get; set; }
+
+        ///<summary>
+        ///Uncertainty
+        ///</summary>
+        [ApiMember(DataType="double", Description="Uncertainty")]
+        public double? Uncertainty { get; set; }
     }
 
     public class StandardReferenceDatumsResponse
@@ -5163,7 +5713,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the user has the 'Can Configure System' right
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if the user has the 'Can Configure System' right")]
+        [ApiMember(DataType="boolean", Description="True if the user has the \'Can Configure System\' right")]
         public bool CanConfigureSystem { get; set; }
 
         ///<summary>
@@ -5198,6 +5748,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.2.85.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.3.84.0");
     }
 }

@@ -1,6 +1,6 @@
-// Date: 2020-08-28T13:19:34.6085468-07:00
-// Base URL: https://ai.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2020.04.3767)
+// Date: 2020-10-23T08:13:33.1418991-07:00
+// Base URL: https://demo.aqsamples.com/api/swagger.json
+// Source: AQUARIUS Samples API (2020.05.3976)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2020.04.3767");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2020.05.3976");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -381,6 +381,46 @@ namespace Aquarius.Samples.Client.ServiceModel
 
     [Route("/v1/collectionmethods/{id}", "DELETE")]
     public class DeleteCollectionMethod : IReturnVoid
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/v1/detectionconditions", "GET")]
+    public class GetDetectionconditions : IReturn<SearchResultResultDetectionCondition>
+    {
+        
+    }
+
+    [Route("/v1/detectionconditions", "POST")]
+    public class PostDetectioncondition : IReturn<ResultDetectionCondition>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string SystemCode { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    [Route("/v1/detectionconditions/{id}", "GET")]
+    public class GetDetectioncondition : IReturn<ResultDetectionCondition>
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/v1/detectionconditions/{id}", "PUT")]
+    public class PutDetectioncondition : IReturn<ResultDetectionCondition>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string SystemCode { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    [Route("/v1/detectionconditions/{id}", "DELETE")]
+    public class DeleteDetectioncondition : IReturnVoid
     {
         public string Id { get; set; }
     }
@@ -842,6 +882,44 @@ namespace Aquarius.Samples.Client.ServiceModel
         
     }
 
+    [Route("/v1/nullmeasurequalifiers", "GET")]
+    public class GetNullMeasureQualifiers : IReturn<SearchResultNullMeasureQualifier>
+    {
+        
+    }
+
+    [Route("/v1/nullmeasurequalifiers", "POST")]
+    public class PostNullMeasureQualifier : IReturn<NullMeasureQualifier>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    [Route("/v1/nullmeasurequalifiers/{id}", "GET")]
+    public class GetNullMeasureQualifier : IReturn<NullMeasureQualifier>
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/v1/nullmeasurequalifiers/{id}", "PUT")]
+    public class PutNullMeasureQualifier : IReturn<NullMeasureQualifier>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    [Route("/v1/nullmeasurequalifiers/{id}", "DELETE")]
+    public class DeleteNullMeasureQualifier : IReturnVoid
+    {
+        public string Id { get; set; }
+    }
+
     [DataContract]
     [Route("/v1/observations", "GET")]
     public class GetObservations : IReturn<SearchResultObservation>, IPaginatedRequest
@@ -871,7 +949,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -965,8 +1043,10 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ResultGrade ResultGrade { get; set; }
         public ResultStatus ResultStatus { get; set; }
         public PlannedFieldResult PlannedFieldResult { get; set; }
+        public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -999,7 +1079,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -1099,8 +1179,10 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ResultGrade ResultGrade { get; set; }
         public ResultStatus ResultStatus { get; set; }
         public PlannedFieldResult PlannedFieldResult { get; set; }
+        public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -1139,7 +1221,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -1231,7 +1313,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -1325,7 +1407,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -1798,7 +1880,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2102,6 +2184,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Activity Activity { get; set; }
         public SpecimenTemplate TemplateCreatedFrom { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public SpecimenViewStatusType? Status { get; set; }
+        public int? NumberOfRequestedObservations { get; set; }
+        public int? NumberOfReceivedObservations { get; set; }
         public List<Observation> Observations { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -2128,12 +2213,21 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Activity Activity { get; set; }
         public SpecimenTemplate TemplateCreatedFrom { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public SpecimenViewStatusType? Status { get; set; }
+        public int? NumberOfRequestedObservations { get; set; }
+        public int? NumberOfReceivedObservations { get; set; }
         public List<Observation> Observations { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
     [Route("/v1/specimens/{id}", "DELETE")]
     public class DeleteSpecimen : IReturnVoid
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/v1/specimens/{id}/observations", "GET")]
+    public class GetSpecimenObservations : IReturn<SearchResultObservationNestedInSpecimen>
     {
         public string Id { get; set; }
     }
@@ -2561,7 +2655,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2655,8 +2749,10 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ResultGrade ResultGrade { get; set; }
         public ResultStatus ResultStatus { get; set; }
         public PlannedFieldResult PlannedFieldResult { get; set; }
+        public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -2689,7 +2785,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2789,8 +2885,10 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ResultGrade ResultGrade { get; set; }
         public ResultStatus ResultStatus { get; set; }
         public PlannedFieldResult PlannedFieldResult { get; set; }
+        public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -2829,7 +2927,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2921,7 +3019,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -3015,7 +3113,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -3109,7 +3207,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         [DataMember(Name = "depthValue")]
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
-        public DetectionConditionType? DetectionCondition { get; set; }
+        public string DetectionCondition { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -3501,6 +3599,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 
     public class CategoricalResult
     {
+        public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public CategoricalValue FixedValue { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
@@ -3537,7 +3636,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string MdlValueUnitCustomId { get; set; }
         public double DepthValue { get; set; }
         public string DepthUnitCustomId { get; set; }
-        public DetectionConditionType DetectionCondition { get; set; }
+        public ResultDetectionCondition ResultDetectionCondition { get; set; }
     }
 
     public class CollectionMethod
@@ -4213,14 +4312,24 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
     }
 
+    public class NullMeasureQualifier
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
     public class NumericResult
     {
         public Quantity Quantity { get; set; }
         public SampleFractionType SampleFraction { get; set; }
         public DeterminationType DeterminationType { get; set; }
-        public DetectionConditionType DetectionCondition { get; set; }
+        public ResultDetectionCondition DetectionCondition { get; set; }
         public Quantity MethodDetectionLevel { get; set; }
         public Quantity LowerMethodReportingLimit { get; set; }
+        public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -4261,8 +4370,10 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ResultGrade ResultGrade { get; set; }
         public ResultStatus ResultStatus { get; set; }
         public PlannedFieldResult PlannedFieldResult { get; set; }
+        public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -4307,6 +4418,20 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Comment { get; set; }
     }
 
+    public class ObservationNestedInSpecimen
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public ObservedProperty ObservedProperty { get; set; }
+        public LabInstruction LabInstruction { get; set; }
+        public NumericResult NumericResult { get; set; }
+        public DataClassificationType DataClassification { get; set; }
+        public Instant? ObservedTime { get; set; }
+        public ResultStatus ResultStatus { get; set; }
+        public CategoricalResult CategoricalResult { get; set; }
+        public TaxonomicResult TaxonomicResult { get; set; }
+    }
+
     public class ObservationStandard
     {
         public ObservedProperty ObservedProperty { get; set; }
@@ -4314,6 +4439,20 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Quantity ResultUpperLimit { get; set; }
         public string RuleText { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    public class ObservationStatistics
+    {
+        public string SamplingLocationId { get; set; }
+        public string ObservedPropertyId { get; set; }
+        public int Count { get; set; }
+        public double Min { get; set; }
+        public double P25 { get; set; }
+        public double P5 { get; set; }
+        public double P50 { get; set; }
+        public double P75 { get; set; }
+        public double P95 { get; set; }
+        public double Max { get; set; }
     }
 
     public class ObservedProperty
@@ -4410,6 +4549,16 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public double Value { get; set; }
         public Unit Unit { get; set; }
+    }
+
+    public class ResultDetectionCondition
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string SystemCode { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
     }
 
     public class ResultGrade
@@ -4824,6 +4973,18 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<Medium> DomainObjects { get; set; }
     }
 
+    public class SearchResultNullMeasureQualifier : IPaginatedResponse<NullMeasureQualifier>
+    {
+        public SearchResultNullMeasureQualifier()
+        {
+            DomainObjects = new List<NullMeasureQualifier>();
+        }
+
+        public int TotalCount { get; set; }
+        public string Cursor { get; set; }
+        public List<NullMeasureQualifier> DomainObjects { get; set; }
+    }
+
     public class SearchResultObservation : IPaginatedResponse<Observation>
     {
         public SearchResultObservation()
@@ -4834,6 +4995,18 @@ namespace Aquarius.Samples.Client.ServiceModel
         public int TotalCount { get; set; }
         public string Cursor { get; set; }
         public List<Observation> DomainObjects { get; set; }
+    }
+
+    public class SearchResultObservationNestedInSpecimen : IPaginatedResponse<ObservationNestedInSpecimen>
+    {
+        public SearchResultObservationNestedInSpecimen()
+        {
+            DomainObjects = new List<ObservationNestedInSpecimen>();
+        }
+
+        public int TotalCount { get; set; }
+        public string Cursor { get; set; }
+        public List<ObservationNestedInSpecimen> DomainObjects { get; set; }
     }
 
     public class SearchResultObservedProperty : IPaginatedResponse<ObservedProperty>
@@ -4858,6 +5031,18 @@ namespace Aquarius.Samples.Client.ServiceModel
         public int TotalCount { get; set; }
         public string Cursor { get; set; }
         public List<Project> DomainObjects { get; set; }
+    }
+
+    public class SearchResultResultDetectionCondition : IPaginatedResponse<ResultDetectionCondition>
+    {
+        public SearchResultResultDetectionCondition()
+        {
+            DomainObjects = new List<ResultDetectionCondition>();
+        }
+
+        public int TotalCount { get; set; }
+        public string Cursor { get; set; }
+        public List<ResultDetectionCondition> DomainObjects { get; set; }
     }
 
     public class SearchResultResultGrade : IPaginatedResponse<ResultGrade>
@@ -5092,6 +5277,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Activity Activity { get; set; }
         public SpecimenTemplate TemplateCreatedFrom { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public SpecimenViewStatusType Status { get; set; }
+        public int NumberOfRequestedObservations { get; set; }
+        public int NumberOfReceivedObservations { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -5144,6 +5332,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Activity Activity { get; set; }
         public SpecimenTemplate TemplateCreatedFrom { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public SpecimenViewStatusType Status { get; set; }
+        public int NumberOfRequestedObservations { get; set; }
+        public int NumberOfReceivedObservations { get; set; }
         public List<Observation> Observations { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -5429,12 +5620,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         DROP_DOWN_LIST
     }
 
-    public enum DetectionConditionType
-    {
-        NOT_REPORTED,
-        NOT_DETECTED
-    }
-
     public enum DeterminationType
     {
         ACTUAL,
@@ -5641,6 +5826,13 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         ALL,
         RANDOM
+    }
+
+    public enum SpecimenViewStatusType
+    {
+        REQUESTED,
+        RECEIVED_SOME,
+        RECEIVED_ALL
     }
 
     public enum SpreadsheetTemplateType
