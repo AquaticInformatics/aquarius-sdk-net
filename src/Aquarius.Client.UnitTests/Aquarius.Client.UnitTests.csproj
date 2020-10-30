@@ -53,8 +53,4 @@
     <ProjectReference Include="..\Aquarius.Client\Aquarius.Client.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestHelpers\" />
-  </ItemGroup>
-
 </Project>

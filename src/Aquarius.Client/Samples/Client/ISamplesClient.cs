@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
+using Aquarius.Helpers;
 using Aquarius.Samples.Client.ServiceModel;
 using Aquarius.TimeSeries.Client;
 using ServiceStack;
@@ -53,7 +55,7 @@ namespace Aquarius.Samples.Client
             HttpContent extraContent = null,
             string extraContentName = null);
 
-        LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto)
+        LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto, CancellationToken? cancellationToken = null, IProgressReporter progressReporter = null)
             where TRequest : IPaginatedRequest, IReturn<TResponse>
             where TResponse : IPaginatedResponse<TDomainObject>;
 

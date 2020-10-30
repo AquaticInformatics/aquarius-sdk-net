@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.NativeTypes;
 using ServiceStack;
 
@@ -43,12 +44,18 @@ namespace Aquarius.TimeSeries.Client
             this IServiceClient client,
             int batchSize,
             IEnumerable<TRequest> requests,
-            CancellationToken? cancellationToken = null)
+            CancellationToken? cancellationToken = null,
+            IProgressReporter progressReporter = null)
             where TRequest : IReturn<TResponse>
         {
             var responses = new List<TResponse>();
 
-            var requestBatches = BatchesOf(requests, batchSize);
+            progressReporter?.Started();
+
+            var requestBatches = BatchesOf(requests, batchSize)
+                .ToList();
+
+            var totalCount = requestBatches.Sum(b => b.Length);
 
             foreach (var requestBatch in requestBatches)
             {
@@ -61,9 +68,13 @@ namespace Aquarius.TimeSeries.Client
 
                 responses.AddRange(SendBatch<TResponse>(client, serverRequestName, requestBatch.Cast<object>()));
 
+                progressReporter?.Progress(responses.Count, totalCount);
+
                 if (cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested)
                     break;
             }
+
+            progressReporter?.Completed();
 
             return responses;
         }
