@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using Aquarius.Helpers;
 using Aquarius.Samples.Client.ServiceModel;
 using Aquarius.TimeSeries.Client;
@@ -279,21 +280,23 @@ namespace Aquarius.Samples.Client
             return requestDto.ToPostUrl();
         }
 
-        public LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto)
+        public LazyResult<TDomainObject> LazyGet<TDomainObject, TRequest, TResponse>(TRequest requestDto, CancellationToken? cancellationToken = null, IProgressReporter progressReporter = null)
             where TRequest : IPaginatedRequest, IReturn<TResponse>
             where TResponse : IPaginatedResponse<TDomainObject>
 
         {
+            progressReporter?.Started();
+
             var responseDto = Get(requestDto);
 
             return new LazyResult<TDomainObject>
             {
                 TotalCount = responseDto.TotalCount,
-                DomainObjects = GetPaginatedResults<TDomainObject, TRequest, TResponse>(requestDto, responseDto)
+                DomainObjects = GetPaginatedResults<TDomainObject, TRequest, TResponse>(requestDto, responseDto, cancellationToken, progressReporter)
             };
         }
 
-        private IEnumerable<TDomainObject> GetPaginatedResults<TDomainObject, TRequest, TResponse>(TRequest requestDto, TResponse responseDto)
+        private IEnumerable<TDomainObject> GetPaginatedResults<TDomainObject, TRequest, TResponse>(TRequest requestDto, TResponse responseDto, CancellationToken? cancellationToken, IProgressReporter progressReporter)
             where TRequest : IPaginatedRequest, IReturn<TResponse>
             where TResponse : IPaginatedResponse<TDomainObject>
         {
@@ -304,12 +307,17 @@ namespace Aquarius.Samples.Client
                 if (responseDto.DomainObjects == null)
                     break;
 
+                if (cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested)
+                    break;
+
                 foreach (var domainObject in responseDto.DomainObjects)
                 {
                     yield return domainObject;
                 }
 
                 count += responseDto.DomainObjects.Count;
+
+                progressReporter?.Progress(count, totalCount);
 
                 if (count >= totalCount || count >= responseDto.TotalCount || !responseDto.DomainObjects.Any() || string.IsNullOrEmpty(responseDto.Cursor))
                     break;
@@ -318,6 +326,8 @@ namespace Aquarius.Samples.Client
 
                 responseDto = Get(requestDto);
             }
+
+            progressReporter?.Completed();
         }
 
         public void InvokeWebServiceMethod(Action webServiceMethod, Func<JsConfigScope> scopeMethod = null)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aquarius.Client.UnitTests.TestHelpers;
+using Aquarius.Helpers;
 using Aquarius.Samples.Client;
 using Aquarius.Samples.Client.ServiceModel;
 using FluentAssertions;
@@ -143,7 +145,7 @@ namespace Aquarius.UnitTests.Samples.Client
 
         private List<Thing> EvaluateAllLazyLoadedItems()
         {
-            return _client.LazyGet<Thing, GetThings, ThingResults>(new GetThings()).DomainObjects.ToList();
+            return _client.LazyGet<Thing, GetThings, ThingResults>(new GetThings(), progressReporter: new ConsoleProgressReporter()).DomainObjects.ToList();
         }
 
         private void AssertExpectedItemsAndLazyFetches(List<Thing> items, int expectedTotalCount, int expectedFetchesCount)

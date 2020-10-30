@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+using Aquarius.Helpers;
 using ServiceStack;
 
 namespace Aquarius.TimeSeries.Client
@@ -26,7 +27,12 @@ namespace Aquarius.TimeSeries.Client
         IServiceClient CloneAuthenticatedClientWithOverrideMethod(IServiceClient client, string overrideMethod);
         string GetBaseUri(IServiceClient client);
 
-        IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(IServiceClient client, int batchSize, IEnumerable<TRequest> requests, CancellationToken? cancellationToken = null)
+        IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(
+            IServiceClient client,
+            int batchSize,
+            IEnumerable<TRequest> requests,
+            CancellationToken? cancellationToken = null,
+            IProgressReporter progressReporter = null)
             where TRequest : IReturn<TResponse>;
 
         [Obsolete("Sessions will now re-authenticate automatically if they expire.")]
