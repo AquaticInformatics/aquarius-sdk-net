@@ -1,8 +1,8 @@
 /* Options:
-Date: 2020-10-16 12:37:09
+Date: 2021-01-08 11:45:42
 Version: 5.80
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver1/AQUARIUS/Acquisition/v2
+BaseUrl: http://aqts-pg/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
@@ -88,6 +88,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         Gap,
     }
 
+    public class ApplyTagRequest
+    {
+        ///<summary>
+        ///UniqueId of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId of the tag", Format="guid", IsRequired=true)]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Optional value of the tag
+        ///</summary>
+        [ApiMember(Description="Optional value of the tag")]
+        public string Value { get; set; }
+    }
+
     [Route("/attachments/reports/{ReportUniqueId}", "DELETE")]
     public class DeleteReportAttachment
         : IReturnVoid
@@ -95,7 +110,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Unique ID of report
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of report", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="Unique ID of report", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid ReportUniqueId { get; set; }
     }
 
@@ -106,13 +121,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time-series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Time range. Only appended notes that are fully contained within the time range will be deleted.
         ///</summary>
-        [ApiMember(DataType="Interval", Description="Time range. Only appended notes that are fully contained within the time range will be deleted.", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Time range. Only appended notes that are fully contained within the time range will be deleted.", Format="interval", IsRequired=true)]
         public Interval? TimeRange { get; set; }
     }
 
@@ -147,16 +162,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostLocationAttachment
         : IReturn<PostLocationAttachmentResponse>, IFileUploadRequest
     {
+        public PostLocationAttachment()
+        {
+            Tags = new List<ApplyTagRequest>{};
+        }
+
         ///<summary>
         ///Unique ID of the location to add the attachment to
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location to add the attachment to", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="Unique ID of the location to add the attachment to", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
-        ///If not specified, defaults to None
+        ///Deprecated - use tags instead. If not specified, defaults to None
         ///</summary>
-        [ApiMember(DataType="AttachmentCategory", Description="If not specified, defaults to None")]
+        [ApiMember(DataType="string", Description="Deprecated - use tags instead. If not specified, defaults to None")]
         public AttachmentCategory AttachmentCategory { get; set; }
 
         ///<summary>
@@ -171,6 +191,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         [Ignore]
         [ApiMember(DataType="file", Description="File", IsRequired=true, ParameterType="form")]
         public IHttpFile File { get; set; }
+
+        ///<summary>
+        ///Tags to be assigned to the attachment with optional values; an empty list means the attachment will have no tags assigned to it.
+        ///</summary>
+        [ApiMember(DataType="array", Description="Tags to be assigned to the attachment with optional values; an empty list means the attachment will have no tags assigned to it.")]
+        public List<ApplyTagRequest> Tags { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/reflected", "POST")]
@@ -185,19 +211,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the reflected time-series to receive points
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the reflected time-series to receive points", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the reflected time-series to receive points", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points to append (can be empty). All points must lie within the time range")]
+        [ApiMember(DataType="array", Description="Points to append (can be empty). All points must lie within the time range")]
         public List<TimeSeriesPoint> Points { get; set; }
 
         ///<summary>
         ///Time range to update. Any existing points in the time range will be overwritten
         ///</summary>
-        [ApiMember(DataType="Interval", Description="Time range to update. Any existing points in the time range will be overwritten", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Time range to update. Any existing points in the time range will be overwritten", Format="interval", IsRequired=true)]
         public Interval TimeRange { get; set; }
     }
 
@@ -208,6 +234,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public PostReportAttachment()
         {
             SourceTimeSeriesUniqueIds = new List<Guid>{};
+            Tags = new List<ApplyTagRequest>{};
         }
 
         ///<summary>
@@ -231,26 +258,32 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Unique ID of the location to add the report to
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location to add the report to", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="Unique ID of the location to add the report to", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
         ///Unique IDs of source time-series displayed in report
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Unique IDs of source time-series displayed in report")]
+        [ApiMember(DataType="array", Description="Unique IDs of source time-series displayed in report")]
         public List<Guid> SourceTimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Time range of source data displayed in report
         ///</summary>
-        [ApiMember(DataType="Interval", Description="Time range of source data displayed in report")]
+        [ApiMember(DataType="string", Description="Time range of source data displayed in report", Format="interval")]
         public Interval? SourceTimeRange { get; set; }
 
         ///<summary>
         ///Time report was created
         ///</summary>
-        [ApiMember(DataType="Instant", Description="Time report was created")]
+        [ApiMember(DataType="string", Description="Time report was created", Format="date-time")]
         public Instant? CreatedTime { get; set; }
+
+        ///<summary>
+        ///Tags to be assigned to the report with optional values; an empty list means the report will have no tags assigned to it.
+        ///</summary>
+        [ApiMember(DataType="array", Description="Tags to be assigned to the report with optional values; an empty list means the report will have no tags assigned to it.")]
+        public List<ApplyTagRequest> Tags { get; set; }
 
         ///<summary>
         ///File
@@ -272,13 +305,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series to receive points", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series to receive points", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Points to append (can be empty)
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points to append (can be empty)")]
+        [ApiMember(DataType="array", Description="Points to append (can be empty)")]
         public List<TimeSeriesPoint> Points { get; set; }
     }
 
@@ -294,13 +327,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time-series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Notes to append
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesNote>", Description="Notes to append", IsRequired=true)]
+        [ApiMember(DataType="array", Description="Notes to append", IsRequired=true)]
         public List<TimeSeriesNote> Notes { get; set; }
     }
 
@@ -316,19 +349,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series to receive points", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series to receive points", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points to append (can be empty). All points must lie within the time range")]
+        [ApiMember(DataType="array", Description="Points to append (can be empty). All points must lie within the time range")]
         public List<TimeSeriesPoint> Points { get; set; }
 
         ///<summary>
         ///Time range to delete before appending points
         ///</summary>
-        [ApiMember(DataType="Interval", Description="Time range to delete before appending points", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Time range to delete before appending points", Format="interval", IsRequired=true)]
         public Interval TimeRange { get; set; }
     }
 
@@ -356,7 +389,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Unique ID of the location of visits in the file
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location of visits in the file", IsRequired=true, ParameterType="path")]
+        [ApiMember(DataType="string", Description="Unique ID of the location of visits in the file", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid LocationUniqueId { get; set; }
     }
 
@@ -376,7 +409,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Time range of the note
         ///</summary>
-        [ApiMember(DataType="Interval", Description="Time range of the note", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Time range of the note", Format="interval", IsRequired=true)]
         public Interval? TimeRange { get; set; }
 
         ///<summary>
@@ -396,13 +429,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///ISO 8601 timestamp. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="Instant", Description="ISO 8601 timestamp. Must not be specified if Type is \'Gap\'.")]
+        [ApiMember(DataType="string", Description="ISO 8601 timestamp. Must not be specified if Type is \'Gap\'.", Format="date-time")]
         public Instant? Time { get; set; }
 
         ///<summary>
         ///The value of the point. Null or empty to represent a NaN. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="double", Description="The value of the point. Null or empty to represent a NaN. Must not be specified if Type is \'Gap\'.")]
+        [ApiMember(DataType="number", Description="The value of the point. Null or empty to represent a NaN. Must not be specified if Type is \'Gap\'.", Format="double")]
         public double? Value { get; set; }
 
         ///<summary>
@@ -414,13 +447,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code")]
+        [ApiMember(DataType="integer", Description="Grade code", Format="int32")]
         public int? GradeCode { get; set; }
 
         ///<summary>
         ///Qualifier codes
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Qualifier codes")]
+        [ApiMember(DataType="array", Description="Qualifier codes")]
         public List<string> Qualifiers { get; set; }
     }
 
@@ -433,12 +466,33 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public string AppendRequestIdentifier { get; set; }
     }
 
+    public class AppliedTag
+    {
+        ///<summary>
+        ///UniqueId of the tag
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId of the tag", Format="guid")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Key of the tag
+        ///</summary>
+        [ApiMember(Description="Key of the tag")]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Value of the applied tag, if the tag's ValueType is PickList
+        ///</summary>
+        [ApiMember(Description="Value of the applied tag, if the tag\'s ValueType is PickList")]
+        public string Value { get; set; }
+    }
+
     public class DeleteTimeSeriesNotesResponse
     {
         ///<summary>
         ///Notes deleted
         ///</summary>
-        [ApiMember(DataType="integer", Description="Notes deleted")]
+        [ApiMember(DataType="integer", Description="Notes deleted", Format="int32")]
         public int NotesDeleted { get; set; }
     }
 
@@ -453,12 +507,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique id")]
+        [ApiMember(DataType="string", Description="Unique id", Format="guid")]
         public Guid UniqueId { get; set; }
     }
 
     public class PostLocationAttachmentResponse
     {
+        public PostLocationAttachmentResponse()
+        {
+            Tags = new List<AppliedTag>{};
+        }
+
         ///<summary>
         ///Attachment URL
         ///</summary>
@@ -468,7 +527,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the location")]
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid")]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
@@ -480,7 +539,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Attachment category
         ///</summary>
-        [ApiMember(DataType="AttachmentCategory", Description="Attachment category")]
+        [ApiMember(DataType="string", Description="Attachment category")]
         public AttachmentCategory AttachmentCategory { get; set; }
 
         ///<summary>
@@ -490,6 +549,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         public string Comments { get; set; }
 
         public AttachmentType AttachmentType { get; set; }
+        ///<summary>
+        ///Tags applied to this attachment
+        ///</summary>
+        [ApiMember(DataType="array", Description="Tags applied to this attachment")]
+        public List<AppliedTag> Tags { get; set; }
     }
 
     public class PostReportResponse
@@ -497,7 +561,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Unique ID of the created report
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the created report")]
+        [ApiMember(DataType="string", Description="Unique ID of the created report", Format="guid")]
         public Guid ReportUniqueId { get; set; }
     }
 
@@ -506,7 +570,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Notes created
         ///</summary>
-        [ApiMember(DataType="integer", Description="Notes created")]
+        [ApiMember(DataType="integer", Description="Notes created", Format="int32")]
         public int NotesCreated { get; set; }
     }
 
@@ -521,13 +585,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Relative URIs of created or modified visits
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Relative URIs of created or modified visits")]
+        [ApiMember(DataType="array", Description="Relative URIs of created or modified visits")]
         public List<string> VisitUris { get; set; }
 
         ///<summary>
         ///Identifiers of created or modified visits
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Identifiers of created or modified visits")]
+        [ApiMember(DataType="array", Description="Identifiers of created or modified visits")]
         public List<string> VisitIdentifiers { get; set; }
 
         ///<summary>
@@ -542,26 +606,26 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series")]
+        [ApiMember(DataType="string", Description="Unique ID of the time series", Format="guid")]
         public Guid TimeSeriesUniqueId { get; set; }
 
         public AppendStatusCode AppendStatus { get; set; }
         ///<summary>
         ///When AppendStatus=Completed: Version of the time series containing the appended points
         ///</summary>
-        [ApiMember(DataType="Int64", Description="When AppendStatus=Completed: Version of the time series containing the appended points")]
+        [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Version of the time series containing the appended points", Format="int64")]
         public long AppendedVersion { get; set; }
 
         ///<summary>
         ///When AppendStatus=Completed: Number of points successfully appended
         ///</summary>
-        [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully appended")]
+        [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully appended", Format="int32")]
         public int NumberOfPointsAppended { get; set; }
 
         ///<summary>
         ///When AppendStatus=Completed: Number of points successfully deleted
         ///</summary>
-        [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully deleted")]
+        [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully deleted", Format="int32")]
         public int NumberOfPointsDeleted { get; set; }
     }
 
@@ -611,7 +675,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///RSA key size in bits
         ///</summary>
-        [ApiMember(DataType="integer", Description="RSA key size in bits")]
+        [ApiMember(DataType="integer", Description="RSA key size in bits", Format="int32")]
         public int KeySize { get; set; }
 
         ///<summary>
@@ -626,6 +690,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.3.84.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.4.71.0");
     }
 }

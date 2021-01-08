@@ -1,8 +1,8 @@
 /* Options:
-Date: 2020-10-16 12:36:39
+Date: 2021-01-08 11:45:20
 Version: 5.80
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://autoserver1/AQUARIUS/Publish/v2
+BaseUrl: http://aqts-pg/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -41,6 +41,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         AppliesToLocations,
         AppliesToLocationNotes,
         AppliesToSensorsGauges,
+        AppliesToAttachments,
+        AppliesToReports,
     }
 
     [Route("/session", "DELETE")]
@@ -89,7 +91,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///RSA key size in bits
         ///</summary>
-        [ApiMember(DataType="integer", Description="RSA key size in bits")]
+        [ApiMember(DataType="integer", Description="RSA key size in bits", Format="int32")]
         public int KeySize { get; set; }
 
         ///<summary>
@@ -105,13 +107,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level
         ///</summary>
-        [ApiMember(DataType="integer", Description="Approval level")]
+        [ApiMember(DataType="integer", Description="Approval level", Format="int32")]
         public int ApprovalLevel { get; set; }
 
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -164,25 +166,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Type
         ///</summary>
-        [ApiMember(DataType="CorrectionType", Description="Type")]
+        [ApiMember(DataType="string", Description="Type")]
         public CorrectionType Type { get; set; }
 
         ///<summary>
         ///Start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        [ApiMember(DataType="string", Description="Start time", Format="date-time")]
         public DateTimeOffset StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        [ApiMember(DataType="string", Description="End time", Format="date-time")]
         public DateTimeOffset EndTime { get; set; }
 
         ///<summary>
         ///Applied time utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Applied time utc")]
+        [ApiMember(DataType="string", Description="Applied time utc", Format="date-time")]
         public DateTime AppliedTimeUtc { get; set; }
 
         ///<summary>
@@ -211,7 +213,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Type
         ///</summary>
-        [ApiMember(DataType="CorrectionType", Description="Type")]
+        [ApiMember(DataType="string", Description="Type")]
         public CorrectionType Type { get; set; }
 
         public IDictionary<string, Object> Parameters { get; set; }
@@ -224,7 +226,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -236,13 +238,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Operation type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
+        [ApiMember(DataType="string", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
 
         ///<summary>
         ///Stack position
         ///</summary>
-        [ApiMember(DataType="integer", Description="Stack position")]
+        [ApiMember(DataType="integer", Description="Stack position", Format="int32")]
         public int StackPosition { get; set; }
 
         ///<summary>
@@ -290,7 +292,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric")]
+        [ApiMember(DataType="number", Description="Numeric", Format="double")]
         public double? Numeric { get; set; }
 
         ///<summary>
@@ -305,13 +307,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Timestamp
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Timestamp")]
+        [ApiMember(DataType="string", Description="Timestamp", Format="date-time")]
         public DateTimeOffset Timestamp { get; set; }
 
         ///<summary>
         ///Value
         ///</summary>
-        [ApiMember(DataType="double", Description="Value")]
+        [ApiMember(DataType="number", Description="Value", Format="double")]
         public double? Value { get; set; }
     }
 
@@ -335,7 +337,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Type
         ///</summary>
-        [ApiMember(DataType="RatingCurveType", Description="Type")]
+        [ApiMember(DataType="string", Description="Type")]
         public RatingCurveType Type { get; set; }
 
         ///<summary>
@@ -359,19 +361,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Periods of applicability
         ///</summary>
-        [ApiMember(DataType="Array<PeriodOfApplicability>", Description="Periods of applicability")]
+        [ApiMember(DataType="array", Description="Periods of applicability")]
         public List<PeriodOfApplicability> PeriodsOfApplicability { get; set; }
 
         ///<summary>
         ///Shifts
         ///</summary>
-        [ApiMember(DataType="Array<RatingShift>", Description="Shifts")]
+        [ApiMember(DataType="array", Description="Shifts")]
         public List<RatingShift> Shifts { get; set; }
 
         ///<summary>
         ///Offsets
         ///</summary>
-        [ApiMember(DataType="Array<OffsetPoint>", Description="Offsets")]
+        [ApiMember(DataType="array", Description="Offsets")]
         public List<OffsetPoint> Offsets { get; set; }
 
         ///<summary>
@@ -383,13 +385,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Base rating table
         ///</summary>
-        [ApiMember(DataType="Array<RatingPoint>", Description="Base rating table")]
+        [ApiMember(DataType="array", Description="Base rating table")]
         public List<RatingPoint> BaseRatingTable { get; set; }
 
         ///<summary>
         ///Adjusted rating table
         ///</summary>
-        [ApiMember(DataType="Array<RatingPoint>", Description="Adjusted rating table")]
+        [ApiMember(DataType="array", Description="Adjusted rating table")]
         public List<RatingPoint> AdjustedRatingTable { get; set; }
     }
 
@@ -435,7 +437,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Tolerance in minutes
         ///</summary>
-        [ApiMember(DataType="double", Description="Tolerance in minutes")]
+        [ApiMember(DataType="number", Description="Tolerance in minutes", Format="double")]
         public double? ToleranceInMinutes { get; set; }
     }
 
@@ -445,13 +447,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Operation type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
+        [ApiMember(DataType="string", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
 
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -463,7 +465,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Stack position
         ///</summary>
-        [ApiMember(DataType="integer", Description="Stack position")]
+        [ApiMember(DataType="integer", Description="Stack position", Format="int32")]
         public int StackPosition { get; set; }
 
         ///<summary>
@@ -516,7 +518,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -528,13 +530,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Operation type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
+        [ApiMember(DataType="string", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
 
         ///<summary>
         ///Stack position
         ///</summary>
-        [ApiMember(DataType="integer", Description="Stack position")]
+        [ApiMember(DataType="integer", Description="Stack position", Format="int32")]
         public int StackPosition { get; set; }
 
         ///<summary>
@@ -567,7 +569,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -579,13 +581,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Operation type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
+        [ApiMember(DataType="string", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
 
         ///<summary>
         ///Stack position
         ///</summary>
-        [ApiMember(DataType="integer", Description="Stack position")]
+        [ApiMember(DataType="integer", Description="Stack position", Format="int32")]
         public int StackPosition { get; set; }
 
         ///<summary>
@@ -618,7 +620,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Datum periods
         ///</summary>
-        [ApiMember(DataType="Array<LocationDatumPeriod>", Description="Datum periods")]
+        [ApiMember(DataType="array", Description="Datum periods")]
         public List<LocationDatumPeriod> DatumPeriods { get; set; }
     }
 
@@ -645,13 +647,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Offset to standard
         ///</summary>
-        [ApiMember(DataType="double", Description="Offset to standard")]
+        [ApiMember(DataType="number", Description="Offset to standard", Format="double")]
         public double OffsetToStandard { get; set; }
 
         ///<summary>
         ///Uncertainty of offset to standard if any
         ///</summary>
-        [ApiMember(DataType="double", Description="Uncertainty of offset to standard if any")]
+        [ApiMember(DataType="number", Description="Uncertainty of offset to standard if any", Format="double")]
         public double? Uncertainty { get; set; }
 
         ///<summary>
@@ -663,7 +665,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Direction that positive measurements are taken in relation to the reference point
         ///</summary>
-        [ApiMember(DataType="MeasurementDirection", Description="Direction that positive measurements are taken in relation to the reference point")]
+        [ApiMember(DataType="string", Description="Direction that positive measurements are taken in relation to the reference point")]
         public MeasurementDirection MeasurementDirection { get; set; }
 
         ///<summary>
@@ -675,7 +677,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Applied time utc
         ///</summary>
-        [ApiMember(DataType="Instant", Description="Applied time utc")]
+        [ApiMember(DataType="string", Description="Applied time utc", Format="date-time")]
         public Instant AppliedTimeUtc { get; set; }
 
         ///<summary>
@@ -708,7 +710,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique id")]
+        [ApiMember(DataType="string", Description="Unique id", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -726,13 +728,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Secondary folders
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Secondary folders")]
+        [ApiMember(DataType="array", Description="Secondary folders")]
         public List<string> SecondaryFolders { get; set; }
 
         ///<summary>
         ///Last modified
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Last modified")]
+        [ApiMember(DataType="string", Description="Last modified", Format="date-time")]
         public DateTimeOffset LastModified { get; set; }
 
         ///<summary>
@@ -744,7 +746,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Tags
         ///</summary>
-        [ApiMember(DataType="Array<TagMetadata>", Description="Tags")]
+        [ApiMember(DataType="array", Description="Tags")]
         public List<TagMetadata> Tags { get; set; }
     }
 
@@ -758,7 +760,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///UniqueId
         ///</summary>
-        [ApiMember(DataType="string", Description="UniqueId")]
+        [ApiMember(DataType="string", Description="UniqueId", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -800,7 +802,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Parameter Unique Id
         ///</summary>
-        [ApiMember(DataType="string", Description="Parameter Unique Id")]
+        [ApiMember(DataType="string", Description="Parameter Unique Id", Format="guid")]
         public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
@@ -836,13 +838,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Last modified time (UTC)
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Last modified time (UTC)")]
+        [ApiMember(DataType="string", Description="Last modified time (UTC)", Format="date-time")]
         public DateTimeOffset LastModifiedUtc { get; set; }
 
         ///<summary>
         ///Tags
         ///</summary>
-        [ApiMember(DataType="Array<TagMetadata>", Description="Tags")]
+        [ApiMember(DataType="array", Description="Tags")]
         public List<TagMetadata> Tags { get; set; }
     }
 
@@ -856,31 +858,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///UniqueId
         ///</summary>
-        [ApiMember(DataType="string", Description="UniqueId")]
+        [ApiMember(DataType="string", Description="UniqueId", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Create time (UTC)
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Create time (UTC)")]
+        [ApiMember(DataType="string", Description="Create time (UTC)", Format="date-time")]
         public DateTimeOffset CreateTimeUtc { get; set; }
 
         ///<summary>
         ///Last modified time (UTC)
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Last modified time (UTC)")]
+        [ApiMember(DataType="string", Description="Last modified time (UTC)", Format="date-time")]
         public DateTimeOffset LastModifiedUtc { get; set; }
 
         ///<summary>
         ///From time (UTC)
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="From time (UTC)")]
+        [ApiMember(DataType="string", Description="From time (UTC)", Format="date-time")]
         public DateTimeOffset? FromTimeUtc { get; set; }
 
         ///<summary>
         ///To time (UTC)
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="To time (UTC)")]
+        [ApiMember(DataType="string", Description="To time (UTC)", Format="date-time")]
         public DateTimeOffset? ToTimeUtc { get; set; }
 
         ///<summary>
@@ -892,13 +894,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time-series unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Time-series unique id")]
+        [ApiMember(DataType="string", Description="Time-series unique id", Format="guid")]
         public Guid? TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Location note tags
         ///</summary>
-        [ApiMember(DataType="Array<TagMetadata>", Description="Location note tags")]
+        [ApiMember(DataType="array", Description="Location note tags")]
         public List<TagMetadata> Tags { get; set; }
 
         ///<summary>
@@ -924,7 +926,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reference standard offsets
         ///</summary>
-        [ApiMember(DataType="Array<ReferenceStandardOffset>", Description="Reference standard offsets")]
+        [ApiMember(DataType="array", Description="Reference standard offsets")]
         public List<ReferenceStandardOffset> ReferenceStandardOffsets { get; set; }
 
         ///<summary>
@@ -942,7 +944,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Uncertainty
         ///</summary>
-        [ApiMember(DataType="double", Description="Uncertainty")]
+        [ApiMember(DataType="number", Description="Uncertainty", Format="double")]
         public double? Uncertainty { get; set; }
     }
 
@@ -951,19 +953,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Create time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Create time")]
+        [ApiMember(DataType="string", Description="Create time", Format="date-time")]
         public DateTimeOffset? CreateTime { get; set; }
 
         ///<summary>
         ///From time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="From time")]
+        [ApiMember(DataType="string", Description="From time", Format="date-time")]
         public DateTimeOffset? FromTime { get; set; }
 
         ///<summary>
         ///To time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="To time")]
+        [ApiMember(DataType="string", Description="To time", Format="date-time")]
         public DateTimeOffset? ToTime { get; set; }
 
         ///<summary>
@@ -1009,7 +1011,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Applied time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Applied time")]
+        [ApiMember(DataType="string", Description="Applied time", Format="date-time")]
         public DateTimeOffset AppliedTime { get; set; }
 
         ///<summary>
@@ -1021,49 +1023,49 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Content type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeContentType", Description="Content type")]
+        [ApiMember(DataType="string", Description="Content type")]
         public MetadataChangeContentType ContentType { get; set; }
 
         ///<summary>
         ///Gap tolerance operations
         ///</summary>
-        [ApiMember(DataType="Array<GapToleranceOperation>", Description="Gap tolerance operations")]
+        [ApiMember(DataType="array", Description="Gap tolerance operations")]
         public IList<GapToleranceOperation> GapToleranceOperations { get; set; }
 
         ///<summary>
         ///Grade operations
         ///</summary>
-        [ApiMember(DataType="Array<GradeOperation>", Description="Grade operations")]
+        [ApiMember(DataType="array", Description="Grade operations")]
         public IList<GradeOperation> GradeOperations { get; set; }
 
         ///<summary>
         ///Interpolation type operations
         ///</summary>
-        [ApiMember(DataType="Array<InterpolationTypeOperation>", Description="Interpolation type operations")]
+        [ApiMember(DataType="array", Description="Interpolation type operations")]
         public IList<InterpolationTypeOperation> InterpolationTypeOperations { get; set; }
 
         ///<summary>
         ///Method operations
         ///</summary>
-        [ApiMember(DataType="Array<MethodOperation>", Description="Method operations")]
+        [ApiMember(DataType="array", Description="Method operations")]
         public IList<MethodOperation> MethodOperations { get; set; }
 
         ///<summary>
         ///Note operations
         ///</summary>
-        [ApiMember(DataType="Array<NoteOperation>", Description="Note operations")]
+        [ApiMember(DataType="array", Description="Note operations")]
         public IList<NoteOperation> NoteOperations { get; set; }
 
         ///<summary>
         ///Qualifier operations
         ///</summary>
-        [ApiMember(DataType="Array<QualifierOperation>", Description="Qualifier operations")]
+        [ApiMember(DataType="array", Description="Qualifier operations")]
         public IList<QualifierOperation> QualifierOperations { get; set; }
 
         ///<summary>
         ///Correction operations
         ///</summary>
-        [ApiMember(DataType="Array<CorrectionOperation>", Description="Correction operations")]
+        [ApiMember(DataType="array", Description="Correction operations")]
         public IList<CorrectionOperation> CorrectionOperations { get; set; }
     }
 
@@ -1083,7 +1085,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -1095,13 +1097,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Operation type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
+        [ApiMember(DataType="string", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
 
         ///<summary>
         ///Stack position
         ///</summary>
-        [ApiMember(DataType="integer", Description="Stack position")]
+        [ApiMember(DataType="integer", Description="Stack position", Format="int32")]
         public int StackPosition { get; set; }
 
         ///<summary>
@@ -1170,7 +1172,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -1182,7 +1184,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Operation type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
+        [ApiMember(DataType="string", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
     }
 
@@ -1191,13 +1193,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input value
         ///</summary>
-        [ApiMember(DataType="double", Description="Input value")]
+        [ApiMember(DataType="number", Description="Input value", Format="double")]
         public double? InputValue { get; set; }
 
         ///<summary>
         ///Offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Offset")]
+        [ApiMember(DataType="number", Description="Offset", Format="double")]
         public double Offset { get; set; }
     }
 
@@ -1260,13 +1262,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        [ApiMember(DataType="string", Description="Start time", Format="date-time")]
         public DateTimeOffset StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        [ApiMember(DataType="string", Description="End time", Format="date-time")]
         public DateTimeOffset EndTime { get; set; }
 
         ///<summary>
@@ -1293,13 +1295,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input time series unique ids
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Input time series unique ids")]
+        [ApiMember(DataType="array", Description="Input time series unique ids")]
         public List<Guid> InputTimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Output time series unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Output time series unique id")]
+        [ApiMember(DataType="string", Description="Output time series unique id", Format="guid")]
         public Guid OutputTimeSeriesUniqueId { get; set; }
 
         ///<summary>
@@ -1335,7 +1337,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date applied
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied")]
+        [ApiMember(DataType="string", Description="Date applied", Format="date-time")]
         public DateTime DateApplied { get; set; }
 
         ///<summary>
@@ -1378,13 +1380,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Operation type
         ///</summary>
-        [ApiMember(DataType="MetadataChangeOperationType", Description="Operation type")]
+        [ApiMember(DataType="string", Description="Operation type")]
         public MetadataChangeOperationType OperationType { get; set; }
 
         ///<summary>
         ///Date applied utc
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Date applied utc")]
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
         public DateTime DateAppliedUtc { get; set; }
 
         ///<summary>
@@ -1413,7 +1415,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Type
         ///</summary>
-        [ApiMember(DataType="RatingCurveType", Description="Type")]
+        [ApiMember(DataType="string", Description="Type")]
         public RatingCurveType Type { get; set; }
 
         ///<summary>
@@ -1443,25 +1445,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Periods of applicability
         ///</summary>
-        [ApiMember(DataType="Array<PeriodOfApplicability>", Description="Periods of applicability")]
+        [ApiMember(DataType="array", Description="Periods of applicability")]
         public List<PeriodOfApplicability> PeriodsOfApplicability { get; set; }
 
         ///<summary>
         ///Shifts
         ///</summary>
-        [ApiMember(DataType="Array<RatingShift>", Description="Shifts")]
+        [ApiMember(DataType="array", Description="Shifts")]
         public List<RatingShift> Shifts { get; set; }
 
         ///<summary>
         ///Base rating table
         ///</summary>
-        [ApiMember(DataType="Array<RatingPoint>", Description="Base rating table")]
+        [ApiMember(DataType="array", Description="Base rating table")]
         public List<RatingPoint> BaseRatingTable { get; set; }
 
         ///<summary>
         ///Offsets
         ///</summary>
-        [ApiMember(DataType="Array<OffsetPoint>", Description="Offsets")]
+        [ApiMember(DataType="array", Description="Offsets")]
         public List<OffsetPoint> Offsets { get; set; }
     }
 
@@ -1539,7 +1541,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Last modified
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Last modified")]
+        [ApiMember(DataType="string", Description="Last modified", Format="date-time")]
         public DateTimeOffset LastModified { get; set; }
 
         ///<summary>
@@ -1554,13 +1556,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input value
         ///</summary>
-        [ApiMember(DataType="double", Description="Input value")]
+        [ApiMember(DataType="number", Description="Input value", Format="double")]
         public double? InputValue { get; set; }
 
         ///<summary>
         ///Output value
         ///</summary>
-        [ApiMember(DataType="double", Description="Output value")]
+        [ApiMember(DataType="number", Description="Output value", Format="double")]
         public double? OutputValue { get; set; }
     }
 
@@ -1580,7 +1582,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Shift points
         ///</summary>
-        [ApiMember(DataType="Array<RatingShiftPoint>", Description="Shift points")]
+        [ApiMember(DataType="array", Description="Shift points")]
         public List<RatingShiftPoint> ShiftPoints { get; set; }
     }
 
@@ -1589,13 +1591,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input value
         ///</summary>
-        [ApiMember(DataType="double", Description="Input value")]
+        [ApiMember(DataType="number", Description="Input value", Format="double")]
         public double InputValue { get; set; }
 
         ///<summary>
         ///Shift
         ///</summary>
-        [ApiMember(DataType="double", Description="Shift")]
+        [ApiMember(DataType="number", Description="Shift", Format="double")]
         public double Shift { get; set; }
     }
 
@@ -1609,7 +1611,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique ID of the reference point
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the reference point")]
+        [ApiMember(DataType="string", Description="Unique ID of the reference point", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1627,7 +1629,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Decommissioned date
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Decommissioned date")]
+        [ApiMember(DataType="string", Description="Decommissioned date", Format="date-time")]
         public DateTimeOffset? DecommissionedDate { get; set; }
 
         ///<summary>
@@ -1639,25 +1641,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Point has been the primary reference point since this date. If no date is provided, the point is treated as a regular point.
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Point has been the primary reference point since this date. If no date is provided, the point is treated as a regular point.")]
+        [ApiMember(DataType="string", Description="Point has been the primary reference point since this date. If no date is provided, the point is treated as a regular point.", Format="date-time")]
         public DateTimeOffset? PrimarySinceDate { get; set; }
 
         ///<summary>
         ///Latitude (WGS 84)
         ///</summary>
-        [ApiMember(DataType="double", Description="Latitude (WGS 84)")]
+        [ApiMember(DataType="number", Description="Latitude (WGS 84)", Format="double")]
         public double? Latitude { get; set; }
 
         ///<summary>
         ///Longitude (WGS 84)
         ///</summary>
-        [ApiMember(DataType="double", Description="Longitude (WGS 84)")]
+        [ApiMember(DataType="number", Description="Longitude (WGS 84)", Format="double")]
         public double? Longitude { get; set; }
 
         ///<summary>
         ///Periods of applicability
         ///</summary>
-        [ApiMember(DataType="Array<ReferencePointPeriod>", Description="Periods of applicability")]
+        [ApiMember(DataType="array", Description="Periods of applicability")]
         public List<ReferencePointPeriod> ReferencePointPeriods { get; set; }
     }
 
@@ -1678,7 +1680,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time this period is valid from
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Time this period is valid from")]
+        [ApiMember(DataType="string", Description="Time this period is valid from", Format="date-time")]
         public DateTimeOffset ValidFrom { get; set; }
 
         ///<summary>
@@ -1690,13 +1692,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Elevation of the reference point relative to the standard or local assumed datum
         ///</summary>
-        [ApiMember(DataType="double", Description="Elevation of the reference point relative to the standard or local assumed datum")]
+        [ApiMember(DataType="number", Description="Elevation of the reference point relative to the standard or local assumed datum", Format="double")]
         public double Elevation { get; set; }
 
         ///<summary>
         ///Optional uncertainty of elevation
         ///</summary>
-        [ApiMember(DataType="double", Description="Optional uncertainty of elevation")]
+        [ApiMember(DataType="number", Description="Optional uncertainty of elevation", Format="double")]
         public double? Uncertainty { get; set; }
 
         ///<summary>
@@ -1708,7 +1710,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Direction of positive elevations in relation to the reference point
         ///</summary>
-        [ApiMember(DataType="MeasurementDirection", Description="Direction of positive elevations in relation to the reference point")]
+        [ApiMember(DataType="string", Description="Direction of positive elevations in relation to the reference point")]
         public MeasurementDirection MeasurementDirection { get; set; }
 
         ///<summary>
@@ -1720,7 +1722,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Applied date
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Applied date")]
+        [ApiMember(DataType="string", Description="Applied date", Format="date-time")]
         public DateTimeOffset AppliedTime { get; set; }
 
         ///<summary>
@@ -1741,7 +1743,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Offset to reference standard
         ///</summary>
-        [ApiMember(DataType="double", Description="Offset to reference standard")]
+        [ApiMember(DataType="number", Description="Offset to reference standard", Format="double")]
         public double OffsetToReferenceStandard { get; set; }
 
         ///<summary>
@@ -1759,7 +1761,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Uncertainty
         ///</summary>
-        [ApiMember(DataType="double", Description="Uncertainty")]
+        [ApiMember(DataType="number", Description="Uncertainty", Format="double")]
         public double? Uncertainty { get; set; }
     }
 
@@ -1768,12 +1770,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public Report()
         {
             SourceTimeSeriesUniqueIds = new List<Guid>{};
+            Tags = new List<TagMetadata>{};
         }
 
         ///<summary>
         ///ReportUniqueId
         ///</summary>
-        [ApiMember(DataType="string", Description="ReportUniqueId")]
+        [ApiMember(DataType="string", Description="ReportUniqueId", Format="guid")]
         public Guid ReportUniqueId { get; set; }
 
         ///<summary>
@@ -1797,7 +1800,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Created time (UTC)
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Created time (UTC)")]
+        [ApiMember(DataType="string", Description="Created time (UTC)", Format="date-time")]
         public DateTime CreatedTime { get; set; }
 
         ///<summary>
@@ -1815,19 +1818,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Source time-series unique IDs
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Source time-series unique IDs")]
+        [ApiMember(DataType="array", Description="Source time-series unique IDs")]
         public List<Guid> SourceTimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Location unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Location unique ID")]
+        [ApiMember(DataType="string", Description="Location unique ID", Format="guid")]
         public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Tags
+        ///</summary>
+        [ApiMember(DataType="array", Description="Tags")]
+        public List<TagMetadata> Tags { get; set; }
 
         ///<summary>
         ///Report creator's user unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Report creator\'s user unique ID")]
+        [ApiMember(DataType="string", Description="Report creator\'s user unique ID", Format="guid")]
         public Guid UserUniqueId { get; set; }
 
         ///<summary>
@@ -1848,19 +1857,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input value
         ///</summary>
-        [ApiMember(DataType="double", Description="Input value")]
+        [ApiMember(DataType="number", Description="Input value", Format="double")]
         public double InputValue { get; set; }
 
         ///<summary>
         ///Correction
         ///</summary>
-        [ApiMember(DataType="double", Description="Correction")]
+        [ApiMember(DataType="number", Description="Correction", Format="double")]
         public double Correction { get; set; }
 
         ///<summary>
         ///Corrected value
         ///</summary>
-        [ApiMember(DataType="double", Description="Corrected value")]
+        [ApiMember(DataType="number", Description="Corrected value", Format="double")]
         public double CorrectedValue { get; set; }
     }
 
@@ -1869,7 +1878,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date time offset
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Date time offset")]
+        [ApiMember(DataType="string", Description="Date time offset", Format="date-time")]
         public DateTimeOffset DateTimeOffset { get; set; }
 
         ///<summary>
@@ -1910,7 +1919,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///UniqueId
         ///</summary>
-        [ApiMember(DataType="string", Description="UniqueId")]
+        [ApiMember(DataType="string", Description="UniqueId", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1922,7 +1931,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Set of pick-list values if ValueType is PickList
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Set of pick-list values if ValueType is PickList")]
+        [ApiMember(DataType="array", Description="Set of pick-list values if ValueType is PickList")]
         public List<string> PickListValues { get; set; }
 
         ///<summary>
@@ -1949,7 +1958,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///UniqueId of the tag
         ///</summary>
-        [ApiMember(DataType="string", Description="UniqueId of the tag")]
+        [ApiMember(DataType="string", Description="UniqueId of the tag", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -1991,13 +2000,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Timestamp
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Timestamp")]
+        [ApiMember(DataType="string", Description="Timestamp", Format="date-time")]
         public DateTimeOffset Timestamp { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 1
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 1")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 1", Format="double")]
         public double? NumericValue1 { get; set; }
 
         ///<summary>
@@ -2009,7 +2018,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 1
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 1")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 1", Format="int64")]
         public long? GradeCode1 { get; set; }
 
         ///<summary>
@@ -2033,7 +2042,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 1
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 1")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 1", Format="int64")]
         public long? ApprovalLevel1 { get; set; }
 
         ///<summary>
@@ -2045,7 +2054,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 2
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 2")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 2", Format="double")]
         public double? NumericValue2 { get; set; }
 
         ///<summary>
@@ -2057,7 +2066,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 2
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 2")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 2", Format="int64")]
         public long? GradeCode2 { get; set; }
 
         ///<summary>
@@ -2081,7 +2090,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 2
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 2")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 2", Format="int64")]
         public long? ApprovalLevel2 { get; set; }
 
         ///<summary>
@@ -2093,7 +2102,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 3
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 3")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 3", Format="double")]
         public double? NumericValue3 { get; set; }
 
         ///<summary>
@@ -2105,7 +2114,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 3
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 3")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 3", Format="int64")]
         public long? GradeCode3 { get; set; }
 
         ///<summary>
@@ -2129,7 +2138,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 3
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 3")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 3", Format="int64")]
         public long? ApprovalLevel3 { get; set; }
 
         ///<summary>
@@ -2141,7 +2150,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 4
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 4")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 4", Format="double")]
         public double? NumericValue4 { get; set; }
 
         ///<summary>
@@ -2153,7 +2162,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 4
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 4")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 4", Format="int64")]
         public long? GradeCode4 { get; set; }
 
         ///<summary>
@@ -2177,7 +2186,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 4
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 4")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 4", Format="int64")]
         public long? ApprovalLevel4 { get; set; }
 
         ///<summary>
@@ -2189,7 +2198,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 5
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 5")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 5", Format="double")]
         public double? NumericValue5 { get; set; }
 
         ///<summary>
@@ -2201,7 +2210,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 5
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 5")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 5", Format="int64")]
         public long? GradeCode5 { get; set; }
 
         ///<summary>
@@ -2225,7 +2234,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 5
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 5")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 5", Format="int64")]
         public long? ApprovalLevel5 { get; set; }
 
         ///<summary>
@@ -2237,7 +2246,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 6
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 6")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 6", Format="double")]
         public double? NumericValue6 { get; set; }
 
         ///<summary>
@@ -2249,7 +2258,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 6
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 6")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 6", Format="int64")]
         public long? GradeCode6 { get; set; }
 
         ///<summary>
@@ -2273,7 +2282,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 6
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 6")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 6", Format="int64")]
         public long? ApprovalLevel6 { get; set; }
 
         ///<summary>
@@ -2285,7 +2294,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 7
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 7")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 7", Format="double")]
         public double? NumericValue7 { get; set; }
 
         ///<summary>
@@ -2297,7 +2306,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 7
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 7")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 7", Format="int64")]
         public long? GradeCode7 { get; set; }
 
         ///<summary>
@@ -2321,7 +2330,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 7
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 7")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 7", Format="int64")]
         public long? ApprovalLevel7 { get; set; }
 
         ///<summary>
@@ -2333,7 +2342,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 8
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 8")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 8", Format="double")]
         public double? NumericValue8 { get; set; }
 
         ///<summary>
@@ -2345,7 +2354,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 8
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 8")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 8", Format="int64")]
         public long? GradeCode8 { get; set; }
 
         ///<summary>
@@ -2369,7 +2378,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 8
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 8")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 8", Format="int64")]
         public long? ApprovalLevel8 { get; set; }
 
         ///<summary>
@@ -2381,7 +2390,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 9
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 9")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 9", Format="double")]
         public double? NumericValue9 { get; set; }
 
         ///<summary>
@@ -2393,7 +2402,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 9
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 9")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 9", Format="int64")]
         public long? GradeCode9 { get; set; }
 
         ///<summary>
@@ -2417,7 +2426,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 9
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 9")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 9", Format="int64")]
         public long? ApprovalLevel9 { get; set; }
 
         ///<summary>
@@ -2429,7 +2438,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Numeric value of output time-series 10
         ///</summary>
-        [ApiMember(DataType="double", Description="Numeric value of output time-series 10")]
+        [ApiMember(DataType="number", Description="Numeric value of output time-series 10", Format="double")]
         public double? NumericValue10 { get; set; }
 
         ///<summary>
@@ -2441,7 +2450,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code of output time-series 10
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Grade code of output time-series 10")]
+        [ApiMember(DataType="integer", Description="Grade code of output time-series 10", Format="int64")]
         public long? GradeCode10 { get; set; }
 
         ///<summary>
@@ -2465,7 +2474,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level of output time-series 10
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level of output time-series 10")]
+        [ApiMember(DataType="integer", Description="Approval level of output time-series 10", Format="int64")]
         public long? ApprovalLevel10 { get; set; }
 
         ///<summary>
@@ -2480,7 +2489,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique id")]
+        [ApiMember(DataType="string", Description="Unique id", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -2525,13 +2534,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        [ApiMember(DataType="string", Description="Start time", Format="date-time")]
         public DateTimeOffset StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        [ApiMember(DataType="string", Description="End time", Format="date-time")]
         public DateTimeOffset EndTime { get; set; }
     }
 
@@ -2546,7 +2555,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique id")]
+        [ApiMember(DataType="string", Description="Unique id", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -2570,43 +2579,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Utc offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Utc offset")]
+        [ApiMember(DataType="number", Description="Utc offset", Format="double")]
         public double UtcOffset { get; set; }
 
         ///<summary>
         ///Utc offset iso duration
         ///</summary>
-        [ApiMember(DataType="Offset", Description="Utc offset iso duration")]
+        [ApiMember(DataType="string", Description="Utc offset iso duration", Format="offset from UTC")]
         public Offset UtcOffsetIsoDuration { get; set; }
 
         ///<summary>
         ///Last modified
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Last modified")]
+        [ApiMember(DataType="string", Description="Last modified", Format="date-time")]
         public DateTimeOffset LastModified { get; set; }
 
         ///<summary>
         ///Raw start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Raw start time")]
+        [ApiMember(DataType="string", Description="Raw start time", Format="date-time")]
         public DateTimeOffset? RawStartTime { get; set; }
 
         ///<summary>
         ///Raw end time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Raw end time")]
+        [ApiMember(DataType="string", Description="Raw end time", Format="date-time")]
         public DateTimeOffset? RawEndTime { get; set; }
 
         ///<summary>
         ///Corrected start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Corrected start time")]
+        [ApiMember(DataType="string", Description="Corrected start time", Format="date-time")]
         public DateTimeOffset? CorrectedStartTime { get; set; }
 
         ///<summary>
         ///Corrected end time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Corrected end time")]
+        [ApiMember(DataType="string", Description="Corrected end time", Format="date-time")]
         public DateTimeOffset? CorrectedEndTime { get; set; }
 
         ///<summary>
@@ -2660,13 +2669,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Extended attributes
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttribute>", Description="Extended attributes")]
+        [ApiMember(DataType="array", Description="Extended attributes")]
         public IList<ExtendedAttribute> ExtendedAttributes { get; set; }
 
         ///<summary>
         ///Thresholds
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesThreshold>", Description="Thresholds")]
+        [ApiMember(DataType="array", Description="Thresholds")]
         public IList<TimeSeriesThreshold> Thresholds { get; set; }
     }
 
@@ -2713,19 +2722,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Severity
         ///</summary>
-        [ApiMember(DataType="integer", Description="Severity")]
+        [ApiMember(DataType="integer", Description="Severity", Format="int32")]
         public int Severity { get; set; }
 
         ///<summary>
         ///Type
         ///</summary>
-        [ApiMember(DataType="ThresholdType", Description="Type")]
+        [ApiMember(DataType="string", Description="Type")]
         public ThresholdType Type { get; set; }
 
         ///<summary>
         ///Processing order
         ///</summary>
-        [ApiMember(DataType="CorrectionProcessingOrder", Description="Processing order")]
+        [ApiMember(DataType="string", Description="Processing order")]
         public CorrectionProcessingOrder ProcessingOrder { get; set; }
 
         ///<summary>
@@ -2737,7 +2746,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Periods
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesThresholdPeriod>", Description="Periods")]
+        [ApiMember(DataType="array", Description="Periods")]
         public List<TimeSeriesThresholdPeriod> Periods { get; set; }
     }
 
@@ -2746,19 +2755,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        [ApiMember(DataType="string", Description="Start time", Format="date-time")]
         public DateTimeOffset StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        [ApiMember(DataType="string", Description="End time", Format="date-time")]
         public DateTimeOffset EndTime { get; set; }
 
         ///<summary>
         ///Applied time
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Applied time")]
+        [ApiMember(DataType="string", Description="Applied time", Format="date-time")]
         public DateTime AppliedTime { get; set; }
 
         ///<summary>
@@ -2770,13 +2779,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reference value
         ///</summary>
-        [ApiMember(DataType="double", Description="Reference value")]
+        [ApiMember(DataType="number", Description="Reference value", Format="double")]
         public double ReferenceValue { get; set; }
 
         ///<summary>
         ///Secondary reference value
         ///</summary>
-        [ApiMember(DataType="double", Description="Secondary reference value")]
+        [ApiMember(DataType="number", Description="Secondary reference value", Format="double")]
         public double? SecondaryReferenceValue { get; set; }
 
         ///<summary>
@@ -2791,13 +2800,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique id")]
+        [ApiMember(DataType="string", Description="Unique id", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
         ///First point changed
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="First point changed")]
+        [ApiMember(DataType="string", Description="First point changed", Format="date-time")]
         public DateTimeOffset? FirstPointChanged { get; set; }
 
         ///<summary>
@@ -2815,7 +2824,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Last time attributes on the time-series matched the given filters; null when time-series current attributes matched the given filters
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Last time attributes on the time-series matched the given filters; null when time-series current attributes matched the given filters")]
+        [ApiMember(DataType="string", Description="Last time attributes on the time-series matched the given filters; null when time-series current attributes matched the given filters", Format="date-time")]
         public DateTimeOffset? LastMatchedTime { get; set; }
     }
 
@@ -2824,7 +2833,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Type of regression analysis
         ///</summary>
-        [ApiMember(DataType="TrendLineAnalysisType", Description="Type of regression analysis")]
+        [ApiMember(DataType="string", Description="Type of regression analysis")]
         public TrendLineAnalysisType Type { get; set; }
 
         ///<summary>
@@ -2934,7 +2943,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///UniqueId
         ///</summary>
-        [ApiMember(DataType="string", Description="UniqueId")]
+        [ApiMember(DataType="string", Description="UniqueId", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -2991,7 +3000,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Number of transects
         ///</summary>
-        [ApiMember(DataType="integer", Description="Number of transects")]
+        [ApiMember(DataType="integer", Description="Number of transects", Format="int32")]
         public int? NumberOfTransects { get; set; }
 
         ///<summary>
@@ -3120,28 +3129,33 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Adjustment amount
         ///</summary>
-        [ApiMember(DataType="double", Description="Adjustment amount")]
+        [ApiMember(DataType="number", Description="Adjustment amount", Format="double")]
         public double? AdjustmentAmount { get; set; }
 
         ///<summary>
         ///Adjustment type
         ///</summary>
-        [ApiMember(DataType="AdjustmentType", Description="Adjustment type")]
+        [ApiMember(DataType="string", Description="Adjustment type")]
         public AdjustmentType AdjustmentType { get; set; }
 
         ///<summary>
         ///Reason for adjustment
         ///</summary>
-        [ApiMember(DataType="ReasonForAdjustmentType", Description="Reason for adjustment")]
+        [ApiMember(DataType="string", Description="Reason for adjustment")]
         public ReasonForAdjustmentType ReasonForAdjustment { get; set; }
     }
 
     public class Attachment
     {
+        public Attachment()
+        {
+            Tags = new List<TagMetadata>{};
+        }
+
         ///<summary>
         ///Attachment type
         ///</summary>
-        [ApiMember(DataType="AttachmentType", Description="Attachment type")]
+        [ApiMember(DataType="string", Description="Attachment type")]
         public AttachmentType AttachmentType { get; set; }
 
         ///<summary>
@@ -3159,19 +3173,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date created
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Date created")]
+        [ApiMember(DataType="string", Description="Date created", Format="date-time")]
         public DateTimeOffset DateCreated { get; set; }
 
         ///<summary>
         ///Date uploaded
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Date uploaded")]
+        [ApiMember(DataType="string", Description="Date uploaded", Format="date-time")]
         public DateTimeOffset DateUploaded { get; set; }
 
         ///<summary>
         ///Date last accessed
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Date last accessed")]
+        [ApiMember(DataType="string", Description="Date last accessed", Format="date-time")]
         public DateTimeOffset? DateLastAccessed { get; set; }
 
         ///<summary>
@@ -3189,13 +3203,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Gps latitude
         ///</summary>
-        [ApiMember(DataType="double", Description="Gps latitude")]
+        [ApiMember(DataType="number", Description="Gps latitude", Format="double")]
         public double? GpsLatitude { get; set; }
 
         ///<summary>
         ///Gps longitude
         ///</summary>
-        [ApiMember(DataType="double", Description="Gps longitude")]
+        [ApiMember(DataType="number", Description="Gps longitude", Format="double")]
         public double? GpsLongitude { get; set; }
 
         ///<summary>
@@ -3203,6 +3217,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Url")]
         public string Url { get; set; }
+
+        ///<summary>
+        ///Tags
+        ///</summary>
+        [ApiMember(DataType="array", Description="Tags")]
+        public List<TagMetadata> Tags { get; set; }
     }
 
     public class Calibration
@@ -3210,25 +3230,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Range start
         ///</summary>
-        [ApiMember(DataType="double", Description="Range start")]
+        [ApiMember(DataType="number", Description="Range start", Format="double")]
         public double? RangeStart { get; set; }
 
         ///<summary>
         ///Range end
         ///</summary>
-        [ApiMember(DataType="double", Description="Range end")]
+        [ApiMember(DataType="number", Description="Range end", Format="double")]
         public double? RangeEnd { get; set; }
 
         ///<summary>
         ///Slope
         ///</summary>
-        [ApiMember(DataType="double", Description="Slope")]
+        [ApiMember(DataType="number", Description="Slope", Format="double")]
         public double Slope { get; set; }
 
         ///<summary>
         ///Intercept
         ///</summary>
-        [ApiMember(DataType="double", Description="Intercept")]
+        [ApiMember(DataType="number", Description="Intercept", Format="double")]
         public double Intercept { get; set; }
 
         ///<summary>
@@ -3291,7 +3311,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Calibration check type
         ///</summary>
-        [ApiMember(DataType="CalibrationCheckType", Description="Calibration check type")]
+        [ApiMember(DataType="string", Description="Calibration check type")]
         public CalibrationCheckType CalibrationCheckType { get; set; }
 
         ///<summary>
@@ -3315,7 +3335,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Time")]
+        [ApiMember(DataType="string", Description="Time", Format="date-time")]
         public DateTimeOffset? Time { get; set; }
 
         ///<summary>
@@ -3351,7 +3371,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Sensor unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Sensor unique ID")]
+        [ApiMember(DataType="string", Description="Sensor unique ID", Format="guid")]
         public Guid? SensorUniqueId { get; set; }
     }
 
@@ -3429,7 +3449,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Control cleaned
         ///</summary>
-        [ApiMember(DataType="ControlCleanedType", Description="Control cleaned")]
+        [ApiMember(DataType="string", Description="Control cleaned")]
         public ControlCleanedType ControlCleaned { get; set; }
 
         ///<summary>
@@ -3441,7 +3461,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Date cleaned
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Date cleaned")]
+        [ApiMember(DataType="string", Description="Date cleaned", Format="date-time")]
         public DateTimeOffset? DateCleaned { get; set; }
 
         ///<summary>
@@ -3474,7 +3494,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Point order
         ///</summary>
-        [ApiMember(DataType="integer", Description="Point order")]
+        [ApiMember(DataType="integer", Description="Point order", Format="int32")]
         public int PointOrder { get; set; }
 
         ///<summary>
@@ -3512,13 +3532,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        [ApiMember(DataType="string", Description="Start time", Format="date-time")]
         public DateTimeOffset StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        [ApiMember(DataType="string", Description="End time", Format="date-time")]
         public DateTimeOffset EndTime { get; set; }
 
         ///<summary>
@@ -3542,7 +3562,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Starting point
         ///</summary>
-        [ApiMember(DataType="StartPointType", Description="Starting point")]
+        [ApiMember(DataType="string", Description="Starting point")]
         public StartPointType StartingPoint { get; set; }
 
         ///<summary>
@@ -3560,7 +3580,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Cross-section points
         ///</summary>
-        [ApiMember(DataType="Array<CrossSectionPoint>", Description="Cross-section points")]
+        [ApiMember(DataType="array", Description="Cross-section points")]
         public List<CrossSectionPoint> CrossSectionPoints { get; set; }
     }
 
@@ -3636,31 +3656,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Volumetric discharge activities
         ///</summary>
-        [ApiMember(DataType="Array<VolumetricDischargeActivity>", Description="Volumetric discharge activities")]
+        [ApiMember(DataType="array", Description="Volumetric discharge activities")]
         public List<VolumetricDischargeActivity> VolumetricDischargeActivities { get; set; }
 
         ///<summary>
         ///Engineered structure discharge activities
         ///</summary>
-        [ApiMember(DataType="Array<EngineeredStructureDischargeActivity>", Description="Engineered structure discharge activities")]
+        [ApiMember(DataType="array", Description="Engineered structure discharge activities")]
         public List<EngineeredStructureDischargeActivity> EngineeredStructureDischargeActivities { get; set; }
 
         ///<summary>
         ///Point velocity discharge activities
         ///</summary>
-        [ApiMember(DataType="Array<PointVelocityDischargeActivity>", Description="Point velocity discharge activities")]
+        [ApiMember(DataType="array", Description="Point velocity discharge activities")]
         public List<PointVelocityDischargeActivity> PointVelocityDischargeActivities { get; set; }
 
         ///<summary>
         ///Other method discharge activities
         ///</summary>
-        [ApiMember(DataType="Array<OtherMethodDischargeActivity>", Description="Other method discharge activities")]
+        [ApiMember(DataType="array", Description="Other method discharge activities")]
         public List<OtherMethodDischargeActivity> OtherMethodDischargeActivities { get; set; }
 
         ///<summary>
         ///Adcp discharge activities
         ///</summary>
-        [ApiMember(DataType="Array<AdcpDischargeActivity>", Description="Adcp discharge activities")]
+        [ApiMember(DataType="array", Description="Adcp discharge activities")]
         public List<AdcpDischargeActivity> AdcpDischargeActivities { get; set; }
     }
 
@@ -3675,13 +3695,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        [ApiMember(DataType="string", Description="Start time", Format="date-time")]
         public DateTimeOffset? StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        [ApiMember(DataType="string", Description="End time", Format="date-time")]
         public DateTimeOffset? EndTime { get; set; }
 
         ///<summary>
@@ -3711,61 +3731,61 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Horizontal flow
         ///</summary>
-        [ApiMember(DataType="HorizontalFlowType", Description="Horizontal flow")]
+        [ApiMember(DataType="string", Description="Horizontal flow")]
         public HorizontalFlowType HorizontalFlow { get; set; }
 
         ///<summary>
         ///Channel stability
         ///</summary>
-        [ApiMember(DataType="ChannelStabilityType", Description="Channel stability")]
+        [ApiMember(DataType="string", Description="Channel stability")]
         public ChannelStabilityType ChannelStability { get; set; }
 
         ///<summary>
         ///Channel material
         ///</summary>
-        [ApiMember(DataType="ChannelMaterialType", Description="Channel material")]
+        [ApiMember(DataType="string", Description="Channel material")]
         public ChannelMaterialType ChannelMaterial { get; set; }
 
         ///<summary>
         ///Channel evenness
         ///</summary>
-        [ApiMember(DataType="ChannelEvennessType", Description="Channel evenness")]
+        [ApiMember(DataType="string", Description="Channel evenness")]
         public ChannelEvennessType ChannelEvenness { get; set; }
 
         ///<summary>
         ///Vertical velocity distribution
         ///</summary>
-        [ApiMember(DataType="VerticalVelocityDistributionType", Description="Vertical velocity distribution")]
+        [ApiMember(DataType="string", Description="Vertical velocity distribution")]
         public VerticalVelocityDistributionType VerticalVelocityDistribution { get; set; }
 
         ///<summary>
         ///Velocity variation
         ///</summary>
-        [ApiMember(DataType="VelocityVariationType", Description="Velocity variation")]
+        [ApiMember(DataType="string", Description="Velocity variation")]
         public VelocityVariationType VelocityVariation { get; set; }
 
         ///<summary>
         ///Measurement location to gage
         ///</summary>
-        [ApiMember(DataType="MeasurementLocationToGageType", Description="Measurement location to gage")]
+        [ApiMember(DataType="string", Description="Measurement location to gage")]
         public MeasurementLocationToGageType MeasurementLocationToGage { get; set; }
 
         ///<summary>
         ///Meter suspension
         ///</summary>
-        [ApiMember(DataType="MeterSuspensionType", Description="Meter suspension")]
+        [ApiMember(DataType="string", Description="Meter suspension")]
         public MeterSuspensionType MeterSuspension { get; set; }
 
         ///<summary>
         ///Deployment method
         ///</summary>
-        [ApiMember(DataType="DeploymentMethodType", Description="Deployment method")]
+        [ApiMember(DataType="string", Description="Deployment method")]
         public DeploymentMethodType DeploymentMethod { get; set; }
 
         ///<summary>
         ///Current meter
         ///</summary>
-        [ApiMember(DataType="CurrentMeterType", Description="Current meter")]
+        [ApiMember(DataType="string", Description="Current meter")]
         public CurrentMeterType CurrentMeter { get; set; }
 
         ///<summary>
@@ -3785,19 +3805,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Measurement start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Measurement start time")]
+        [ApiMember(DataType="string", Description="Measurement start time", Format="date-time")]
         public DateTimeOffset? MeasurementStartTime { get; set; }
 
         ///<summary>
         ///Measurement end time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Measurement end time")]
+        [ApiMember(DataType="string", Description="Measurement end time", Format="date-time")]
         public DateTimeOffset? MeasurementEndTime { get; set; }
 
         ///<summary>
         ///Measurement time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Measurement time")]
+        [ApiMember(DataType="string", Description="Measurement time", Format="date-time")]
         public DateTimeOffset MeasurementTime { get; set; }
 
         ///<summary>
@@ -3809,7 +3829,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Base flow
         ///</summary>
-        [ApiMember(DataType="BaseFlowType", Description="Base flow")]
+        [ApiMember(DataType="string", Description="Base flow")]
         public BaseFlowType BaseFlow { get; set; }
 
         ///<summary>
@@ -3863,7 +3883,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Discharge measurement reason
         ///</summary>
-        [ApiMember(DataType="DischargeMeasurementReasonType", Description="Discharge measurement reason")]
+        [ApiMember(DataType="string", Description="Discharge measurement reason")]
         public DischargeMeasurementReasonType DischargeMeasurementReason { get; set; }
 
         ///<summary>
@@ -3875,13 +3895,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Gage height calculation
         ///</summary>
-        [ApiMember(DataType="GageHeightCalculationType", Description="Gage height calculation")]
+        [ApiMember(DataType="string", Description="Gage height calculation")]
         public GageHeightCalculationType GageHeightCalculation { get; set; }
 
         ///<summary>
         ///Gage height readings
         ///</summary>
-        [ApiMember(DataType="Array<GageHeightReading>", Description="Gage height readings")]
+        [ApiMember(DataType="array", Description="Gage height readings")]
         public List<GageHeightReading> GageHeightReadings { get; set; }
 
         ///<summary>
@@ -3911,13 +3931,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///DEPRECATED: Use DischargeUncertainty.QualitativeUncertainty instead.
         ///</summary>
-        [ApiMember(DataType="MeasurementGradeType", Description="DEPRECATED: Use DischargeUncertainty.QualitativeUncertainty instead.")]
+        [ApiMember(DataType="string", Description="DEPRECATED: Use DischargeUncertainty.QualitativeUncertainty instead.")]
         public MeasurementGradeType MeasurementGrade { get; set; }
 
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code")]
+        [ApiMember(DataType="integer", Description="Grade code", Format="int32")]
         public int? GradeCode { get; set; }
 
         ///<summary>
@@ -3950,7 +3970,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Active Uncertainty Type in use
         ///</summary>
-        [ApiMember(DataType="UncertaintyType", Description="Active Uncertainty Type in use")]
+        [ApiMember(DataType="string", Description="Active Uncertainty Type in use")]
         public UncertaintyType ActiveUncertaintyType { get; set; }
 
         ///<summary>
@@ -3962,7 +3982,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Qualitative (Type B) Uncertainty
         ///</summary>
-        [ApiMember(DataType="QualitativeUncertaintyType", Description="Qualitative (Type B) Uncertainty")]
+        [ApiMember(DataType="string", Description="Qualitative (Type B) Uncertainty")]
         public QualitativeUncertaintyType QualitativeUncertainty { get; set; }
     }
 
@@ -4012,13 +4032,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Attachments
         ///</summary>
-        [ApiMember(DataType="Array<Attachment>", Description="Attachments")]
+        [ApiMember(DataType="array", Description="Attachments")]
         public List<Attachment> Attachments { get; set; }
 
         ///<summary>
         ///Discharge activities
         ///</summary>
-        [ApiMember(DataType="Array<DischargeActivity>", Description="Discharge activities")]
+        [ApiMember(DataType="array", Description="Discharge activities")]
         public List<DischargeActivity> DischargeActivities { get; set; }
 
         ///<summary>
@@ -4042,7 +4062,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Cross-section survey activity
         ///</summary>
-        [ApiMember(DataType="Array<CrossSectionSurveyActivity>", Description="Cross-section survey activity")]
+        [ApiMember(DataType="array", Description="Cross-section survey activity")]
         public List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
 
         ///<summary>
@@ -4069,7 +4089,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approval level
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Approval level")]
+        [ApiMember(DataType="integer", Description="Approval level", Format="int64")]
         public long ApprovalLevel { get; set; }
 
         ///<summary>
@@ -4096,13 +4116,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Start time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start time")]
+        [ApiMember(DataType="string", Description="Start time", Format="date-time")]
         public DateTimeOffset? StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End time")]
+        [ApiMember(DataType="string", Description="End time", Format="date-time")]
         public DateTimeOffset? EndTime { get; set; }
 
         ///<summary>
@@ -4138,7 +4158,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Last modified
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Last modified")]
+        [ApiMember(DataType="string", Description="Last modified", Format="date-time")]
         public DateTimeOffset LastModified { get; set; }
     }
 
@@ -4183,7 +4203,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Datum converted values where applicable.
         ///</summary>
-        [ApiMember(DataType="Array<DatumConvertedQuantityWithDisplay>", Description="Datum converted values where applicable.")]
+        [ApiMember(DataType="array", Description="Datum converted values where applicable.")]
         public List<DatumConvertedQuantityWithDisplay> DatumConvertedValues { get; set; }
 
         ///<summary>
@@ -4225,7 +4245,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Time")]
+        [ApiMember(DataType="string", Description="Time", Format="date-time")]
         public DateTimeOffset Time { get; set; }
 
         ///<summary>
@@ -4243,25 +4263,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code")]
+        [ApiMember(DataType="integer", Description="Grade code", Format="int32")]
         public int? GradeCode { get; set; }
 
         ///<summary>
         ///Qualifiers
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Qualifiers")]
+        [ApiMember(DataType="array", Description="Qualifiers")]
         public List<string> Qualifiers { get; set; }
 
         ///<summary>
         ///Field visit reading type
         ///</summary>
-        [ApiMember(DataType="FieldVisitReadingType", Description="Field visit reading type")]
+        [ApiMember(DataType="string", Description="Field visit reading type")]
         public FieldVisitReadingType ReadingType { get; set; }
 
         ///<summary>
         ///Reference point unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Reference point unique ID")]
+        [ApiMember(DataType="string", Description="Reference point unique ID", Format="guid")]
         public Guid? ReferencePointUniqueId { get; set; }
 
         ///<summary>
@@ -4276,13 +4296,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Observed date
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Observed date")]
+        [ApiMember(DataType="string", Description="Observed date", Format="date-time")]
         public DateTimeOffset? ObservedDate { get; set; }
 
         ///<summary>
         ///Applicable since
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Applicable since")]
+        [ApiMember(DataType="string", Description="Applicable since", Format="date-time")]
         public DateTimeOffset? ApplicableSince { get; set; }
 
         ///<summary>
@@ -4360,7 +4380,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reading time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Reading time")]
+        [ApiMember(DataType="string", Description="Reading time", Format="date-time")]
         public DateTimeOffset? ReadingTime { get; set; }
 
         ///<summary>
@@ -4438,7 +4458,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Under ice coefficient
         ///</summary>
-        [ApiMember(DataType="double", Description="Under ice coefficient")]
+        [ApiMember(DataType="number", Description="Under ice coefficient", Format="double")]
         public double? UnderIceCoefficient { get; set; }
     }
 
@@ -4461,7 +4481,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Inspection type
         ///</summary>
-        [ApiMember(DataType="InspectionType", Description="Inspection type")]
+        [ApiMember(DataType="string", Description="Inspection type")]
         public InspectionType InspectionType { get; set; }
 
         ///<summary>
@@ -4485,7 +4505,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Time")]
+        [ApiMember(DataType="string", Description="Time", Format="date-time")]
         public DateTimeOffset? Time { get; set; }
 
         ///<summary>
@@ -4519,25 +4539,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Readings
         ///</summary>
-        [ApiMember(DataType="Array<Reading>", Description="Readings")]
+        [ApiMember(DataType="array", Description="Readings")]
         public List<Reading> Readings { get; set; }
 
         ///<summary>
         ///Number of readings which could not be converted to the target datum
         ///</summary>
-        [ApiMember(DataType="integer", Description="Number of readings which could not be converted to the target datum")]
+        [ApiMember(DataType="integer", Description="Number of readings which could not be converted to the target datum", Format="int32")]
         public int? NumberOfReadingsNotDatumConverted { get; set; }
 
         ///<summary>
         ///Calibration checks
         ///</summary>
-        [ApiMember(DataType="Array<CalibrationCheck>", Description="Calibration checks")]
+        [ApiMember(DataType="array", Description="Calibration checks")]
         public List<CalibrationCheck> CalibrationChecks { get; set; }
 
         ///<summary>
         ///Inspections
         ///</summary>
-        [ApiMember(DataType="Array<Inspection>", Description="Inspections")]
+        [ApiMember(DataType="array", Description="Inspections")]
         public List<Inspection> Inspections { get; set; }
 
         ///<summary>
@@ -4563,7 +4583,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Origin reference point unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Origin reference point unique ID")]
+        [ApiMember(DataType="string", Description="Origin reference point unique ID", Format="guid")]
         public Guid OriginReferencePointUniqueId { get; set; }
 
         ///<summary>
@@ -4581,7 +4601,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Level survey measurements
         ///</summary>
-        [ApiMember(DataType="Array<LevelSurveyMeasurement>", Description="Level survey measurements")]
+        [ApiMember(DataType="array", Description="Level survey measurements")]
         public List<LevelSurveyMeasurement> LevelMeasurements { get; set; }
     }
 
@@ -4590,7 +4610,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Measured reference point unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Measured reference point unique ID")]
+        [ApiMember(DataType="string", Description="Measured reference point unique ID", Format="guid")]
         public Guid ReferencePointUniqueId { get; set; }
 
         ///<summary>
@@ -4602,7 +4622,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Measurement time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Measurement time")]
+        [ApiMember(DataType="string", Description="Measurement time", Format="date-time")]
         public DateTimeOffset MeasurementTime { get; set; }
 
         ///<summary>
@@ -4629,13 +4649,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Dry Line Angle
         ///</summary>
-        [ApiMember(DataType="double", Description="Dry Line Angle")]
+        [ApiMember(DataType="number", Description="Dry Line Angle", Format="double")]
         public double DryLineAngle { get; set; }
 
         ///<summary>
         ///Surface Coefficient
         ///</summary>
-        [ApiMember(DataType="double", Description="Surface Coefficient")]
+        [ApiMember(DataType="number", Description="Surface Coefficient", Format="double")]
         public double? SurfaceCoefficient { get; set; }
 
         ///<summary>
@@ -4647,13 +4667,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Dry Line Correction
         ///</summary>
-        [ApiMember(DataType="double", Description="Dry Line Correction")]
+        [ApiMember(DataType="number", Description="Dry Line Correction", Format="double")]
         public double? DryLineCorrection { get; set; }
 
         ///<summary>
         ///Wet Line Correction
         ///</summary>
-        [ApiMember(DataType="double", Description="Wet Line Correction")]
+        [ApiMember(DataType="number", Description="Wet Line Correction", Format="double")]
         public double? WetLineCorrection { get; set; }
     }
 
@@ -4748,7 +4768,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Number of panels
         ///</summary>
-        [ApiMember(DataType="integer", Description="Number of panels")]
+        [ApiMember(DataType="integer", Description="Number of panels", Format="int32")]
         public int? NumberOfPanels { get; set; }
 
         ///<summary>
@@ -4778,7 +4798,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Discharge method
         ///</summary>
-        [ApiMember(DataType="DischargeMethodType", Description="Discharge method")]
+        [ApiMember(DataType="string", Description="Discharge method")]
         public DischargeMethodType DischargeMethod { get; set; }
 
         ///<summary>
@@ -4808,7 +4828,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Starting point
         ///</summary>
-        [ApiMember(DataType="StartPointType", Description="Starting point")]
+        [ApiMember(DataType="string", Description="Starting point")]
         public StartPointType StartPoint { get; set; }
 
         ///<summary>
@@ -4826,7 +4846,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Verticals
         ///</summary>
-        [ApiMember(DataType="Array<Vertical>", Description="Verticals")]
+        [ApiMember(DataType="array", Description="Verticals")]
         public List<Vertical> Verticals { get; set; }
     }
 
@@ -4880,7 +4900,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reading type
         ///</summary>
-        [ApiMember(DataType="ReadingType", Description="Reading type")]
+        [ApiMember(DataType="string", Description="Reading type")]
         public ReadingType ReadingType { get; set; }
 
         ///<summary>
@@ -4904,7 +4924,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Time")]
+        [ApiMember(DataType="string", Description="Time", Format="date-time")]
         public DateTimeOffset? Time { get; set; }
 
         ///<summary>
@@ -4940,7 +4960,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reference point unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Reference point unique ID")]
+        [ApiMember(DataType="string", Description="Reference point unique ID", Format="guid")]
         public Guid? ReferencePointUniqueId { get; set; }
 
         ///<summary>
@@ -4958,7 +4978,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reading Qualifiers
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Reading Qualifiers")]
+        [ApiMember(DataType="array", Description="Reading Qualifiers")]
         public List<string> ReadingQualifiers { get; set; }
 
         ///<summary>
@@ -4970,13 +4990,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Sensor unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Sensor unique ID")]
+        [ApiMember(DataType="string", Description="Sensor unique ID", Format="guid")]
         public Guid? SensorUniqueId { get; set; }
 
         ///<summary>
         ///Grade code
         ///</summary>
-        [ApiMember(DataType="integer", Description="Grade code")]
+        [ApiMember(DataType="integer", Description="Grade code", Format="int32")]
         public int? GradeCode { get; set; }
     }
 
@@ -5003,7 +5023,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Expiration date
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Expiration date")]
+        [ApiMember(DataType="string", Description="Expiration date", Format="date-time")]
         public DateTimeOffset? ExpirationDate { get; set; }
     }
 
@@ -5012,7 +5032,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Uncertainty Type in use
         ///</summary>
-        [ApiMember(DataType="UncertaintyType", Description="Uncertainty Type in use")]
+        [ApiMember(DataType="string", Description="Uncertainty Type in use")]
         public UncertaintyType UncertaintyType { get; set; }
 
         ///<summary>
@@ -5024,7 +5044,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Qualitative (Type B) Uncertainty
         ///</summary>
-        [ApiMember(DataType="QualitativeUncertaintyType", Description="Qualitative (Type B) Uncertainty")]
+        [ApiMember(DataType="string", Description="Qualitative (Type B) Uncertainty")]
         public QualitativeUncertaintyType? QualitativeUncertainty { get; set; }
     }
 
@@ -5039,7 +5059,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Revolution count
         ///</summary>
-        [ApiMember(DataType="integer", Description="Revolution count")]
+        [ApiMember(DataType="integer", Description="Revolution count", Format="int32")]
         public int? RevolutionCount { get; set; }
 
         ///<summary>
@@ -5063,13 +5083,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Depth multiplier
         ///</summary>
-        [ApiMember(DataType="double", Description="Depth multiplier")]
+        [ApiMember(DataType="number", Description="Depth multiplier", Format="double")]
         public double DepthMultiplier { get; set; }
 
         ///<summary>
         ///Weighting
         ///</summary>
-        [ApiMember(DataType="double", Description="Weighting")]
+        [ApiMember(DataType="number", Description="Weighting", Format="double")]
         public double Weighting { get; set; }
     }
 
@@ -5078,13 +5098,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Deployment Method
         ///</summary>
-        [ApiMember(DataType="DeploymentMethodType", Description="Deployment Method")]
+        [ApiMember(DataType="string", Description="Deployment Method")]
         public DeploymentMethodType? DeploymentMethod { get; set; }
 
         ///<summary>
         ///Velocity Depth Observations
         ///</summary>
-        [ApiMember(DataType="Array<VelocityDepthObservation>", Description="Velocity Depth Observations")]
+        [ApiMember(DataType="array", Description="Velocity Depth Observations")]
         public IList<VelocityDepthObservation> Observations { get; set; }
     }
 
@@ -5098,7 +5118,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Vertical number
         ///</summary>
-        [ApiMember(DataType="double", Description="Vertical number")]
+        [ApiMember(DataType="number", Description="Vertical number", Format="double")]
         public double VerticalNumber { get; set; }
 
         ///<summary>
@@ -5116,7 +5136,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Velocity method
         ///</summary>
-        [ApiMember(DataType="PointVelocityObservationType", Description="Velocity method")]
+        [ApiMember(DataType="string", Description="Velocity method")]
         public PointVelocityObservationType? VelocityObservationMethod { get; set; }
 
         ///<summary>
@@ -5158,43 +5178,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Percentage of total discharge
         ///</summary>
-        [ApiMember(DataType="double", Description="Percentage of total discharge")]
+        [ApiMember(DataType="number", Description="Percentage of total discharge", Format="double")]
         public double PercentageOfTotalDischarge { get; set; }
 
         ///<summary>
         ///Vertical type
         ///</summary>
-        [ApiMember(DataType="VerticalType", Description="Vertical type")]
+        [ApiMember(DataType="string", Description="Vertical type")]
         public VerticalType VerticalType { get; set; }
 
         ///<summary>
         ///Measurement condition
         ///</summary>
-        [ApiMember(DataType="MeasurementCondition", Description="Measurement condition")]
+        [ApiMember(DataType="string", Description="Measurement condition")]
         public MeasurementCondition MeasurementCondition { get; set; }
 
         ///<summary>
         ///Ice covered data
         ///</summary>
-        [ApiMember(DataType="IceCoveredData", Description="Ice covered data")]
+        [ApiMember(DataType="string", Description="Ice covered data")]
         public IceCoveredData IceCoveredData { get; set; }
 
         ///<summary>
         ///Open water data
         ///</summary>
-        [ApiMember(DataType="OpenWaterData", Description="Open water data")]
+        [ApiMember(DataType="string", Description="Open water data")]
         public OpenWaterData OpenWaterData { get; set; }
 
         ///<summary>
         ///Flow direction type
         ///</summary>
-        [ApiMember(DataType="FlowDirectionType", Description="Flow direction type")]
+        [ApiMember(DataType="string", Description="Flow direction type")]
         public FlowDirectionType FlowDirection { get; set; }
 
         ///<summary>
         ///Measurement time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Measurement time")]
+        [ApiMember(DataType="string", Description="Measurement time", Format="date-time")]
         public DateTimeOffset? MeasurementTime { get; set; }
 
         ///<summary>
@@ -5212,7 +5232,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Cosine of unique flow
         ///</summary>
-        [ApiMember(DataType="double", Description="Cosine of unique flow")]
+        [ApiMember(DataType="number", Description="Cosine of unique flow", Format="double")]
         public double CosineOfUniqueFlow { get; set; }
 
         ///<summary>
@@ -5224,19 +5244,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Velocity observation
         ///</summary>
-        [ApiMember(DataType="VelocityObservation", Description="Velocity observation")]
+        [ApiMember(DataType="string", Description="Velocity observation")]
         public VelocityObservation VelocityObservation { get; set; }
 
         ///<summary>
         ///Current Meter
         ///</summary>
-        [ApiMember(DataType="CurrentMeter", Description="Current Meter")]
+        [ApiMember(DataType="string", Description="Current Meter")]
         public CurrentMeter CurrentMeter { get; set; }
 
         ///<summary>
         ///Calibration
         ///</summary>
-        [ApiMember(DataType="Array<Calibration>", Description="Calibration")]
+        [ApiMember(DataType="array", Description="Calibration")]
         public List<Calibration> Calibrations { get; set; }
     }
 
@@ -5256,7 +5276,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Volumetric discharge readings
         ///</summary>
-        [ApiMember(DataType="Array<VolumetricDischargeReading>", Description="Volumetric discharge readings")]
+        [ApiMember(DataType="array", Description="Volumetric discharge readings")]
         public List<VolumetricDischargeReading> VolumetricDischargeReadings { get; set; }
 
         ///<summary>
@@ -5333,13 +5353,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Visit date
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Visit date")]
+        [ApiMember(DataType="string", Description="Visit date", Format="date-time")]
         public DateTimeOffset FirstUsedDate { get; set; }
 
         ///<summary>
         ///Equations
         ///</summary>
-        [ApiMember(DataType="Array<ActiveMeterCalibrationEquation>", Description="Equations")]
+        [ApiMember(DataType="array", Description="Equations")]
         public List<ActiveMeterCalibrationEquation> Equations { get; set; }
     }
 
@@ -5359,7 +5379,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Meter type
         ///</summary>
-        [ApiMember(DataType="MeterType", Description="Meter type")]
+        [ApiMember(DataType="string", Description="Meter type")]
         public MeterType? MeterType { get; set; }
 
         ///<summary>
@@ -5383,7 +5403,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Meter calibrations
         ///</summary>
-        [ApiMember(DataType="Array<ActiveMeterCalibration>", Description="Meter calibrations")]
+        [ApiMember(DataType="array", Description="Meter calibrations")]
         public List<ActiveMeterCalibration> MeterCalibrations { get; set; }
     }
 
@@ -5791,19 +5811,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="The unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to items with a StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items with an EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with an EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items with an EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -5820,13 +5840,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -5837,19 +5857,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -5866,31 +5886,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Table step size increment. Defaults to 0.01
         ///</summary>
-        [ApiMember(DataType="double", Description="Table step size increment. Defaults to 0.01")]
+        [ApiMember(DataType="number", Description="Table step size increment. Defaults to 0.01", Format="double")]
         public double? StepSize { get; set; }
 
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the location UTC offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Forces the response time values to a specific UTC offset. Defaults to the location UTC offset")]
+        [ApiMember(DataType="number", Description="Forces the response time values to a specific UTC offset. Defaults to the location UTC offset", Format="double")]
         public double? UtcOffset { get; set; }
 
         ///<summary>
         ///Table start value. Required for equation-based ratings. Defaults to minimum table value for table-based ratings
         ///</summary>
-        [ApiMember(DataType="double", Description="Table start value. Required for equation-based ratings. Defaults to minimum table value for table-based ratings")]
+        [ApiMember(DataType="number", Description="Table start value. Required for equation-based ratings. Defaults to minimum table value for table-based ratings", Format="double")]
         public double? StartValue { get; set; }
 
         ///<summary>
         ///Table end value. Required for equation-based ratings. Defaults to maximum table value for table-based ratings
         ///</summary>
-        [ApiMember(DataType="double", Description="Table end value. Required for equation-based ratings. Defaults to maximum table value for table-based ratings")]
+        [ApiMember(DataType="number", Description="Table end value. Required for equation-based ratings. Defaults to maximum table value for table-based ratings", Format="double")]
         public double? EndValue { get; set; }
 
         ///<summary>
         ///Effective time of the calculation. Defaults to the current time if not specified
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Effective time of the calculation. Defaults to the current time if not specified")]
+        [ApiMember(DataType="string", Description="Effective time of the calculation. Defaults to the current time if not specified", Format="date-time")]
         public DateTimeOffset? EffectiveTime { get; set; }
     }
 
@@ -5901,31 +5921,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="The unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Table step size increment. Defaults to 0.01
         ///</summary>
-        [ApiMember(DataType="double", Description="Table step size increment. Defaults to 0.01")]
+        [ApiMember(DataType="number", Description="Table step size increment. Defaults to 0.01", Format="double")]
         public double? StepSize { get; set; }
 
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset")]
+        [ApiMember(DataType="number", Description="Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset", Format="double")]
         public double? UtcOffset { get; set; }
 
         ///<summary>
         ///Table starting value
         ///</summary>
-        [ApiMember(DataType="double", Description="Table starting value", IsRequired=true)]
+        [ApiMember(DataType="number", Description="Table starting value", Format="double", IsRequired=true)]
         public double? StartValue { get; set; }
 
         ///<summary>
         ///Table ending value
         ///</summary>
-        [ApiMember(DataType="double", Description="Table ending value", IsRequired=true)]
+        [ApiMember(DataType="number", Description="Table ending value", Format="double", IsRequired=true)]
         public double? EndValue { get; set; }
     }
 
@@ -5949,19 +5969,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="Array<ActivityType>", Description="If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment")]
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment")]
         public List<ActivityType> Activities { get; set; }
 
         ///<summary>
         ///If set, only return readings and calibrations of the specified parameters
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="If set, only return readings and calibrations of the specified parameters")]
+        [ApiMember(DataType="array", Description="If set, only return readings and calibrations of the specified parameters")]
         public List<string> Parameters { get; set; }
 
         ///<summary>
         ///If set, only return inspections of the specified types, selected from: BubbleGage, CrestStageGage, WireWeightGage, MaximumMinimumGage, WaterQuality, FieldMeter, Other
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="Array<InspectionType>", Description="If set, only return inspections of the specified types, selected from: BubbleGage, CrestStageGage, WireWeightGage, MaximumMinimumGage, WaterQuality, FieldMeter, Other")]
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, only return inspections of the specified types, selected from: BubbleGage, CrestStageGage, WireWeightGage, MaximumMinimumGage, WaterQuality, FieldMeter, Other")]
         public List<InspectionType> InspectionTypes { get; set; }
 
         ///<summary>
@@ -6079,13 +6099,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items with a StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items with an EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with an EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items with an EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
 
         ///<summary>
@@ -6097,7 +6117,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Filter results to items modified at or after the ChangesSinceToken time")]
+        [ApiMember(DataType="string", Description="Filter results to items modified at or after the ChangesSinceToken time", Format="date-time")]
         public DateTime? ChangesSinceToken { get; set; }
     }
 
@@ -6142,13 +6162,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Location unique ID. Must be empty when LocationIdentifier is set.
         ///</summary>
-        [ApiMember(DataType="string", Description="Location unique ID. Must be empty when LocationIdentifier is set.")]
+        [ApiMember(DataType="string", Description="Location unique ID. Must be empty when LocationIdentifier is set.", Format="guid")]
         public Guid? LocationUniqueId { get; set; }
 
         ///<summary>
         ///If set, only return readings of the specified parameters
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="If set, only return readings of the specified parameters")]
+        [ApiMember(DataType="array", Description="If set, only return readings of the specified parameters")]
         public List<string> Parameters { get; set; }
 
         ///<summary>
@@ -6237,25 +6257,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///DEPRECATED: renamed to TagKeys
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="DEPRECATED: renamed to TagKeys")]
+        [ApiMember(DataType="array", Description="DEPRECATED: renamed to TagKeys")]
         public List<string> TagNames { get; set; }
 
         ///<summary>
         ///Filter results to locations matching all tags by key (supports *partialname* pattern)
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Filter results to locations matching all tags by key (supports *partialname* pattern)")]
+        [ApiMember(DataType="array", Description="Filter results to locations matching all tags by key (supports *partialname* pattern)")]
         public List<string> TagKeys { get; set; }
 
         ///<summary>
         ///Filter results to locations matching all tags by value (supports *partialname* pattern)
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Filter results to locations matching all tags by value (supports *partialname* pattern)")]
+        [ApiMember(DataType="array", Description="Filter results to locations matching all tags by value (supports *partialname* pattern)")]
         public List<string> TagValues { get; set; }
 
         ///<summary>
         ///Filter results to items matching the given extended attribute values
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeFilter>", Description="Filter results to items matching the given extended attribute values")]
+        [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
         public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
 
         ///<summary>
@@ -6267,7 +6287,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Filter results to items modified at or after the ChangesSinceToken time")]
+        [ApiMember(DataType="string", Description="Filter results to items modified at or after the ChangesSinceToken time", Format="date-time")]
         public DateTime? ChangesSinceToken { get; set; }
     }
 
@@ -6284,19 +6304,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="The unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to items with a StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items with an EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with an EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items with an EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -6331,19 +6351,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the location UTC offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Forces the response time values to a specific UTC offset. Defaults to the location UTC offset")]
+        [ApiMember(DataType="number", Description="Forces the response time values to a specific UTC offset. Defaults to the location UTC offset", Format="double")]
         public double? UtcOffset { get; set; }
 
         ///<summary>
         ///Filter results to curves with a Period.StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to curves with a Period.StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to curves with a Period.StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to curves with a Period.EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to curves with a Period.EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to curves with a Period.EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -6378,7 +6398,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Filter results to items modified at or after the ChangesSinceToken time")]
+        [ApiMember(DataType="string", Description="Filter results to items modified at or after the ChangesSinceToken time", Format="date-time")]
         public DateTime? ChangesSinceToken { get; set; }
     }
 
@@ -6400,13 +6420,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The time at which the shift is to be applied
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="The time at which the shift is to be applied", IsRequired=true)]
+        [ApiMember(DataType="string", Description="The time at which the shift is to be applied", Format="date-time", IsRequired=true)]
         public DateTimeOffset? MeasurementTime { get; set; }
 
         ///<summary>
         ///The input stage values to which the shift is to be applied
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="The input stage values to which the shift is to be applied", IsRequired=true)]
+        [ApiMember(DataType="array", Description="The input stage values to which the shift is to be applied", IsRequired=true)]
         public List<double> StageValues { get; set; }
     }
 
@@ -6417,7 +6437,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique ID of the input time series
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the input time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the input time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
@@ -6429,13 +6449,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Read the input time series starting at the QueryFrom time. Defaults to beginning of record
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Read the input time series starting at the QueryFrom time. Defaults to beginning of record")]
+        [ApiMember(DataType="string", Description="Read the input time series starting at the QueryFrom time. Defaults to beginning of record", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Read the input time series ending at the QueryTo time. Defaults to the end of record.
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Read the input time series ending at the QueryTo time. Defaults to the end of record.")]
+        [ApiMember(DataType="string", Description="Read the input time series ending at the QueryTo time. Defaults to the end of record.", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -6457,13 +6477,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Output values
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="Output values", IsRequired=true)]
+        [ApiMember(DataType="array", Description="Output values", IsRequired=true)]
         public List<double> OutputValues { get; set; }
 
         ///<summary>
         ///Effective time of the calculation. Defaults to the current time if not specified
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Effective time of the calculation. Defaults to the current time if not specified")]
+        [ApiMember(DataType="string", Description="Effective time of the calculation. Defaults to the current time if not specified", Format="date-time")]
         public DateTimeOffset? EffectiveTime { get; set; }
     }
 
@@ -6485,13 +6505,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input values
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="Input values", IsRequired=true)]
+        [ApiMember(DataType="array", Description="Input values", IsRequired=true)]
         public List<double> InputValues { get; set; }
 
         ///<summary>
         ///Effective time of the calculation. Defaults to the current time if not specified
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Effective time of the calculation. Defaults to the current time if not specified")]
+        [ApiMember(DataType="string", Description="Effective time of the calculation. Defaults to the current time if not specified", Format="date-time")]
         public DateTimeOffset? EffectiveTime { get; set; }
 
         ///<summary>
@@ -6508,24 +6528,26 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public ReportListServiceRequest()
         {
             TimeSeriesUniqueIds = new List<Guid>{};
+            TagKeys = new List<string>{};
+            TagValues = new List<string>{};
         }
 
         ///<summary>
         ///Filter results to given location unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Filter results to given location unique ID")]
+        [ApiMember(DataType="string", Description="Filter results to given location unique ID", Format="guid")]
         public Guid? LocationUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to given source time series unique IDs
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Filter results to given source time series unique IDs")]
+        [ApiMember(DataType="array", Description="Filter results to given source time series unique IDs")]
         public List<Guid> TimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Filter results to the given user unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Filter results to the given user unique ID")]
+        [ApiMember(DataType="string", Description="Filter results to the given user unique ID", Format="guid")]
         public Guid? UserUniqueId { get; set; }
 
         ///<summary>
@@ -6537,13 +6559,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items created at or after the CreatedFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items created at or after the CreatedFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items created at or after the CreatedFrom time", Format="date-time")]
         public DateTimeOffset? CreatedFrom { get; set; }
+
+        ///<summary>
+        ///Filter results to items matching all tags by key (supports *partialname* pattern)
+        ///</summary>
+        [ApiMember(DataType="array", Description="Filter results to items matching all tags by key (supports *partialname* pattern)")]
+        public List<string> TagKeys { get; set; }
+
+        ///<summary>
+        ///Filter results to items matching all tags by value (supports *partialname* pattern)
+        ///</summary>
+        [ApiMember(DataType="array", Description="Filter results to items matching all tags by value (supports *partialname* pattern)")]
+        public List<string> TagValues { get; set; }
 
         ///<summary>
         ///Limit the number of results items, after all filtering and ordering
         ///</summary>
-        [ApiMember(DataType="integer", Description="Limit the number of results items, after all filtering and ordering")]
+        [ApiMember(DataType="integer", Description="Limit the number of results items, after all filtering and ordering", Format="int32")]
         public int? MaxResults { get; set; }
     }
 
@@ -6583,7 +6617,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///A list of data values to be rounded and returned as strings
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
+        [ApiMember(DataType="array", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
         public List<double> Data { get; set; }
     }
 
@@ -6611,7 +6645,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///A list of data values to be rounded and returned as strings
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
+        [ApiMember(DataType="array", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
         public List<double> Data { get; set; }
     }
 
@@ -6635,19 +6669,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to sensors and gauges for these locations. Limited to roughly 60 items for a GET request; use POST to avoid this limit.
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Filter results to sensors and gauges for these locations. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
+        [ApiMember(DataType="array", Description="Filter results to sensors and gauges for these locations. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
         public List<Guid> LocationUniqueIds { get; set; }
 
         ///<summary>
         ///Filter results to sensors and gauges matching all tags by key (supports *partialname* pattern)
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Filter results to sensors and gauges matching all tags by key (supports *partialname* pattern)")]
+        [ApiMember(DataType="array", Description="Filter results to sensors and gauges matching all tags by key (supports *partialname* pattern)")]
         public List<string> TagKeys { get; set; }
 
         ///<summary>
         ///Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)")]
+        [ApiMember(DataType="array", Description="Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)")]
         public List<string> TagValues { get; set; }
     }
 
@@ -6661,9 +6695,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         }
 
         ///<summary>
-        ///If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges
+        ///If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges, AppliesToAttachments, AppliesToReports
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="Array<TagApplicability>", Description="If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges")]
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges, AppliesToAttachments, AppliesToReports")]
         public List<TagApplicability> Applicability { get; set; }
     }
 
@@ -6680,31 +6714,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The unique IDs of the time-series to retrieve
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="The unique IDs of the time-series to retrieve", IsRequired=true)]
+        [ApiMember(DataType="array", Description="The unique IDs of the time-series to retrieve", IsRequired=true)]
         public List<Guid> TimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///The unit identifiers for points. Defaults to the time-series unit
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="The unit identifiers for points. Defaults to the time-series unit")]
+        [ApiMember(DataType="array", Description="The unit identifiers for points. Defaults to the time-series unit")]
         public List<string> TimeSeriesOutputUnitIds { get; set; }
 
         ///<summary>
         ///Filter results to items at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
 
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the UTC offset of the first time-series
         ///</summary>
-        [ApiMember(DataType="double", Description="Forces the response time values to a specific UTC offset. Defaults to the UTC offset of the first time-series")]
+        [ApiMember(DataType="number", Description="Forces the response time values to a specific UTC offset. Defaults to the UTC offset of the first time-series", Format="double")]
         public double? UtcOffset { get; set; }
 
         ///<summary>
@@ -6727,19 +6761,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="The unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to items with a StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items with an EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with an EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items with an EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -6750,19 +6784,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="The unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to items at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
 
         ///<summary>
@@ -6780,7 +6814,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset")]
+        [ApiMember(DataType="number", Description="Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset", Format="double")]
         public double? UtcOffset { get; set; }
 
         ///<summary>
@@ -6809,19 +6843,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="The unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="The unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to items at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
 
         ///<summary>
@@ -6839,7 +6873,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset")]
+        [ApiMember(DataType="number", Description="Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset", Format="double")]
         public double? UtcOffset { get; set; }
 
         ///<summary>
@@ -6861,7 +6895,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
+        [ApiMember(DataType="array", Description="A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
         public List<Guid> TimeSeriesUniqueIds { get; set; }
     }
 
@@ -6907,7 +6941,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items matching the given extended attribute values
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeFilter>", Description="Filter results to items matching the given extended attribute values")]
+        [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
         public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
     }
 
@@ -6923,7 +6957,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Filter results to items modified at or after the ChangesSinceToken time")]
+        [ApiMember(DataType="string", Description="Filter results to items modified at or after the ChangesSinceToken time", Format="date-time")]
         public DateTime? ChangesSinceToken { get; set; }
 
         ///<summary>
@@ -6965,7 +6999,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to items matching the given extended attribute values
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttributeFilter>", Description="Filter results to items matching the given extended attribute values")]
+        [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
         public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
     }
 
@@ -6981,25 +7015,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Type of regression analysis
         ///</summary>
-        [ApiMember(DataType="TrendLineAnalysisType", Description="Type of regression analysis", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Type of regression analysis", IsRequired=true)]
         public TrendLineAnalysisType? Type { get; set; }
 
         ///<summary>
         ///Start Time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Start Time", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Start Time", Format="date-time", IsRequired=true)]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///End Time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="End Time", IsRequired=true)]
+        [ApiMember(DataType="string", Description="End Time", Format="date-time", IsRequired=true)]
         public DateTimeOffset? QueryTo { get; set; }
 
         ///<summary>
         ///List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.", IsRequired=true)]
+        [ApiMember(DataType="array", Description="List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.", IsRequired=true)]
         public List<TimeSeriesPoint> Points { get; set; }
     }
 
@@ -7021,19 +7055,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique ID of the time series
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the time series", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the time series", Format="guid", IsRequired=true)]
         public Guid TimeSeriesUniqueId { get; set; }
 
         ///<summary>
         ///Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a ProcessorPeriod.StartTime at or after the QueryFrom time", Format="date-time")]
         public DateTimeOffset? QueryFrom { get; set; }
 
         ///<summary>
         ///Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time")]
+        [ApiMember(DataType="string", Description="Filter results to items with a ProcessorPeriod.EndTime at or before the QueryTo time", Format="date-time")]
         public DateTimeOffset? QueryTo { get; set; }
     }
 
@@ -7048,7 +7082,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Current meter details
         ///</summary>
-        [ApiMember(DataType="Array<ActiveMeterDetails>", Description="Current meter details")]
+        [ApiMember(DataType="array", Description="Current meter details")]
         public List<ActiveMeterDetails> ActiveMeterDetails { get; set; }
     }
 
@@ -7063,7 +7097,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approvals
         ///</summary>
-        [ApiMember(DataType="Array<ApprovalMetadata>", Description="Approvals")]
+        [ApiMember(DataType="array", Description="Approvals")]
         public List<ApprovalMetadata> Approvals { get; set; }
     }
 
@@ -7078,7 +7112,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Corrections
         ///</summary>
-        [ApiMember(DataType="Array<Correction>", Description="Corrections")]
+        [ApiMember(DataType="array", Description="Corrections")]
         public List<Correction> Corrections { get; set; }
     }
 
@@ -7104,13 +7138,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Expanded stage table
         ///</summary>
-        [ApiMember(DataType="Array<StagePoint>", Description="Expanded stage table")]
+        [ApiMember(DataType="array", Description="Expanded stage table")]
         public List<StagePoint> ExpandedStageTable { get; set; }
 
         ///<summary>
         ///Corrections
         ///</summary>
-        [ApiMember(DataType="Array<Correction>", Description="Corrections")]
+        [ApiMember(DataType="array", Description="Corrections")]
         public List<Correction> Corrections { get; set; }
     }
 
@@ -7125,7 +7159,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Field visit descriptions and data
         ///</summary>
-        [ApiMember(DataType="Array<FieldVisit>", Description="Field visit descriptions and data")]
+        [ApiMember(DataType="array", Description="Field visit descriptions and data")]
         public List<FieldVisit> FieldVisitData { get; set; }
     }
 
@@ -7148,13 +7182,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Attachments
         ///</summary>
-        [ApiMember(DataType="Array<Attachment>", Description="Attachments")]
+        [ApiMember(DataType="array", Description="Attachments")]
         public List<Attachment> Attachments { get; set; }
 
         ///<summary>
         ///Discharge activities
         ///</summary>
-        [ApiMember(DataType="Array<DischargeActivity>", Description="Discharge activities")]
+        [ApiMember(DataType="array", Description="Discharge activities")]
         public List<DischargeActivity> DischargeActivities { get; set; }
 
         ///<summary>
@@ -7178,7 +7212,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Cross-section survey activity
         ///</summary>
-        [ApiMember(DataType="Array<CrossSectionSurveyActivity>", Description="Cross-section survey activity")]
+        [ApiMember(DataType="array", Description="Cross-section survey activity")]
         public List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
 
         ///<summary>
@@ -7211,13 +7245,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Field visit descriptions
         ///</summary>
-        [ApiMember(DataType="Array<FieldVisitDescription>", Description="Field visit descriptions")]
+        [ApiMember(DataType="array", Description="Field visit descriptions")]
         public List<FieldVisitDescription> FieldVisitDescriptions { get; set; }
 
         ///<summary>
         ///Next token
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Next token")]
+        [ApiMember(DataType="string", Description="Next token", Format="date-time")]
         public DateTime? NextToken { get; set; }
     }
 
@@ -7232,7 +7266,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Field visit readings
         ///</summary>
-        [ApiMember(DataType="Array<FieldVisitReading>", Description="Field visit readings")]
+        [ApiMember(DataType="array", Description="Field visit readings")]
         public List<FieldVisitReading> FieldVisitReadings { get; set; }
     }
 
@@ -7247,7 +7281,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Grades
         ///</summary>
-        [ApiMember(DataType="Array<GradeMetadata>", Description="Grades")]
+        [ApiMember(DataType="array", Description="Grades")]
         public List<GradeMetadata> Grades { get; set; }
     }
 
@@ -7285,7 +7319,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique id")]
+        [ApiMember(DataType="string", Description="Unique id", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -7303,19 +7337,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Latitude
         ///</summary>
-        [ApiMember(DataType="double", Description="Latitude")]
+        [ApiMember(DataType="number", Description="Latitude", Format="double")]
         public double Latitude { get; set; }
 
         ///<summary>
         ///Longitude
         ///</summary>
-        [ApiMember(DataType="double", Description="Longitude")]
+        [ApiMember(DataType="number", Description="Longitude", Format="double")]
         public double Longitude { get; set; }
 
         ///<summary>
         ///Srid
         ///</summary>
-        [ApiMember(DataType="double", Description="Srid")]
+        [ApiMember(DataType="number", Description="Srid", Format="double")]
         public double Srid { get; set; }
 
         ///<summary>
@@ -7327,43 +7361,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Elevation
         ///</summary>
-        [ApiMember(DataType="double", Description="Elevation")]
+        [ApiMember(DataType="number", Description="Elevation", Format="double")]
         public double Elevation { get; set; }
 
         ///<summary>
         ///Utc offset
         ///</summary>
-        [ApiMember(DataType="double", Description="Utc offset")]
+        [ApiMember(DataType="number", Description="Utc offset", Format="double")]
         public double UtcOffset { get; set; }
 
         ///<summary>
         ///Tags
         ///</summary>
-        [ApiMember(DataType="Array<TagMetadata>", Description="Tags")]
+        [ApiMember(DataType="array", Description="Tags")]
         public List<TagMetadata> Tags { get; set; }
 
         ///<summary>
         ///Extended attributes
         ///</summary>
-        [ApiMember(DataType="Array<ExtendedAttribute>", Description="Extended attributes")]
+        [ApiMember(DataType="array", Description="Extended attributes")]
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
 
         ///<summary>
         ///Location remarks
         ///</summary>
-        [ApiMember(DataType="Array<LocationRemark>", Description="Location remarks")]
+        [ApiMember(DataType="array", Description="Location remarks")]
         public List<LocationRemark> LocationRemarks { get; set; }
 
         ///<summary>
         ///Location notes
         ///</summary>
-        [ApiMember(DataType="Array<LocationNote>", Description="Location notes")]
+        [ApiMember(DataType="array", Description="Location notes")]
         public List<LocationNote> LocationNotes { get; set; }
 
         ///<summary>
         ///Attachments
         ///</summary>
-        [ApiMember(DataType="Array<Attachment>", Description="Attachments")]
+        [ApiMember(DataType="array", Description="Attachments")]
         public List<Attachment> Attachments { get; set; }
 
         ///<summary>
@@ -7375,7 +7409,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reference points
         ///</summary>
-        [ApiMember(DataType="Array<ReferencePoint>", Description="Reference points")]
+        [ApiMember(DataType="array", Description="Reference points")]
         public List<ReferencePoint> ReferencePoints { get; set; }
     }
 
@@ -7390,13 +7424,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Location descriptions
         ///</summary>
-        [ApiMember(DataType="Array<LocationDescription>", Description="Location descriptions")]
+        [ApiMember(DataType="array", Description="Location descriptions")]
         public List<LocationDescription> LocationDescriptions { get; set; }
 
         ///<summary>
         ///Next token
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Next token")]
+        [ApiMember(DataType="string", Description="Next token", Format="date-time")]
         public DateTime? NextToken { get; set; }
     }
 
@@ -7410,13 +7444,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Response version
         ///</summary>
-        [ApiMember(DataType="integer", Description="Response version")]
+        [ApiMember(DataType="integer", Description="Response version", Format="int32")]
         public int ResponseVersion { get; set; }
 
         ///<summary>
         ///Response time
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Response time")]
+        [ApiMember(DataType="string", Description="Response time", Format="date-time")]
         public DateTime ResponseTime { get; set; }
 
         ///<summary>
@@ -7428,7 +7462,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Tags
         ///</summary>
-        [ApiMember(DataType="Array<NameTagDefinition>", Description="Tags")]
+        [ApiMember(DataType="array", Description="Tags")]
         public List<NameTagDefinition> Tags { get; set; }
     }
 
@@ -7438,7 +7472,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Metadata change transactions
         ///</summary>
-        [ApiMember(DataType="Array<MetadataChangeTransaction>", Description="Metadata change transactions")]
+        [ApiMember(DataType="array", Description="Metadata change transactions")]
         public IList<MetadataChangeTransaction> MetadataChangeTransactions { get; set; }
     }
 
@@ -7452,13 +7486,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Response version
         ///</summary>
-        [ApiMember(DataType="integer", Description="Response version")]
+        [ApiMember(DataType="integer", Description="Response version", Format="int32")]
         public int ResponseVersion { get; set; }
 
         ///<summary>
         ///Response time
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Response time")]
+        [ApiMember(DataType="string", Description="Response time", Format="date-time")]
         public DateTime ResponseTime { get; set; }
 
         ///<summary>
@@ -7470,7 +7504,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Monitoring methods
         ///</summary>
-        [ApiMember(DataType="Array<MonitoringMethod>", Description="Monitoring methods")]
+        [ApiMember(DataType="array", Description="Monitoring methods")]
         public List<MonitoringMethod> MonitoringMethods { get; set; }
     }
 
@@ -7485,7 +7519,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Parameters
         ///</summary>
-        [ApiMember(DataType="Array<ParameterMetadata>", Description="Parameters")]
+        [ApiMember(DataType="array", Description="Parameters")]
         public List<ParameterMetadata> Parameters { get; set; }
     }
 
@@ -7500,7 +7534,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Processors
         ///</summary>
-        [ApiMember(DataType="Array<Processor>", Description="Processors")]
+        [ApiMember(DataType="array", Description="Processors")]
         public List<Processor> Processors { get; set; }
     }
 
@@ -7509,13 +7543,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Response version
         ///</summary>
-        [ApiMember(DataType="integer", Description="Response version")]
+        [ApiMember(DataType="integer", Description="Response version", Format="int32")]
         public int ResponseVersion { get; set; }
 
         ///<summary>
         ///Response time
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Response time")]
+        [ApiMember(DataType="string", Description="Response time", Format="date-time")]
         public DateTimeOffset ResponseTime { get; set; }
 
         ///<summary>
@@ -7536,7 +7570,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Qualifiers
         ///</summary>
-        [ApiMember(DataType="Array<QualifierMetadata>", Description="Qualifiers")]
+        [ApiMember(DataType="array", Description="Qualifiers")]
         public List<QualifierMetadata> Qualifiers { get; set; }
     }
 
@@ -7546,13 +7580,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Rating curves
         ///</summary>
-        [ApiMember(DataType="Array<RatingCurve>", Description="Rating curves")]
+        [ApiMember(DataType="array", Description="Rating curves")]
         public IList<RatingCurve> RatingCurves { get; set; }
 
         ///<summary>
         ///Approvals
         ///</summary>
-        [ApiMember(DataType="Array<Approval>", Description="Approvals")]
+        [ApiMember(DataType="array", Description="Approvals")]
         public IList<Approval> Approvals { get; set; }
     }
 
@@ -7562,13 +7596,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Rating model descriptions
         ///</summary>
-        [ApiMember(DataType="Array<RatingModelDescription>", Description="Rating model descriptions")]
+        [ApiMember(DataType="array", Description="Rating model descriptions")]
         public IList<RatingModelDescription> RatingModelDescriptions { get; set; }
 
         ///<summary>
         ///Next token
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Next token")]
+        [ApiMember(DataType="string", Description="Next token", Format="date-time")]
         public DateTime? NextToken { get; set; }
     }
 
@@ -7583,13 +7617,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Timestamp
         ///</summary>
-        [ApiMember(DataType="DateTimeOffset", Description="Timestamp")]
+        [ApiMember(DataType="string", Description="Timestamp", Format="date-time")]
         public DateTimeOffset? Timestamp { get; set; }
 
         ///<summary>
         ///Effective shift values
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="Effective shift values")]
+        [ApiMember(DataType="array", Description="Effective shift values")]
         public List<Nullable<Double>> EffectiveShiftValues { get; set; }
     }
 
@@ -7604,7 +7638,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Effective shifts
         ///</summary>
-        [ApiMember(DataType="Array<EffectiveShift>", Description="Effective shifts")]
+        [ApiMember(DataType="array", Description="Effective shifts")]
         public List<EffectiveShift> EffectiveShifts { get; set; }
     }
 
@@ -7619,7 +7653,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Input values
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="Input values")]
+        [ApiMember(DataType="array", Description="Input values")]
         public List<Nullable<Double>> InputValues { get; set; }
     }
 
@@ -7634,7 +7668,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Output values
         ///</summary>
-        [ApiMember(DataType="Array<double>", Description="Output values")]
+        [ApiMember(DataType="array", Description="Output values")]
         public List<Nullable<Double>> OutputValues { get; set; }
     }
 
@@ -7649,7 +7683,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Reports
         ///</summary>
-        [ApiMember(DataType="Array<Report>", Description="Reports")]
+        [ApiMember(DataType="array", Description="Reports")]
         public List<Report> Reports { get; set; }
     }
 
@@ -7664,7 +7698,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Values rounded as requested
         ///</summary>
-        [ApiMember(DataType="Array<string>", Description="Values rounded as requested")]
+        [ApiMember(DataType="array", Description="Values rounded as requested")]
         public List<string> Data { get; set; }
     }
 
@@ -7679,7 +7713,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Monitoring methods
         ///</summary>
-        [ApiMember(DataType="Array<LocationMonitoringMethod>", Description="Monitoring methods")]
+        [ApiMember(DataType="array", Description="Monitoring methods")]
         public List<LocationMonitoringMethod> MonitoringMethods { get; set; }
     }
 
@@ -7694,7 +7728,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Tags
         ///</summary>
-        [ApiMember(DataType="Array<TagDefinition>", Description="Tags")]
+        [ApiMember(DataType="array", Description="Tags")]
         public List<TagDefinition> Tags { get; set; }
     }
 
@@ -7710,7 +7744,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Summary info of the retrieved time-series
         ///</summary>
-        [ApiMember(DataType="Array<TimeAlignedTimeSeriesInfo>", Description="Summary info of the retrieved time-series")]
+        [ApiMember(DataType="array", Description="Summary info of the retrieved time-series")]
         public List<TimeAlignedTimeSeriesInfo> TimeSeries { get; set; }
 
         ///<summary>
@@ -7722,13 +7756,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Number of points
         ///</summary>
-        [ApiMember(DataType="integer", Description="Number of points")]
+        [ApiMember(DataType="integer", Description="Number of points", Format="int32")]
         public int NumPoints { get; set; }
 
         ///<summary>
         ///Points
         ///</summary>
-        [ApiMember(DataType="Array<TimeAlignedPoint>", Description="Points")]
+        [ApiMember(DataType="array", Description="Points")]
         public List<TimeAlignedPoint> Points { get; set; }
     }
 
@@ -7738,7 +7772,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approvals transactions
         ///</summary>
-        [ApiMember(DataType="Array<ApprovalsTransaction>", Description="Approvals transactions")]
+        [ApiMember(DataType="array", Description="Approvals transactions")]
         public IList<ApprovalsTransaction> ApprovalsTransactions { get; set; }
     }
 
@@ -7760,7 +7794,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unique id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique id")]
+        [ApiMember(DataType="string", Description="Unique id", Format="guid")]
         public Guid UniqueId { get; set; }
 
         ///<summary>
@@ -7784,7 +7818,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Num points
         ///</summary>
-        [ApiMember(DataType="long integer", Description="Num points")]
+        [ApiMember(DataType="integer", Description="Num points", Format="int64")]
         public long? NumPoints { get; set; }
 
         ///<summary>
@@ -7796,43 +7830,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Approvals
         ///</summary>
-        [ApiMember(DataType="Array<Approval>", Description="Approvals")]
+        [ApiMember(DataType="array", Description="Approvals")]
         public List<Approval> Approvals { get; set; }
 
         ///<summary>
         ///Qualifiers
         ///</summary>
-        [ApiMember(DataType="Array<Qualifier>", Description="Qualifiers")]
+        [ApiMember(DataType="array", Description="Qualifiers")]
         public List<Qualifier> Qualifiers { get; set; }
 
         ///<summary>
         ///Methods
         ///</summary>
-        [ApiMember(DataType="Array<Method>", Description="Methods")]
+        [ApiMember(DataType="array", Description="Methods")]
         public List<Method> Methods { get; set; }
 
         ///<summary>
         ///Grades
         ///</summary>
-        [ApiMember(DataType="Array<Grade>", Description="Grades")]
+        [ApiMember(DataType="array", Description="Grades")]
         public List<Grade> Grades { get; set; }
 
         ///<summary>
         ///Gap tolerances
         ///</summary>
-        [ApiMember(DataType="Array<GapTolerance>", Description="Gap tolerances")]
+        [ApiMember(DataType="array", Description="Gap tolerances")]
         public List<GapTolerance> GapTolerances { get; set; }
 
         ///<summary>
         ///Interpolation types
         ///</summary>
-        [ApiMember(DataType="Array<InterpolationType>", Description="Interpolation types")]
+        [ApiMember(DataType="array", Description="Interpolation types")]
         public List<InterpolationType> InterpolationTypes { get; set; }
 
         ///<summary>
         ///Notes
         ///</summary>
-        [ApiMember(DataType="Array<Note>", Description="Notes")]
+        [ApiMember(DataType="array", Description="Notes")]
         public List<Note> Notes { get; set; }
 
         ///<summary>
@@ -7844,7 +7878,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Points
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesPoint>", Description="Points")]
+        [ApiMember(DataType="array", Description="Points")]
         public List<TimeSeriesPoint> Points { get; set; }
     }
 
@@ -7859,7 +7893,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time series descriptions
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesDescription>", Description="Time series descriptions")]
+        [ApiMember(DataType="array", Description="Time series descriptions")]
         public List<TimeSeriesDescription> TimeSeriesDescriptions { get; set; }
     }
 
@@ -7874,7 +7908,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Time series descriptions
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesDescription>", Description="Time series descriptions")]
+        [ApiMember(DataType="array", Description="Time series descriptions")]
         public List<TimeSeriesDescription> TimeSeriesDescriptions { get; set; }
     }
 
@@ -7895,13 +7929,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Next token
         ///</summary>
-        [ApiMember(DataType="DateTime", Description="Next token")]
+        [ApiMember(DataType="string", Description="Next token", Format="date-time")]
         public DateTime? NextToken { get; set; }
 
         ///<summary>
         ///Time series unique ids
         ///</summary>
-        [ApiMember(DataType="Array<TimeSeriesUniqueIds>", Description="Time series unique ids")]
+        [ApiMember(DataType="array", Description="Time series unique ids")]
         public List<TimeSeriesUniqueIds> TimeSeriesUniqueIds { get; set; }
     }
 
@@ -7926,7 +7960,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Units
         ///</summary>
-        [ApiMember(DataType="Array<UnitMetadata>", Description="Units")]
+        [ApiMember(DataType="array", Description="Units")]
         public List<UnitMetadata> Units { get; set; }
     }
 }
@@ -7935,6 +7969,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.3.84.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.4.71.0");
     }
 }
