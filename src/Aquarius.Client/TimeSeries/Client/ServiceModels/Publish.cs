@@ -1,5 +1,5 @@
 /* Options:
-Date: 2021-01-07 11:59:32
+Date: 2021-01-08 11:45:20
 Version: 5.80
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://aqts-pg/AQUARIUS/Publish/v2
@@ -602,21 +602,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     {
         int StackPosition { get; set; }
         string Comments { get; set; }
-    }
-
-    public class LocationAttachment
-        : Attachment
-    {
-        public LocationAttachment()
-        {
-            Tags = new List<TagMetadata>{};
-        }
-
-        ///<summary>
-        ///Tags
-        ///</summary>
-        [ApiMember(DataType="array", Description="Tags")]
-        public List<TagMetadata> Tags { get; set; }
     }
 
     public class LocationDatum
@@ -3162,6 +3147,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Attachment
     {
+        public Attachment()
+        {
+            Tags = new List<TagMetadata>{};
+        }
+
         ///<summary>
         ///Attachment type
         ///</summary>
@@ -3227,6 +3217,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Url")]
         public string Url { get; set; }
+
+        ///<summary>
+        ///Tags
+        ///</summary>
+        [ApiMember(DataType="array", Description="Tags")]
+        public List<TagMetadata> Tags { get; set; }
     }
 
     public class Calibration
@@ -6699,9 +6695,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         }
 
         ///<summary>
-        ///If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges
+        ///If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges, AppliesToAttachments, AppliesToReports
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges")]
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges, AppliesToAttachments, AppliesToReports")]
         public List<TagApplicability> Applicability { get; set; }
     }
 
@@ -7298,7 +7294,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
             ExtendedAttributes = new List<ExtendedAttribute>{};
             LocationRemarks = new List<LocationRemark>{};
             LocationNotes = new List<LocationNote>{};
-            Attachments = new List<LocationAttachment>{};
+            Attachments = new List<Attachment>{};
             ReferencePoints = new List<ReferencePoint>{};
         }
 
@@ -7402,7 +7398,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Attachments
         ///</summary>
         [ApiMember(DataType="array", Description="Attachments")]
-        public List<LocationAttachment> Attachments { get; set; }
+        public List<Attachment> Attachments { get; set; }
 
         ///<summary>
         ///Location datum
@@ -7973,6 +7969,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.4.70.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.4.71.0");
     }
 }
