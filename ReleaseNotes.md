@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 20.4.1
+- No external changes, just some internal build plumbing fixes.
+
 ### 20.4.0
 - Updated the service models for the AQUARIUS Time-Series 2020.4 release.
 
