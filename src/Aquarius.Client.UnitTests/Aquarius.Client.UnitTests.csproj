@@ -11,7 +11,7 @@
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0'">
-    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0;NODATIME2;AUTOFIXTURE4</DefineConstants>
+    <DefineConstants>NODATIME2;AUTOFIXTURE4</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0'">
 	  <PackageReference Include="AutoFixture" Version="4.0.0-rc1" />
@@ -26,9 +26,9 @@
     <PackageReference Include="ServiceStack.Text.Core" Version="5.10.4" />
   </ItemGroup>
 
-  <!-- .NET 4.5 references, compilation flags and build options -->
+  <!-- .NET 4.7.2 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net472'">
-    <DefineConstants>NET472;NETFULL;NODATIME1;AUTOFIXTURE3</DefineConstants>
+    <DefineConstants>NODATIME1;AUTOFIXTURE3</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
     <Reference Include="System" />

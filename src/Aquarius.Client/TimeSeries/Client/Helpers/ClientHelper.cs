@@ -70,7 +70,7 @@ namespace Aquarius.TimeSeries.Client.Helpers
 
         private static void LoadFromXmlString(RSACryptoServiceProvider rsaCrypto, string publicKeyXml)
         {
-#if NETFULL
+#if NETFRAMEWORK
             rsaCrypto.FromXmlString(publicKeyXml);
 #else
             // Thanks to: https://gist.github.com/Jargon64/5b172c452827e15b21882f1d76a94be4

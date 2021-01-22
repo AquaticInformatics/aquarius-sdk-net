@@ -21,9 +21,6 @@
   </PropertyGroup>
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
-  </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="NodaTime" Version="2.2.3" />
     <PackageReference Include="ServiceStack.Client.Core" Version="5.10.4" />
@@ -32,10 +29,7 @@
     <PackageReference Include="ServiceStack.Text.Core" Version="5.10.4" />
   </ItemGroup>
 
-  <!-- .NET 4.5 references, compilation flags and build options -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net472'">
-    <DefineConstants>NET472;NETFULL</DefineConstants>
-  </PropertyGroup>
+  <!-- .NET 4.7.2 references, compilation flags and build options -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
