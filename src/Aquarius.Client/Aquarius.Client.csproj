@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;netstandard2.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Aquarius.SDK</PackageId>
     <Authors>Aquatic Informatics Inc.</Authors>
@@ -20,11 +20,11 @@
     <RootNamespace>Aquarius</RootNamespace>
   </PropertyGroup>
 
-  <!-- .NET Standard 2.0 references, compilation flags and build options -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+  <!-- .NET Standard 2.1 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">
     <DefineConstants>NODATIME2</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="NodaTime" Version="2.2.3" />
     <PackageReference Include="ServiceStack.Client.Core" Version="5.10.4" />
     <PackageReference Include="ServiceStack.HttpClient.Core" Version="5.10.4" />
