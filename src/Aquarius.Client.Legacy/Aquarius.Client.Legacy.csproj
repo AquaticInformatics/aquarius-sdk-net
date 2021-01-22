@@ -26,10 +26,10 @@
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="NodaTime" Version="2.2.3" />
-    <PackageReference Include="ServiceStack.Client.Core" Version="5.9.0" />
-    <PackageReference Include="ServiceStack.HttpClient.Core" Version="5.9.0" />
-    <PackageReference Include="ServiceStack.Interfaces.Core" Version="5.9.0" />
-    <PackageReference Include="ServiceStack.Text.Core" Version="5.9.0" />
+    <PackageReference Include="ServiceStack.Client.Core" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.HttpClient.Core" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="5.10.4" />
   </ItemGroup>
 
   <!-- .NET 4.5 references, compilation flags and build options -->
@@ -44,10 +44,10 @@
     <Reference Include="System.Xml" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="NodaTime" Version="1.3.0" />
-    <PackageReference Include="ServiceStack.Client" Version="5.9.0" />
-    <PackageReference Include="ServiceStack.HttpClient" Version="5.9.0" />
-    <PackageReference Include="ServiceStack.Interfaces" Version="5.9.0" />
-    <PackageReference Include="ServiceStack.Text" Version="5.9.0" />
+    <PackageReference Include="ServiceStack.Client" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.HttpClient" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.Interfaces" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.Text" Version="5.10.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aquarius.Client\Aquarius.Client.csproj" />
