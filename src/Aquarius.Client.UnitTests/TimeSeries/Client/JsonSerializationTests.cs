@@ -632,7 +632,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         {
             new object[] {ArbitraryOffset, "\"PT8H30M\""},
             new object[] {-ArbitraryOffset, "\"-PT8H30M\""},
-#if NET45
+#if NET472
             // NodaTime 2.x has dropped support for subsecond precision
             new object[] {Offset.FromMilliseconds(1), "\"PT0.001S\""},
             new object[] {Offset.FromMilliseconds(-1), "\"-PT0.001S\""},
