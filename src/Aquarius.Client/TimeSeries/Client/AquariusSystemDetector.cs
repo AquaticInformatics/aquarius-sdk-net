@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-#if NETFULL
+#if NETFRAMEWORK
 using System.Configuration;
 #endif
 using System.Diagnostics;

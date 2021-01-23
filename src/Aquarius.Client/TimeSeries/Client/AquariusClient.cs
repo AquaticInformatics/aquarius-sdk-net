@@ -94,6 +94,18 @@ namespace Aquarius.TimeSeries.Client
                 : null;
         }
 
+        public void SetTimeout(IServiceClient client, TimeSpan? requestTimeout, TimeSpan? readWriteTimeout)
+        {
+            if (client is JsonServiceClient jsonServiceClient)
+            {
+                if (requestTimeout.HasValue)
+                    jsonServiceClient.Timeout = requestTimeout.Value;
+
+                if (readWriteTimeout.HasValue)
+                    jsonServiceClient.ReadWriteTimeout = readWriteTimeout.Value;
+            }
+        }
+
         public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(
             IServiceClient client,
             int batchSize,

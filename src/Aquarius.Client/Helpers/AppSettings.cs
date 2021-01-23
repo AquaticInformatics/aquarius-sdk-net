@@ -71,7 +71,7 @@ namespace Aquarius.Helpers
 
         private static Dictionary<string, string> ReadAppSettings()
         {
-#if NETFULL
+#if NETFRAMEWORK
             return ConfigurationManager
                 .AppSettings
                 .ToDictionary();

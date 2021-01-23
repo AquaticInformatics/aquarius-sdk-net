@@ -100,7 +100,7 @@ namespace Aquarius.TimeSeries.Client
         {
             // Disabling throwing on any deserialization error is swinging a very blunt hammer
             // So keep this enabled and try to do something specific to enumerations only
-            JsConfig.ThrowOnDeserializationError = true;
+            JsConfig.ThrowOnError = true;
 
             var allServiceModelEnumTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()

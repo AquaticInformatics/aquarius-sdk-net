@@ -632,7 +632,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         {
             new object[] {ArbitraryOffset, "\"PT8H30M\""},
             new object[] {-ArbitraryOffset, "\"-PT8H30M\""},
-#if NET45
+#if NODATIME1
             // NodaTime 2.x has dropped support for subsecond precision
             new object[] {Offset.FromMilliseconds(1), "\"PT0.001S\""},
             new object[] {Offset.FromMilliseconds(-1), "\"-PT0.001S\""},
@@ -702,12 +702,36 @@ namespace Aquarius.UnitTests.TimeSeries.Client
         {
             new TestCaseData(1234.0123456789012, "1234.0123456789013"),
             new TestCaseData(6.0221415E23, "6.0221415E+23"),
-            new TestCaseData(1.0 / 3.0, "0.33333333333333331"),
-            new TestCaseData(Math.PI, "3.1415926535897931"),
-            new TestCaseData(Math.E, "2.7182818284590451"),
+            new TestCaseData(1.0 / 3.0,
+#if NETFRAMEWORK
+                "0.33333333333333331"
+#else
+                "0.3333333333333333"
+#endif
+                ),
+            new TestCaseData(Math.PI,
+#if NETFRAMEWORK
+                "3.1415926535897931"
+#else
+                "3.141592653589793"
+#endif
+                ),
+            new TestCaseData(Math.E,
+#if NETFRAMEWORK
+                "2.7182818284590451"
+#else
+                "2.718281828459045"
+#endif
+                ),
             new TestCaseData(double.MaxValue, "1.7976931348623157E+308"),
             new TestCaseData(double.MinValue, "-1.7976931348623157E+308"),
-            new TestCaseData(double.Epsilon, "4.94065645841247E-324"),
+            new TestCaseData(double.Epsilon,
+#if NETFRAMEWORK
+                "4.94065645841247E-324"
+#else
+                "5E-324"
+#endif
+                ),
         };
 
         private static readonly List<TestCaseData> DoubleSpecificValues = new List<TestCaseData>
