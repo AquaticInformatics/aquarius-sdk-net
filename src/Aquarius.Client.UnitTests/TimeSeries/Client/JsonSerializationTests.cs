@@ -282,6 +282,15 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             NodaTimeInstant_ParsesVariousValues(
                 "\"1901-02-03T08:05:06.789+04:00[GST]\"", // Gulf Standard Time
                 Instant.FromDateTimeUtc(ArbitraryUtcDate));
+
+            // AQS-760 workaround for goofy timestamps without a time component
+            NodaTimeInstant_ParsesVariousValues(
+                "\"2020-12-01T-08:00\"", // This occurred in on a production system
+                Instant.FromUtc(2020, 12, 01, 0, 0).Minus(Duration.FromHours(-8)));
+
+            NodaTimeInstant_ParsesVariousValues(
+                "\"2020-12-01T+10:00\"", // What if the timezone was in Australia?
+                Instant.FromUtc(2020, 12, 01, 0, 0).Minus(Duration.FromHours(10)));
         }
 
         [Test]
