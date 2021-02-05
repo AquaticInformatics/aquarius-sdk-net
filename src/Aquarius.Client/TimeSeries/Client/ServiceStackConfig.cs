@@ -223,15 +223,36 @@ namespace Aquarius.TimeSeries.Client
                 case "maxinstant":
                     return Instant.MaxValue;
                 default:
-                    var timeCodeIndex = text.IndexOf('[');
-
-                    if (timeCodeIndex >= 0)
+                    if (text.LastOrDefault() == ']')
                     {
-                        text = text.Substring(0, timeCodeIndex);
+                        var timeCodeIndex = text.IndexOf('[');
+
+                        if (timeCodeIndex >= 0)
+                        {
+                            text = text.Substring(0, timeCodeIndex);
+                        }
                     }
 
-                    var dateTimeOffset = DateTimeSerializer.ParseDateTimeOffset(text);
+                    var dateTimeOffset = ParseDateTimeOffset(text);
                     return Instant.FromDateTimeOffset(dateTimeOffset);
+            }
+        }
+        private static DateTimeOffset ParseDateTimeOffset(string text)
+        {
+            try
+            {
+                return DateTimeSerializer.ParseDateTimeOffset(text);
+            }
+            catch (FormatException)
+            {
+                // Workaround for AQS-760 timestamps with no time component like: 2020-12-01T-08:00
+                if (text.Contains("T-"))
+                    return DateTimeSerializer.ParseDateTimeOffset(text.Replace("T-", "T00:00:00.000-"));
+
+                if (text.Contains("T+"))
+                    return DateTimeSerializer.ParseDateTimeOffset(text.Replace("T+", "T00:00:00.000+"));
+
+                throw;
             }
         }
 
