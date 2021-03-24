@@ -40,15 +40,21 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
 
                     foreach (var operation in response.Operations)
                     {
-                        foreach (var route in operation.Request.Routes)
+                        var routes = operation.Routes ?? operation.Request.Routes;
+
+                        if (routes == null)
+                            continue;
+
+                        foreach (var route in routes)
                         {
                             RequestsByRoute[route.Path] = operation.Request;
                         }
                     }
                 }
-                catch (WebServiceException)
+                catch (Exception)
                 {
                     // The endpoint may be private and not have metadata exposed.
+                    // Or the shape of the types metadata may have changed so much that other errors occur.
                     // So all we can do is hope that the client request name still matches the server name
                 }
             }

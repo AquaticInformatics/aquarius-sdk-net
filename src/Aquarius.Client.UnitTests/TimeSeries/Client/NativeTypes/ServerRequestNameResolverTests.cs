@@ -80,6 +80,33 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client.NativeTypes
                 });
         }
 
+        private void SetupMockEndpointWithServiceStack510Metadata()
+        {
+            _mockEndpointClient
+                .Get(Arg.Any<GetTypesMetadata>())
+                .Returns(new MetadataTypes
+                {
+                    Operations = new List<MetadataOperationType>
+                    {
+                        new MetadataOperationType
+                        {
+                            Request = new MetadataType
+                            {
+                                Name = typeof(RenamedServerGetRequest).Name,
+                                Routes = null,
+                            },
+                            Routes = new List<MetadataRoute>
+                            {
+                                new MetadataRoute
+                                {
+                                    Path = KnownRoute
+                                }
+                            }
+                        }
+                    }
+                });
+        }
+
         private void SetupMockEndPointWithoutMetadata()
         {
             _mockEndpointClient
@@ -121,6 +148,21 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client.NativeTypes
             SetupMockEndpointWithRenamedMetadata();
 
             var request = new ClientPutRequest();
+            var clientRequestName = request.GetType().Name;
+
+            var actual = _resolver.ResolveRequestName(_mockEndpointClient, request);
+            var expected = typeof(RenamedServerGetRequest).Name;
+
+            actual.Should().NotBe(clientRequestName);
+            actual.ShouldBeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void ResolveRequestName_WithServiceStack510Metadata_ReturnsRenamedServerRequestName()
+        {
+            SetupMockEndpointWithServiceStack510Metadata();
+
+            var request = new ClientGetRequest();
             var clientRequestName = request.GetType().Name;
 
             var actual = _resolver.ResolveRequestName(_mockEndpointClient, request);
