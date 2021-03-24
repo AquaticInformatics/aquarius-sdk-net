@@ -40,9 +40,19 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
 
                     foreach (var operation in response.Operations)
                     {
-                        foreach (var route in operation.Request.Routes)
+                        if (operation.Request.Routes != null)
                         {
-                            RequestsByRoute[route.Path] = operation.Request;
+                            foreach (var route in operation.Request.Routes)
+                            {
+                                RequestsByRoute[route.Path] = operation.Request;
+                            }
+                        }
+                        else
+                        {
+                            foreach (var route in operation.Routes)
+                            {
+                                RequestsByRoute[route.Path] = operation.Request;
+                            }
                         }
                     }
                 }

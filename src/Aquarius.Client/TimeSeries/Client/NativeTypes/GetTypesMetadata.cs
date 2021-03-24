@@ -19,6 +19,7 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
     {
         public List<string> Actions { get; set; }
         public MetadataType Request { get; set; }
+        public List<MetadataRoute> Routes { get; set; }
     }
 
     public class MetadataType
