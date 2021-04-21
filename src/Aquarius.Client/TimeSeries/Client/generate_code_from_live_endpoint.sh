@@ -39,6 +39,12 @@ echo "Generating $OutputFile ..."
 OutputFile=$OutputPath/$EndPointName.cs
 curl -s -o "$OutputFile" "http://$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartial=false&MakeVirtual=false&ExportValueTypes=true&GlobalNamespace=$GlobalNamespace&DefaultNamespaces=System,System.Collections.Generic,ServiceStack,ServiceStack.DataAnnotations,ServiceStack.Web,NodaTime" || exit_abort "Can't read endpoint"
 
+# 2021.1 added a hidden IFileUploadRequest.IsFileRequired property with [ApiMember(ExcludeInSchema = true)][IgnoreDataMember] attributes.
+# The built-in ServiceStack code generator endpoint doesn't respect these attributes.
+# So we need to manually detect and remove the IsFileRequired property so that everything compiles.
+# This blunt-hammer approach works for 2021.1, but may need to be revisited if a property of the same name ever needs to exist in the API
+sed -i.bak -e "s/        bool IsFileRequired { get; set; }/        \\/\\/ HACK from generate_code_from_live_endpoint.sh \\/\\/ bool IsFileRequired { get; set; }/" "$OutputFile"
+
 # Append the generated version to the code
 echo "namespace $GlobalNamespace" >> "$OutputFile"
 echo "{" >> "$OutputFile"

@@ -1,8 +1,8 @@
 /* Options:
-Date: 2021-01-08 11:45:42
-Version: 5.80
+Date: 2021-04-21 11:17:06
+Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-pg/AQUARIUS/Acquisition/v2
+BaseUrl: http://aqts-rel-pg-1.aquaticinformatics.com/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
@@ -367,7 +367,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     [Route("/visits/upload/plugins", "POST")]
     public class PostVisitFile
-        : PostVisitFileBase, IReturn<PostVisitFileResponse>, IFileUploadRequest
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>
     {
     }
 
@@ -384,7 +384,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     [Route("/locations/{LocationUniqueId}/visits/upload/plugins", "POST")]
     public class PostVisitFileToLocation
-        : PostVisitFileBase, IReturn<PostVisitFileResponse>, IFileUploadRequest
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>
     {
         ///<summary>
         ///Unique ID of the location of visits in the file
@@ -395,12 +395,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     [Route("/visits/{VisitIdentifier}/upload/plugins", "POST")]
     public class PostVisitFileToVisit
-        : PostVisitFileBase, IReturn<PostVisitFileResponse>, IFileUploadRequest
+        : PostVisitFileBase, IReturn<PostVisitFileResponse>
     {
         ///<summary>
         ///Identifier of the existing visit to add the file's content to
         ///</summary>
-        [ApiMember(Description="Identifier of the existing visit to add the file\'s content to", IsRequired=true, ParameterType="path")]
+        [ApiMember(Description="Identifier of the existing visit to add the file's content to", IsRequired=true, ParameterType="path")]
         public string VisitIdentifier { get; set; }
     }
 
@@ -429,19 +429,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///ISO 8601 timestamp. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="string", Description="ISO 8601 timestamp. Must not be specified if Type is \'Gap\'.", Format="date-time")]
+        [ApiMember(DataType="string", Description="ISO 8601 timestamp. Must not be specified if Type is 'Gap'.", Format="date-time")]
         public Instant? Time { get; set; }
 
         ///<summary>
         ///The value of the point. Null or empty to represent a NaN. Must not be specified if Type is 'Gap'.
         ///</summary>
-        [ApiMember(DataType="number", Description="The value of the point. Null or empty to represent a NaN. Must not be specified if Type is \'Gap\'.", Format="double")]
+        [ApiMember(DataType="number", Description="The value of the point. Null or empty to represent a NaN. Must not be specified if Type is 'Gap'.", Format="double")]
         public double? Value { get; set; }
 
         ///<summary>
         ///The type of the point: 'Point' or 'Gap'. Defaults to 'Point' if null or empty.
         ///</summary>
-        [ApiMember(DataType="PointType", Description="The type of the point: \'Point\' or \'Gap\'. Defaults to \'Point\' if null or empty.")]
+        [ApiMember(DataType="PointType", Description="The type of the point: 'Point' or 'Gap'. Defaults to 'Point' if null or empty.")]
         public PointType? Type { get; set; }
 
         ///<summary>
@@ -483,7 +483,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///<summary>
         ///Value of the applied tag, if the tag's ValueType is PickList
         ///</summary>
-        [ApiMember(Description="Value of the applied tag, if the tag\'s ValueType is PickList")]
+        [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
         public string Value { get; set; }
     }
 
@@ -535,6 +535,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(Description="File name")]
         public string FileName { get; set; }
+
+        ///<summary>
+        ///Unique ID of the attachment
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the attachment", Format="guid")]
+        public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Attachment category
@@ -690,6 +696,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.4.71.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.1.122.0");
     }
 }
