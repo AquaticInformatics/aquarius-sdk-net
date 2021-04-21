@@ -1,8 +1,8 @@
 /* Options:
-Date: 2021-01-08 11:45:20
-Version: 5.80
+Date: 2021-04-21 11:17:04
+Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-pg/AQUARIUS/Publish/v2
+BaseUrl: http://aqts-rel-pg-1.aquaticinformatics.com/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -208,7 +208,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class CorrectionOperation
-        : TimeRange, IStackPositionMetadataOperation, IMetadataChangeOperation
+        : TimeRange, IStackPositionMetadataOperation
     {
         ///<summary>
         ///Type
@@ -442,7 +442,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class GapToleranceOperation
-        : GapTolerance, IStackPositionMetadataOperation, IMetadataChangeOperation
+        : GapTolerance, IStackPositionMetadataOperation
     {
         ///<summary>
         ///Operation type
@@ -513,7 +513,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class GradeOperation
-        : Grade, IStackPositionMetadataOperation, IMetadataChangeOperation
+        : Grade, IStackPositionMetadataOperation
     {
         ///<summary>
         ///Date applied utc
@@ -564,7 +564,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class InterpolationTypeOperation
-        : InterpolationType, IStackPositionMetadataOperation, IMetadataChangeOperation
+        : InterpolationType, IStackPositionMetadataOperation
     {
         ///<summary>
         ///Date applied utc
@@ -804,6 +804,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="string", Description="Parameter Unique Id", Format="guid")]
         public Guid ParameterUniqueId { get; set; }
+
+        ///<summary>
+        ///Unit Id
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unit Id")]
+        public string UnitId { get; set; }
+
+        ///<summary>
+        ///Unit Name
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unit Name")]
+        public string UnitName { get; set; }
 
         ///<summary>
         ///Sub location identifier
@@ -1080,7 +1092,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     }
 
     public class MethodOperation
-        : Method, IStackPositionMetadataOperation, IMetadataChangeOperation
+        : Method, IStackPositionMetadataOperation
     {
         ///<summary>
         ///Date applied utc
@@ -1674,7 +1686,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///True if this period is measured against the location's local assumed datum instead of a standard datum
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if this period is measured against the location\'s local assumed datum instead of a standard datum")]
+        [ApiMember(DataType="boolean", Description="True if this period is measured against the location's local assumed datum instead of a standard datum")]
         public bool IsMeasuredAgainstLocalAssumedDatum { get; set; }
 
         ///<summary>
@@ -1836,13 +1848,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Report creator's user unique ID
         ///</summary>
-        [ApiMember(DataType="string", Description="Report creator\'s user unique ID", Format="guid")]
+        [ApiMember(DataType="string", Description="Report creator's user unique ID", Format="guid")]
         public Guid UserUniqueId { get; set; }
 
         ///<summary>
         ///Report creator's user name
         ///</summary>
-        [ApiMember(Description="Report creator\'s user name")]
+        [ApiMember(Description="Report creator's user name")]
         public string UserName { get; set; }
 
         ///<summary>
@@ -1935,6 +1947,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<string> PickListValues { get; set; }
 
         ///<summary>
+        ///True if tag is applicable to Attachments
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Attachments")]
+        public bool AppliesToAttachments { get; set; }
+
+        ///<summary>
         ///True if tag is applicable to Locations
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if tag is applicable to Locations")]
@@ -1945,6 +1963,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if tag is applicable to Location Notes")]
         public bool AppliesToLocationNotes { get; set; }
+
+        ///<summary>
+        ///True if tag is applicable to Reports
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if tag is applicable to Reports")]
+        public bool AppliesToReports { get; set; }
 
         ///<summary>
         ///True if tag is applicable to Sensors and Gauges
@@ -1976,7 +2000,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Value of the applied tag, if the tag's ValueType is PickList
         ///</summary>
-        [ApiMember(Description="Value of the applied tag, if the tag\'s ValueType is PickList")]
+        [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
         public string Value { get; set; }
     }
 
@@ -1985,6 +2009,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         Unknown,
         None,
         PickList,
+        Text,
+        Number,
+        Boolean,
     }
 
     public enum ThresholdType
@@ -3171,6 +3198,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string FileName { get; set; }
 
         ///<summary>
+        ///Unique ID of the attachment
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the attachment", Format="guid")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
         ///Date created
         ///</summary>
         [ApiMember(DataType="string", Description="Date created", Format="date-time")]
@@ -3261,10 +3294,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class CalibrationCheck
     {
         ///<summary>
-        ///Parameter
+        ///Parameter Name
         ///</summary>
-        [ApiMember(Description="Parameter")]
+        [ApiMember(Description="Parameter Name")]
         public string Parameter { get; set; }
+
+        ///<summary>
+        ///Parameter Id
+        ///</summary>
+        [ApiMember(Description="Parameter Id")]
+        public string ParameterId { get; set; }
 
         ///<summary>
         ///Standard
@@ -4160,6 +4199,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="string", Description="Last modified", Format="date-time")]
         public DateTimeOffset LastModified { get; set; }
+
+        ///<summary>
+        ///Last time the deleted field visit matched the given filters; set only when request includes ChangesSinceToken
+        ///</summary>
+        [ApiMember(DataType="string", Description="Last time the deleted field visit matched the given filters; set only when request includes ChangesSinceToken", Format="date-time")]
+        public DateTimeOffset? LastMatchedTime { get; set; }
     }
 
     public class FieldVisitReading
@@ -4207,10 +4252,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<DatumConvertedQuantityWithDisplay> DatumConvertedValues { get; set; }
 
         ///<summary>
-        ///Parameter
+        ///Parameter Name
         ///</summary>
-        [ApiMember(Description="Parameter")]
+        [ApiMember(Description="Parameter Name")]
         public string Parameter { get; set; }
+
+        ///<summary>
+        ///Parameter Id
+        ///</summary>
+        [ApiMember(Description="Parameter Id")]
+        public string ParameterId { get; set; }
 
         ///<summary>
         ///Monitoring method
@@ -4287,7 +4338,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Indicates if this reading is measured against the local assumed datum of the reading's location
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading\'s location")]
+        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading's location")]
         public bool UseLocationDatumAsReference { get; set; }
     }
 
@@ -4868,10 +4919,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         }
 
         ///<summary>
-        ///Parameter
+        ///Parameter Name
         ///</summary>
-        [ApiMember(Description="Parameter")]
+        [ApiMember(Description="Parameter Name")]
         public string Parameter { get; set; }
+
+        ///<summary>
+        ///Parameter Id
+        ///</summary>
+        [ApiMember(Description="Parameter Id")]
+        public string ParameterId { get; set; }
 
         ///<summary>
         ///Monitoring method
@@ -4966,7 +5023,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Indicates if this reading is measured against the local assumed datum of the reading's location
         ///</summary>
-        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading\'s location")]
+        [ApiMember(DataType="boolean", Description="Indicates if this reading is measured against the local assumed datum of the reading's location")]
         public bool UseLocationDatumAsReference { get; set; }
 
         ///<summary>
@@ -6802,7 +6859,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///The level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'
         ///</summary>
-        [ApiMember(Description="The level of time series detail to report. One of \'All\', \'PointsOnly\', or \'MetadataOnly\'. Defaults to \'All\'")]
+        [ApiMember(Description="The level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'")]
         public string GetParts { get; set; }
 
         ///<summary>
@@ -6861,7 +6918,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Sets the level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'
         ///</summary>
-        [ApiMember(Description="Sets the level of time series detail to report. One of \'All\', \'PointsOnly\', or \'MetadataOnly\'. Defaults to \'All\'")]
+        [ApiMember(Description="Sets the level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'")]
         public string GetParts { get; set; }
 
         ///<summary>
@@ -6963,7 +7020,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Filter results to a specific change event type: 'Data' or 'Attribute'
         ///</summary>
-        [ApiMember(Description="Filter results to a specific change event type: \'Data\' or \'Attribute\'")]
+        [ApiMember(Description="Filter results to a specific change event type: 'Data' or 'Attribute'")]
         public string ChangeEventType { get; set; }
 
         ///<summary>
@@ -7240,6 +7297,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public FieldVisitDescriptionListServiceResponse()
         {
             FieldVisitDescriptions = new List<FieldVisitDescription>{};
+            DeletedFieldVisitDescriptions = new List<FieldVisitDescription>{};
         }
 
         ///<summary>
@@ -7247,6 +7305,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="array", Description="Field visit descriptions")]
         public List<FieldVisitDescription> FieldVisitDescriptions { get; set; }
+
+        ///<summary>
+        ///Field visits that have been deleted since the requested ChangesSinceToken
+        ///</summary>
+        [ApiMember(DataType="array", Description="Field visits that have been deleted since the requested ChangesSinceToken")]
+        public List<FieldVisitDescription> DeletedFieldVisitDescriptions { get; set; }
 
         ///<summary>
         ///Next token
@@ -7969,6 +8033,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.4.71.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.1.122.0");
     }
 }

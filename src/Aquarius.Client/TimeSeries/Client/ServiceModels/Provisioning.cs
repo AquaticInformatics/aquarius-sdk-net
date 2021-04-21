@@ -1,8 +1,8 @@
 /* Options:
-Date: 2021-01-08 11:45:24
-Version: 5.80
+Date: 2021-04-21 11:17:05
+Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-pg/AQUARIUS/Provisioning/v1
+BaseUrl: http://aqts-rel-pg-1.aquaticinformatics.com/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -35,6 +35,11 @@ using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
 
 namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
+
+    public enum ExtendedAttributeApplicability
+    {
+        AppliesToLocations,
+    }
 
     public enum TagApplicability
     {
@@ -145,6 +150,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         Unknown,
         None,
         PickList,
+        Text,
+        Number,
+        Boolean,
     }
 
     public enum ThresholdBehavior
@@ -180,6 +188,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public interface IFileUploadRequest
     {
         IHttpFile File { get; set; }
+        // HACK from generate_code_from_live_endpoint.sh // bool IsFileRequired { get; set; }
     }
 
     public class ApprovalLevelBase
@@ -424,6 +433,84 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="The that will be shown for the item in drop-down lists", IsRequired=true)]
         public string DisplayName { get; set; }
+    }
+
+    [Route("/extendedattributes/{UniqueId}", "DELETE")]
+    public class DeleteExtendedAttribute
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the extended attribute
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the extended attribute", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    public class EditableExtendedAttribute
+    {
+        public EditableExtendedAttribute()
+        {
+            PickListValues = new List<string>{};
+            Applicability = new List<ExtendedAttributeApplicability>{};
+        }
+
+        ///<summary>
+        ///Unique extended attribute key
+        ///</summary>
+        [ApiMember(Description="Unique extended attribute key", IsRequired=true)]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Value type of the extended attribute. Defaults to Text.
+        ///</summary>
+        [ApiMember(DataType="string", Description="Value type of the extended attribute. Defaults to Text.")]
+        public TagValueType? ValueType { get; set; }
+
+        ///<summary>
+        ///Set of pick-list values. Required if ValueType is PickList. Values must be distinct.
+        ///</summary>
+        [ApiMember(DataType="array", Description="Set of pick-list values. Required if ValueType is PickList. Values must be distinct.")]
+        public List<string> PickListValues { get; set; }
+
+        ///<summary>
+        ///If set, create extended attribute with specified applicability, selected from one or more: AppliesToLocations.  When omitted, the extended attribute is applicable to all.
+        ///</summary>
+        [ApiMember(DataType="array", Description="If set, create extended attribute with specified applicability, selected from one or more: AppliesToLocations.  When omitted, the extended attribute is applicable to all.")]
+        public List<ExtendedAttributeApplicability> Applicability { get; set; }
+    }
+
+    [Route("/extendedattributes/{UniqueId}", "GET")]
+    public class GetExtendedAttribute
+        : IReturn<ExtendedAttribute>
+    {
+        ///<summary>
+        ///Unique ID of the extended attribute
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the extended attribute", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/extendedattributes", "GET")]
+    public class GetExtendedAttributes
+        : IReturn<ExtendedAttributesResponse>
+    {
+    }
+
+    [Route("/extendedattributes", "POST")]
+    public class PostExtendedAttribute
+        : EditableExtendedAttribute, IReturn<ExtendedAttribute>
+    {
+    }
+
+    [Route("/extendedattributes/{UniqueId}", "PUT")]
+    public class PutExtendedAttribute
+        : EditableExtendedAttribute, IReturn<ExtendedAttribute>
+    {
+        ///<summary>
+        ///Unique ID of the extended attribute
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the extended attribute", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
     }
 
     [Route("/fielddataplugins/{UniqueId}", "DELETE")]
@@ -1073,7 +1160,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the method's parameter
         ///</summary>
-        [ApiMember(DataType="string", Description="Unique ID of the method\'s parameter", Format="guid", IsRequired=true)]
+        [ApiMember(DataType="string", Description="Unique ID of the method's parameter", Format="guid", IsRequired=true)]
         public Guid ParameterUniqueId { get; set; }
 
         ///<summary>
@@ -1124,13 +1211,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.
         ///</summary>
-        [ApiMember(Description="The redirection URI for the authorization response; e.g. \'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect\'. Must exactly match what is specified in the OpenID Connect client for the provider used.", IsRequired=true)]
+        [ApiMember(Description="The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.", IsRequired=true)]
         public string RedirectUri { get; set; }
 
         ///<summary>
         ///If not specified, defaults to 'openid', the standard scope required by the protocol.
         ///</summary>
-        [ApiMember(DataType="array", Description="If not specified, defaults to \'openid\', the standard scope required by the protocol.")]
+        [ApiMember(DataType="array", Description="If not specified, defaults to 'openid', the standard scope required by the protocol.")]
         public IList<string> Scopes { get; set; }
 
         ///<summary>
@@ -1142,13 +1229,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.
         ///</summary>
-        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use \'sub\', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
+        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
         public string IdentifierClaim { get; set; }
 
         ///<summary>
         ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
         ///</summary>
-        [ApiMember(Description="Short display name of the identity provider. If \'Google\' or \'Microsoft\', an appropriate icon will be displayed on the sign-in page.")]
+        [ApiMember(Description="Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.")]
         public string DisplayName { get; set; }
     }
 
@@ -1159,7 +1246,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the 'issuer' field of the OpenID Connect discovery document published by the provider.
         ///</summary>
-        [ApiMember(Description="The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the \'issuer\' field of the OpenID Connect discovery document published by the provider.", IsRequired=true)]
+        [ApiMember(Description="The issuer identifier of the OpenID Connect provider, an HTTPS URI. This can be obtained from the 'issuer' field of the OpenID Connect discovery document published by the provider.", IsRequired=true)]
         public string IssuerIdentifier { get; set; }
     }
 
@@ -1363,7 +1450,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group
         ///</summary>
-        [ApiMember(DataType="array", Description="Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the \'Default\' qualifier group", IsRequired=true)]
+        [ApiMember(DataType="array", Description="Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group", IsRequired=true)]
         public List<string> GroupIdentifiers { get; set; }
     }
 
@@ -1423,7 +1510,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group
         ///</summary>
-        [ApiMember(DataType="array", Description="Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the \'Default\' qualifier group")]
+        [ApiMember(DataType="array", Description="Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group")]
         public List<string> GroupIdentifiers { get; set; }
     }
 
@@ -1540,8 +1627,26 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/reportplugins", "POST")]
     public class PostReportPlugin
-        : ReportPluginBase, IReturn<ReportPlugin>
+        : IReturn<ReportPlugin>, IFileUploadRequest
     {
+        ///<summary>
+        ///Report plugin .zip or .report bundle. Cannot be used in combination with AssemblyName and FolderName properties.
+        ///</summary>
+        [Ignore]
+        [ApiMember(DataType="file", Description="Report plugin .zip or .report bundle. Cannot be used in combination with AssemblyName and FolderName properties.", ParameterType="form")]
+        public IHttpFile File { get; set; }
+
+        ///<summary>
+        ///Assembly name. Required when FolderName is set.
+        ///</summary>
+        [ApiMember(Description="Assembly name. Required when FolderName is set.")]
+        public string AssemblyName { get; set; }
+
+        ///<summary>
+        ///Plug-in folder name. Required when AssemblyName is set.
+        ///</summary>
+        [ApiMember(Description="Plug-in folder name. Required when AssemblyName is set.")]
+        public string FolderName { get; set; }
     }
 
     [Route("/reportplugins/{UniqueId}", "PUT")]
@@ -1559,21 +1664,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="Is enabled", IsRequired=true)]
         public bool IsEnabled { get; set; }
-    }
-
-    public class ReportPluginBase
-    {
-        ///<summary>
-        ///Assembly name
-        ///</summary>
-        [ApiMember(Description="Assembly name", IsRequired=true)]
-        public string AssemblyName { get; set; }
-
-        ///<summary>
-        ///Plug-in folder name
-        ///</summary>
-        [ApiMember(Description="Plug-in folder name", IsRequired=true)]
-        public string FolderName { get; set; }
     }
 
     [Route("/roles/{UniqueId}", "DELETE")]
@@ -1745,7 +1835,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'
         ///</summary>
-        [ApiMember(DataType="array", Description="List of approval transitions this role grants permission to perform. Format: \'&lt;FromLevel&gt; &lt;ToLevel&gt;\'. Example: \'900 1200\'")]
+        [ApiMember(DataType="array", Description="List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'")]
         public List<string> RoleApprovalTransitions { get; set; }
 
         ///<summary>
@@ -1874,6 +1964,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string MethodCode { get; set; }
 
         ///<summary>
+        ///Unit ID
+        ///</summary>
+        [ApiMember(Description="Unit ID")]
+        public string UnitId { get; set; }
+
+        ///<summary>
         ///Name
         ///</summary>
         [ApiMember(Description="Name")]
@@ -1982,7 +2078,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/settings", "POST")]
     public class PostSetting
-        : IReturn<Setting>, IModifySetting, IIdentifySetting
+        : IReturn<Setting>, IModifySetting
     {
         ///<summary>
         ///Setting group
@@ -2011,7 +2107,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/settings/{Group}/{Key}", "PUT")]
     public class PutSetting
-        : IReturn<Setting>, IModifySetting, IIdentifySetting
+        : IReturn<Setting>, IModifySetting
     {
         ///<summary>
         ///Setting group
@@ -2114,7 +2210,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereference", "POST")]
     public class PostBaseStandardReferenceDatum
-        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum
     {
         ///<summary>
         ///Unique ID of the location
@@ -2149,7 +2245,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset", "POST")]
     public class PostBaseStandardReferenceDatumOffset
-        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum
     {
         ///<summary>
         ///Unique ID of the location
@@ -2190,7 +2286,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereference", "PUT")]
     public class PutBaseStandardReferenceDatum
-        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum
     {
         ///<summary>
         ///Unique ID of the location
@@ -2225,7 +2321,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     [Route("/locations/{LocationUniqueId}/standardreferencedatums/basereferenceoffset/{StandardIdentifier}", "PUT")]
     public class PutBaseStandardReferenceDatumOffset
-        : IReturn<StandardReferenceDatum>, ICreateStandardDatum, IStandardReferenceDatumIdentity
+        : IReturn<StandardReferenceDatum>, ICreateStandardDatum
     {
         ///<summary>
         ///Unique ID of the location
@@ -3113,7 +3209,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Time Step Count. Must be included for 'Statistic' derived time-series.
         ///</summary>
-        [ApiMember(DataType="integer", Description="Time Step Count. Must be included for \'Statistic\' derived time-series.", Format="int32")]
+        [ApiMember(DataType="integer", Description="Time Step Count. Must be included for 'Statistic' derived time-series.", Format="int32")]
         public int? TimeStepCount { get; set; }
     }
 
@@ -3474,13 +3570,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format")]
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user\'s security identifier (SID)")]
+        [ApiMember(Description="The domain user's security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -3519,13 +3615,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format")]
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user\'s security identifier (SID)")]
+        [ApiMember(Description="The domain user's security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -3536,13 +3632,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format
         ///</summary>
-        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format")]
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user\'s security identifier (SID)")]
+        [ApiMember(Description="The domain user's security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -3672,13 +3768,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The user's domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value
         ///</summary>
-        [ApiMember(Description="The user\'s domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value")]
+        [ApiMember(Description="The user's domain credentials specified in User Principal Name format. May be blank if the domain does not permit retrieving this value")]
         public string UserPrincipalName { get; set; }
 
         ///<summary>
         ///The domain user's security identifier (SID)
         ///</summary>
-        [ApiMember(Description="The domain user\'s security identifier (SID)")]
+        [ApiMember(Description="The domain user's security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
     }
 
@@ -3705,7 +3801,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Value of the applied tag, if the tag's ValueType is PickList
         ///</summary>
-        [ApiMember(Description="Value of the applied tag, if the tag\'s ValueType is PickList")]
+        [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
         public string Value { get; set; }
     }
 
@@ -3811,6 +3907,44 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<DropDownList> Results { get; set; }
     }
 
+    public class ExtendedAttribute
+    {
+        public ExtendedAttribute()
+        {
+            PickListValues = new List<string>{};
+        }
+
+        ///<summary>
+        ///Unique ID of the extended attribute
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the extended attribute", Format="guid")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Unique extended attribute key
+        ///</summary>
+        [ApiMember(Description="Unique extended attribute key")]
+        public string Key { get; set; }
+
+        ///<summary>
+        ///Value type
+        ///</summary>
+        [ApiMember(DataType="TagValueType", Description="Value type")]
+        public TagValueType? ValueType { get; set; }
+
+        ///<summary>
+        ///Set of pick-list values if ValueType is PickList
+        ///</summary>
+        [ApiMember(DataType="array", Description="Set of pick-list values if ValueType is PickList")]
+        public List<string> PickListValues { get; set; }
+
+        ///<summary>
+        ///True if extended attribute is applicable to Locations
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to Locations")]
+        public bool AppliesToLocations { get; set; }
+    }
+
     public class ExtendedAttributeField
     {
         ///<summary>
@@ -3890,6 +4024,20 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         Number,
         String,
         StringOption,
+    }
+
+    public class ExtendedAttributesResponse
+    {
+        public ExtendedAttributesResponse()
+        {
+            Results = new List<ExtendedAttribute>{};
+        }
+
+        ///<summary>
+        ///The list of extended attributes
+        ///</summary>
+        [ApiMember(DataType="array", Description="The list of extended attributes")]
+        public List<ExtendedAttribute> Results { get; set; }
     }
 
     public class ExtendedAttributeValue
@@ -4568,13 +4716,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.
         ///</summary>
-        [ApiMember(Description="The redirection URI for the authorization response; e.g. \'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect\'. Must exactly match what is specified in the OpenID Connect client for the provider used.")]
+        [ApiMember(Description="The redirection URI for the authorization response; e.g. 'https://my-domain/AQUARIUS/apps/v1/auth/openidconnect'. Must exactly match what is specified in the OpenID Connect client for the provider used.")]
         public string RedirectUri { get; set; }
 
         ///<summary>
         ///If not specified, defaults to 'openid', the standard scope required by the protocol.
         ///</summary>
-        [ApiMember(DataType="array", Description="If not specified, defaults to \'openid\', the standard scope required by the protocol.")]
+        [ApiMember(DataType="array", Description="If not specified, defaults to 'openid', the standard scope required by the protocol.")]
         public IList<string> Scopes { get; set; }
 
         ///<summary>
@@ -4586,13 +4734,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.
         ///</summary>
-        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use \'sub\', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
+        [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
         public string IdentifierClaim { get; set; }
 
         ///<summary>
         ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
         ///</summary>
-        [ApiMember(Description="Short display name of the identity provider. If \'Google\' or \'Microsoft\', an appropriate icon will be displayed on the sign-in page.")]
+        [ApiMember(Description="Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.")]
         public string DisplayName { get; set; }
     }
 
@@ -4849,7 +4997,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if this period is measured against the location's local assumed datum instead of a standard datum
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if this period is measured against the location\'s local assumed datum instead of a standard datum", IsRequired=true)]
+        [ApiMember(DataType="boolean", Description="True if this period is measured against the location's local assumed datum instead of a standard datum", IsRequired=true)]
         public bool IsMeasuredAgainstLocalAssumedDatum { get; set; }
 
         ///<summary>
@@ -4916,6 +5064,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Plug-in folder name")]
         public string FolderName { get; set; }
+
+        ///<summary>
+        ///Version of the report plug-in
+        ///</summary>
+        [ApiMember(Description="Version of the report plug-in")]
+        public string Version { get; set; }
 
         ///<summary>
         ///Is enabled
@@ -5099,6 +5253,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Monitoring method code")]
         public string MethodCode { get; set; }
+
+        ///<summary>
+        ///Unit ID
+        ///</summary>
+        [ApiMember(Description="Unit ID")]
+        public string UnitId { get; set; }
 
         ///<summary>
         ///Sub location identifier
@@ -5733,7 +5893,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///True if the user has the 'Can Configure System' right
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if the user has the \'Can Configure System\' right")]
+        [ApiMember(DataType="boolean", Description="True if the user has the 'Can Configure System' right")]
         public bool CanConfigureSystem { get; set; }
 
         ///<summary>
@@ -5768,6 +5928,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("20.4.71.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.1.122.0");
     }
 }
