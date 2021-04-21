@@ -1,6 +1,6 @@
-// Date: 2021-02-16T09:38:54.5964724-08:00
+// Date: 2021-04-21T11:23:41.5427783-07:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2020.06.4163)
+// Source: AQUARIUS Samples API (2021.01.4241)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2020.06.4163");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2021.01.4241");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -491,7 +491,6 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class GetExtendedAttribute : IReturn<ExtendedAttributeDefinition>
     {
         public string Id { get; set; }
-        public bool? Detail { get; set; }
     }
 
     [Route("/v1/extendedattributes/{id}", "PUT")]
@@ -510,6 +509,12 @@ namespace Aquarius.Samples.Client.ServiceModel
 
     [Route("/v1/extendedattributes/{id}", "DELETE")]
     public class DeleteExtendedAttribute : IReturnVoid
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/v1/extendedattributes/{id}/details", "GET")]
+    public class GetExtendedAttributeDetails : IReturn<ExtendedAttributeDefinition>
     {
         public string Id { get; set; }
     }
@@ -2173,7 +2178,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Cursor { get; set; }
         public Instant? EndModificationTime { get; set; }
         public List<string> FieldTripIds { get; set; }
-        public string FieldVisitId { get; set; }
+        public List<string> FieldVisitId { get; set; }
         public List<string> LaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> ProjectIds { get; set; }
@@ -2361,7 +2366,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Cursor { get; set; }
         public Instant? EndModificationTime { get; set; }
         public List<string> FieldTripIds { get; set; }
-        public string FieldVisitId { get; set; }
+        public List<string> FieldVisitId { get; set; }
         public List<string> LaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> ProjectIds { get; set; }
