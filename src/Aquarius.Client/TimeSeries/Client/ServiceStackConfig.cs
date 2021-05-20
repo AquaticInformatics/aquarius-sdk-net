@@ -74,6 +74,9 @@ namespace Aquarius.TimeSeries.Client
             JsConfig<Interval>.RawDeserializeFn = DeserializeInterval;
             JsConfig<Interval>.IncludeDefaultValue = true;
 
+            JsConfig<Interval?>.RawSerializeFn = SerializeInterval;
+            JsConfig<Interval?>.RawDeserializeFn = DeserializeNullableInterval;
+
             JsConfig<Duration>.RawSerializeFn = SerializeDuration;
             JsConfig<Duration>.DeSerializeFn = DeserializeDuration;
             JsConfig<Duration>.IncludeDefaultValue = true;
@@ -264,6 +267,14 @@ namespace Aquarius.TimeSeries.Client
             return DeserializeInstant(text);
         }
 
+        private static string SerializeInterval(Interval? value)
+        {
+            if (value == null)
+                return null;
+            return SerializeInterval(value.Value);
+        }
+
+
         private static string SerializeInterval(Interval value)
         {
             var dto = new IntervalDto
@@ -272,6 +283,14 @@ namespace Aquarius.TimeSeries.Client
                 End = value.End
             };
             return dto.ToJson();
+        }
+
+        private static Interval? DeserializeNullableInterval(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+                return null;
+
+            return DeserializeInterval(json);
         }
 
         private static Interval DeserializeInterval(string json)
