@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Aquarius.Client.UnitTests.TestHelpers;
 using Aquarius.TimeSeries.Client;
 using Aquarius.TimeSeries.Client.Helpers;
@@ -11,7 +12,6 @@ using NUnit.Framework;
 using ServiceStack;
 using ServiceStack.Logging;
 using ServiceStack.Text;
-using ServiceStack.Text.Common;
 
 namespace Aquarius.UnitTests.TimeSeries.Client
 {
@@ -431,28 +431,52 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private static readonly object[][] ExpectedJsonNodaTimeIntervals =
         {
-            new object[] {"{\"Start\":\"MinInstant\",\"End\":\"MaxInstant\"}", Instant.MinValue, Instant.MaxValue},
-            new object[] {"{\"stART\":\"minINSTAnt\",\"eND\":\"MAxinSTANT\"}", Instant.MinValue, Instant.MaxValue},
-            new object[]
-            {
-                "{\"Start\":\"1901-02-03T04:05:06.789Z\",\"End\":\"MaxInstant\"}",
-                Instant.FromDateTimeUtc(ArbitraryUtcDate),
-                Instant.MaxValue
-            },
-            new object[]
-            {
-                "{\"Start\":\"MinInstant\",\"End\":\"1901-02-03T04:05:06.789Z\"}",
-                Instant.MinValue,
-                Instant.FromDateTimeUtc(ArbitraryUtcDate)
-            }
+            new object[] {"{\"Start\":\"MinInstant\",\"End\":\"MaxInstant\"}", new Interval(Instant.MinValue, Instant.MaxValue)},
+            new object[] {"{\"stART\":\"minINSTAnt\",\"eND\":\"MAxinSTANT\"}", new Interval(Instant.MinValue, Instant.MaxValue)},
+            new object[] {"{\"Start\":\"1901-02-03T04:05:06.789Z\",\"End\":\"MaxInstant\"}", new Interval(Instant.FromDateTimeUtc(ArbitraryUtcDate), Instant.MaxValue)},
+            new object[] {"{\"Start\":\"MinInstant\",\"End\":\"1901-02-03T04:05:06.789Z\"}", new Interval(Instant.MinValue, Instant.FromDateTimeUtc(ArbitraryUtcDate))},
         };
 
+        private static readonly object[][] ExpectedJsonNodaTimeNullableIntervals =
+            ExpectedJsonNodaTimeIntervals
+                .Select(o => new object[] {o[0], o[1]})
+                .Concat(new []
+                {
+                    new object[] {(string)null, (Interval?)null}
+                })
+                .ToArray();
+
+
+        [TestCaseSource(nameof(ExpectedJsonNodaTimeNullableIntervals))]
+        public void NodaTimeNullableInterval_DeserializesFromJson(string json, Interval? expected)
+        {
+            var actual = json.FromJson<Interval?>();
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
         [TestCaseSource(nameof(ExpectedJsonNodaTimeIntervals))]
-        public void NodaTimeInterval_ParsesVariousValues(string json, Instant expectedStart, Instant expectedEnd)
+        public void NodaTimeNullableInterval_SerializesToJson(string expectedJson, Interval? interval)
+        {
+            var actual = interval.ToJson();
+
+            Assert.That(actual, Is.EqualTo(expectedJson).IgnoreCase);
+        }
+
+        [TestCaseSource(nameof(ExpectedJsonNodaTimeIntervals))]
+        public void NodaTimeInterval_DeserializesFromJson(string json, Interval expected)
         {
             var actual = json.FromJson<Interval>();
 
-            Assert.That(actual, Is.EqualTo(new Interval(expectedStart, expectedEnd)));
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCaseSource(nameof(ExpectedJsonNodaTimeIntervals))]
+        public void NodaTimeInterval_SerializesToJson(string expectedJson, Interval interval)
+        {
+            var actual = interval.ToJson();
+
+            Assert.That(actual, Is.EqualTo(expectedJson).IgnoreCase);
         }
 
         [Test]
