@@ -1,8 +1,8 @@
 /* Options:
-Date: 2021-04-21 11:17:05
+Date: 2021-07-19 19:10:10
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-rel-pg-1.aquaticinformatics.com/AQUARIUS/Provisioning/v1
+BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -39,6 +39,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public enum ExtendedAttributeApplicability
     {
         AppliesToLocations,
+        AppliesToLocationTypes,
     }
 
     public enum TagApplicability
@@ -473,9 +474,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<string> PickListValues { get; set; }
 
         ///<summary>
-        ///If set, create extended attribute with specified applicability, selected from one or more: AppliesToLocations.  When omitted, the extended attribute is applicable to all.
+        ///If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes. When omitted, the extended attribute is applicable to locations.
         ///</summary>
-        [ApiMember(DataType="array", Description="If set, create extended attribute with specified applicability, selected from one or more: AppliesToLocations.  When omitted, the extended attribute is applicable to all.")]
+        [ApiMember(DataType="array", Description="If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes. When omitted, the extended attribute is applicable to locations.")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
     }
 
@@ -494,6 +495,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class GetExtendedAttributes
         : IReturn<ExtendedAttributesResponse>
     {
+        public GetExtendedAttributes()
+        {
+            Applicability = new List<ExtendedAttributeApplicability>{};
+        }
+
+        ///<summary>
+        ///If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes
+        ///</summary>
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes")]
+        public List<ExtendedAttributeApplicability> Applicability { get; set; }
     }
 
     [Route("/extendedattributes", "POST")]
@@ -625,6 +636,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Reference standard this period is related to, which must be a standard reference datum for the location", IsRequired=true)]
         public string StandardIdentifier { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}", "DELETE")]
+    public class DeleteLocation
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
     }
 
     [Route("/locationfolders/{LocationFolderUniqueId}", "DELETE")]
@@ -864,6 +886,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 
     public class LocationTypeBase
     {
+        public LocationTypeBase()
+        {
+            ExtendedAttributeDefinitionIds = new List<Guid>{};
+        }
+
         ///<summary>
         ///Type name
         ///</summary>
@@ -881,6 +908,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Name of database table used for extended attributes, omit if none")]
         public string AttributeTableName { get; set; }
+
+        ///<summary>
+        ///Unique IDs of Extended Attribute definitions associated with this location type
+        ///</summary>
+        [ApiMember(DataType="array", Description="Unique IDs of Extended Attribute definitions associated with this location type")]
+        public List<Guid> ExtendedAttributeDefinitionIds { get; set; }
     }
 
     [Route("/locations", "POST")]
@@ -1608,6 +1641,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
     }
 
+    [Route("/recurringreports/{UniqueId}", "DELETE")]
+    public class DeleteRecurringReport
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the recurring report
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the recurring report", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
     [Route("/reportplugins/{UniqueId}", "DELETE")]
     public class DeleteReportPlugin
         : IReturnVoid
@@ -1619,9 +1663,32 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
     }
 
+    [Route("/recurringreports/{UniqueId}", "GET")]
+    public class GetRecurringReport
+        : IReturn<RecurringReport>
+    {
+        ///<summary>
+        ///Unique ID of the recurring report
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the recurring report", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/recurringreports", "GET")]
+    public class GetRecurringReports
+        : IReturn<RecurringReportResponse>
+    {
+    }
+
     [Route("/reportplugins", "GET")]
     public class GetReportPlugins
         : IReturn<ReportPluginResponse>
+    {
+    }
+
+    [Route("/recurringreports", "POST")]
+    public class PostRecurringReport
+        : RecurringReportBase, IReturn<RecurringReport>
     {
     }
 
@@ -1649,6 +1716,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string FolderName { get; set; }
     }
 
+    [Route("/recurringreports/{UniqueId}", "PUT")]
+    public class PutRecurringReport
+        : RecurringReportBase, IReturn<RecurringReport>
+    {
+        ///<summary>
+        ///Unique ID of the recurring report
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the recurring report", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
     [Route("/reportplugins/{UniqueId}", "PUT")]
     public class PutReportPlugin
         : IReturn<ReportPlugin>
@@ -1664,6 +1742,27 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="Is enabled", IsRequired=true)]
         public bool IsEnabled { get; set; }
+    }
+
+    public class RecurringReportBase
+    {
+        ///<summary>
+        ///Report template, in JSON format
+        ///</summary>
+        [ApiMember(Description="Report template, in JSON format", IsRequired=true)]
+        public string JsonTemplate { get; set; }
+
+        ///<summary>
+        ///Next date and time to generate the report
+        ///</summary>
+        [ApiMember(DataType="string", Description="Next date and time to generate the report", Format="date-time", IsRequired=true)]
+        public Instant NextGenerationDate { get; set; }
+
+        ///<summary>
+        ///Recurrence period to generate the report, in ISO 8601 period format
+        ///</summary>
+        [ApiMember(DataType="string", Description="Recurrence period to generate the report, in ISO 8601 period format", IsRequired=true)]
+        public string RecurrencePeriod { get; set; }
     }
 
     [Route("/roles/{UniqueId}", "DELETE")]
@@ -3943,6 +4042,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to Locations")]
         public bool AppliesToLocations { get; set; }
+
+        ///<summary>
+        ///True if extended attribute is applicable to Location Types
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to Location Types")]
+        public bool AppliesToLocationTypes { get; set; }
     }
 
     public class ExtendedAttributeField
@@ -4555,10 +4660,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
 
         ///<summary>
-        ///Extended attribute field definitions for this location type
+        ///DEPRECATED: use /extendedattributes API instead
         ///</summary>
-        [ApiMember(DataType="array", Description="Extended attribute field definitions for this location type")]
+        [ApiMember(DataType="array", Description="DEPRECATED: use /extendedattributes API instead")]
         public IList<ExtendedAttributeField> ExtendedAttributeFields { get; set; }
+
+        ///<summary>
+        ///Unique IDs of Extended Attribute definitions associated with this location type
+        ///</summary>
+        [ApiMember(DataType="array", Description="Unique IDs of Extended Attribute definitions associated with this location type")]
+        public IList<Guid> ExtendedAttributeDefinitionIds { get; set; }
     }
 
     public class LocationTypesResponse
@@ -4935,6 +5046,53 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="The list of qualifiers")]
         public List<QualifierResponse> Results { get; set; }
+    }
+
+    public class RecurringReport
+    {
+        ///<summary>
+        ///Unique ID of the recurring report
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the recurring report", Format="guid")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Report title
+        ///</summary>
+        [ApiMember(Description="Report title")]
+        public string Title { get; set; }
+
+        ///<summary>
+        ///Recurrence period to generate the report, in ISO 8601 period format
+        ///</summary>
+        [ApiMember(DataType="string", Description="Recurrence period to generate the report, in ISO 8601 period format")]
+        public string RecurrencePeriod { get; set; }
+
+        ///<summary>
+        ///Next date and time to generate the report
+        ///</summary>
+        [ApiMember(DataType="string", Description="Next date and time to generate the report", Format="date-time")]
+        public Instant NextGenerationDate { get; set; }
+
+        ///<summary>
+        ///Report template, in JSON format
+        ///</summary>
+        [ApiMember(Description="Report template, in JSON format")]
+        public string JsonTemplate { get; set; }
+    }
+
+    public class RecurringReportResponse
+    {
+        public RecurringReportResponse()
+        {
+            Results = new List<RecurringReport>{};
+        }
+
+        ///<summary>
+        ///The list of recurring reports
+        ///</summary>
+        [ApiMember(DataType="array", Description="The list of recurring reports")]
+        public List<RecurringReport> Results { get; set; }
     }
 
     public class ReferencePoint
@@ -5928,6 +6086,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.1.122.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.2.93.0");
     }
 }

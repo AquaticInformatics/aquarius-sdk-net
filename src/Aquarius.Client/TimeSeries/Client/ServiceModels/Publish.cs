@@ -1,8 +1,8 @@
 /* Options:
-Date: 2021-04-21 11:17:04
+Date: 2021-07-19 19:10:01
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-rel-pg-1.aquaticinformatics.com/AQUARIUS/Publish/v2
+BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -397,6 +397,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class ExtendedAttribute
     {
+        ///<summary>
+        ///UniqueId of the extended attribute
+        ///</summary>
+        [ApiMember(DataType="string", Description="UniqueId of the extended attribute", Format="guid")]
+        public Guid? UniqueId { get; set; }
+
         ///<summary>
         ///Name
         ///</summary>
@@ -808,13 +814,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Unit Id
         ///</summary>
-        [ApiMember(DataType="string", Description="Unit Id")]
+        [ApiMember(Description="Unit Id")]
         public string UnitId { get; set; }
 
         ///<summary>
         ///Unit Name
         ///</summary>
-        [ApiMember(DataType="string", Description="Unit Name")]
+        [ApiMember(Description="Unit Name")]
         public string UnitName { get; set; }
 
         ///<summary>
@@ -2596,6 +2602,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Parameter")]
         public string Parameter { get; set; }
+
+        ///<summary>
+        ///Parameter Id
+        ///</summary>
+        [ApiMember(Description="Parameter Id")]
+        public string ParameterId { get; set; }
 
         ///<summary>
         ///Unit
@@ -6585,6 +6597,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public ReportListServiceRequest()
         {
             TimeSeriesUniqueIds = new List<Guid>{};
+            ReportUniqueIds = new List<Guid>{};
             TagKeys = new List<string>{};
             TagValues = new List<string>{};
         }
@@ -6612,6 +6625,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Filter results to the given report title")]
         public string ReportTitle { get; set; }
+
+        ///<summary>
+        ///Filter results to given report unique IDs
+        ///</summary>
+        [ApiMember(DataType="array", Description="Filter results to given report unique IDs")]
+        public List<Guid> ReportUniqueIds { get; set; }
 
         ///<summary>
         ///Filter results to items created at or after the CreatedFrom time
@@ -8033,6 +8052,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.1.122.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.2.93.0");
     }
 }
