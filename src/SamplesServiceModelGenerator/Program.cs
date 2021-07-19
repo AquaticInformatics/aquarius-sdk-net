@@ -130,7 +130,6 @@ namespace SamplesServiceModelGenerator
             "POST:/v1/services/import/observedproperties/dryrun=PostImportObservedPropertiesDryRun",
             "POST:/v1/services/import/labanalysismethods/dryrun=PostImportLabAnalysisMethodsDryRun",
             "POST:/v1/services/import/analysismethods/dryrun=PostImportAnalysisMethodsDryRun",
-            "POST:/v1/services/import/observations/dryrun=PostImportObservationsDryRun",
 
             // More PascalCase fixups for the 2020.03 deployment. I guess some more were actually necessary
             "GET:/v1/labanalysismethods=GetLabAnalysisMethods",
@@ -156,7 +155,6 @@ namespace SamplesServiceModelGenerator
                     "PostImportSamplingLocationsDryrun:PostImportSamplingLocationsDryRun",
                     "PostImportObservedPropertiesDryrun:PostImportObservedPropertiesDryRun",
                     "PostImportLabAnalysisMethodsDryrun:PostImportAnalysisMethodsDryRun",
-                    "PostImportObservationsDryrun:PostImportObservationsDryRun",
                     // These obsolete DTOs come from the 2018.05 deployment
                     "PutAddOrUpdateBioIndex:PutAddOrUpdateIndex",
                     // These obsolete DTOs come from the cleanup contained within the 2018.03 deployment
@@ -182,8 +180,6 @@ namespace SamplesServiceModelGenerator
                     "DeleteLaboratoryById:DeleteLaboratory",
                     "PutSparseLabReport:PutLabReport",
                     "DeleteLabReportById:DeleteLabReport",
-                    "PutSparseObservation:PutObservation",
-                    "DeleteObservationById:DeleteObservation",
                     "PutSparseObservedProperty:PutObservedProperty",
                     "DeleteObservedPropertyById:DeleteObservedProperty",
                     "PutSparseProject:PutProject",
