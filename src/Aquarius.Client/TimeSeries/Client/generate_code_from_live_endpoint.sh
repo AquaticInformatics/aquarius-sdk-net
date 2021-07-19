@@ -25,19 +25,19 @@ OutputPath=$4
 
 [ ! -z "$EndPointName" ] || show_usage "No namespace! Specify a namespace for the generated code"
 [ ! -z "$EndPoint" ] || show_usage "No endpoint! Specify a relative URL for the endpoint to inspect"
-[ ! -z "$ServerName" ] || ServerName=localhost
+[ ! -z "$ServerName" ] || ServerName=http://localhost
 [ ! -z "$OutputPath" ] || OutputPath=.
 
 GlobalNamespace=Aquarius.TimeSeries.Client.ServiceModels.$EndPointName
 
 mkdir -p "$OutputPath" || exit_abort "Can't create OutputPath=$OutputPath"
 echo "Determining AQUARIUS Server version ..."
-ApiVersionJson=`curl -s http://$ServerName/AQUARIUS/apps/v1/version` || exit_abort "Can't determine AQUARIUS server version of $ServerName"
+ApiVersionJson=`curl -s $ServerName/AQUARIUS/apps/v1/version` || exit_abort "Can't determine AQUARIUS server version of $ServerName"
 ApiVersion=`echo "$ApiVersionJson" | sed -e "s/{\"ApiVersion\":\"//" -e "s/\"}//"`
 
 echo "Generating $OutputFile ..."
 OutputFile=$OutputPath/$EndPointName.cs
-curl -s -o "$OutputFile" "http://$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartial=false&MakeVirtual=false&ExportValueTypes=true&GlobalNamespace=$GlobalNamespace&DefaultNamespaces=System,System.Collections.Generic,ServiceStack,ServiceStack.DataAnnotations,ServiceStack.Web,NodaTime" || exit_abort "Can't read endpoint"
+curl -s -o "$OutputFile" "$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartial=false&MakeVirtual=false&ExportValueTypes=true&GlobalNamespace=$GlobalNamespace&DefaultNamespaces=System,System.Collections.Generic,ServiceStack,ServiceStack.DataAnnotations,ServiceStack.Web,NodaTime" || exit_abort "Can't read endpoint"
 
 # 2021.1 added a hidden IFileUploadRequest.IsFileRequired property with [ApiMember(ExcludeInSchema = true)][IgnoreDataMember] attributes.
 # The built-in ServiceStack code generator endpoint doesn't respect these attributes.

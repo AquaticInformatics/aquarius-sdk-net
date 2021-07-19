@@ -23,7 +23,7 @@ Generator=./generate_code_from_live_endpoint.sh
 ServerName=$1
 OutputPath=$2
 
-[ ! -z "$ServerName" ] || ServerName=localhost
+[ ! -z "$ServerName" ] || ServerName=https://aqts-rel-pg.aquariusdev.net
 [ ! -z "$OutputPath" ] || OutputPath=./ServiceModels
 
 $Generator Publish Publish/v2 $ServerName $OutputPath || exit_abort
