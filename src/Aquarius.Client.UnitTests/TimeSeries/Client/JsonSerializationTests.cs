@@ -13,6 +13,7 @@ using ServiceStack;
 using ServiceStack.Logging;
 using ServiceStack.Text;
 
+// ReSharper disable once CheckNamespace
 namespace Aquarius.UnitTests.TimeSeries.Client
 {
     public class JsonSerializationTests
@@ -206,6 +207,13 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             }
         }
 
+        private static readonly IEnumerable<TestCaseData> DateTimeOffsetRoundTripCases = new[]
+        {
+            new TestCaseData("\"2020-04-01T00:11:22.1234567+09:30\"", new DateTimeOffset(2020, 4, 1, 0, 11, 22, TimeSpan.FromHours(9.5)).Add(TimeSpan.FromTicks(1234567)) , "Full precision, ACST"),
+            new TestCaseData("\"2020-04-01T00:11:22.1234567-07:00\"", new DateTimeOffset(2020, 4, 1, 0, 11, 22, TimeSpan.FromHours(-7)) .Add(TimeSpan.FromTicks(1234567)) , "Full precision, PST"),
+            new TestCaseData("\"2020-04-01T00:11:22.1234567Z\"",      new DateTimeOffset(2020, 4, 1, 0, 11, 22, TimeSpan.Zero)          .Add(TimeSpan.FromTicks(1234567)) , "Full precision, UTC"),
+        };
+
         private static readonly IEnumerable<TestCaseData> DateTimeOffsetSpecialCases = new[]
         {
             new TestCaseData("\"1901-02-03T08:05:06.789+04:00[GST]\"", new DateTimeOffset(1901,2,3,8,5,6,789, TimeSpan.FromHours(4)), "should strip the trailing [GST] AQSamples timecode"),
@@ -213,7 +221,10 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new TestCaseData("\"2020-12-01T+10:00\"", new DateTimeOffset(new DateTime(2020,12,1), TimeSpan.FromHours(10)), "The production system, but Australian"),
         };
 
-        [TestCaseSource(nameof(DateTimeOffsetSpecialCases))]
+        private static readonly IEnumerable<TestCaseData> DateTimeOffsetCases = DateTimeOffsetRoundTripCases
+            .Concat(DateTimeOffsetSpecialCases);
+
+        [TestCaseSource(nameof(DateTimeOffsetCases))]
         public void DateTimeOffset_ParsesVariousValues(string input, DateTimeOffset expected, string because)
         {
             var actual = input.FromJson<DateTimeOffset>();
@@ -221,10 +232,45 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             actual.ShouldBeEquivalentTo(expected, because);
         }
 
-        [TestCaseSource(nameof(DateTimeOffsetSpecialCases))]
+        private static readonly IEnumerable<TestCaseData> DateTimeOffsetSerializationCases = new[]
+        {
+            new TestCaseData(new DateTimeOffset(2020, 4, 1, 0, 11, 22, TimeSpan.FromHours(9.5)).Add(TimeSpan.FromTicks(1234567)), "\"2020-04-01T00:11:22.1234567+09:30\"",  "Full precision, ACST"),
+            new TestCaseData(new DateTimeOffset(2020, 4, 1, 0, 11, 22, TimeSpan.FromHours(-7)) .Add(TimeSpan.FromTicks(1234567)), "\"2020-04-01T00:11:22.1234567-07:00\"",  "Full precision, PST"),
+            new TestCaseData(new DateTimeOffset(2020, 4, 1, 0, 11, 22, TimeSpan.Zero)          .Add(TimeSpan.FromTicks(1234567)), "\"2020-04-01T00:11:22.1234567+00:00\"",  "Full precision, UTC"),
+        };
+
+        [TestCaseSource(nameof(DateTimeOffsetSerializationCases))]
+        public void DateTimeOffset_SerializesAsExpected(DateTimeOffset input, string expected, string because)
+        {
+            var actual = input.ToJson();
+
+            actual.ShouldBeEquivalentTo(expected, because);
+        }
+
+        private static readonly IEnumerable<TestCaseData> NullableDateTimeOffsetCases = DateTimeOffsetCases
+            .Concat(new[]
+            {
+                new TestCaseData(null, null, "Null yields null")
+            });
+
+        [TestCaseSource(nameof(NullableDateTimeOffsetCases))]
         public void NullableDateTimeOffset_ParsesVariousValues(string input, DateTimeOffset? expected, string because)
         {
-            var actual = input.FromJson<DateTimeOffset>();
+            var actual = input.FromJson<DateTimeOffset?>();
+
+            actual.ShouldBeEquivalentTo(expected, because);
+        }
+
+        private static readonly IEnumerable<TestCaseData> NullableDateTimeOffsetSerializationCases = DateTimeOffsetSerializationCases
+            .Concat(new[]
+            {
+                new TestCaseData(null, null, "Null yields null")
+            });
+
+        [TestCaseSource(nameof(NullableDateTimeOffsetSerializationCases))]
+        public void NullableDateTimeOffset_DeserializesVariousValues(DateTimeOffset? input, string expected, string because)
+        {
+            var actual = input.ToJson();
 
             actual.ShouldBeEquivalentTo(expected, because);
         }
@@ -445,10 +491,10 @@ namespace Aquarius.UnitTests.TimeSeries.Client
 
         private static readonly object[][] ExpectedJsonNodaTimeNullableIntervals =
             ExpectedJsonNodaTimeIntervals
-                .Select(o => new object[] {o[0], o[1]})
+                .Select(o => new[] {o[0], o[1]})
                 .Concat(new []
                 {
-                    new object[] {(string)null, (Interval?)null}
+                    new object[] {null, null}
                 })
                 .ToArray();
 
@@ -557,6 +603,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             Assert.That(actual, Is.EqualTo(input));
         }
 
+        private static readonly Offset ArbitraryOffset = Offset.FromHoursAndMinutes(8, 30);
+
         private static readonly IEnumerable<TestCaseData> ExpectedNodaTimeDto = new[]
         {
             new TestCaseData(new NodaTimeDto
@@ -664,8 +712,6 @@ namespace Aquarius.UnitTests.TimeSeries.Client
                 Assert.That(actual, Is.EqualTo(expected));
             }
         }
-
-        private static readonly Offset ArbitraryOffset = Offset.FromHoursAndMinutes(8, 30);
 
         private static readonly object[][] ExpectedNodaTimeOffsetJson =
         {
