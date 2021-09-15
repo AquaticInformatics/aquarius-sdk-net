@@ -67,6 +67,8 @@ namespace Aquarius.TimeSeries.Client
             JsConfig<DateTimeOffset>.DeSerializeFn = ParseDateTimeOffset;
             JsConfig<DateTimeOffset>.IncludeDefaultValue = true;
 
+            JsConfig<DateTimeOffset?>.DeSerializeFn = ParseNullableDateTimeOffset;
+
             JsConfig<Instant>.SerializeFn = SerializeInstant;
             JsConfig<Instant>.DeSerializeFn = DeserializeInstant;
             JsConfig<Instant>.IncludeDefaultValue = true;
@@ -233,6 +235,14 @@ namespace Aquarius.TimeSeries.Client
                     var dateTimeOffset = ParseDateTimeOffset(text);
                     return Instant.FromDateTimeOffset(dateTimeOffset);
             }
+        }
+
+        private static DateTimeOffset? ParseNullableDateTimeOffset(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
+            return ParseDateTimeOffset(text);
         }
 
         private static DateTimeOffset ParseDateTimeOffset(string text)
