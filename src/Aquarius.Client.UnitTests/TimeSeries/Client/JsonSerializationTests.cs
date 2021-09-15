@@ -206,6 +206,29 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             }
         }
 
+        private static readonly IEnumerable<TestCaseData> DateTimeOffsetSpecialCases = new[]
+        {
+            new TestCaseData("\"1901-02-03T08:05:06.789+04:00[GST]\"", new DateTimeOffset(1901,2,3,8,5,6,789, TimeSpan.FromHours(4)), "should strip the trailing [GST] AQSamples timecode"),
+            new TestCaseData("\"2020-12-01T-08:00\"", new DateTimeOffset(new DateTime(2020,12,1), TimeSpan.FromHours(-8)), "This occurred on a production system"),
+            new TestCaseData("\"2020-12-01T+10:00\"", new DateTimeOffset(new DateTime(2020,12,1), TimeSpan.FromHours(10)), "The production system, but Australian"),
+        };
+
+        [TestCaseSource(nameof(DateTimeOffsetSpecialCases))]
+        public void DateTimeOffset_ParsesVariousValues(string input, DateTimeOffset expected, string because)
+        {
+            var actual = input.FromJson<DateTimeOffset>();
+
+            actual.ShouldBeEquivalentTo(expected, because);
+        }
+
+        [TestCaseSource(nameof(DateTimeOffsetSpecialCases))]
+        public void NullableDateTimeOffset_ParsesVariousValues(string input, DateTimeOffset? expected, string because)
+        {
+            var actual = input.FromJson<DateTimeOffset>();
+
+            actual.ShouldBeEquivalentTo(expected, because);
+        }
+
         private static JsConfigScope CreateJsConfigThatOverridesDefaultIncludeNullValuesSetting()
         {
             var jsConfig = JsConfig.BeginScope();
@@ -274,23 +297,6 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             var actual = input.FromJson<Instant>();
 
             Assert.That(actual, Is.EqualTo(expected));
-        }
-
-        [Test]
-        public void NodaTimeInstant_ParsesSamplesTimestampWithTimeCode()
-        {
-            NodaTimeInstant_ParsesVariousValues(
-                "\"1901-02-03T08:05:06.789+04:00[GST]\"", // Gulf Standard Time
-                Instant.FromDateTimeUtc(ArbitraryUtcDate));
-
-            // AQS-760 workaround for goofy timestamps without a time component
-            NodaTimeInstant_ParsesVariousValues(
-                "\"2020-12-01T-08:00\"", // This occurred in on a production system
-                Instant.FromUtc(2020, 12, 01, 0, 0).Minus(Duration.FromHours(-8)));
-
-            NodaTimeInstant_ParsesVariousValues(
-                "\"2020-12-01T+10:00\"", // What if the timezone was in Australia?
-                Instant.FromUtc(2020, 12, 01, 0, 0).Minus(Duration.FromHours(10)));
         }
 
         [Test]
