@@ -1,6 +1,6 @@
-// Date: 2021-07-19T13:24:05.4235747-07:00
+// Date: 2021-09-14T17:28:23.3235959-07:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2021.03.4425)
+// Source: AQUARIUS Samples API (2021.05.4598)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2021.03.4425");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2021.05.4598");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -89,10 +89,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ActivityType? Type { get; set; }
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public string ReplicateSourceActivityId { get; set; }
         public string SourceActivityId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Comment { get; set; }
         public string LoggerFileName { get; set; }
         public Device Device { get; set; }
@@ -105,7 +104,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<SamplingContextTag> SamplingContextTags { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public bool? Refreshed { get; set; }
-        public bool? Blank { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -142,10 +140,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public bool? Detail { get; set; }
         public ActivityWithDetailsType? Type { get; set; }
         public string CustomId { get; set; }
-        public string ReplicateSourceActivityId { get; set; }
         public string SourceActivityId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Comment { get; set; }
         public string LoggerFileName { get; set; }
         public Device Device { get; set; }
@@ -162,7 +159,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<SpecimenNestedInActivity> Specimens { get; set; }
         public List<ObservationMinimal> Observations { get; set; }
         public bool? Refreshed { get; set; }
-        public bool? Blank { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -352,7 +348,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string ContentType { get; set; }
         public string Comment { get; set; }
         public long? FileSize { get; set; }
-        public Instant? DateTaken { get; set; }
+        public DateTimeOffset? DateTaken { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Resolution { get; set; }
@@ -556,8 +552,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public List<DomainObjectAttachment> Attachments { get; set; }
@@ -576,8 +572,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public List<DomainObjectAttachment> Attachments { get; set; }
@@ -631,8 +627,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class PostFieldVisit : IReturn<FieldVisit>
     {
         public string Id { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public FieldTripSimple FieldTrip { get; set; }
@@ -694,8 +690,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class PutFieldVisit : IReturn<FieldVisit>
     {
         public string Id { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public FieldTripSimple FieldTrip { get; set; }
@@ -771,8 +767,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public List<ObservedProperty> ObservedProperties { get; set; }
         public List<SamplingLocation> SamplingLocations { get; set; }
         public string Description { get; set; }
@@ -790,8 +786,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public List<ObservedProperty> ObservedProperties { get; set; }
         public List<SamplingLocation> SamplingLocations { get; set; }
         public string Description { get; set; }
@@ -936,7 +932,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? DateReceived { get; set; }
+        public DateTimeOffset? DateReceived { get; set; }
         public string CaseNarrative { get; set; }
         public string QcSummary { get; set; }
         public Laboratory Laboratory { get; set; }
@@ -956,7 +952,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? DateReceived { get; set; }
+        public DateTimeOffset? DateReceived { get; set; }
         public string CaseNarrative { get; set; }
         public string QcSummary { get; set; }
         public Laboratory Laboratory { get; set; }
@@ -1144,8 +1140,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string ScopeStatement { get; set; }
         public bool? Approved { get; set; }
         public string ApprovalAgency { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -1166,8 +1162,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string ScopeStatement { get; set; }
         public bool? Approved { get; set; }
         public string ApprovalAgency { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -1411,15 +1407,15 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartDate { get; set; }
-        public Instant? EndDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
         public RecurrenceType? RecurrenceType { get; set; }
         public RecurrenceDayWeeklyType? RecurrenceDayWeekly { get; set; }
         public RecurrenceDayMonthlyType? RecurrenceDayMonthly { get; set; }
         public SamplingLocationGroup SamplingLocationGroup { get; set; }
         public SamplingLocationGroupSelectionType? SamplingLocationGroupSelectionType { get; set; }
         public int? SamplingLocationGroupSelectionTypeRandomCount { get; set; }
-        public Instant? LastGenerationDate { get; set; }
+        public DateTimeOffset? LastGenerationDate { get; set; }
         public List<SchedulePlannedActivity> SchedulePlannedActivities { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -1435,15 +1431,15 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartDate { get; set; }
-        public Instant? EndDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
         public RecurrenceType? RecurrenceType { get; set; }
         public RecurrenceDayWeeklyType? RecurrenceDayWeekly { get; set; }
         public RecurrenceDayMonthlyType? RecurrenceDayMonthly { get; set; }
         public SamplingLocationGroup SamplingLocationGroup { get; set; }
         public SamplingLocationGroupSelectionType? SamplingLocationGroupSelectionType { get; set; }
         public int? SamplingLocationGroupSelectionTypeRandomCount { get; set; }
-        public Instant? LastGenerationDate { get; set; }
+        public DateTimeOffset? LastGenerationDate { get; set; }
         public List<SchedulePlannedActivity> SchedulePlannedActivities { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -2235,7 +2231,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public UserProfile UserProfile { get; set; }
-        public string ProviderId { get; set; }
         public string Email { get; set; }
         public UserType? UserType { get; set; }
         public List<string> Roles { get; set; }
@@ -2254,7 +2249,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public UserProfile UserProfile { get; set; }
-        public string ProviderId { get; set; }
         public string Email { get; set; }
         public UserType? UserType { get; set; }
         public List<string> Roles { get; set; }
@@ -2412,8 +2406,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public DataClassificationType? DataClassification { get; set; }
         public Medium Medium { get; set; }
         public string MediumSubdivision { get; set; }
-        public Instant? ObservedTime { get; set; }
-        public Instant? ResultTime { get; set; }
+        public DateTimeOffset? ObservedTime { get; set; }
+        public DateTimeOffset? ResultTime { get; set; }
         public Quantity Depth { get; set; }
         public LabInstruction LabInstruction { get; set; }
         public LabResultDetails LabResultDetails { get; set; }
@@ -2556,8 +2550,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public DataClassificationType? DataClassification { get; set; }
         public Medium Medium { get; set; }
         public string MediumSubdivision { get; set; }
-        public Instant? ObservedTime { get; set; }
-        public Instant? ResultTime { get; set; }
+        public DateTimeOffset? ObservedTime { get; set; }
+        public DateTimeOffset? ResultTime { get; set; }
         public Quantity Depth { get; set; }
         public LabInstruction LabInstruction { get; set; }
         public LabResultDetails LabResultDetails { get; set; }
@@ -2993,6 +2987,48 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> TaxonIds { get; set; }
     }
 
+    [Route("/v2/users", "GET")]
+    public class GetUsersV2 : IReturn<SearchResultUser>
+    {
+        
+    }
+
+    [Route("/v2/users", "POST")]
+    public class PostUserV2 : IReturn<User>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public UserProfile UserProfile { get; set; }
+        public string Email { get; set; }
+        public UserType? UserType { get; set; }
+        public List<string> Roles { get; set; }
+        public List<string> AccessGroups { get; set; }
+    }
+
+    [Route("/v2/users/{id}", "GET")]
+    public class GetUserV2 : IReturn<User>
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/v2/users/{id}", "PUT")]
+    public class PutUserV2 : IReturn<User>
+    {
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public UserProfile UserProfile { get; set; }
+        public string Email { get; set; }
+        public UserType? UserType { get; set; }
+        public List<string> Roles { get; set; }
+        public List<string> AccessGroups { get; set; }
+    }
+
+    [Route("/v2/users/{id}", "DELETE")]
+    public class DeleteUserV2 : IReturnVoid
+    {
+        public string Id { get; set; }
+    }
+
     [Obsolete("Prefer the PostFieldVisitActivityFromPlannedActivity class instead")] public class PostActivityFromPlannedActivity : PostFieldVisitActivityFromPlannedActivity {}
     [Obsolete("Prefer the PostFieldVisitActivityWithTemplate class instead")] public class PostActivityWithTemplate : PostFieldVisitActivityWithTemplate {}
     [Obsolete("Prefer the GetSamplingLocationCanEdit class instead")] public class GetCanUserEditSamplingLocationData : GetSamplingLocationCanEdit {}
@@ -3078,10 +3114,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ActivityType Type { get; set; }
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public string ReplicateSourceActivityId { get; set; }
         public string SourceActivityId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Comment { get; set; }
         public string LoggerFileName { get; set; }
         public Device Device { get; set; }
@@ -3094,7 +3129,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<SamplingContextTag> SamplingContextTags { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public bool Refreshed { get; set; }
-        public bool Blank { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -3130,10 +3164,9 @@ namespace Aquarius.Samples.Client.ServiceModel
         public ActivityWithDetailsType Type { get; set; }
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public string ReplicateSourceActivityId { get; set; }
         public string SourceActivityId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Comment { get; set; }
         public string LoggerFileName { get; set; }
         public Device Device { get; set; }
@@ -3150,7 +3183,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<SpecimenNestedInActivity> Specimens { get; set; }
         public List<ObservationMinimal> Observations { get; set; }
         public bool Refreshed { get; set; }
-        public bool Blank { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -3265,7 +3297,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string ContentType { get; set; }
         public string Comment { get; set; }
         public long FileSize { get; set; }
-        public Instant? DateTaken { get; set; }
+        public DateTimeOffset? DateTaken { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Resolution { get; set; }
@@ -3279,7 +3311,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string ContentType { get; set; }
         public string Comment { get; set; }
         public long FileSize { get; set; }
-        public Instant? DateTaken { get; set; }
+        public DateTimeOffset? DateTaken { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Resolution { get; set; }
@@ -3290,17 +3322,17 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class AuditAttributes
     {
         public string CreationUserProfileId { get; set; }
-        public Instant? CreationTime { get; set; }
+        public DateTimeOffset? CreationTime { get; set; }
         public string ModificationUserProfileId { get; set; }
-        public Instant? ModificationTime { get; set; }
+        public DateTimeOffset? ModificationTime { get; set; }
     }
 
     public class AuditAttributesFull
     {
         public string CreationUserProfileId { get; set; }
-        public Instant? CreationTime { get; set; }
+        public DateTimeOffset? CreationTime { get; set; }
         public string ModificationUserProfileId { get; set; }
-        public Instant? ModificationTime { get; set; }
+        public DateTimeOffset? ModificationTime { get; set; }
         public UserProfile CreationUserProfile { get; set; }
         public UserProfile ModificationUserProfile { get; set; }
     }
@@ -3321,7 +3353,7 @@ namespace Aquarius.Samples.Client.ServiceModel
             AuditChanges = new List<AuditChange>();
         }
 
-        public Instant? ModificationTime { get; set; }
+        public DateTimeOffset? ModificationTime { get; set; }
         public UserProfile UserProfile { get; set; }
         public OperationType Operation { get; set; }
         public List<AuditChange> AuditChanges { get; set; }
@@ -3360,7 +3392,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public double Value { get; set; }
         public string ObservationId { get; set; }
-        public Instant? ObservedTime { get; set; }
+        public DateTimeOffset? ObservedTime { get; set; }
         public string NumericResultUnitCustomId { get; set; }
         public double MdlValue { get; set; }
         public string MdlValueUnitCustomId { get; set; }
@@ -3457,8 +3489,8 @@ namespace Aquarius.Samples.Client.ServiceModel
 
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public List<DomainObjectAttachment> Attachments { get; set; }
@@ -3475,8 +3507,8 @@ namespace Aquarius.Samples.Client.ServiceModel
 
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public List<DomainObjectAttachment> Attachments { get; set; }
@@ -3500,8 +3532,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         }
 
         public string Id { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public FieldTripSimple FieldTrip { get; set; }
@@ -3519,8 +3551,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class FieldVisitSimple
     {
         public string Id { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public string Participants { get; set; }
         public string Notes { get; set; }
         public FieldTripSimple FieldTrip { get; set; }
@@ -3542,7 +3574,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
     }
 
     public class Filter
@@ -3555,8 +3587,8 @@ namespace Aquarius.Samples.Client.ServiceModel
 
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public List<ObservedProperty> ObservedProperties { get; set; }
         public List<SamplingLocation> SamplingLocations { get; set; }
         public string Description { get; set; }
@@ -3590,7 +3622,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 
         public string Id { get; set; }
         public ImportType ImportType { get; set; }
-        public Instant? ImportTime { get; set; }
+        public DateTimeOffset? ImportTime { get; set; }
         public string FileName { get; set; }
         public string TimeZoneOffset { get; set; }
         public UserProfile ImportedBy { get; set; }
@@ -3601,7 +3633,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public ImportType ImportType { get; set; }
-        public Instant? ImportTime { get; set; }
+        public DateTimeOffset? ImportTime { get; set; }
         public string FileName { get; set; }
         public string TimeZoneOffset { get; set; }
         public UserProfile ImportedBy { get; set; }
@@ -3942,7 +3974,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? DateReceived { get; set; }
+        public DateTimeOffset? DateReceived { get; set; }
         public string CaseNarrative { get; set; }
         public string QcSummary { get; set; }
         public Laboratory Laboratory { get; set; }
@@ -3963,10 +3995,10 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Laboratory Laboratory { get; set; }
         public string PreparationMethod { get; set; }
         public string DilutionFactor { get; set; }
-        public Instant? DateReceived { get; set; }
+        public DateTimeOffset? DateReceived { get; set; }
         public string AnalysisComment { get; set; }
         public string QualityFlag { get; set; }
-        public Instant? DatePrepared { get; set; }
+        public DateTimeOffset? DatePrepared { get; set; }
         public LabReport LabReport { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -4122,8 +4154,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public DataClassificationType DataClassification { get; set; }
         public Medium Medium { get; set; }
         public string MediumSubdivision { get; set; }
-        public Instant? ObservedTime { get; set; }
-        public Instant? ResultTime { get; set; }
+        public DateTimeOffset? ObservedTime { get; set; }
+        public DateTimeOffset? ResultTime { get; set; }
         public Quantity Depth { get; set; }
         public LabInstruction LabInstruction { get; set; }
         public LabResultDetails LabResultDetails { get; set; }
@@ -4172,8 +4204,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public string Id { get; set; }
         public ObservedProperty ObservedProperty { get; set; }
-        public Instant? ObservedTime { get; set; }
-        public Instant? ResultTime { get; set; }
+        public DateTimeOffset? ObservedTime { get; set; }
+        public DateTimeOffset? ResultTime { get; set; }
         public SpecimenNestedInActivity Specimen { get; set; }
         public NumericResult NumericResult { get; set; }
         public CategoricalResult CategoricalResult { get; set; }
@@ -4192,7 +4224,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public LabInstruction LabInstruction { get; set; }
         public NumericResult NumericResult { get; set; }
         public DataClassificationType DataClassification { get; set; }
-        public Instant? ObservedTime { get; set; }
+        public DateTimeOffset? ObservedTime { get; set; }
         public ResultStatus ResultStatus { get; set; }
         public CategoricalResult CategoricalResult { get; set; }
         public TaxonomicResult TaxonomicResult { get; set; }
@@ -4299,8 +4331,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string ScopeStatement { get; set; }
         public bool Approved { get; set; }
         public string ApprovalAgency { get; set; }
-        public Instant? StartTime { get; set; }
-        public Instant? EndTime { get; set; }
+        public DateTimeOffset? StartTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -4453,15 +4485,15 @@ namespace Aquarius.Samples.Client.ServiceModel
 
         public string Id { get; set; }
         public string CustomId { get; set; }
-        public Instant? StartDate { get; set; }
-        public Instant? EndDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
         public RecurrenceType RecurrenceType { get; set; }
         public RecurrenceDayWeeklyType RecurrenceDayWeekly { get; set; }
         public RecurrenceDayMonthlyType RecurrenceDayMonthly { get; set; }
         public SamplingLocationGroup SamplingLocationGroup { get; set; }
         public SamplingLocationGroupSelectionType SamplingLocationGroupSelectionType { get; set; }
         public int SamplingLocationGroupSelectionTypeRandomCount { get; set; }
-        public Instant? LastGenerationDate { get; set; }
+        public DateTimeOffset? LastGenerationDate { get; set; }
         public List<SchedulePlannedActivity> SchedulePlannedActivities { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
@@ -5272,7 +5304,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
         public string CustomId { get; set; }
         public UserProfile UserProfile { get; set; }
-        public string ProviderId { get; set; }
         public string Email { get; set; }
         public UserType UserType { get; set; }
         public List<string> Roles { get; set; }
@@ -5282,7 +5313,6 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class UserProfile
     {
         public string Id { get; set; }
-        public string ProviderId { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -5298,6 +5328,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         REPLICATE,
         BLANK,
         SPIKE,
+        OTHER_QC,
         FIELD_SURVEY,
         INDEX_CALCULATION,
         NONE
@@ -5310,6 +5341,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         REPLICATE,
         BLANK,
         SPIKE,
+        OTHER_QC,
         FIELD_SURVEY,
         INDEX_CALCULATION,
         NONE
@@ -5322,6 +5354,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         REPLICATE,
         BLANK,
         SPIKE,
+        OTHER_QC,
         FIELD_SURVEY,
         INDEX_CALCULATION,
         NONE
@@ -5499,6 +5532,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         REPLICATE,
         BLANK,
         SPIKE,
+        OTHER_QC,
         FIELD_SURVEY,
         INDEX_CALCULATION,
         NONE
@@ -5541,7 +5575,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         NORMAL,
         REPLICATE,
         BLANK,
-        SPIKE
+        SPIKE,
+        OTHER_QC
     }
 
     public enum RecurrenceDayMonthlyType
@@ -5631,6 +5666,7 @@ namespace Aquarius.Samples.Client.ServiceModel
     public enum UserType
     {
         INTERNAL,
-        EXTERNAL
+        EXTERNAL,
+        SYSTEM
     }
 }

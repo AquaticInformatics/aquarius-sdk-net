@@ -4,6 +4,11 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 21.2.1
+- Improved the DateTimeOffset and NodaTime.Instant deserializers to handle AQSamples timestamps with optional timecodes
+- Switch AQSamples service models from NodaTime.Instant to DateTimeOffset, so that clients can see the UTC offset.
+- Updated the service models for the AQUARIUS Samples 2021.05 release.
+
 ### 21.2.0
 - Updated the service models for the AQUARIUS Time-Series 2021.2 release.
 - Updated the service models for the AQUARIUS Samples 2021.03 release.

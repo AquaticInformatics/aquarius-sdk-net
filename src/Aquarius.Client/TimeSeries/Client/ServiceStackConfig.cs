@@ -63,6 +63,10 @@ namespace Aquarius.TimeSeries.Client
             JsConfig<DateTime>.DeSerializeFn = AlwaysDeserializeDateTimeAsUtc;
             JsConfig<DateTime>.IncludeDefaultValue = true;
 
+            // JsConfig<DateTimeOffset>.SerializeFn = ... leave as-is, since delegating to ServiceStack.Text is fine ...;
+            JsConfig<DateTimeOffset>.DeSerializeFn = ParseDateTimeOffset;
+            JsConfig<DateTimeOffset>.IncludeDefaultValue = true;
+
             JsConfig<Instant>.SerializeFn = SerializeInstant;
             JsConfig<Instant>.DeSerializeFn = DeserializeInstant;
             JsConfig<Instant>.IncludeDefaultValue = true;
@@ -226,22 +230,24 @@ namespace Aquarius.TimeSeries.Client
                 case "maxinstant":
                     return Instant.MaxValue;
                 default:
-                    if (text.LastOrDefault() == ']')
-                    {
-                        var timeCodeIndex = text.IndexOf('[');
-
-                        if (timeCodeIndex >= 0)
-                        {
-                            text = text.Substring(0, timeCodeIndex);
-                        }
-                    }
-
                     var dateTimeOffset = ParseDateTimeOffset(text);
                     return Instant.FromDateTimeOffset(dateTimeOffset);
             }
         }
+
         private static DateTimeOffset ParseDateTimeOffset(string text)
         {
+            if (text.LastOrDefault() == ']')
+            {
+                // Strips off AQSamples timecodes at the end of a timestamp
+                var timeCodeIndex = text.IndexOf('[');
+
+                if (timeCodeIndex >= 0)
+                {
+                    text = text.Substring(0, timeCodeIndex);
+                }
+            }
+
             try
             {
                 return DateTimeSerializer.ParseDateTimeOffset(text);
