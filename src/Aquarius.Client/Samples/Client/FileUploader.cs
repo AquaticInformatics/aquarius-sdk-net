@@ -40,7 +40,7 @@ namespace Aquarius.Samples.Client
             if (_restClient is JsonHttpClient jhc)
             {
                 jhc.ResultsFilterResponse = (response, o, method, uri, request) =>
-                    LocationResponseHeader = response.Headers?.Location.ToString();
+                    LocationResponseHeader = response.Headers?.Location?.ToString();
             }
         }
 
