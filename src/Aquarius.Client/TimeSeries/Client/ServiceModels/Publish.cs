@@ -1,8 +1,8 @@
 /* Options:
-Date: 2021-07-19 19:10:01
+Date: 2021-10-12 15:48:29
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Publish/v2
+BaseUrl: https://aqts-pg.aquariusdev.net/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -2015,7 +2015,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         Unknown,
         None,
         PickList,
-        Text,
+        String,
         Number,
         Boolean,
     }
@@ -3914,6 +3914,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public QuantityWithDisplay MeanGageHeight { get; set; }
 
         ///<summary>
+        ///Gage height adjustment amount
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Gage height adjustment amount")]
+        public QuantityWithDisplay GageHeightAdjustmentAmount { get; set; }
+
+        ///<summary>
         ///True if the mean gage height was converted to the target datum
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if the mean gage height was converted to the target datum")]
@@ -3942,6 +3948,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Comments")]
         public string Comments { get; set; }
+
+        ///<summary>
+        ///Gage height comments
+        ///</summary>
+        [ApiMember(Description="Gage height comments")]
+        public string GageHeightComments { get; set; }
 
         ///<summary>
         ///Gage height calculation
@@ -4250,6 +4262,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Value")]
         public QuantityWithDisplay Value { get; set; }
+
+        ///<summary>
+        ///Value
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Value")]
+        public QuantityWithDisplay AdjustmentAmount { get; set; }
 
         ///<summary>
         ///Uncertainty
@@ -4953,6 +4971,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Value")]
         public DoubleWithDisplay Value { get; set; }
+
+        ///<summary>
+        ///AdjustmentAmount
+        ///</summary>
+        [ApiMember(DataType="DoubleWithDisplay", Description="AdjustmentAmount")]
+        public DoubleWithDisplay AdjustmentAmount { get; set; }
 
         ///<summary>
         ///Unit
@@ -8052,6 +8076,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.2.93.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.3.83.0");
     }
 }

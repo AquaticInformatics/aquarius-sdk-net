@@ -1,8 +1,8 @@
 /* Options:
-Date: 2021-07-19 19:10:10
+Date: 2021-10-12 15:48:31
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
+BaseUrl: https://aqts-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -40,6 +40,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     {
         AppliesToLocations,
         AppliesToLocationTypes,
+        AppliesToTimeSeries,
     }
 
     public enum TagApplicability
@@ -151,9 +152,10 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         Unknown,
         None,
         PickList,
-        Text,
+        String,
         Number,
         Boolean,
+        DateTime,
     }
 
     public enum ThresholdBehavior
@@ -474,9 +476,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<string> PickListValues { get; set; }
 
         ///<summary>
-        ///If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes. When omitted, the extended attribute is applicable to locations.
+        ///If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.  When omitted, the extended attribute is applicable to locations.
         ///</summary>
-        [ApiMember(DataType="array", Description="If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes. When omitted, the extended attribute is applicable to locations.")]
+        [ApiMember(DataType="array", Description="If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.  When omitted, the extended attribute is applicable to locations.")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
     }
 
@@ -501,9 +503,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         }
 
         ///<summary>
-        ///If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes
+        ///If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes")]
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
     }
 
@@ -1264,6 +1266,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
         public string IdentifierClaim { get; set; }
+
+        ///<summary>
+        ///Optionally specify the full URI for the Issuer Discovery document including the Issuer Identifier. If empty, the discovery URI is composed as '{IssuerIdentifier}/.well-known/openid-configuration' which is suitable for most configurations. Specify the URI explicitly if additional query parameters are needed or a non-standard discovery URI is used. For Azure AD environments that use custom claims, the '?appid={ClientIdentifier}' query string must be include in the URI; e.g. 'https://login.microsoftonline.com/{IssuerUniqueId}/v2.0/.well-known/openid-configuration?appid={ClientIdentifier}'.
+        ///</summary>
+        [ApiMember(Description="Optionally specify the full URI for the Issuer Discovery document including the Issuer Identifier. If empty, the discovery URI is composed as '{IssuerIdentifier}/.well-known/openid-configuration' which is suitable for most configurations. Specify the URI explicitly if additional query parameters are needed or a non-standard discovery URI is used. For Azure AD environments that use custom claims, the '?appid={ClientIdentifier}' query string must be include in the URI; e.g. 'https://login.microsoftonline.com/{IssuerUniqueId}/v2.0/.well-known/openid-configuration?appid={ClientIdentifier}'.")]
+        public string OptionalIssuerDiscoveryUri { get; set; }
 
         ///<summary>
         ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
@@ -4048,6 +4056,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to Location Types")]
         public bool AppliesToLocationTypes { get; set; }
+
+        ///<summary>
+        ///True if extended attribute is applicable to TimeSeries
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to TimeSeries")]
+        public bool AppliesToTimeSeries { get; set; }
     }
 
     public class ExtendedAttributeField
@@ -4158,6 +4172,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Value")]
         public string Value { get; set; }
+
+        ///<summary>
+        ///Unique ID
+        ///</summary>
+        [ApiMember(Description="Unique ID")]
+        public string UniqueId { get; set; }
     }
 
     public class FieldDataPlugin
@@ -4847,6 +4867,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Name of an ID token claim to use as the unique identifier for OpenID Connect users. The default behaviour is to use 'sub', the standard subject identifier claim, which is suitable for most configurations. Options vary by OpenID Connect provider. Note that if this is changed after OpenID Connect users are registered, they will not be able to login until their identifiers are updated.")]
         public string IdentifierClaim { get; set; }
+
+        ///<summary>
+        ///Optionally specify the full URI for the Issuer Discovery document including the Issuer Identifier. If empty, the discovery URI is composed as '{IssuerIdentifier}/.well-known/openid-configuration' which is suitable for most configurations. Specify the URI explicitly if additional query parameters are needed or a non-standard discovery URI is used. For Azure AD environments that use custom claims, the '?appid={ClientIdentifier}' query string must be include in the URI; e.g. 'https://login.microsoftonline.com/{IssuerUniqueId}/v2.0/.well-known/openid-configuration?appid={ClientIdentifier}'.
+        ///</summary>
+        [ApiMember(Description="Optionally specify the full URI for the Issuer Discovery document including the Issuer Identifier. If empty, the discovery URI is composed as '{IssuerIdentifier}/.well-known/openid-configuration' which is suitable for most configurations. Specify the URI explicitly if additional query parameters are needed or a non-standard discovery URI is used. For Azure AD environments that use custom claims, the '?appid={ClientIdentifier}' query string must be include in the URI; e.g. 'https://login.microsoftonline.com/{IssuerUniqueId}/v2.0/.well-known/openid-configuration?appid={ClientIdentifier}'.")]
+        public string OptionalIssuerDiscoveryUri { get; set; }
 
         ///<summary>
         ///Short display name of the identity provider. If 'Google' or 'Microsoft', an appropriate icon will be displayed on the sign-in page.
@@ -6086,6 +6112,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.2.93.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.3.83.0");
     }
 }
