@@ -1,6 +1,6 @@
-// Date: 2021-09-14T17:28:23.3235959-07:00
+// Date: 2021-12-06T09:49:58.7911550-08:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2021.05.4598)
+// Source: AQUARIUS Samples API (2021.08.4777)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2021.05.4598");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2021.08.4777");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -613,6 +613,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> ProjectIds { get; set; }
         [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "samplingPlanIds")]
+        public List<string> SamplingPlanIds { get; set; }
         [DataMember(Name = "scheduleIds")]
         public List<string> ScheduleIds { get; set; }
         [DataMember(Name = "search")]
@@ -640,6 +642,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<DomainObjectAttachment> Attachments { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public Schedule Schedule { get; set; }
+        public SamplingPlan SamplingPlan { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -663,6 +666,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> ProjectIds { get; set; }
         [DataMember(Name = "samplingLocationIds")]
         public List<string> SamplingLocationIds { get; set; }
+        [DataMember(Name = "samplingPlanIds")]
+        public List<string> SamplingPlanIds { get; set; }
         [DataMember(Name = "scheduleIds")]
         public List<string> ScheduleIds { get; set; }
         [DataMember(Name = "search")]
@@ -703,6 +708,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<DomainObjectAttachment> Attachments { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public Schedule Schedule { get; set; }
+        public SamplingPlan SamplingPlan { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -3545,6 +3551,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<DomainObjectAttachment> Attachments { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public Schedule Schedule { get; set; }
+        public SamplingPlan SamplingPlan { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
     }
 
@@ -4474,6 +4481,48 @@ namespace Aquarius.Samples.Client.ServiceModel
         public long ObservationCount { get; set; }
         public long FieldVisitCount { get; set; }
         public FieldVisitSummaryRepresentation LatestFieldVisit { get; set; }
+    }
+
+    public class SamplingPlan
+    {
+        public SamplingPlan()
+        {
+            PlannedActivities = new List<SamplingPlanPlannedActivity>();
+        }
+
+        public string Id { get; set; }
+        public string CustomId { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
+        public SamplingLocationGroup SamplingLocationGroup { get; set; }
+        public SamplingLocationGroupSelectionType SamplingLocationGroupSelectionType { get; set; }
+        public int SamplingLocationGroupSelectionTypeRandomCount { get; set; }
+        public DateTimeOffset? LastGenerationDate { get; set; }
+        public List<SamplingPlanPlannedActivity> PlannedActivities { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    public class SamplingPlanPlannedActivity
+    {
+        public string Id { get; set; }
+        public ActivityTemplate ActivityTemplate { get; set; }
+        public string Instruction { get; set; }
+        public ActivityType ActivityType { get; set; }
+        public SamplingPlanPlannedActivityRecurrence Recurrence { get; set; }
+        public AuditAttributes AuditAttributes { get; set; }
+    }
+
+    public class SamplingPlanPlannedActivityRecurrence
+    {
+        public SamplingPlanPlannedActivityRecurrence()
+        {
+            MonthsOfYear = new List<string>();
+        }
+
+        public RecurrenceFrequencyType RecurrenceFrequency { get; set; }
+        public DayOfWeekType DayOfWeek { get; set; }
+        public List<string> MonthsOfYear { get; set; }
+        public TemporalExpressionType TemporalExpression { get; set; }
     }
 
     public class Schedule
@@ -5419,6 +5468,17 @@ namespace Aquarius.Samples.Client.ServiceModel
         DROP_DOWN_LIST
     }
 
+    public enum DayOfWeekType
+    {
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY,
+        SUNDAY
+    }
+
     public enum DeterminationType
     {
         ACTUAL,
@@ -5596,9 +5656,17 @@ namespace Aquarius.Samples.Client.ServiceModel
         SUNDAY
     }
 
+    public enum RecurrenceFrequencyType
+    {
+        WEEKLY,
+        BI_WEEKLY,
+        MONTHLY
+    }
+
     public enum RecurrenceType
     {
         WEEKLY,
+        BI_WEEKLY,
         MONTHLY
     }
 
@@ -5651,6 +5719,17 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         CUSTODY_LOG,
         OBSERVATION_EXPORT
+    }
+
+    public enum TemporalExpressionType
+    {
+        FIRST_WEEK_OF_MONTH,
+        SECOND_WEEK_OF_MONTH,
+        THIRD_WEEK_OF_MONTH,
+        FORTH_WEEK_OF_MONTH,
+        LAST_WEEK_OF_MONTH,
+        FIRST_DAY_OF_MONTH,
+        LAST_DAY_OF_MONTH
     }
 
     public enum UnitGroupSystemCodeType
