@@ -1,5 +1,5 @@
 /* Options:
-Date: 2021-10-12 15:48:29
+Date: 2022-01-06 20:22:47
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqts-pg.aquariusdev.net/AQUARIUS/Publish/v2
@@ -754,6 +754,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
         public List<TagMetadata> Tags { get; set; }
+
+        ///<summary>
+        ///Utc offset
+        ///</summary>
+        [ApiMember(DataType="number", Description="Utc offset", Format="double")]
+        public double UtcOffset { get; set; }
     }
 
     public class LocationMonitoringMethod
@@ -3481,6 +3487,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="boolean", Description="Water quality sample taken")]
         public bool WaterQualitySampleTaken { get; set; }
+
+        ///<summary>
+        ///Water quality cross-section performed
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Water quality cross-section performed")]
+        public bool WaterQualityCrossSectionPerformed { get; set; }
     }
 
     public class ControlConditionActivity
@@ -8076,6 +8088,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.3.83.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.4.62.0");
     }
 }
