@@ -1,5 +1,5 @@
 /* Options:
-Date: 2021-10-12 15:48:31
+Date: 2022-01-06 20:22:58
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqts-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -480,6 +480,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.  When omitted, the extended attribute is applicable to locations.")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
+
+        ///<summary>
+        ///Flag which defines if extended attribute is VisibleInDatasetList
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Flag which defines if extended attribute is VisibleInDatasetList")]
+        public bool VisibleInDatasetList { get; set; }
+
+        ///<summary>
+        ///Flag which define is value required.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Flag which define is value required.")]
+        public bool Required { get; set; }
+
+        ///<summary>
+        ///Default value. This is required when Required is true.
+        ///</summary>
+        [ApiMember(DataType="string", Description="Default value. This is required when Required is true.")]
+        public string DefaultValue { get; set; }
     }
 
     [Route("/extendedattributes/{UniqueId}", "GET")]
@@ -906,9 +924,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
 
         ///<summary>
-        ///Name of database table used for extended attributes, omit if none
+        ///DEPRECATED : use new location type extended attributes instead
         ///</summary>
-        [ApiMember(Description="Name of database table used for extended attributes, omit if none")]
+        [ApiMember(Description="DEPRECATED : use new location type extended attributes instead")]
         public string AttributeTableName { get; set; }
 
         ///<summary>
@@ -4062,6 +4080,24 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to TimeSeries")]
         public bool AppliesToTimeSeries { get; set; }
+
+        ///<summary>
+        ///True if extended attribute is VisibleInDatasetList
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="True if extended attribute is VisibleInDatasetList")]
+        public bool VisibleInDatasetList { get; set; }
+
+        ///<summary>
+        ///Flag which define is value required.
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Flag which define is value required.")]
+        public bool Required { get; set; }
+
+        ///<summary>
+        ///Default value. This is required when Required is true.
+        ///</summary>
+        [ApiMember(DataType="string", Description="Default value. This is required when Required is true.")]
+        public string DefaultValue { get; set; }
     }
 
     public class ExtendedAttributeField
@@ -4077,6 +4113,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Display name")]
         public string DisplayName { get; set; }
+
+        ///<summary>
+        ///Unique ID of the extended attribute
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the extended attribute", Format="guid")]
+        public Guid UniqueId { get; set; }
 
         ///<summary>
         ///Field type
@@ -4668,9 +4710,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
 
         ///<summary>
-        ///Attribute table name
+        ///DEPRECATED : use new location type extended attributes instead
         ///</summary>
-        [ApiMember(Description="Attribute table name")]
+        [ApiMember(Description="DEPRECATED : use new location type extended attributes instead")]
         public string AttributeTableName { get; set; }
 
         ///<summary>
@@ -6112,6 +6154,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.3.83.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.4.62.0");
     }
 }
