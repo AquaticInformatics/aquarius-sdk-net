@@ -1,8 +1,8 @@
 /* Options:
-Date: 2022-01-06 20:22:47
+Date: 2022-01-28 19:41:32
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://aqts-pg.aquariusdev.net/AQUARIUS/Publish/v2
+BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -3930,6 +3930,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Gage height adjustment amount")]
         public QuantityWithDisplay GageHeightAdjustmentAmount { get; set; }
+
+        ///<summary>
+        ///Gage Height Reference Point name at this Visit's Location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Gage Height Reference Point name at this Visit's Location", Format="guid")]
+        public Guid? GageHeightReferencePointUniqueId { get; set; }
 
         ///<summary>
         ///True if the mean gage height was converted to the target datum
@@ -8088,6 +8094,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.4.62.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.4.84.0");
     }
 }
