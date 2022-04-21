@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using SamplesServiceModelGenerator.CodeGenerators;
@@ -333,9 +334,10 @@ namespace SamplesServiceModelGenerator
 
             _log.Info($"Fetching {uri} ...");
 
-            using (var client = new WebClient())
+            using (var client = new HttpClient())
             {
-                return client.DownloadString(uri);
+                var response = client.GetAsync(uri).Result;
+                return response.Content.ReadAsStringAsync().Result;
             }
         }
 

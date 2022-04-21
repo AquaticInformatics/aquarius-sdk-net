@@ -18,7 +18,7 @@ show_usage() {
 	exit_abort "$@"
 }
 
-Generator=../../../SamplesServiceModelGenerator/bin/Release/netcoreapp2.0/SamplesServiceModelGenerator.dll
+Generator=../../../SamplesServiceModelGenerator/bin/Release/net6.0/SamplesServiceModelGenerator.dll
 
 ServerName=$1
 OutputPath=$2
