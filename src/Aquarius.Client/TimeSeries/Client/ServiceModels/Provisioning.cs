@@ -1,5 +1,5 @@
 /* Options:
-Date: 2022-01-28 19:41:43
+Date: 2022-04-21 19:08:11
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -498,6 +498,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Default value. This is required when Required is true.")]
         public string DefaultValue { get; set; }
+
+        ///<summary>
+        ///Defines the order of elements on the page from least to greatest.
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Defines the order of elements on the page from least to greatest.")]
+        public int Order { get; set; }
     }
 
     [Route("/extendedattributes/{UniqueId}", "GET")]
@@ -4098,6 +4104,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Default value. This is required when Required is true.")]
         public string DefaultValue { get; set; }
+
+        ///<summary>
+        ///Defines the order of elements on the page from least to greatest.
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Defines the order of elements on the page from least to greatest.")]
+        public int Order { get; set; }
     }
 
     public class ExtendedAttributeField
@@ -4436,9 +4448,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string LocationType { get; set; }
 
         ///<summary>
-        ///External locations are created by data connectors.  Only extended attributes can be modified on an external location.
+        ///DEPRECATED: External locations are no longer supported; value always returns false.
         ///</summary>
-        [ApiMember(DataType="boolean", Description="External locations are created by data connectors.  Only extended attributes can be modified on an external location.")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: External locations are no longer supported; value always returns false.")]
         public bool IsExternalLocation { get; set; }
 
         ///<summary>
@@ -6154,6 +6166,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.4.84.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.1.86.0");
     }
 }
