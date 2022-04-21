@@ -11,14 +11,20 @@
     <Description>The AQUARIUS SDK for .NET enables .NET developers to easily work with the AQUARIUS Platform of environmental monitoring products.</Description>
     <Copyright>Copyright (c) Aquatic Informatics Inc. 2017</Copyright>
     <PackageTags>Aquatic Informatics;Aquarius SDK;Time-Series;WebPortal;Samples</PackageTags>
-    <PackageLicenseUrl>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/AquaticInformatics/aquarius-sdk-net/develop/images/icon.png</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/ReleaseNotes.md</PackageReleaseNotes>
     <Version>0.0.0</Version>
     <RootNamespace>Aquarius</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\images\icon.png" Pack="true" PackagePath="\"/>
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <!-- .NET Standard 2.1 references, compilation flags and build options -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">
