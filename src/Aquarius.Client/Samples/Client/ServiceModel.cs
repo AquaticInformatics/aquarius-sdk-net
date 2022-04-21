@@ -1,6 +1,6 @@
-// Date: 2021-12-06T09:49:58.7911550-08:00
+// Date: 2022-04-21T12:30:46.2268015-07:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2021.08.4777)
+// Source: AQUARIUS Samples API (2022.03.4987)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2021.08.4777");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2022.03.4987");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -183,6 +183,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     [Route("/v1/activitytemplates", "GET")]
     public class GetActivityTemplates : IReturn<SearchResultActivityTemplate>
     {
+        public int? Limit { get; set; }
+        public List<string> Search { get; set; }
         public List<string> Type { get; set; }
     }
 
@@ -236,7 +238,9 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class GetAnalysisMethods : IReturn<SearchResultAnalysisMethod>
     {
         public string Context { get; set; }
+        public int? Limit { get; set; }
         public List<string> ObservedPropertyIds { get; set; }
+        public List<string> Search { get; set; }
     }
 
     [Route("/v1/analysismethods", "POST")]
@@ -287,7 +291,9 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class GetAnalyticalGroups : IReturn<SearchResultAnalyticalGroup>
     {
         public List<string> AnalyticalGroupTypes { get; set; }
+        public int? Limit { get; set; }
         public List<string> ObservedPropertyIds { get; set; }
+        public List<string> Search { get; set; }
     }
 
     [Route("/v1/analyticalgroups", "POST")]
@@ -816,7 +822,9 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class GetLabAnalysisMethods : IReturn<SearchResultAnalysisMethod>
     {
         public string Context { get; set; }
+        public int? Limit { get; set; }
         public List<string> ObservedPropertyIds { get; set; }
+        public List<string> Search { get; set; }
     }
 
     [Route("/v1/labanalysismethods", "POST")]
@@ -1508,6 +1516,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
         public string DetectionCondition { get; set; }
+        [DataMember(Name = "end-lastReindexTime")]
+        public Instant? EndLastReindexTime { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -1566,6 +1576,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> SpecimenIds { get; set; }
         [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-lastReindexTime")]
+        public Instant? StartLastReindexTime { get; set; }
         [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
         [DataMember(Name = "start-resultTime")]
@@ -1608,6 +1620,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> ProjectIds { get; set; }
         public List<string> SamplingLocationGroupIds { get; set; }
         public List<string> SamplingLocationIds { get; set; }
+        public List<string> SamplingPlanIds { get; set; }
         public List<string> Search { get; set; }
         public string Sort { get; set; }
         public List<string> SpecimenStatuses { get; set; }
@@ -1780,6 +1793,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> ProjectIds { get; set; }
         public List<string> SamplingLocationGroupIds { get; set; }
         public List<string> SamplingLocationIds { get; set; }
+        public List<string> SamplingPlanIds { get; set; }
         public List<string> Search { get; set; }
         public string Sort { get; set; }
         public List<string> SpecimenStatuses { get; set; }
@@ -2024,7 +2038,9 @@ namespace Aquarius.Samples.Client.ServiceModel
     [Route("/v1/taxons", "GET")]
     public class GetTaxons : IReturn<SearchResultTaxon>
     {
+        public int? Limit { get; set; }
         public string ScientificName { get; set; }
+        public List<string> Search { get; set; }
     }
 
     [Route("/v1/taxons", "POST")]
@@ -2089,6 +2105,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class GetUnitGroups : IReturn<SearchResultUnitGroup>
     {
         public string CustomId { get; set; }
+        public int? Limit { get; set; }
+        public List<string> Search { get; set; }
         public GetUnitGroupsSystemCodeType? SystemCode { get; set; }
     }
 
@@ -2134,6 +2152,8 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class GetUnitGroupWithUnits : IReturn<SearchResultUnitGroupWithUnits>
     {
         public string CustomId { get; set; }
+        public int? Limit { get; set; }
+        public List<string> Search { get; set; }
         public GetUnitGroupWithUnitsSystemCodeType? SystemCode { get; set; }
     }
 
@@ -2327,6 +2347,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
         public string DetectionCondition { get; set; }
+        [DataMember(Name = "end-lastReindexTime")]
+        public Instant? EndLastReindexTime { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2385,6 +2407,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> SpecimenIds { get; set; }
         [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-lastReindexTime")]
+        public Instant? StartLastReindexTime { get; set; }
         [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
         [DataMember(Name = "start-resultTime")]
@@ -2428,6 +2452,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public PlannedFieldResult PlannedFieldResult { get; set; }
         public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
+        public DateTimeOffset? LastReindexTime { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
@@ -2465,6 +2490,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
         public string DetectionCondition { get; set; }
+        [DataMember(Name = "end-lastReindexTime")]
+        public Instant? EndLastReindexTime { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2523,6 +2550,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> SpecimenIds { get; set; }
         [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-lastReindexTime")]
+        public Instant? StartLastReindexTime { get; set; }
         [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
         [DataMember(Name = "start-resultTime")]
@@ -2572,6 +2601,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public PlannedFieldResult PlannedFieldResult { get; set; }
         public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
+        public DateTimeOffset? LastReindexTime { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
@@ -2621,6 +2651,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
         public string DetectionCondition { get; set; }
+        [DataMember(Name = "end-lastReindexTime")]
+        public Instant? EndLastReindexTime { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2679,6 +2711,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> SpecimenIds { get; set; }
         [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-lastReindexTime")]
+        public Instant? StartLastReindexTime { get; set; }
         [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
         [DataMember(Name = "start-resultTime")]
@@ -2721,6 +2755,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
         public string DetectionCondition { get; set; }
+        [DataMember(Name = "end-lastReindexTime")]
+        public Instant? EndLastReindexTime { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2779,6 +2815,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> SpecimenIds { get; set; }
         [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-lastReindexTime")]
+        public Instant? StartLastReindexTime { get; set; }
         [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
         [DataMember(Name = "start-resultTime")]
@@ -2823,6 +2861,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
         public string DetectionCondition { get; set; }
+        [DataMember(Name = "end-lastReindexTime")]
+        public Instant? EndLastReindexTime { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2881,6 +2921,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> SpecimenIds { get; set; }
         [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-lastReindexTime")]
+        public Instant? StartLastReindexTime { get; set; }
         [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
         [DataMember(Name = "start-resultTime")]
@@ -2925,6 +2967,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public double? DepthValue { get; set; }
         [DataMember(Name = "detectionCondition")]
         public string DetectionCondition { get; set; }
+        [DataMember(Name = "end-lastReindexTime")]
+        public Instant? EndLastReindexTime { get; set; }
         [DataMember(Name = "end-observedTime")]
         public Instant? EndObservedTime { get; set; }
         [DataMember(Name = "end-resultTime")]
@@ -2983,6 +3027,8 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> SpecimenIds { get; set; }
         [DataMember(Name = "specimenName")]
         public string SpecimenName { get; set; }
+        [DataMember(Name = "start-lastReindexTime")]
+        public Instant? StartLastReindexTime { get; set; }
         [DataMember(Name = "start-observedTime")]
         public Instant? StartObservedTime { get; set; }
         [DataMember(Name = "start-resultTime")]
@@ -4177,6 +4223,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public PlannedFieldResult PlannedFieldResult { get; set; }
         public ObservationStatistics Statistics { get; set; }
         public Taxon RelatedTaxon { get; set; }
+        public DateTimeOffset? LastReindexTime { get; set; }
         public List<ExtendedAttribute> ExtendedAttributes { get; set; }
         public NullMeasureQualifier NullMeasureQualifier { get; set; }
         public AuditAttributes AuditAttributes { get; set; }
@@ -5723,11 +5770,11 @@ namespace Aquarius.Samples.Client.ServiceModel
 
     public enum TemporalExpressionType
     {
-        FIRST_WEEK_OF_MONTH,
-        SECOND_WEEK_OF_MONTH,
-        THIRD_WEEK_OF_MONTH,
-        FORTH_WEEK_OF_MONTH,
-        LAST_WEEK_OF_MONTH,
+        FIRST,
+        SECOND,
+        THIRD,
+        FOURTH,
+        LAST,
         FIRST_DAY_OF_MONTH,
         LAST_DAY_OF_MONTH
     }

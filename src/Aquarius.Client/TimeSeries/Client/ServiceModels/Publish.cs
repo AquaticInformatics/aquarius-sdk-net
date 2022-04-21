@@ -1,5 +1,5 @@
 /* Options:
-Date: 2022-01-28 19:41:32
+Date: 2022-04-21 19:08:00
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Publish/v2
@@ -720,9 +720,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public Guid UniqueId { get; set; }
 
         ///<summary>
-        ///External locations are created by data connectors.
+        ///DEPRECATED: External locations are no longer supported; value always returns false.
         ///</summary>
-        [ApiMember(DataType="boolean", Description="External locations are created by data connectors.")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: External locations are no longer supported; value always returns false.")]
         public bool IsExternalLocation { get; set; }
 
         ///<summary>
@@ -7454,9 +7454,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string LocationType { get; set; }
 
         ///<summary>
-        ///External locations are created by data connectors.
+        ///DEPRECATED: External locations are no longer supported; value always returns false.
         ///</summary>
-        [ApiMember(DataType="boolean", Description="External locations are created by data connectors.")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: External locations are no longer supported; value always returns false.")]
         public bool IsExternalLocation { get; set; }
 
         ///<summary>
@@ -8094,6 +8094,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("21.4.84.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.1.86.0");
     }
 }
