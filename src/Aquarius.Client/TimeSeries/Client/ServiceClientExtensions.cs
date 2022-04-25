@@ -44,6 +44,7 @@ namespace Aquarius.TimeSeries.Client
             this IServiceClient client,
             int batchSize,
             IEnumerable<TRequest> requests,
+            Action<TRequest, ResponseStatus> failedRequestHandler = null,
             CancellationToken? cancellationToken = null,
             IProgressReporter progressReporter = null)
             where TRequest : IReturn<TResponse>
@@ -66,7 +67,38 @@ namespace Aquarius.TimeSeries.Client
 
                 var serverRequestName = requestNameResolver.ResolveRequestName(client, firstRequest);
 
-                responses.AddRange(SendBatch<TResponse>(client, serverRequestName, requestBatch.Cast<object>()));
+                var batchRequests = requestBatch.ToList();
+
+                while (true)
+                {
+                    try
+                    {
+                        var batchResponses = SendBatch<TResponse>(client, serverRequestName, batchRequests.Cast<object>());
+
+                        responses.AddRange(batchResponses);
+
+                        break;
+                    }
+                    catch (WebServiceException webServiceException)
+                    {
+                        if (failedRequestHandler != null
+                            && (webServiceException.ResponseStatus?.Meta?.TryGetValue("AutoBatchIndex", out var textValue) ?? false)
+                            && int.TryParse(textValue, out var batchIndex)
+                            && batchIndex >= 0 && batchIndex < requestBatch.Length)
+                        {
+                            failedRequestHandler(requestBatch[batchIndex], webServiceException.ResponseStatus);
+
+                            batchRequests.RemoveAt(batchIndex);
+
+                            if (!batchRequests.Any())
+                                break;
+
+                            continue;
+                        }
+ 
+                        throw;
+                    }
+                }
 
                 progressReporter?.Progress(responses.Count, totalCount);
 

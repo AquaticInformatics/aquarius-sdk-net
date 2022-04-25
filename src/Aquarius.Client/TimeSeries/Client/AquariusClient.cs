@@ -114,9 +114,21 @@ namespace Aquarius.TimeSeries.Client
             IProgressReporter progressReporter = null)
             where TRequest : IReturn<TResponse>
         {
+            return SendBatchRequests<TRequest, TResponse>(client, batchSize, requests, null, cancellationToken, progressReporter);
+        }
+
+        public IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(
+            IServiceClient client,
+            int batchSize,
+            IEnumerable<TRequest> requests,
+            Action<TRequest, ResponseStatus> failedRequestHandler,
+            CancellationToken? cancellationToken = null,
+            IProgressReporter progressReporter = null)
+            where TRequest : IReturn<TResponse>
+        {
             using (var batchClient = CreateBatchGetRequestClient(client))
             {
-                return batchClient.SendAll<TRequest, TResponse>(batchSize, requests, cancellationToken, progressReporter);
+                return batchClient.SendAll<TRequest, TResponse>(batchSize, requests, failedRequestHandler, cancellationToken, progressReporter);
             }
         }
 
