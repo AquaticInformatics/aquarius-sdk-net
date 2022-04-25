@@ -36,6 +36,15 @@ namespace Aquarius.TimeSeries.Client
             IProgressReporter progressReporter = null)
             where TRequest : IReturn<TResponse>;
 
+        IEnumerable<TResponse> SendBatchRequests<TRequest, TResponse>(
+            IServiceClient client,
+            int batchSize,
+            IEnumerable<TRequest> requests,
+            Action<TRequest, ResponseStatus> failedRequestHandler,
+            CancellationToken? cancellationToken = null,
+            IProgressReporter progressReporter = null)
+            where TRequest : IReturn<TResponse>;
+
         [Obsolete("Sessions will now re-authenticate automatically if they expire.")]
         ScopeAction SessionKeepAlive();
     }
