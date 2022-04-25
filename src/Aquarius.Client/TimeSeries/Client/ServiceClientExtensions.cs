@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client.NativeTypes;
@@ -58,6 +59,8 @@ namespace Aquarius.TimeSeries.Client
 
             var totalCount = requestBatches.Sum(b => b.Length);
 
+            var failedRequests = 0;
+
             foreach (var requestBatch in requestBatches)
             {
                 var firstRequest = requestBatch.First();
@@ -71,6 +74,9 @@ namespace Aquarius.TimeSeries.Client
 
                 while (true)
                 {
+                    if (cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested)
+                        break;
+
                     try
                     {
                         var batchResponses = SendBatch<TResponse>(client, serverRequestName, batchRequests.Cast<object>());
@@ -86,12 +92,20 @@ namespace Aquarius.TimeSeries.Client
                             && int.TryParse(textValue, out var batchIndex)
                             && batchIndex >= 0 && batchIndex < requestBatch.Length)
                         {
-                            failedRequestHandler(requestBatch[batchIndex], webServiceException.ResponseStatus);
+                            failedRequestHandler(batchRequests[batchIndex], webServiceException.ResponseStatus);
+
+                            ++failedRequests;
 
                             batchRequests.RemoveAt(batchIndex);
 
                             if (!batchRequests.Any())
                                 break;
+
+                            if (failedRequests > totalCount / 4)
+                                throw new WebServiceException($"Too many failed batch requests ({failedRequests} out of {totalCount}) for {serverRequestName}.", webServiceException)
+                                {
+                                    StatusCode = 500
+                                };
 
                             continue;
                         }
