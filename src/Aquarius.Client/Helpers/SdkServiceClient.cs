@@ -33,6 +33,7 @@ namespace Aquarius.Helpers
             var components = new[]
             {
                 UserAgent,
+                System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,
                 UserAgentBuilder.GetSdkComponent(),
                 UserAgentBuilder.GetApplicationComponent()
             };

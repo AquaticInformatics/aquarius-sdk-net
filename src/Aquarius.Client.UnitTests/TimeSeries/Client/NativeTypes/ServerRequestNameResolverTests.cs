@@ -58,18 +58,18 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client.NativeTypes
         {
             _mockEndpointClient
                 .Get(Arg.Any<GetTypesMetadata>())
-                .Returns(new MetadataTypes
+                .Returns(new Aquarius.TimeSeries.Client.NativeTypes.MetadataTypes
                 {
-                    Operations = new List<MetadataOperationType>
+                    Operations = new List<Aquarius.TimeSeries.Client.NativeTypes.MetadataOperationType>
                     {
-                        new MetadataOperationType
+                        new Aquarius.TimeSeries.Client.NativeTypes.MetadataOperationType
                         {
-                            Request = new MetadataType
+                            Request = new Aquarius.TimeSeries.Client.NativeTypes.MetadataType
                             {
                                 Name = typeof(RenamedServerGetRequest).Name,
-                                Routes = new List<MetadataRoute>
+                                Routes = new List<Aquarius.TimeSeries.Client.NativeTypes.MetadataRoute>
                                 {
-                                    new MetadataRoute
+                                    new Aquarius.TimeSeries.Client.NativeTypes.MetadataRoute
                                     {
                                         Path = KnownRoute
                                     }
@@ -84,20 +84,20 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client.NativeTypes
         {
             _mockEndpointClient
                 .Get(Arg.Any<GetTypesMetadata>())
-                .Returns(new MetadataTypes
+                .Returns(new Aquarius.TimeSeries.Client.NativeTypes.MetadataTypes
                 {
-                    Operations = new List<MetadataOperationType>
+                    Operations = new List<Aquarius.TimeSeries.Client.NativeTypes.MetadataOperationType>
                     {
-                        new MetadataOperationType
+                        new Aquarius.TimeSeries.Client.NativeTypes.MetadataOperationType
                         {
-                            Request = new MetadataType
+                            Request = new Aquarius.TimeSeries.Client.NativeTypes.MetadataType
                             {
                                 Name = typeof(RenamedServerGetRequest).Name,
                                 Routes = null,
                             },
-                            Routes = new List<MetadataRoute>
+                            Routes = new List<Aquarius.TimeSeries.Client.NativeTypes.MetadataRoute>
                             {
-                                new MetadataRoute
+                                new Aquarius.TimeSeries.Client.NativeTypes.MetadataRoute
                                 {
                                     Path = KnownRoute
                                 }
