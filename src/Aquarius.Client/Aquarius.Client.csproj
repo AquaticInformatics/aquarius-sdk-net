@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="NodaTime" Version="2.2.3" />
-    <PackageReference Include="ServiceStack.Client.Core" Version="5.10.4" />
-    <PackageReference Include="ServiceStack.HttpClient.Core" Version="5.10.4" />
-    <PackageReference Include="ServiceStack.Interfaces.Core" Version="5.10.4" />
-    <PackageReference Include="ServiceStack.Text.Core" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.Client.Core" Version="6.0.2" />
+    <PackageReference Include="ServiceStack.HttpClient.Core" Version="6.0.2" />
+    <PackageReference Include="ServiceStack.Interfaces.Core" Version="6.0.2" />
+    <PackageReference Include="ServiceStack.Text.Core" Version="6.0.2" />
   </ItemGroup>
 
   <!-- .NET 4.7.2 references, compilation flags and build options -->
@@ -50,10 +50,10 @@
     <Reference Include="System.Xml" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="NodaTime" Version="1.3.0" />
-    <PackageReference Include="ServiceStack.Client" Version="5.10.4" />
-    <PackageReference Include="ServiceStack.HttpClient" Version="5.10.4" />
-    <PackageReference Include="ServiceStack.Interfaces" Version="5.10.4" />
-    <PackageReference Include="ServiceStack.Text" Version="5.10.4" />
+    <PackageReference Include="ServiceStack.Client" Version="6.0.2" />
+    <PackageReference Include="ServiceStack.HttpClient" Version="6.0.2" />
+    <PackageReference Include="ServiceStack.Interfaces" Version="6.0.2" />
+    <PackageReference Include="ServiceStack.Text" Version="6.0.2" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
