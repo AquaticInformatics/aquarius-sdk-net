@@ -55,6 +55,15 @@ namespace Aquarius.Client.UnitTests.Samples.Client
                 .Get(Arg.Any<SamplesClient.GetUserTokens>())
                 .Returns(_fixture.Create<SamplesClient.UserTokensResponse>());
             
+            var client = SamplesClient.CreateTestClient(_fakeServiceClient);
+            PutFakeServiceClientInMaintenanceMode(_fakeServiceClient);
+
+            ((Action)(() => client.Post(new PostTag())))
+                .ShouldThrow<SamplesMaintenanceModeException>();
+        }
+
+        private void PutFakeServiceClientInMaintenanceMode(IServiceClient fakeServiceClient)
+        {
             _fakeServiceClient
                 .Post(Arg.Any<PostTag>())
                 .Returns(x =>
@@ -64,10 +73,16 @@ namespace Aquarius.Client.UnitTests.Samples.Client
                         StatusCode = 500
                     };
                 });
-
-            var client = SamplesClient.CreateTestClient(_fakeServiceClient);
-            ((Action)(() => client.Post(new PostTag())))
-                .ShouldThrow<SamplesMaintenanceModeException>();
+            
+            _fakeServiceClient
+                .Get(Arg.Any<GetStatus>())
+                .Returns(x =>
+                {
+                    throw new WebServiceException
+                    {
+                        StatusCode = 500
+                    };
+                });
         }
     }
 }

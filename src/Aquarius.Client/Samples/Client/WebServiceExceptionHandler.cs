@@ -9,9 +9,6 @@ namespace Aquarius.Samples.Client
     {
         public static SamplesApiException CreateSamplesApiExceptionFromResponse(WebServiceException e)
         {
-            if (e.IsAny500())
-                return new SamplesMaintenanceModeException($"{e.Message}: AQUARIUS Samples is in maintenance mode", e);
-            
             var errorResponse = DeserializeErrorFromResponse(e);
             var message = ComposeMessage(e, errorResponse);
 

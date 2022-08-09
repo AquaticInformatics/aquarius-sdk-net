@@ -342,7 +342,8 @@ namespace Aquarius.Samples.Client
             }, scopeMethod);
         }
 
-        public TResponse InvokeWebServiceMethod<TResponse>(Func<TResponse> webServiceMethod, Func<JsConfigScope> scopeMethod = null)
+        public TResponse InvokeWebServiceMethod<TResponse>(Func<TResponse> webServiceMethod,
+            Func<JsConfigScope> scopeMethod = null)
         {
             try
             {
@@ -353,12 +354,25 @@ namespace Aquarius.Samples.Client
             }
             catch (WebServiceException exception)
             {
+                if (exception.IsAny500() && IsStatusRequest(webServiceMethod))
+                {
+                    throw new SamplesMaintenanceModeException($"{exception.Message}: AQUARIUS Samples is in maintenance mode", exception);
+                }
+                if (exception.IsAny500())
+                {
+                    InvokeWebServiceMethod(() => _client.Get(new GetStatus()));
+                }
                 throw WebServiceExceptionHandler.CreateSamplesApiExceptionFromResponse(exception);
             }
             catch (WebException exception)
             {
                 throw WebServiceExceptionHandler.CreateSamplesApiExceptionFromResponse(exception);
             }
+        }
+        
+        private static bool IsStatusRequest<TResponse>(Func<TResponse> webServiceMethod)
+        {
+            return webServiceMethod.Method.ReturnType == typeof(Status);
         }
     }
 }
