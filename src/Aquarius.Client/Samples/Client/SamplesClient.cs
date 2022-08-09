@@ -76,19 +76,7 @@ namespace Aquarius.Samples.Client
 
             Client.AddHeader(AuthorizationHeaderKey, $"token {apiToken}");
 
-            try
-            {
-                ServerVersion = GetServerVersion();
-            }
-            catch (SamplesApiException e)
-            {
-                if (e.IsAny500())
-                {
-                    throw new SamplesMaintenanceModeException($"{e.Message}: AQUARIUS Samples is in maintenance mode", e.InnerException as WebServiceException);
-                }
-                throw;
-            }
-
+            ServerVersion = GetServerVersion();
             AuthenticatedUser = GetAuthenticatedUser();
 
             Log.Info($"Connected to {GetBaseUri()} ({ServerVersion}) as {AuthenticatedUser.FullName}");
