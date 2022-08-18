@@ -4,6 +4,14 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 22.2.0
+- Updated the service models for the AQUARIUS Time-Series 2022.2 release.
+- Updated the service models for the AQUARIUS Samples 2022.06 release.
+- Fixed a JSON deserialization bug when Samples UTC offsets exceed 14 hours.
+
+### 22.1.3
+- Moved the ServiceStack dependecies from v5.10.4 to v6.0.2
+
 ### 22.1.0
 - Updated the service models for the AQUARIUS Time-Series 2022.1 release.
 - Updated the service models for the AQUARIUS Samples 2022.03 release.

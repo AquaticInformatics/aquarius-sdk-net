@@ -219,6 +219,16 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new TestCaseData("\"1901-02-03T08:05:06.789+04:00[GST]\"", new DateTimeOffset(1901,2,3,8,5,6,789, TimeSpan.FromHours(4)), "should strip the trailing [GST] AQSamples timecode"),
             new TestCaseData("\"2020-12-01T-08:00\"", new DateTimeOffset(new DateTime(2020,12,1), TimeSpan.FromHours(-8)), "This occurred on a production system"),
             new TestCaseData("\"2020-12-01T+10:00\"", new DateTimeOffset(new DateTime(2020,12,1), TimeSpan.FromHours(10)), "The production system, but Australian"),
+            new TestCaseData("\"2020-10-16T10:00:00.000-16:00\"", new DateTimeOffset(2020, 10, 17, 10, 0, 0, TimeSpan.FromHours(8)), "Adjust aggressively negative timezones forward one day"),
+            new TestCaseData("\"2020-10-16T10:00:00.000+16:00\"", new DateTimeOffset(2020, 10, 15, 10, 0, 0, TimeSpan.FromHours(-8)), "Adjust aggressively positive timezones backward one day"),
+        };
+
+        private static readonly IEnumerable<TestCaseData> DateTimeOffsetFailureCases = new[]
+        {
+            new TestCaseData("\"2020-10-16T10:00:00.000-24:00\"", "Samples UTC offsets of negative one day are invalid"),
+            new TestCaseData("\"2020-10-16T10:00:00.000-25:00\"", "Samples UTC offsets more negative than one day are invalid"),
+            new TestCaseData("\"2020-10-16T10:00:00.000+24:00\"", "Samples UTC offsets of positive one day are invalid"),
+            new TestCaseData("\"2020-10-16T10:00:00.000+25:00\"", "Samples UTC offsets more positive than one day are invalid"),
         };
 
         private static readonly IEnumerable<TestCaseData> DateTimeOffsetCases = DateTimeOffsetRoundTripCases
@@ -245,6 +255,12 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             var actual = input.ToJson();
 
             actual.ShouldBeEquivalentTo(expected, because);
+        }
+
+        [TestCaseSource(nameof(DateTimeOffsetFailureCases))]
+        public void DateTimeOffset_WithOutOfRangeUtcOffset_Throws(string input, string because)
+        {
+            Assert.That(input.FromJson<DateTimeOffset>, Throws.InstanceOf<FormatException>(), because);
         }
 
         private static readonly IEnumerable<TestCaseData> NullableDateTimeOffsetCases = DateTimeOffsetCases
