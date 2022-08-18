@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using NodaTime;
@@ -264,16 +265,67 @@ namespace Aquarius.TimeSeries.Client
             }
             catch (FormatException)
             {
+                // Workarounds for some Samples timestamp quirks which can't be represented as .NET DateTimeOffset values.
+                // For both known quirks below, the FormatException contains no extra information that allows us to make a quick decision.
+                // We can't use the FormatException.Message property, since it might be localized into a non-English language.
+                // We can't use the FormatException.HResult property, since it is always -2146233033 (0x80131537) for both known quirks.
+                // Instead, we can just try to detect the known conditions and adjust the values accordingly.
+                // These adjustments will mean that any round tripping back to Samples through the SDK might change the data a bit, even though the changed timestamp will still be the same unambiguous time.
+
+                // Workaround for WI-5127 timestamps with UTC offsets outside the allowed +/- 14 hours. AQSamples allows +/-23:59. Yikes!
+                // FormatException.Message = "The time zone offset of string '2020-10-16T10:00:00.000-16:00' must be within plus or minus 14 hours."
+                // FormatException.HResult = -2146233033 (0x80131537)
+                var adjustment = TimeSpan.Zero;
+
+                text = UtcOffsetRegex.Replace(text, m =>
+                {
+                    var signText = m.Groups["sign"].Value;
+                    var offsetText = m.Groups["offset"].Value;
+
+                    if (TimeSpan.TryParse(offsetText, out var utcOffset))
+                    {
+                        if (utcOffset > MaxAllowedOffset && utcOffset < MaxAdjustableOffset)
+                        {
+                            // OK, we can adjust this time into a sane .NET timestamp
+                            if (signText == "+")
+                            {
+                                adjustment = TimeSpan.FromHours(-24);
+                                utcOffset += adjustment;
+                                signText = "-";
+                            }
+                            else
+                            {
+                                adjustment = TimeSpan.FromHours(24);
+                                utcOffset -= adjustment;
+                                signText = "+";
+                            }
+
+                            return $"{signText}{utcOffset:hh\\:mm}";
+                        }
+                    }
+
+                    return m.Value;
+                });
+
                 // Workaround for AQS-760 timestamps with no time component like: 2020-12-01T-08:00
+                // FormatException.Message = "String '2020-12-01T+10:00' was not recognized as a valid DateTime."
+                // FormatException.HResult = -2146233033 (0x80131537)
                 if (text.Contains("T-"))
-                    return DateTimeSerializer.ParseDateTimeOffset(text.Replace("T-", "T00:00:00.000-"));
+                    return DateTimeSerializer.ParseDateTimeOffset(text.Replace("T-", "T00:00:00.000-")) + adjustment;
 
                 if (text.Contains("T+"))
-                    return DateTimeSerializer.ParseDateTimeOffset(text.Replace("T+", "T00:00:00.000+"));
+                    return DateTimeSerializer.ParseDateTimeOffset(text.Replace("T+", "T00:00:00.000+")) + adjustment;
+
+                if (adjustment != TimeSpan.Zero)
+                    return DateTimeSerializer.ParseDateTimeOffset(text) + adjustment;
 
                 throw;
             }
         }
+
+        private static readonly Regex UtcOffsetRegex = new Regex(@"(?<sign>[-+])(?<offset>\d{1,2}(:\d{1,2})?)$");
+        private static readonly TimeSpan MaxAllowedOffset = TimeSpan.FromHours(14);
+        private static readonly TimeSpan MaxAdjustableOffset = TimeSpan.FromHours(24);
 
         private static Instant? DeserializeNullableInstant(string text)
         {
