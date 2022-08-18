@@ -1,5 +1,5 @@
 /* Options:
-Date: 2022-04-21 19:08:11
+Date: 2022-08-18 21:02:04
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -253,6 +253,51 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     public class PutApprovalLevel
         : ApprovalLevelBase, IReturn<ApprovalLevel>
     {
+    }
+
+    [Route("/locations/{LocationUniqueId}/channel/{Identifier}", "DELETE")]
+    public class DeleteChannel
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier", IsRequired=true)]
+        public string Identifier { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/channels/", "GET")]
+    public class GetChannels
+        : IReturn<ChannelsResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/channel", "POST")]
+    public class PostChannel
+        : IReturn<Channel>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier", IsRequired=true)]
+        public string Identifier { get; set; }
     }
 
     public class CodeTable
@@ -2236,9 +2281,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
     }
 
-    [Route("/settings/{Group}/{Key}", "PUT")]
+    [Route("/settings/{Group}/{Key}", "POST,PUT")]
     public class PutSetting
-        : IReturn<Setting>, IModifySetting
+        : IReturn<Setting>, IModifySetting, IFileUploadRequest
     {
         ///<summary>
         ///Setting group
@@ -2257,6 +2302,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Setting value")]
         public string Value { get; set; }
+
+        ///<summary>
+        ///Setting value file
+        ///</summary>
+        [ApiMember(DataType="file", Description="Setting value file", ParameterType="form")]
+        public IHttpFile File { get; set; }
 
         ///<summary>
         ///Setting description
@@ -2489,6 +2540,80 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="number", Description="Uncertainty for the offset to the base reference", Format="double")]
         public double? Uncertainty { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/sublocation/{Identifier}", "DELETE")]
+    public class DeleteSubLocation
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier", IsRequired=true)]
+        public string Identifier { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/sublocations", "GET")]
+    public class GetSubLocations
+        : IReturn<SubLocationsResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/sublocation", "POST")]
+    public class PostSubLocation
+        : IReturn<SubLocation>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier", IsRequired=true)]
+        public string Identifier { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/sublocation/{Identifier}", "PUT")]
+    public class PutSubLocation
+        : IReturn<SubLocation>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier", IsRequired=true)]
+        public string Identifier { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
     }
 
     public class ApplyTagRequest
@@ -3969,6 +4094,35 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="The list of approval levels")]
         public List<ApprovalLevel> Results { get; set; }
+    }
+
+    public class Channel
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(Description="Unique ID of the location")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier")]
+        public string Identifier { get; set; }
+    }
+
+    public class ChannelsResponse
+    {
+        public ChannelsResponse()
+        {
+            Results = new List<Channel>{};
+        }
+
+        ///<summary>
+        ///The list of channels
+        ///</summary>
+        [ApiMember(DataType="array", Description="The list of channels")]
+        public List<Channel> Results { get; set; }
     }
 
     public class CodeTableResponse
@@ -5676,6 +5830,41 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<StandardReferenceDatum> Results { get; set; }
     }
 
+    public class SubLocation
+    {
+        ///<summary>
+        ///Identifier
+        ///</summary>
+        [ApiMember(Description="Identifier")]
+        public string Identifier { get; set; }
+
+        ///<summary>
+        ///Description
+        ///</summary>
+        [ApiMember(Description="Description")]
+        public string Description { get; set; }
+
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(Description="Unique ID of the location")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    public class SubLocationsResponse
+    {
+        public SubLocationsResponse()
+        {
+            Results = new List<SubLocation>{};
+        }
+
+        ///<summary>
+        ///The list of sublocations
+        ///</summary>
+        [ApiMember(DataType="array", Description="The list of sublocations")]
+        public List<SubLocation> Results { get; set; }
+    }
+
     public class Tag
     {
         public Tag()
@@ -6166,6 +6355,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.1.86.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.2.188.0");
     }
 }
