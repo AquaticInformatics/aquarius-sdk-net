@@ -1,8 +1,8 @@
 /* Options:
-Date: 2022-08-18 21:02:14
+Date: 2022-10-25 21:44:15
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Acquisition/v2
+BaseUrl: http://aqts-pg-in.aquariusdev.net/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
@@ -641,6 +641,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     {
     }
 
+    [Route("/session/end", "GET")]
+    public class EndSession
+        : IReturn<IHttpResult>
+    {
+    }
+
     [Route("/session/keepalive", "GET")]
     public class GetKeepAlive
         : IReturnVoid
@@ -696,6 +702,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.2.188.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.3.75.0");
     }
 }
