@@ -51,12 +51,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     {
     }
 
-    [Route("/session/end", "GET")]
-    public class EndSession
-        : IReturn<IHttpResult>
-    {
-    }
-
     [Route("/session/keepalive", "GET")]
     public class GetKeepAlive
         : IReturnVoid
