@@ -2,7 +2,7 @@
 Date: 2022-10-25 21:44:12
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-pg-in.aquariusdev.net/AQUARIUS/Publish/v2
+BaseUrl: http://aqts-pg.aquariusdev.net/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
