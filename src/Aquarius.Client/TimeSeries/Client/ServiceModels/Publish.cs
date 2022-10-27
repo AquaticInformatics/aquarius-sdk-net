@@ -1,8 +1,8 @@
 /* Options:
-Date: 2022-08-18 21:01:54
+Date: 2022-10-25 21:44:12
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Publish/v2
+BaseUrl: http://aqts-pg.aquariusdev.net/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -1170,16 +1170,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string RoundingSpec { get; set; }
     }
 
-    public class NameTagDefinition
-        : TagDefinition
-    {
-        ///<summary>
-        ///DEPRECATED: renamed to Key
-        ///</summary>
-        [ApiMember(Description="DEPRECATED: renamed to Key")]
-        public string Name { get; set; }
-    }
-
     public class Note
         : TimeRange
     {
@@ -1996,12 +1986,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="string", Description="UniqueId of the tag", Format="guid")]
         public Guid UniqueId { get; set; }
-
-        ///<summary>
-        ///DEPRECATED: renamed to Key
-        ///</summary>
-        [ApiMember(Description="DEPRECATED: renamed to Key")]
-        public string Name { get; set; }
 
         ///<summary>
         ///Key of the tag
@@ -6402,12 +6386,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DateTime? ChangesSinceToken { get; set; }
     }
 
-    [Route("/GetLocationTagList", "GET")]
-    public class LocationTagListServiceRequest
-        : IReturn<LocationTagListServiceResponse>
-    {
-    }
-
     [Route("/GetMetadataChangeTransactionList", "GET")]
     public class MetadataChangeTransactionListServiceRequest
         : IReturn<MetadataChangeTransactionListServiceResponse>
@@ -7559,38 +7537,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DateTime? NextToken { get; set; }
     }
 
-    public class LocationTagListServiceResponse
-    {
-        public LocationTagListServiceResponse()
-        {
-            Tags = new List<NameTagDefinition>{};
-        }
-
-        ///<summary>
-        ///Response version
-        ///</summary>
-        [ApiMember(DataType="integer", Description="Response version", Format="int32")]
-        public int ResponseVersion { get; set; }
-
-        ///<summary>
-        ///Response time
-        ///</summary>
-        [ApiMember(DataType="string", Description="Response time", Format="date-time")]
-        public DateTime ResponseTime { get; set; }
-
-        ///<summary>
-        ///Summary
-        ///</summary>
-        [ApiMember(Description="Summary")]
-        public string Summary { get; set; }
-
-        ///<summary>
-        ///Tags
-        ///</summary>
-        [ApiMember(DataType="array", Description="Tags")]
-        public List<NameTagDefinition> Tags { get; set; }
-    }
-
     public class MetadataChangeTransactionListServiceResponse
         : PublishServiceResponse
     {
@@ -8094,6 +8040,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.2.188.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.3.75.0");
     }
 }

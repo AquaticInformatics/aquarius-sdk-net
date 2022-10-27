@@ -1,8 +1,8 @@
 /* Options:
-Date: 2022-08-18 21:02:04
+Date: 2022-10-25 21:44:14
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://aqts-rel-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
+BaseUrl: http://aqts-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -268,7 +268,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Identifier
         ///</summary>
-        [ApiMember(Description="Identifier", IsRequired=true)]
+        [ApiMember(Description="Identifier", IsRequired=true, ParameterType="path")]
         public string Identifier { get; set; }
     }
 
@@ -521,9 +521,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<string> PickListValues { get; set; }
 
         ///<summary>
-        ///If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.  When omitted, the extended attribute is applicable to locations.
+        ///Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.
         ///</summary>
-        [ApiMember(DataType="array", Description="If set, create extended attribute with specified applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.  When omitted, the extended attribute is applicable to locations.")]
+        [ApiMember(DataType="array", Description="Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
 
         ///<summary>
@@ -541,13 +541,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Default value. This is required when Required is true.
         ///</summary>
-        [ApiMember(DataType="string", Description="Default value. This is required when Required is true.")]
+        [ApiMember(Description="Default value. This is required when Required is true.")]
         public string DefaultValue { get; set; }
 
         ///<summary>
         ///Defines the order of elements on the page from least to greatest.
         ///</summary>
-        [ApiMember(DataType="integer", Description="Defines the order of elements on the page from least to greatest.")]
+        [ApiMember(DataType="integer", Description="Defines the order of elements on the page from least to greatest.", Format="int32")]
         public int Order { get; set; }
     }
 
@@ -1838,7 +1838,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Recurrence period to generate the report, in ISO 8601 period format
         ///</summary>
-        [ApiMember(DataType="string", Description="Recurrence period to generate the report, in ISO 8601 period format", IsRequired=true)]
+        [ApiMember(Description="Recurrence period to generate the report, in ISO 8601 period format", IsRequired=true)]
         public string RecurrencePeriod { get; set; }
     }
 
@@ -2555,7 +2555,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Identifier
         ///</summary>
-        [ApiMember(Description="Identifier", IsRequired=true)]
+        [ApiMember(Description="Identifier", IsRequired=true, ParameterType="path")]
         public string Identifier { get; set; }
     }
 
@@ -2606,7 +2606,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Identifier
         ///</summary>
-        [ApiMember(Description="Identifier", IsRequired=true)]
+        [ApiMember(Description="Identifier", IsRequired=true, ParameterType="path")]
         public string Identifier { get; set; }
 
         ///<summary>
@@ -3780,6 +3780,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UniqueId { get; set; }
     }
 
+    [Route("/users/aqiidentity/{UniqueId}", "GET")]
+    public class GetAqiIdentityUser
+        : IReturn<User>
+    {
+        ///<summary>
+        ///Unique ID of the user
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the user", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+    }
+
+    [Route("/users/aqiidentity", "GET")]
+    public class GetAqiIdentityUsers
+        : IReturn<UsersResponse>
+    {
+    }
+
     [Route("/users/openidconnect/{UniqueId}", "GET")]
     public class GetOpenIdConnectUser
         : IReturn<OpenIdConnectUser>
@@ -3896,6 +3913,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="The domain user's security identifier (SID)")]
         public string ActiveDirectorySid { get; set; }
+    }
+
+    [Route("/users/aqiidentity/{UniqueId}", "PUT")]
+    public class PutAqiIdentityUser
+        : PutUserBase, IReturn<User>
+    {
     }
 
     [Route("/users/{UniqueId}/credentials", "PUT")]
@@ -4101,7 +4124,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(Description="Unique ID of the location")]
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid")]
         public Guid LocationUniqueId { get; set; }
 
         ///<summary>
@@ -4197,6 +4220,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public ExtendedAttribute()
         {
             PickListValues = new List<string>{};
+            Applicability = new List<ExtendedAttributeApplicability>{};
         }
 
         ///<summary>
@@ -4224,22 +4248,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<string> PickListValues { get; set; }
 
         ///<summary>
-        ///True if extended attribute is applicable to Locations
+        ///DEPRECATED: Use Applicability instead. True if extended attribute is applicable to Locations
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to Locations")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if extended attribute is applicable to Locations")]
         public bool AppliesToLocations { get; set; }
 
         ///<summary>
-        ///True if extended attribute is applicable to Location Types
+        ///DEPRECATED: Use Applicability instead. True if extended attribute is applicable to Location Types
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to Location Types")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if extended attribute is applicable to Location Types")]
         public bool AppliesToLocationTypes { get; set; }
 
         ///<summary>
-        ///True if extended attribute is applicable to TimeSeries
+        ///DEPRECATED: Use Applicability instead. True if extended attribute is applicable to TimeSeries
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if extended attribute is applicable to TimeSeries")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if extended attribute is applicable to TimeSeries")]
         public bool AppliesToTimeSeries { get; set; }
+
+        ///<summary>
+        ///Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.
+        ///</summary>
+        [ApiMember(DataType="array", Description="Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.")]
+        public List<ExtendedAttributeApplicability> Applicability { get; set; }
 
         ///<summary>
         ///True if extended attribute is VisibleInDatasetList
@@ -4256,13 +4286,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Default value. This is required when Required is true.
         ///</summary>
-        [ApiMember(DataType="string", Description="Default value. This is required when Required is true.")]
+        [ApiMember(Description="Default value. This is required when Required is true.")]
         public string DefaultValue { get; set; }
 
         ///<summary>
         ///Defines the order of elements on the page from least to greatest.
         ///</summary>
-        [ApiMember(DataType="integer", Description="Defines the order of elements on the page from least to greatest.")]
+        [ApiMember(DataType="integer", Description="Defines the order of elements on the page from least to greatest.", Format="int32")]
         public int Order { get; set; }
     }
 
@@ -5299,7 +5329,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Recurrence period to generate the report, in ISO 8601 period format
         ///</summary>
-        [ApiMember(DataType="string", Description="Recurrence period to generate the report, in ISO 8601 period format")]
+        [ApiMember(Description="Recurrence period to generate the report, in ISO 8601 period format")]
         public string RecurrencePeriod { get; set; }
 
         ///<summary>
@@ -5847,7 +5877,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///<summary>
         ///Unique ID of the location
         ///</summary>
-        [ApiMember(Description="Unique ID of the location")]
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid")]
         public Guid LocationUniqueId { get; set; }
     }
 
@@ -5870,6 +5900,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Tag()
         {
             PickListValues = new List<string>{};
+            Applicability = new List<TagApplicability>{};
         }
 
         ///<summary>
@@ -5897,34 +5928,40 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<string> PickListValues { get; set; }
 
         ///<summary>
-        ///True if tag is applicable to Attachments
+        ///DEPRECATED: Use Applicability instead. True if tag is applicable to Attachments
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if tag is applicable to Attachments")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if tag is applicable to Attachments")]
         public bool AppliesToAttachments { get; set; }
 
         ///<summary>
-        ///True if tag is applicable to Locations
+        ///DEPRECATED: Use Applicability instead. True if tag is applicable to Locations
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if tag is applicable to Locations")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if tag is applicable to Locations")]
         public bool AppliesToLocations { get; set; }
 
         ///<summary>
-        ///True if tag is applicable to Location Notes
+        ///DEPRECATED: Use Applicability instead. True if tag is applicable to Location Notes
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if tag is applicable to Location Notes")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if tag is applicable to Location Notes")]
         public bool AppliesToLocationNotes { get; set; }
 
         ///<summary>
-        ///True if tag is applicable to Reports
+        ///DEPRECATED: Use Applicability instead. True if tag is applicable to Reports
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if tag is applicable to Reports")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if tag is applicable to Reports")]
         public bool AppliesToReports { get; set; }
 
         ///<summary>
-        ///True if tag is applicable to Sensors and Gauges
+        ///DEPRECATED: Use Applicability instead. True if tag is applicable to Sensors and Gauges
         ///</summary>
-        [ApiMember(DataType="boolean", Description="True if tag is applicable to Sensors and Gauges")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if tag is applicable to Sensors and Gauges")]
         public bool AppliesToSensorsGauges { get; set; }
+
+        ///<summary>
+        ///Tag applicability, any of: AppliesToAttachments, AppliesToLocations, AppliesToLocationNotes, AppliesToReports and AppliesToSensorsGauges.
+        ///</summary>
+        [ApiMember(DataType="array", Description="Tag applicability, any of: AppliesToAttachments, AppliesToLocations, AppliesToLocationNotes, AppliesToReports and AppliesToSensorsGauges.")]
+        public List<TagApplicability> Applicability { get; set; }
     }
 
     public class TagsResponse
@@ -6355,6 +6392,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.2.188.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.3.75.0");
     }
 }
