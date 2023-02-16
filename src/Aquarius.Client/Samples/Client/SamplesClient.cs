@@ -27,6 +27,9 @@ namespace Aquarius.Samples.Client
 
         private static void SetupServiceStack()
         {
+            if (_serviceStackConfigured)
+                return;
+
             lock (SyncLock)
             {
                 if (_serviceStackConfigured)
