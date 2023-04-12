@@ -6,6 +6,7 @@ Not all changes will be listed, but you can always [compare by version tags](htt
 
 ### 23.1.0
 - Updated the service models for the AQUARIUS Time-Series 2023.1 release.
+- Updated the service models for the AQUARIUS Samples 2023.01 release.
 
 ### 22.3.0
 - Updated the service models for the AQUARIUS Samples 2022.09 release.
