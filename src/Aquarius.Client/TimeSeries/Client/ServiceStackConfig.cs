@@ -22,6 +22,9 @@ namespace Aquarius.TimeSeries.Client
 
         public static void ConfigureServiceStack()
         {
+            if (_configured)
+                return;
+
             lock (SyncLock)
             {
                 if (_configured)

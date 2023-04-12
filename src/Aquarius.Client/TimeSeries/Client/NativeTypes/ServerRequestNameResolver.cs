@@ -27,6 +27,9 @@ namespace Aquarius.TimeSeries.Client.NativeTypes
 
         private void FetchEndpointMetadataOnce(IServiceClient client)
         {
+            if (RequestsByRoute != null)
+                return;
+
             lock (_syncLock)
             {
                 if (RequestsByRoute != null)
