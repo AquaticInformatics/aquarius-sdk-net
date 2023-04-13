@@ -1,6 +1,6 @@
-// Date: 2022-10-25T22:21:12.9833740-07:00
+// Date: 2023-04-12T13:54:03.8529691-07:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2022.09.5395)
+// Source: AQUARIUS Samples API (2023.01.5895)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2022.09.5395");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2023.01.5895");
     }
 
     [Route("/v1/accessgroups", "GET")]

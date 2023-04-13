@@ -1,5 +1,5 @@
 /* Options:
-Date: 2022-10-25 21:44:14
+Date: 2023-04-11 18:37:41
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: http://aqts-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -124,6 +124,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="XML blob containing the RSA public key components")]
         public string Xml { get; set; }
+    }
+
+    public enum AuditEventType
+    {
+        Create,
+        Update,
+        Delete,
+    }
+
+    public enum AuditType
+    {
+        All,
+        User,
+        UserRole,
+        Role,
     }
 
     public enum DropDownListType
@@ -252,6 +267,45 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     [Route("/approvallevels/{ApprovalLevel}", "PUT")]
     public class PutApprovalLevel
         : ApprovalLevelBase, IReturn<ApprovalLevel>
+    {
+    }
+
+    public class GetAudits
+    {
+        ///<summary>
+        ///If set, filters audits by record type. Selected from one or more: User, UserRole, Role.
+        ///</summary>
+        [ApiMember(DataType="array", Description="If set, filters audits by record type. Selected from one or more: User, UserRole, Role.")]
+        public IEnumerable<AuditType> AuditTypes { get; set; }
+
+        ///<summary>
+        ///User identifier who made changes
+        ///</summary>
+        [ApiMember(Description="User identifier who made changes")]
+        public string AppliedByUser { get; set; }
+
+        ///<summary>
+        ///Audits from - ISO 8601 DateTime Format
+        ///</summary>
+        [ApiMember(DataType="string", Description="Audits from - ISO 8601 DateTime Format", Format="date-time")]
+        public Instant? AppliedTimeFrom { get; set; }
+
+        ///<summary>
+        ///Audits until - ISO 8601 DateTime Format
+        ///</summary>
+        [ApiMember(DataType="string", Description="Audits until - ISO 8601 DateTime Format", Format="date-time")]
+        public Instant? AppliedTimeTo { get; set; }
+    }
+
+    [Route("/audittrail/json", "GET")]
+    public class GetAuditsJson
+        : GetAudits, IReturn<AuditsResponse>
+    {
+    }
+
+    [Route("/audittrail/spreadsheet", "GET")]
+    public class GetAuditsSpreadsheet
+        : GetAudits, IReturn<ResponseStatus>
     {
     }
 
@@ -4119,6 +4173,94 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<ApprovalLevel> Results { get; set; }
     }
 
+    public class AttributeVariance
+    {
+        ///<summary>
+        ///Attribute name
+        ///</summary>
+        [ApiMember(Description="Attribute name")]
+        public string Attribute { get; set; }
+
+        ///<summary>
+        ///Current attribute value
+        ///</summary>
+        [ApiMember(Description="Current attribute value")]
+        public string CurrentValue { get; set; }
+
+        ///<summary>
+        ///Previous attribute value
+        ///</summary>
+        [ApiMember(Description="Previous attribute value")]
+        public string PreviousValue { get; set; }
+    }
+
+    public class Audit
+    {
+        public Audit()
+        {
+            AttributeChanges = new List<AttributeVariance>{};
+        }
+
+        ///<summary>
+        ///The recorded audit event
+        ///</summary>
+        [ApiMember(DataType="AuditEvent", Description="The recorded audit event")]
+        public AuditEvent AuditEvent { get; set; }
+
+        ///<summary>
+        ///Summary of attribute changes
+        ///</summary>
+        [ApiMember(DataType="array", Description="Summary of attribute changes")]
+        public List<AttributeVariance> AttributeChanges { get; set; }
+    }
+
+    public class AuditEvent
+    {
+        ///<summary>
+        ///Audit record type
+        ///</summary>
+        [ApiMember(DataType="AuditType", Description="Audit record type")]
+        public AuditType AuditType { get; set; }
+
+        ///<summary>
+        ///The name of user making the change
+        ///</summary>
+        [ApiMember(Description="The name of user making the change")]
+        public string AppliedByUserName { get; set; }
+
+        ///<summary>
+        ///Audit event timestamp - ISO 8601 DateTime Format
+        ///</summary>
+        [ApiMember(DataType="string", Description="Audit event timestamp - ISO 8601 DateTime Format", Format="date-time")]
+        public Instant AppliedTime { get; set; }
+
+        ///<summary>
+        ///Audit event type
+        ///</summary>
+        [ApiMember(DataType="AuditEventType", Description="Audit event type")]
+        public AuditEventType EventType { get; set; }
+
+        ///<summary>
+        ///Audited record summary
+        ///</summary>
+        [ApiMember(Description="Audited record summary")]
+        public string RecordSummary { get; set; }
+    }
+
+    public class AuditsResponse
+    {
+        public AuditsResponse()
+        {
+            Results = new List<Audit>{};
+        }
+
+        ///<summary>
+        ///The list of audits
+        ///</summary>
+        [ApiMember(DataType="array", Description="The list of audits")]
+        public List<Audit> Results { get; set; }
+    }
+
     public class Channel
     {
         ///<summary>
@@ -6392,6 +6534,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("22.3.75.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.1.61.0");
     }
 }

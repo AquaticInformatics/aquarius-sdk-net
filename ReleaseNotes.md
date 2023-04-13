@@ -4,6 +4,10 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 23.1.0
+- Updated the service models for the AQUARIUS Time-Series 2023.1 release.
+- Updated the service models for the AQUARIUS Samples 2023.01 release.
+
 ### 22.3.0
 - Updated the service models for the AQUARIUS Samples 2022.09 release.
 - Updated the service models for the AQUARIUS Time-Series 2022.3 release.
