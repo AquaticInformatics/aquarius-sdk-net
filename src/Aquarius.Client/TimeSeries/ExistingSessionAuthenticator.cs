@@ -1,4 +1,5 @@
-﻿using Aquarius.TimeSeries.Client;
+﻿using System;
+using Aquarius.TimeSeries.Client;
 
 namespace Aquarius.TimeSeries
 {
@@ -19,6 +20,11 @@ namespace Aquarius.TimeSeries
         public string Login(string username, string password)
         {
             return SessionToken;
+        }
+
+        public void Login(string accessToken)
+        {
+            throw new NotImplementedException();
         }
 
         public void Logout()

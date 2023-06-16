@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Aquarius.Client.UnitTests.TestHelpers;
-using Aquarius.Helpers;
+﻿using System.Collections.Generic;
 using Aquarius.TimeSeries.Client;
 using Aquarius.TimeSeries.Client.EndPoints;
 using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;

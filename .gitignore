@@ -5,6 +5,8 @@ Thumbs.db
 #Ignore some MyGet cruft
 [Bb]uild/
 msbuild.log
+#Ignore IDE files
+*.idea
 #Ignore build output and Visual Studio temp file
 *.obj
 *.exe

@@ -49,6 +49,20 @@ namespace Aquarius.TimeSeries.Client.Helpers
             return client.Post(new PostSession {EncryptedPassword = encryptedPassword, Username = username});
         }
 
+        public static void Login(IServiceClient client, string accessToken)
+        {
+            ResetBearerToken(client, accessToken);
+        }
+
+        private static void ResetBearerToken(IServiceClient client, string accessToken)
+        {
+            if (client == null)
+                return;
+
+            client.BearerToken = accessToken;
+            client.ClearCookies();
+        }
+
         public static void Logout(IServiceClient client)
         {
             client.Delete(new DeleteSession());

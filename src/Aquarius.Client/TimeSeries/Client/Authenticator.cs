@@ -32,6 +32,11 @@ namespace Aquarius.TimeSeries.Client
             return ClientHelper.Login(Client, username, password);
         }
 
+        public void Login(string accessToken)
+        {
+            throw new NotImplementedException($"Credentials authenticator requires a username and password to login.");
+        }
+
         public void Logout()
         {
             try

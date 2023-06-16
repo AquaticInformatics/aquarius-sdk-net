@@ -30,7 +30,19 @@ namespace Aquarius.TimeSeries.Client
         {
             var client = new AquariusClient();
 
-            client.Connect(hostname, existingSessionToken);
+            const string fakeUsername = "!BrowserUser!";
+            const string fakePassword = "!BrowserPassword!";
+
+            client.Connect(hostname, fakeUsername, fakePassword, existingSessionToken);
+
+            return client;
+        }
+        
+        public static IAquariusClient CreateConnectedClient(string hostname, string accessToken)
+        {
+            var client = new AquariusClient();
+            
+            client.Connect(hostname, accessToken);
 
             return client;
         }
@@ -148,7 +160,7 @@ namespace Aquarius.TimeSeries.Client
             return clone;
         }
 
-        internal Connection Connection { get; set; }
+        internal IConnection Connection { get; set; }
 
         internal enum ClientType
         {
@@ -207,7 +219,7 @@ namespace Aquarius.TimeSeries.Client
             InternalConnect(hostname, () => ConnectionPool.Instance.GetConnection(hostname, username, password, Authenticator.Create(hostname)));
         }
 
-        private void Connect(string hostname, string existingSessionToken)
+        private void Connect(string hostname, string username, string password, string existingSessionToken)
         {
             const string fakeUsername = "!BrowserUser!";
             const string fakePassword = "!BrowserPassword!";
@@ -215,7 +227,12 @@ namespace Aquarius.TimeSeries.Client
             InternalConnect(hostname, () => ConnectionPool.Instance.GetConnection(hostname, fakeUsername, fakePassword, ExistingSessionAuthenticator.Create(existingSessionToken)));
         }
 
-        private void InternalConnect(string hostname, Func<Connection> connectionFactory)
+        private void Connect(string hostname, string accessToken)
+        {
+            InternalConnect(hostname, () => ConnectionPool.Instance.GetConnection(hostname, accessToken, AccessTokenAuthenticator.Create(hostname)));
+        }
+
+        private void InternalConnect(string hostname, Func<IConnection> connectionFactory)
         {
             AddServiceClient(ClientType.PublishJson, PublishV2.ResolveEndpoint(hostname));
             AddServiceClient(ClientType.AcquisitionJson, AcquisitionV2.ResolveEndpoint(hostname));
@@ -238,13 +255,13 @@ namespace Aquarius.TimeSeries.Client
 
         private void CommonRequestFilter(HttpWebRequest request)
         {
-            if (string.IsNullOrEmpty(Connection.SessionToken))
+            if (string.IsNullOrEmpty(Connection.Token()))
             {
                 request.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
             }
             else
             {
-                request.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey] = Connection.SessionToken;
+                request.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey] = Connection.Token();
             }
         }
 
@@ -267,11 +284,11 @@ namespace Aquarius.TimeSeries.Client
 
         private void ReAuthenticate(ServiceClientBase client)
         {
-            var expiredToken = Connection.SessionToken;
+            var expiredToken = Connection.Token();
 
             Connection.ReAuthenticate();
 
-            Log.Info($"Re-authenticated with {client.BaseUri} (v{ServerVersion}). Replaced expiredToken={expiredToken} with newToken={Connection.SessionToken}");
+            Log.Info($"Re-authenticated with {client.BaseUri} (v{ServerVersion}). Replaced expiredToken={expiredToken} with newToken={Connection.Token()}");
         }
 
         private void Disconnect()

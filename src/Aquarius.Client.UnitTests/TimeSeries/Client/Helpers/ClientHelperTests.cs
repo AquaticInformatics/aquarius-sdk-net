@@ -71,6 +71,15 @@ namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
         }
 
         [Test]
+        public void Login_IdentityProvider_SetsBearerTokenAsAccessToken()
+        {
+            var mockAccessToken = _fixture.Create<string>();
+            ClientHelper.Login(_rawClient, mockAccessToken);
+
+            _rawClient.BearerToken.Should().BeEquivalentTo(mockAccessToken);
+        }
+
+        [Test]
         public void CloneAuthenticatedClient_WithNullClient_Throws()
         {
             Action action = () => ClientHelper.CloneAuthenticatedClient(null, string.Empty);

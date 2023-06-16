@@ -5,80 +5,72 @@ using ServiceStack.Logging;
 
 namespace Aquarius.TimeSeries.Client
 {
-    public class Connection : IConnection
+    public class AccessTokenConnection : IConnection
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static readonly bool TraceEnabled;
 
         private readonly object _syncLock = new object();
+        
+        private IAuthenticator Authenticator { get; }
+        private Action<AccessTokenConnection> ConnectionRemovalAction { get; }
+        private string Hostname { get; }
+        internal int ConnectionCount { get; set; }
+        
+        public string AccessToken { get; private set; }
 
-        static Connection()
+        public string Token() => AccessToken;
+
+        static AccessTokenConnection()
         {
             TraceEnabled = AppSettings.Get("TraceConnectionPool", false);
         }
 
-        public Connection(
+        public AccessTokenConnection(
             string hostname,
-            string username,
-            string password,
+            string accessToken,
             IAuthenticator authenticator,
-            Action<Connection> connectionRemovalAction)
+            Action<AccessTokenConnection> connectionRemovalAction)
         {
             Hostname = hostname;
-            Username = username;
-            Password = password;
+            AccessToken = accessToken;
             Authenticator = authenticator;
             ConnectionRemovalAction = connectionRemovalAction;
-
             ConnectionCount = 1;
-
+            
             Trace("Created");
-
+            
             CreateNewSession();
         }
 
         private void Trace(string message)
         {
-            if (!TraceEnabled) return;
-
-            Log.Info($"{GetHashCode()}: {Hostname}/{Username}/***: ConnectionCount={ConnectionCount} {message}");
+            if (!TraceEnabled)
+                return;
+            
+            Log.Info($"{GetHashCode()}: {Hostname}/{Token().Substring(0, 4)}/***: ConnectionCount={ConnectionCount} {message}");
         }
-
+        
         private void CreateNewSession()
         {
-            SessionToken = Authenticator.Login(Username, Password);
+            Authenticator.Login(AccessToken);
 
-            Trace($"NewSession SessionToken={SessionToken}");
+            Trace($"NewSession AccessToken={AccessToken}");
         }
 
         private void DeleteCurrentSession()
         {
-            Trace($"Deleting SessionToken={SessionToken}");
-
+            Trace($"Deleting AccessToken={AccessToken}");
+            
             Authenticator.Logout();
-            SessionToken = null;
+            AccessToken = null;
         }
-
-        public string SessionToken { get; private set; }
-
-        public string Token() => SessionToken;
-
-
-        private IAuthenticator Authenticator { get; }
-        private Action<Connection> ConnectionRemovalAction { get; }
-        private string Hostname { get; }
-        private string Username { get; }
-        private string Password { get; }
-
-        internal int ConnectionCount { get; set; }
 
         public void ReAuthenticate()
         {
-            lock (_syncLock)
-            {
-                CreateNewSession();
-            }
+            throw new NotImplementedException(
+                "Re-authentication not supported for access token-based authentication. Login to acquire a new access token.");
         }
 
         public void Close()
@@ -94,10 +86,10 @@ namespace Aquarius.TimeSeries.Client
 
                 if (ConnectionCount != 0)
                     return;
-
+                
                 DeleteCurrentSession();
                 ConnectionRemovalAction(this);
-
+                
                 Trace("Closed");
             }
         }
@@ -107,7 +99,7 @@ namespace Aquarius.TimeSeries.Client
             lock (_syncLock)
             {
                 ++ConnectionCount;
-
+                
                 Trace("Increased connection count.");
             }
         }
