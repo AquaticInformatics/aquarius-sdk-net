@@ -16,10 +16,11 @@ namespace Aquarius.TimeSeries.Client
     public class AquariusClient : IAquariusClient
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private AuthenticationType _authenticationType;
 
         public static IAquariusClient CreateConnectedClient(string hostname, string username, string password)
         {
-            var client = new AquariusClient();
+            var client = new AquariusClient(AuthenticationType.Credential);
 
             client.Connect(hostname, username, password);
 
@@ -28,7 +29,7 @@ namespace Aquarius.TimeSeries.Client
 
         public static IAquariusClient ClientFromExistingSession(string hostname, string existingSessionToken)
         {
-            var client = new AquariusClient();
+            var client = new AquariusClient(AuthenticationType.Credential);
 
             const string fakeUsername = "!BrowserUser!";
             const string fakePassword = "!BrowserPassword!";
@@ -40,7 +41,7 @@ namespace Aquarius.TimeSeries.Client
         
         public static IAquariusClient CreateConnectedClient(string hostname, string accessToken)
         {
-            var client = new AquariusClient();
+            var client = new AquariusClient(AuthenticationType.AccessToken);
             
             client.Connect(hostname, accessToken);
 
@@ -195,8 +196,9 @@ namespace Aquarius.TimeSeries.Client
             AddServiceClient(clientType, CreateClient(baseUri), baseUri);
         }
 
-        internal AquariusClient()
+        internal AquariusClient(AuthenticationType authType)
         {
+            _authenticationType = authType;
             SetupServiceStack();
         }
 
@@ -234,15 +236,15 @@ namespace Aquarius.TimeSeries.Client
 
         private void InternalConnect(string hostname, Func<IConnection> connectionFactory)
         {
+            Connection = connectionFactory();
+            ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
+            
             AddServiceClient(ClientType.PublishJson, PublishV2.ResolveEndpoint(hostname));
             AddServiceClient(ClientType.AcquisitionJson, AcquisitionV2.ResolveEndpoint(hostname));
             AddServiceClient(ClientType.ProvisioningJson, ProvisioningV1.ResolveEndpoint(hostname));
-
-            ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
-
-            Connection = connectionFactory();
-
-            SetAutomaticReAuthentication();
+            
+            if (_authenticationType == AuthenticationType.Credential)
+                SetAutomaticReAuthentication();
         }
 
         private SdkServiceClient CreateClient(string baseUri)
@@ -258,10 +260,15 @@ namespace Aquarius.TimeSeries.Client
             if (string.IsNullOrEmpty(Connection.Token()))
             {
                 request.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
+                request.Headers.Remove(AuthenticationHeaders.BearerAuthenticationHeaderNameKey);
             }
             else
             {
-                request.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey] = Connection.Token();
+                var authHeader = _authenticationType == AuthenticationType.Credential
+                    ? AuthenticationHeaders.AuthenticationHeaderNameKey
+                    : AuthenticationHeaders.BearerAuthenticationHeaderNameKey;
+
+                request.Headers[authHeader] = Connection.Token();
             }
         }
 

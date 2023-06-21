@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client;
 using Aquarius.TimeSeries.Client.EndPoints;
+using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
 using FluentAssertions;
 using NSubstitute;
@@ -29,13 +32,11 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
         public void BeforeEachTest()
         {
             _fixture = new Fixture();
-
-            SetupClientWithMockEndpoints();
         }
 
-        private void SetupClientWithMockEndpoints()
+        private void SetUpClientWithMockEndpoints(AuthenticationType authType)
         {
-            _client = new AquariusClient
+            _client = new AquariusClient(authType)
             {
                 ServerVersion = CreateDeveloperBuild()
             };
@@ -44,19 +45,14 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             _mockAcquisition = CreateMockServiceClient();
             _mockProvisioning = CreateMockServiceClient();
             _mockAuthenticator = CreateMockAuthenticator();
+            
+            _client.Connection = CreateMockConnection(authType);
 
             var mockHost = "http://example.com";
 
             _client.AddServiceClient(AquariusClient.ClientType.PublishJson, _mockPublish, PublishV2.ResolveEndpoint(mockHost));
             _client.AddServiceClient(AquariusClient.ClientType.AcquisitionJson, _mockAcquisition, AcquisitionV2.ResolveEndpoint(mockHost));
             _client.AddServiceClient(AquariusClient.ClientType.ProvisioningJson, _mockProvisioning, Provisioning.ResolveEndpoint(mockHost));
-
-            _client.Connection = new Connection(
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                _mockAuthenticator,
-                connection => { });
         }
 
         private AquariusServerVersion CreateDeveloperBuild()
@@ -78,6 +74,17 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             return mockAuthenticator;
         }
 
+        private IConnection CreateMockConnection(AuthenticationType authType)
+        {
+            var mockHostname = _fixture.Create<string>();
+            
+            return authType == AuthenticationType.Credential 
+                ? new Connection(mockHostname, _fixture.Create<string>(), _fixture.Create<string>(),
+                    _mockAuthenticator, connection => { }) as IConnection
+                : new AccessTokenConnection(mockHostname, _fixture.Create<string>(),
+                    _mockAuthenticator, connection => { }) as IConnection;
+        }
+
         [Ignore("This integration test should only be run from within the IDE, connecting to a live AQTS app server")]
         [Test]
         public void IntegrationTest_SequentialConnectionsToTheSameServer_Succeed()
@@ -96,21 +103,30 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             }
         }
 
-        [Test]
-        public void Publish_HasBaseUri()
+        public static IEnumerable<AuthenticationType> AuthenticationTypeCases = new AuthenticationType[]
         {
+            AuthenticationType.Credential,
+            AuthenticationType.AccessToken
+        };
+
+        [TestCaseSource(nameof(AuthenticationTypeCases))]
+        public void Publish_HasBaseUri(AuthenticationType authType)
+        {
+            SetUpClientWithMockEndpoints(authType);
             AssertClientHasBaseUri(_client.Publish);
         }
 
-        [Test]
-        public void Acquisition_HasBaseUri()
+        [TestCaseSource(nameof(AuthenticationTypeCases))]
+        public void Acquisition_HasBaseUri(AuthenticationType authType)
         {
+            SetUpClientWithMockEndpoints(authType);
             AssertClientHasBaseUri(_client.Acquisition);
         }
 
-        [Test]
-        public void Provisioning_HasBaseUri()
+        [TestCaseSource(nameof(AuthenticationTypeCases))]
+        public void Provisioning_HasBaseUri(AuthenticationType authType)
         {
+            SetUpClientWithMockEndpoints(authType);
             AssertClientHasBaseUri(_client.Provisioning);
         }
 
@@ -129,6 +145,19 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             var baseUri = _client.GetBaseUri(otherClient);
 
             baseUri.Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public void Client_AccessTokenAuthentication_DoesNotSetReAuthentication()
+        {
+            if (!(AquariusClient.CreateConnectedClient(_fixture.Create<string>(), _fixture.Create<string>()) is AquariusClient client))
+                throw new ArgumentException($"{nameof(AquariusClient)} cannot be null");
+
+            foreach (var kv in client.ServiceClients)
+            {
+                var serviceClient = (SdkServiceClient) kv.Value;
+                serviceClient.OnAuthenticationRequired.Should().BeNull();
+            }
         }
     }
 }

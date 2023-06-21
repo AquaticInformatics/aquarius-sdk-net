@@ -76,7 +76,19 @@ namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
             var mockAccessToken = _fixture.Create<string>();
             ClientHelper.Login(_rawClient, mockAccessToken);
 
-            _rawClient.BearerToken.Should().BeEquivalentTo(mockAccessToken);
+            _rawClient.BearerToken.ShouldBeEquivalentTo(mockAccessToken);
+        }
+
+        [TestCase(null)]
+        [TestCase("FooBar")]
+        public void Login_ExistingAccessToken_NewAccessToken_UpdatesBearerToken(string updatedAccessToken)
+        {
+            var mockAccessToken = _fixture.Create<string>();
+            ClientHelper.Login(_rawClient, mockAccessToken);
+            _rawClient.BearerToken.ShouldBeEquivalentTo(mockAccessToken);
+
+            ClientHelper.Login(_rawClient, updatedAccessToken);
+            _rawClient.BearerToken.ShouldBeEquivalentTo(updatedAccessToken);
         }
 
         [Test]
