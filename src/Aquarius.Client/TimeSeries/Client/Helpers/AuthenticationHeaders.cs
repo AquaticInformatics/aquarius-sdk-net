@@ -4,6 +4,6 @@
     {
         public const string AuthenticationHeaderNameKey = "X-Authentication-Token";
         public const string AuthenticationCookieName = "AQAuthToken";
-        public const string BearerAuthenticationHeaderNameKey = "Authentication";
+        public const string AuthorizationHeaderNameKey = "Authorization";
     }
 }

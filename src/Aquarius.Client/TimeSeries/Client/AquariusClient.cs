@@ -260,15 +260,19 @@ namespace Aquarius.TimeSeries.Client
             if (string.IsNullOrEmpty(Connection.Token()))
             {
                 request.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
-                request.Headers.Remove(AuthenticationHeaders.BearerAuthenticationHeaderNameKey);
+                request.Headers.Remove(AuthenticationHeaders.AuthorizationHeaderNameKey);
             }
             else
             {
-                var authHeader = _authenticationType == AuthenticationType.Credential
+                var authHeaderKey = _authenticationType == AuthenticationType.Credential
                     ? AuthenticationHeaders.AuthenticationHeaderNameKey
-                    : AuthenticationHeaders.BearerAuthenticationHeaderNameKey;
+                    : AuthenticationHeaders.AuthorizationHeaderNameKey;
 
-                request.Headers[authHeader] = Connection.Token();
+                var authHeaderValue = _authenticationType == AuthenticationType.Credential
+                    ? Connection.Token()
+                    : $"Bearer {Connection.Token()}";
+
+                request.Headers[authHeaderKey] = authHeaderValue;
             }
         }
 

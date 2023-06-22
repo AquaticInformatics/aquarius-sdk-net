@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client;
 using Aquarius.TimeSeries.Client.EndPoints;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
+using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
