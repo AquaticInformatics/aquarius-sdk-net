@@ -17,21 +17,9 @@ using Ploeh.AutoFixture;
 namespace Aquarius.Client.UnitTests.TimeSeries.Client
 {
     [TestFixture]
-    public class AuthenticatorTests
+    public class AuthenticatorTests : AuthenticatorTestBase<Authenticator>
     {
-        private IFixture _fixture;
-        private IServiceClient _mockServiceClient;
-
-        [SetUp]
-        public void BeforeEachTest()
-        {
-            _fixture = new Fixture();
-            _mockServiceClient = CreateMockServiceClient();
-
-            ConfigureSystemDetectorWithMockServiceClient();
-        }
-
-        private IServiceClient CreateMockServiceClient()
+        protected override IServiceClient CreateMockServiceClient()
         {
             var mockServiceClient = Substitute.For<IServiceClient>();
 
@@ -49,13 +37,17 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
 
             return mockServiceClient;
         }
-
-        private void ConfigureSystemDetectorWithMockServiceClient()
+        
+        protected override Authenticator CreateAuthenticator()
         {
-            var detector = AquariusSystemDetector.Instance;
+            var authenticator = Authenticator.Create("dummyhost") as Authenticator;
 
-            detector.ServiceClientFactory = s => _mockServiceClient;
-            detector.Reset();
+            if (authenticator != null)
+            {
+                authenticator.Client = _mockServiceClient;
+            }
+
+            return authenticator;
         }
 
         [Test]
@@ -96,18 +88,6 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             authenticator.Logout();
 
             AssertExpectedDeleteSessionRequests(0);
-        }
-
-        private IAuthenticator CreateAuthenticator()
-        {
-            var authenticator = Authenticator.Create("dummyhost") as Authenticator;
-
-            if (authenticator != null)
-            {
-                authenticator.Client = _mockServiceClient;
-            }
-
-            return authenticator;
         }
 
         private void SetupMockToReturnApiVersion(string apiVersion)

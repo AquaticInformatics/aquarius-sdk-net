@@ -13,7 +13,7 @@ namespace Aquarius.TimeSeries.Client
         {
         }
 
-        private readonly ConcurrentDictionary<string, Connection> _connections = new ConcurrentDictionary<string, Connection>();
+        private readonly ConcurrentDictionary<string, IConnection> _connections = new ConcurrentDictionary<string, IConnection>();
 
         public Connection GetConnection(
             string hostname,
@@ -30,7 +30,27 @@ namespace Aquarius.TimeSeries.Client
                     {
                         connection.IncrementConnectionCount();
                         return connection;
-                    });
+                    }) as Connection;
+            }
+        }
+
+        public AccessTokenConnection GetConnection(
+            string hostname,
+            string accessToken,
+            IAuthenticator authenticator)
+        {
+            var connectionKey = string.Join("/", hostname, accessToken);
+
+            lock (_syncLock)
+            {
+                return _connections.AddOrUpdate(
+                    connectionKey,
+                    key => new AccessTokenConnection(hostname, accessToken, authenticator, Remove),
+                    (key, connection) =>
+                    {
+                        connection.IncrementConnectionCount();
+                        return connection;
+                    }) as AccessTokenConnection;
             }
         }
 
@@ -54,7 +74,7 @@ namespace Aquarius.TimeSeries.Client
             }
         }
 
-        private void Remove(Connection connection)
+        private void Remove(IConnection connection)
         {
             var itemToRemove = _connections.FirstOrDefault(kvp => kvp.Value == connection);
 
