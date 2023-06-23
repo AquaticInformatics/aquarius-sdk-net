@@ -249,10 +249,9 @@ namespace Aquarius.TimeSeries.Client
 
         private SdkServiceClient CreateClient(string baseUri)
         {
-            return new SdkServiceClient(baseUri)
-            {
-                RequestFilter = CommonRequestFilter
-            };
+            return _authenticationType == AuthenticationType.Credential
+                ? new SdkServiceClient(baseUri) { RequestFilter = CommonRequestFilter }
+                : new SdkServiceClient(baseUri);
         }
 
         private void CommonRequestFilter(HttpWebRequest request)
@@ -260,19 +259,10 @@ namespace Aquarius.TimeSeries.Client
             if (string.IsNullOrEmpty(Connection.Token()))
             {
                 request.Headers.Remove(AuthenticationHeaders.AuthenticationHeaderNameKey);
-                request.Headers.Remove(AuthenticationHeaders.AuthorizationHeaderNameKey);
             }
             else
             {
-                var authHeaderKey = _authenticationType == AuthenticationType.Credential
-                    ? AuthenticationHeaders.AuthenticationHeaderNameKey
-                    : AuthenticationHeaders.AuthorizationHeaderNameKey;
-
-                var authHeaderValue = _authenticationType == AuthenticationType.Credential
-                    ? Connection.Token()
-                    : $"Bearer {Connection.Token()}";
-
-                request.Headers[authHeaderKey] = authHeaderValue;
+                request.Headers[AuthenticationHeaders.AuthenticationHeaderNameKey] = Connection.Token();
             }
         }
 

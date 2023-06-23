@@ -11,6 +11,7 @@ using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using ServiceStack;
+using PostSession = Aquarius.TimeSeries.Client.ServiceModels.Provisioning.PostSession;
 
 #if AUTOFIXTURE4
 using AutoFixture;
