@@ -1,8 +1,8 @@
 /* Options:
-Date: 2023-04-11 18:37:40
+Date: 2023-06-26 16:25:04
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-pg.aquariusdev.net/AQUARIUS/Publish/v2
+BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
@@ -2706,6 +2706,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="array", Description="Thresholds")]
         public IList<TimeSeriesThreshold> Thresholds { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     public class TimeSeriesPoint
@@ -7514,6 +7520,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="array", Description="Reference points")]
         public List<ReferencePoint> ReferencePoints { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     public class LocationDescriptionListServiceResponse
@@ -8040,6 +8052,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.1.61.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.2.36.0");
     }
 }

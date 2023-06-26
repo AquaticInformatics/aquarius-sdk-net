@@ -1,8 +1,8 @@
 /* Options:
-Date: 2023-04-11 18:37:41
+Date: 2023-06-26 16:25:05
 Version: 5.104
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: http://aqts-pg.aquariusdev.net/AQUARIUS/Provisioning/v1
+BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Provisioning/v1
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 MakePartial: False
@@ -1050,6 +1050,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="ISO 8601 duration format", Format="offset from UTC")]
         public Offset UtcOffset { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/locationfolders", "POST")]
@@ -1121,6 +1127,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Unique Id of the location folder", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid LocationFolderUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/propertybag", "PUT")]
+    public class PutLocationPropertyBag
+        : IReturn<Location>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/tags", "PUT")]
@@ -2969,6 +2992,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         string ComputationIdentifier { get; set; }
         string ComputationPeriodIdentifier { get; set; }
         IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+        string PropertyBag { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/basic", "POST")]
@@ -3064,6 +3088,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="ISO 8601 Duration Format", Format="duration", IsRequired=true)]
         public Duration GapTolerance { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/calculated", "POST")]
@@ -3170,6 +3200,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Formula", IsRequired=true)]
         public string Formula { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/datumconverted", "POST")]
@@ -3289,6 +3325,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="boolean", Description="Target is Local Assumed Datum")]
         public bool TargetIsLocalAssumedDatum { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/reflected", "POST")]
@@ -3384,6 +3426,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="ISO 8601 Duration Format", Format="duration", IsRequired=true)]
         public Duration GapTolerance { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/locations/{LocationUniqueId}/timeseries/statistical", "POST")]
@@ -3521,6 +3569,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="integer", Description="Time Step Count. Must be included for 'Statistic' derived time-series.", Format="int32")]
         public int? TimeStepCount { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}", "PUT")]
@@ -3568,6 +3622,23 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+    }
+
+    [Route("/timeseries/{TimeSeriesUniqueId}/propertybag", "PUT")]
+    public class PutTimeSeriesPropertyBag
+        : IReturn<TimeSeries>
+    {
+        ///<summary>
+        ///Unique ID of the time series
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the time series", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid TimeSeriesUniqueId { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/units/{UniqueId}", "DELETE")]
@@ -4838,6 +4909,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     public class LocationDatumPeriod
@@ -6276,6 +6353,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     public class TimeSeriesResponse
@@ -6534,6 +6617,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.1.61.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.2.36.0");
     }
 }
