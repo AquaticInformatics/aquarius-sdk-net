@@ -13,7 +13,6 @@
     <PackageTags>Aquatic Informatics;Aquarius SDK;Time-Series;WebPortal;Samples</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/AquaticInformatics/aquarius-sdk-net/develop/images/icon.png</PackageIconUrl>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/AquaticInformatics/aquarius-sdk-net</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/AquaticInformatics/aquarius-sdk-net/blob/develop/ReleaseNotes.md</PackageReleaseNotes>
