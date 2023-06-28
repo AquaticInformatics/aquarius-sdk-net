@@ -336,12 +336,12 @@ namespace Aquarius.TimeSeries.Client
             clientDictionary.Clear();
         }
 
-        public void UpdateBearerToken(string accessToken)
+        public void UpdateAccessToken(string accessToken)
         {
             if (_authenticationType != AuthenticationType.AccessToken)
             {
                 throw new NotImplementedException(
-                    "UpdateBearerToken is only supported for access token-based authentication.");
+                    "UpdateAccessToken is only supported for access token-based authentication.");
             }
 
             Connection.ReAuthenticate(accessToken);

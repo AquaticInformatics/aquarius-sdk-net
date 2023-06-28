@@ -6,7 +6,7 @@ Not all changes will be listed, but you can always [compare by version tags](htt
 
 ### 23.2.0
 - Updated the service models for the AQUARIUS Time-Series 2023.2 release.
-- Added support for authenticating with AQUARIUS Time-Series using an existing OpenI Connect Access token
+- Added support for authenticating with AQUARIUS Time-Series using an existing OpenID Connect Access token
   - See https://github.com/AquaticInformatics/aquarius-sdk-net/wiki/Authentication for more information
 
 ### 23.1.0

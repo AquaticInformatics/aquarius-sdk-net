@@ -143,6 +143,7 @@ namespace Aquarius.TimeSeries.Client.Helpers
             clone.OnAuthenticationRequired = client.OnAuthenticationRequired;
             clone.RequestFilter = client.RequestFilter;
             clone.ResponseFilter = client.ResponseFilter;
+            clone.BearerToken = client.BearerToken;
 
             return clone;
         }

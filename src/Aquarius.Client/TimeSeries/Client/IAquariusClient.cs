@@ -48,6 +48,6 @@ namespace Aquarius.TimeSeries.Client
         [Obsolete("Sessions will now re-authenticate automatically if they expire.")]
         ScopeAction SessionKeepAlive();
 
-        void UpdateBearerToken(string accessToken);
+        void UpdateAccessToken(string accessToken);
     }
 }

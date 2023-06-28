@@ -174,7 +174,7 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
         }
 
         [Test]
-        public void UpdateBearerToken_ForAccessTokenAuthentication_UpdatesBearerTokenForAllClients()
+        public void UpdateAccessToken_ForAccessTokenAuthentication_UpdatesBearerTokenForAllClients()
         {
             var token = _fixture.Create<string>();
             if (!(AquariusClient.CreateConnectedClient(_fixture.Create<string>(), token) is AquariusClient client))
@@ -182,17 +182,17 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             AssertAllClientsHaveBearerToken(client, token);
 
             var newToken = _fixture.Create<string>();
-            client.UpdateBearerToken(newToken);
+            client.UpdateAccessToken(newToken);
 
             AssertAllClientsHaveBearerToken(client, newToken);
         }
 
         [Test]
-        public void UpdateBearerToken_ForCredentialsAuthentication_Throws()
+        public void UpdateAccessToken_ForCredentialsAuthentication_Throws()
         {
             SetUpClientWithMockEndpoints(AuthenticationType.Credential);
 
-            Assert.That(() => _client.UpdateBearerToken(_fixture.Create<string>()), Throws.Exception.TypeOf<NotImplementedException>());
+            Assert.That(() => _client.UpdateAccessToken(_fixture.Create<string>()), Throws.Exception.TypeOf<NotImplementedException>());
         }
     }
 }

@@ -11,7 +11,7 @@ using AutoFixture;
 using Ploeh.AutoFixture;
 #endif
 
-namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
+namespace Aquarius.Client.UnitTests.TimeSeries.Client.Helpers
 {
     [TestFixture]
     public class ClientHelperTests
@@ -105,6 +105,7 @@ namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
             var token = _fixture.Create<string>();
 
             SetAuthenticationToken(token);
+            ClientHelper.Login(_rawClient, token);
 
             var host = "somehost";
             var port = 1234;
@@ -128,6 +129,12 @@ namespace Aquarius.UnitTests.TimeSeries.Client.Helpers
             uri.Port.ShouldBeEquivalentTo(port, "Original port retained");
             uri.Scheme.ShouldBeEquivalentTo(scheme, "Original scheme retained");
             uri.PathAndQuery.ShouldBeEquivalentTo(baseUri, "New endpoint");
+            clone.ShouldBeEquivalentTo(_rawClient, options => options
+                .Excluding(client => client.StreamDeserializer)
+                .Excluding(client => client.BaseUri)
+                .Excluding(client => client.SyncReplyBaseUri)
+                .Excluding(client => client.AsyncOneWayBaseUri)
+            );
         }
     }
 }
