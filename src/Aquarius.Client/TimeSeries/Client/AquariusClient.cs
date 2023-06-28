@@ -16,7 +16,7 @@ namespace Aquarius.TimeSeries.Client
     public class AquariusClient : IAquariusClient
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private AuthenticationType _authenticationType;
+        private readonly AuthenticationType _authenticationType;
 
         public static IAquariusClient CreateConnectedClient(string hostname, string username, string password)
         {
@@ -38,11 +38,11 @@ namespace Aquarius.TimeSeries.Client
 
             return client;
         }
-        
+
         public static IAquariusClient CreateConnectedClient(string hostname, string accessToken)
         {
             var client = new AquariusClient(AuthenticationType.AccessToken);
-            
+
             client.Connect(hostname, accessToken);
 
             return client;
@@ -253,20 +253,28 @@ namespace Aquarius.TimeSeries.Client
         {
             Connection = connectionFactory();
             ServerVersion = AquariusSystemDetector.Instance.GetAquariusServerVersion(hostname);
-            
+
             AddServiceClient(ClientType.PublishJson, PublishV2.ResolveEndpoint(hostname));
             AddServiceClient(ClientType.AcquisitionJson, AcquisitionV2.ResolveEndpoint(hostname));
             AddServiceClient(ClientType.ProvisioningJson, ProvisioningV1.ResolveEndpoint(hostname));
-            
+
             if (_authenticationType == AuthenticationType.Credential)
                 SetAutomaticReAuthentication();
         }
 
         private SdkServiceClient CreateClient(string baseUri)
         {
-            return _authenticationType == AuthenticationType.Credential
-                ? new SdkServiceClient(baseUri) { RequestFilter = CommonRequestFilter }
-                : new SdkServiceClient(baseUri);
+            var client = new SdkServiceClient(baseUri);
+            if (_authenticationType == AuthenticationType.Credential)
+            {
+                client.RequestFilter = CommonRequestFilter;
+            }
+            else
+            {
+                ClientHelper.Login(client, Connection.Token());
+            }
+
+            return client;
         }
 
         private void CommonRequestFilter(HttpWebRequest request)
@@ -326,6 +334,21 @@ namespace Aquarius.TimeSeries.Client
             }
 
             clientDictionary.Clear();
+        }
+
+        public void UpdateBearerToken(string accessToken)
+        {
+            if (_authenticationType != AuthenticationType.AccessToken)
+            {
+                throw new NotImplementedException(
+                    "UpdateBearerToken is only supported for access token-based authentication.");
+            }
+
+            Connection.ReAuthenticate(accessToken);
+            foreach (var client in ServiceClients.Values.Concat(CustomClients.Values))
+            {
+                ClientHelper.Login(client, Connection.Token());
+            }
         }
     }
 }

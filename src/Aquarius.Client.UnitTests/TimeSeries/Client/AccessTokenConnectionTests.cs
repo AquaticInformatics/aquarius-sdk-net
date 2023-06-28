@@ -13,7 +13,7 @@ using Ploeh.AutoFixture;
 namespace Aquarius.Client.UnitTests.TimeSeries.Client
 {
     [TestFixture]
-    public class AccessTokenConnectionTests 
+    public class AccessTokenConnectionTests
         : ConnectionTestBase<AccessTokenConnection, AccessTokenAuthenticator>
     {
         protected override IAuthenticator CreateMockAuthenticator()
@@ -27,7 +27,7 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             _mockAuthenticator,
             RemoveConnection);
 
-        protected override void AssertExpectedConnectionCount(int expectedCount) => 
+        protected override void AssertExpectedConnectionCount(int expectedCount) =>
             _connection.ConnectionCount.ShouldBeEquivalentTo(expectedCount, nameof(_connection.ConnectionCount));
 
 
@@ -38,9 +38,9 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
         protected override void AssertExpectedSessionDeleteCount(int expectedCount) =>
             _mockAuthenticator.Received(expectedCount).Logout();
 
-        protected override void AssertExpectedConnectionRemovalCount(int expectedCount) => 
+        protected override void AssertExpectedConnectionRemovalCount(int expectedCount) =>
             _connectionRemovalCount.ShouldBeEquivalentTo(expectedCount, nameof(_connectionRemovalCount));
-        
+
         [Test]
         public void Close_WithNonPositiveConnectionCount_DoesNotDeleteSession()
         {
@@ -59,6 +59,21 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             Action action = () => _connection.ReAuthenticate();
 
             action.ShouldThrow<NotImplementedException>();
+        }
+
+        [Test]
+        public void ReAuthenticate_WithToken_CreatesNewSessionWithoutDeletingExistingSession()
+        {
+            var token = _connection.Token();
+
+            _connection.ReAuthenticate(token);
+
+            AssertExpectedSessionCreateCount(2);
+            AssertExpectedConnectionCount(1);
+            AssertExpectedSessionDeleteCount(0);
+            AssertExpectedConnectionRemovalCount(0);
+
+            token.Should().Be(_connection.AccessToken, "a new session token should be created");
         }
     }
 }

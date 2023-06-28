@@ -4,6 +4,11 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 23.2.0
+- Updated the service models for the AQUARIUS Time-Series 2023.2 release.
+- Added support for authenticating with AQUARIUS Time-Series using an existing OpenI Connect Access token
+  - See https://github.com/AquaticInformatics/aquarius-sdk-net/wiki/Authentication for more information
+
 ### 23.1.0
 - Updated the service models for the AQUARIUS Time-Series 2023.1 release.
 - Updated the service models for the AQUARIUS Samples 2023.01 release.
@@ -11,7 +16,7 @@ Not all changes will be listed, but you can always [compare by version tags](htt
 ### 22.3.0
 - Updated the service models for the AQUARIUS Samples 2022.09 release.
 - Updated the service models for the AQUARIUS Time-Series 2022.3 release.
-- Deprecated ExtendedAttribute and Tag applicabilty boolean flag properties in favor of a new Applicability enum collection.
+- Deprecated ExtendedAttribute and Tag applicability boolean flag properties in favor of a new Applicability enum collection.
 - **Source code change required:** Removed deprecated "LocationTagListServiceRequest & Response" classes, use "TagListServiceRequest" instead.
 - **Source code change required:** Removed deprecated "TagMetadata.Name" property and "NameTagDefinition" class, use "TagMetadata.Key" instead.
 
@@ -21,7 +26,7 @@ Not all changes will be listed, but you can always [compare by version tags](htt
 - Fixed a JSON deserialization bug when Samples UTC offsets exceed 14 hours.
 
 ### 22.1.3
-- Moved the ServiceStack dependecies from v5.10.4 to v6.0.2
+- Moved the ServiceStack dependencies from v5.10.4 to v6.0.2
 
 ### 22.1.0
 - Updated the service models for the AQUARIUS Time-Series 2022.1 release.
