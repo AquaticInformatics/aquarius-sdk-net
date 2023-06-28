@@ -4,6 +4,7 @@
     {
         string Token();
         void ReAuthenticate();
+        void ReAuthenticate(string token);
         void Close();
         void IncrementConnectionCount();
     }

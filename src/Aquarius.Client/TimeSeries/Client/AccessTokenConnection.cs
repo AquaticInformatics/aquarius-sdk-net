@@ -12,12 +12,12 @@ namespace Aquarius.TimeSeries.Client
         private static readonly bool TraceEnabled;
 
         private readonly object _syncLock = new object();
-        
+
         private IAuthenticator Authenticator { get; }
         private Action<AccessTokenConnection> ConnectionRemovalAction { get; }
         private string Hostname { get; }
         internal int ConnectionCount { get; set; }
-        
+
         public string AccessToken { get; private set; }
 
         public string Token() => AccessToken;
@@ -38,9 +38,9 @@ namespace Aquarius.TimeSeries.Client
             Authenticator = authenticator;
             ConnectionRemovalAction = connectionRemovalAction;
             ConnectionCount = 1;
-            
+
             Trace("Created");
-            
+
             CreateNewSession();
         }
 
@@ -48,10 +48,10 @@ namespace Aquarius.TimeSeries.Client
         {
             if (!TraceEnabled)
                 return;
-            
+
             Log.Info($"{GetHashCode()}: {Hostname}/{Token().Substring(0, 4)}/***: ConnectionCount={ConnectionCount} {message}");
         }
-        
+
         private void CreateNewSession()
         {
             Authenticator.Login(AccessToken);
@@ -62,7 +62,7 @@ namespace Aquarius.TimeSeries.Client
         private void DeleteCurrentSession()
         {
             Trace($"Deleting AccessToken={AccessToken}");
-            
+
             Authenticator.Logout();
             AccessToken = null;
         }
@@ -70,7 +70,13 @@ namespace Aquarius.TimeSeries.Client
         public void ReAuthenticate()
         {
             throw new NotImplementedException(
-                "Re-authentication not supported for access token-based authentication. Login to acquire a new access token.");
+                "Re-authentication without a token is not supported for access token-based authentication. Login to acquire a new access token or call ReAuthenticate(token).");
+        }
+
+        public void ReAuthenticate(string token)
+        {
+            AccessToken = token;
+            CreateNewSession();
         }
 
         public void Close()
@@ -86,10 +92,10 @@ namespace Aquarius.TimeSeries.Client
 
                 if (ConnectionCount != 0)
                     return;
-                
+
                 DeleteCurrentSession();
                 ConnectionRemovalAction(this);
-                
+
                 Trace("Closed");
             }
         }
@@ -99,7 +105,7 @@ namespace Aquarius.TimeSeries.Client
             lock (_syncLock)
             {
                 ++ConnectionCount;
-                
+
                 Trace("Increased connection count.");
             }
         }

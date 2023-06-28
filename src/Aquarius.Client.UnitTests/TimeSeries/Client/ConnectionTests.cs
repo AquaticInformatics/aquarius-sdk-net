@@ -12,7 +12,7 @@ using Ploeh.AutoFixture;
 namespace Aquarius.Client.UnitTests.TimeSeries.Client
 {
     [TestFixture]
-    public class ConnectionTests 
+    public class ConnectionTests
         : ConnectionTestBase<Connection, Authenticator>
     {
 
@@ -66,6 +66,21 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             var sessionToken = _connection.SessionToken;
 
             _connection.ReAuthenticate();
+
+            AssertExpectedSessionCreateCount(2);
+            AssertExpectedConnectionCount(1);
+            AssertExpectedSessionDeleteCount(0);
+            AssertExpectedConnectionRemovalCount(0);
+
+            sessionToken.Should().NotBe(_connection.SessionToken, "a new session token should be created");
+        }
+
+        [Test]
+        public void ReAuthenticate_WithToken_CreatesNewSessionWithoutDeletingExistingSession()
+        {
+            var sessionToken = _connection.SessionToken;
+
+            _connection.ReAuthenticate(_fixture.Create<string>());
 
             AssertExpectedSessionCreateCount(2);
             AssertExpectedConnectionCount(1);

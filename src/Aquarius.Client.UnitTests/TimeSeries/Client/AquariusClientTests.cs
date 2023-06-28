@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using Aquarius.Helpers;
 using Aquarius.TimeSeries.Client;
 using Aquarius.TimeSeries.Client.EndPoints;
 using Aquarius.TimeSeries.Client.Helpers;
 using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
-using Aquarius.TimeSeries.Client.ServiceModels.Publish;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
 using ServiceStack;
-using PostSession = Aquarius.TimeSeries.Client.ServiceModels.Provisioning.PostSession;
 
 #if AUTOFIXTURE4
 using AutoFixture;
@@ -48,7 +46,7 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             _mockAcquisition = CreateMockServiceClient();
             _mockProvisioning = CreateMockServiceClient();
             _mockAuthenticator = CreateMockAuthenticator();
-            
+
             _client.Connection = CreateMockConnection(authType);
 
             var mockHost = "http://example.com";
@@ -80,8 +78,8 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
         private IConnection CreateMockConnection(AuthenticationType authType)
         {
             var mockHostname = _fixture.Create<string>();
-            
-            return authType == AuthenticationType.Credential 
+
+            return authType == AuthenticationType.Credential
                 ? new Connection(mockHostname, _fixture.Create<string>(), _fixture.Create<string>(),
                     _mockAuthenticator, connection => { }) as IConnection
                 : new AccessTokenConnection(mockHostname, _fixture.Create<string>(),
@@ -153,7 +151,8 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
         [Test]
         public void Client_AccessTokenAuthentication_DoesNotSetReAuthentication()
         {
-            if (!(AquariusClient.CreateConnectedClient(_fixture.Create<string>(), _fixture.Create<string>()) is AquariusClient client))
+            var token = _fixture.Create<string>();
+            if (!(AquariusClient.CreateConnectedClient(_fixture.Create<string>(), token) is AquariusClient client))
                 throw new ArgumentException($"{nameof(AquariusClient)} cannot be null");
 
             foreach (var kv in client.ServiceClients)
@@ -161,6 +160,39 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
                 var serviceClient = (SdkServiceClient) kv.Value;
                 serviceClient.OnAuthenticationRequired.Should().BeNull();
             }
+
+            AssertAllClientsHaveBearerToken(client, token);
+        }
+
+        private static void AssertAllClientsHaveBearerToken(AquariusClient aquariusClient, string token)
+        {
+            aquariusClient.Connection.Token().Should().Be(token);
+            foreach (var client in aquariusClient.ServiceClients.Values.Concat(aquariusClient.CustomClients.Values))
+            {
+                client.BearerToken.Should().Be(token);
+            }
+        }
+
+        [Test]
+        public void UpdateAccessToken_ForAccessTokenAuthentication_UpdatesBearerTokenForAllClients()
+        {
+            var token = _fixture.Create<string>();
+            if (!(AquariusClient.CreateConnectedClient(_fixture.Create<string>(), token) is AquariusClient client))
+                throw new ArgumentException($"{nameof(AquariusClient)} cannot be null");
+            AssertAllClientsHaveBearerToken(client, token);
+
+            var newToken = _fixture.Create<string>();
+            client.UpdateAccessToken(newToken);
+
+            AssertAllClientsHaveBearerToken(client, newToken);
+        }
+
+        [Test]
+        public void UpdateAccessToken_ForCredentialsAuthentication_Throws()
+        {
+            SetUpClientWithMockEndpoints(AuthenticationType.Credential);
+
+            Assert.That(() => _client.UpdateAccessToken(_fixture.Create<string>()), Throws.Exception.TypeOf<NotImplementedException>());
         }
     }
 }
