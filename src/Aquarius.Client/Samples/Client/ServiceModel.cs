@@ -1,6 +1,6 @@
-// Date: 2023-04-12T13:54:03.8529691-07:00
+// Date: 2024-01-10T18:49:28.4405027-08:00
 // Base URL: https://demo.aqsamples.com/api/swagger.json
-// Source: AQUARIUS Samples API (2023.01.5895)
+// Source: AQUARIUS Samples API (2023.05.6533)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2023.01.5895");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2023.05.6533");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -1297,6 +1297,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Cursor { get; set; }
         public string CustomId { get; set; }
         public Instant? EndModificationTime { get; set; }
+        public List<string> Ids { get; set; }
         public int? Limit { get; set; }
         public List<string> LocationGroupTypeIds { get; set; }
         public List<string> LocationTypeIds { get; set; }
@@ -1594,6 +1595,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Cursor { get; set; }
         public string CustomId { get; set; }
         public Instant? EndModificationTime { get; set; }
+        public List<string> Ids { get; set; }
         public int? Limit { get; set; }
         public List<string> LocationGroupTypeIds { get; set; }
         public List<string> LocationTypeIds { get; set; }
@@ -1615,6 +1617,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Instant? EndModificationTime { get; set; }
         public List<string> FieldTripIds { get; set; }
         public List<string> FieldVisitId { get; set; }
+        public List<string> Ids { get; set; }
         public List<string> LaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> ProjectIds { get; set; }
@@ -1788,6 +1791,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public Instant? EndModificationTime { get; set; }
         public List<string> FieldTripIds { get; set; }
         public List<string> FieldVisitId { get; set; }
+        public List<string> Ids { get; set; }
         public List<string> LaboratoryIds { get; set; }
         public int? Limit { get; set; }
         public List<string> ProjectIds { get; set; }
