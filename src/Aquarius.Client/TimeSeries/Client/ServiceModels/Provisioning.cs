@@ -1,6 +1,6 @@
 /* Options:
-Date: 2023-10-16 22:37:34
-Version: 5.104
+Date: 2024-01-10 18:51:37
+Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Provisioning/v1
 
@@ -32,10 +32,8 @@ using ServiceStack.Web;
 using NodaTime;
 using Aquarius.TimeSeries.Client.ServiceModels.Provisioning;
 
-
 namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
-
     public enum ExtendedAttributeApplicability
     {
         AppliesToLocations,
@@ -992,6 +990,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     public class LocationFolderWriteBase
@@ -1050,12 +1054,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="ISO 8601 duration format", Format="offset from UTC")]
         public Offset UtcOffset { get; set; }
-
-        ///<summary>
-        ///Property Bag
-        ///</summary>
-        [ApiMember(Description="Property Bag")]
-        public string PropertyBag { get; set; }
     }
 
     [Route("/locationfolders", "POST")]
@@ -3622,6 +3620,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attribute values")]
         public IList<ExtendedAttributeValue> ExtendedAttributeValues { get; set; }
+
+        ///<summary>
+        ///Property Bag
+        ///</summary>
+        [ApiMember(Description="Property Bag")]
+        public string PropertyBag { get; set; }
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}/propertybag", "PUT")]
@@ -6611,12 +6615,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         [ApiMember(DataType="array", Description="The list of users")]
         public List<User> Results { get; set; }
     }
+
 }
 
 namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.3.38.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.4.61.0");
     }
 }

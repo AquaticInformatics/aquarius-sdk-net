@@ -1,6 +1,6 @@
 /* Options:
-Date: 2023-10-16 22:37:36
-Version: 5.104
+Date: 2024-01-10 18:51:44
+Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Acquisition/v2
 
@@ -32,10 +32,8 @@ using ServiceStack.Web;
 using NodaTime;
 using Aquarius.TimeSeries.Client.ServiceModels.Acquisition;
 
-
 namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
-
     public enum AppendStatusCode
     {
         Pending,
@@ -690,12 +688,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         [ApiMember(Description="XML blob containing the RSA public key components")]
         public string Xml { get; set; }
     }
+
 }
 
 namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.3.38.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.4.61.0");
     }
 }
