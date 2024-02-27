@@ -1,5 +1,5 @@
 /* Options:
-Date: 2024-01-10 18:51:37
+Date: 2024-02-26 18:51:37
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -828,6 +828,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public Guid UserUniqueId { get; set; }
     }
 
+    [Route("/locations/{LocationUniqueId}/oneplatform", "DELETE")]
+    public class DeleteOnePlatformLocation
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
     [Route("/locations/{LocationUniqueId}/referencepoints/{ReferencePointUniqueId}", "DELETE")]
     public class DeleteReferencePoint
         : IReturnVoid
@@ -843,6 +854,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="string", Description="Unique ID of the reference point", Format="guid", IsRequired=true, ParameterType="path")]
         public Guid ReferencePointUniqueId { get; set; }
+    }
+
+    [Route("/locations/oneplatform", "GET")]
+    public class GetAllOnePlatformLocations
+        : IReturn<OnePlatformLocationsResponse>
+    {
     }
 
     [Route("/locations/{LocationUniqueId}", "GET")]
@@ -2935,6 +2952,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public string Description { get; set; }
     }
 
+    [Route("/timeseries/{TimeSeriesUniqueId}/oneplatform", "DELETE")]
+    public class DeleteOnePlatformTimeSeries
+        : IReturnVoid
+    {
+        ///<summary>
+        ///Unique ID of the time-series
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the time-series", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid TimeSeriesUniqueId { get; set; }
+    }
+
     [Route("/timeseries/{TimeSeriesUniqueId}", "DELETE")]
     public class DeleteTimeSeries
         : IReturnVoid
@@ -2949,6 +2977,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
     [Route("/locations/{LocationUniqueId}/timeseries", "GET")]
     public class GetLocationTimeSeries
         : IReturn<TimeSeriesResponse>
+    {
+        ///<summary>
+        ///Unique ID of the location
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the location", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid LocationUniqueId { get; set; }
+    }
+
+    [Route("/locations/{LocationUniqueId}/timeseries/oneplatform", "GET")]
+    public class GetOnePlatformLocationTimeSeries
+        : IReturn<OnePlatformTimeSeriesResponse>
     {
         ///<summary>
         ///Unique ID of the location
@@ -5291,6 +5330,34 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<NameTag> Results { get; set; }
     }
 
+    public class OnePlatformLocationsResponse
+    {
+        public OnePlatformLocationsResponse()
+        {
+            Results = new List<Location>{};
+        }
+
+        ///<summary>
+        ///The list of One Platform locations
+        ///</summary>
+        [ApiMember(DataType="array", Description="The list of One Platform locations")]
+        public List<Location> Results { get; set; }
+    }
+
+    public class OnePlatformTimeSeriesResponse
+    {
+        public OnePlatformTimeSeriesResponse()
+        {
+            Results = new List<TimeSeries>{};
+        }
+
+        ///<summary>
+        ///The list of One Platform time-series
+        ///</summary>
+        [ApiMember(DataType="array", Description="The list of One Platform time-series")]
+        public List<TimeSeries> Results { get; set; }
+    }
+
     public class OpenIdConnectRelyingPartyConfiguration
     {
         ///<summary>
@@ -6622,6 +6689,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("23.4.61.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("24.1.10.0");
     }
 }
