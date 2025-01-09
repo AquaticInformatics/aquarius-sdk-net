@@ -4,6 +4,16 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 24.4.0
+- Updated the service models for the AQUARIUS Time-Series 2024.4 beta release.
+
+### 24.2.1/24.2.2/24.2.3
+- Internal updates to Nuget access keys for build, no functional changes.
+
+### 24.2.0
+- Added support for .NET 8, dropped support for .NET 6.
+- Moved the ServiceStack dependencies from v6.0.2 to v8.4.0
+
 ### 24.2.0
 - Updated the service models for the AQUARIUS Time-Series 2024.2 beta release.
 
