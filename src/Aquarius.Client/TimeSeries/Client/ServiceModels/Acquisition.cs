@@ -632,6 +632,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully deleted", Format="int32")]
         public int NumberOfPointsDeleted { get; set; }
     }
+    
+    [Route("/timeseries/{UniqueId}/metadata/grade", "POST")]
+    public class PostTimeSeriesGrade : IReturnVoid
+    {
+        ///<summary>
+        ///The unique ID (from Publish API) of the time-series
+        ///</summary>
+        [ApiMember(DataType = "string", Description = "The unique ID (from Publish API) of the time-series")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Grade to append
+        ///</summary>
+        [ApiMember(DataType = "integer", Description = "Grade to append")]
+        public int? GradeCode { get; set; }
+
+        ///<summary>
+        ///Time range to append the grade to
+        ///</summary>
+        [ApiMember(DataType = "string", Description = "Time range to append the grade to")]
+        public Interval? TimeRange { get; set; }
+    }
 
     [Route("/session", "DELETE")]
     public class DeleteSession
