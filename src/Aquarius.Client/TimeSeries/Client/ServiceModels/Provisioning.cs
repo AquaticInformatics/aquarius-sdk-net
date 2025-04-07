@@ -995,6 +995,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="number", Description="Elevation", Format="double")]
         public double? Elevation { get; set; }
+        
+        ///<summary>
+        ///UtcOffset
+        ///</summary>
+        [ApiMember(DataType = "string", Format = "offset from UTC", Description = "ISO 8601 duration format")]
+        public Offset UtcOffset { get; set; }
 
         ///<summary>
         ///Publish
