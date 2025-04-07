@@ -2,7 +2,7 @@
 
 # This is can be installed in your ~/bin folder, outside of any repo.
 
-# Helper functions
+# Helper function
 exit_abort () {
 	[ ! -z "$1" ] && echo ERROR: "$1"
 	echo
@@ -10,21 +10,22 @@ exit_abort () {
 	exit $ERRCODE
 }
 
-show_usage() {
-	echo usage: `basename $0` "[ServerName (default: localhost)] [OutputPath (default: ./ServiceModels)]"
-	echo
-	echo Generates an Aquarius NG client library that matches the services running on the server
-	echo
-	exit_abort "$@"
-}
+readonly SERVER_DEFAULT=https://develop-1.dev.aquariusdev.net
+readonly OUTPUT_DEFAULT=./ServiceModels
+readonly Generator=./generate_code_from_live_endpoint.sh
 
-Generator=./generate_code_from_live_endpoint.sh
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo usage: `basename $0` "[-h] [ServerName (default: $SERVER_DEFAULT)] [OutputPath (default: $OUTPUT_DEFAULT)]"
+    echo
+    echo Generates an Aquarius client library that matches the services running on ServerName
+    exit 0
+fi
 
 ServerName=$1
 OutputPath=$2
 
-[ ! -z "$ServerName" ] || ServerName=https://develop-1.dev.aquariusdev.net
-[ ! -z "$OutputPath" ] || OutputPath=./ServiceModels
+[ ! -z "$ServerName" ] || ServerName=$SERVER_DEFAULT
+[ ! -z "$OutputPath" ] || OutputPath=$OUTPUT_DEFAULT
 
 $Generator Publish Publish/v2 $ServerName $OutputPath || exit_abort
 $Generator Provisioning Provisioning/v1 $ServerName $OutputPath || exit_abort
