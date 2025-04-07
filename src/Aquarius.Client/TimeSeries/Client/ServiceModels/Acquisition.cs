@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-01-08 04:13:00
+Date: 2025-04-07 22:34:54
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Acquisition/v2
@@ -311,6 +311,35 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///</summary>
         [ApiMember(DataType="array", Description="Points to append (can be empty)")]
         public List<TimeSeriesPoint> Points { get; set; }
+    }
+
+    [Route("/timeseries/{UniqueId}/metadata/grade", "POST")]
+    public class PostTimeSeriesGrade
+        : IReturnVoid
+    {
+        ///<summary>
+        ///The unique ID (from Publish API) of the time-series
+        ///</summary>
+        [ApiMember(DataType="string", Description="The unique ID (from Publish API) of the time-series", Format="guid", IsRequired=true, ParameterType="path")]
+        public Guid UniqueId { get; set; }
+
+        ///<summary>
+        ///Grade to append
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade to append", Format="int32", IsRequired=true)]
+        public int? GradeCode { get; set; }
+
+        ///<summary>
+        ///Time range to append the grade to
+        ///</summary>
+        [ApiMember(DataType="string", Description="Time range to append the grade to", Format="interval", IsRequired=true)]
+        public Interval? TimeRange { get; set; }
+
+        ///<summary>
+        ///Optional. Grade comments
+        ///</summary>
+        [ApiMember(Description="Optional. Grade comments")]
+        public string Comments { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/metadata", "POST")]
@@ -632,28 +661,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         [ApiMember(DataType="integer", Description="When AppendStatus=Completed: Number of points successfully deleted", Format="int32")]
         public int NumberOfPointsDeleted { get; set; }
     }
-    
-    [Route("/timeseries/{UniqueId}/metadata/grade", "POST")]
-    public class PostTimeSeriesGrade : IReturnVoid
-    {
-        ///<summary>
-        ///The unique ID (from Publish API) of the time-series
-        ///</summary>
-        [ApiMember(DataType = "string", Description = "The unique ID (from Publish API) of the time-series")]
-        public Guid UniqueId { get; set; }
-
-        ///<summary>
-        ///Grade to append
-        ///</summary>
-        [ApiMember(DataType = "integer", Description = "Grade to append")]
-        public int? GradeCode { get; set; }
-
-        ///<summary>
-        ///Time range to append the grade to
-        ///</summary>
-        [ApiMember(DataType = "string", Description = "Time range to append the grade to")]
-        public Interval? TimeRange { get; set; }
-    }
 
     [Route("/session", "DELETE")]
     public class DeleteSession
@@ -717,6 +724,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("24.4.38.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.1.61.0");
     }
 }
