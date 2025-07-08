@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-04-07 22:34:52
+Date: 2025-07-08 23:35:27
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -997,10 +997,10 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public double? Elevation { get; set; }
 
         ///<summary>
-        ///ISO 8601 duration format
+        ///ISO 8601 duration format. For POST requests, if the value is not provided, the offset defaults to 'PT0H' (UTC). For PUT requests, if the value is not provided, the existing stored offset will be preserved and not overwritten.
         ///</summary>
-        [ApiMember(DataType="string", Description="ISO 8601 duration format", Format="offset from UTC")]
-        public Offset UtcOffset { get; set; }
+        [ApiMember(DataType="string", Description="ISO 8601 duration format. For POST requests, if the value is not provided, the offset defaults to 'PT0H' (UTC). For PUT requests, if the value is not provided, the existing stored offset will be preserved and not overwritten.", Format="offset from UTC")]
+        public Offset? UtcOffset { get; set; }
 
         ///<summary>
         ///Publish
@@ -6726,6 +6726,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.1.61.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.2.72.0");
     }
 }

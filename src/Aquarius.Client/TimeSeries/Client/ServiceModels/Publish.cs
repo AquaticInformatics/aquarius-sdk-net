@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-04-07 22:34:50
+Date: 2025-07-08 23:35:26
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
@@ -1422,6 +1422,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
             Shifts = new List<RatingShift>{};
             BaseRatingTable = new List<RatingPoint>{};
             Offsets = new List<OffsetPoint>{};
+            GradeRanges = new List<RatingGrade>{};
         }
 
         ///<summary>
@@ -1483,6 +1484,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="array", Description="Offsets")]
         public List<OffsetPoint> Offsets { get; set; }
+
+        ///<summary>
+        ///Grade Ranges
+        ///</summary>
+        [ApiMember(DataType="array", Description="Grade Ranges")]
+        public List<RatingGrade> GradeRanges { get; set; }
     }
 
     public enum RatingCurveType
@@ -1493,6 +1500,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         DescriptiveEquation,
         IsoStandardEquation,
         LinearRegressionModel,
+    }
+
+    public class RatingGrade
+    {
+        ///<summary>
+        ///Output upper bound
+        ///</summary>
+        [ApiMember(DataType="number", Description="Output upper bound", Format="double")]
+        public double? OutputUpperBound { get; set; }
+
+        ///<summary>
+        ///Grade code
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Grade code", Format="int32")]
+        public int GradeCode { get; set; }
     }
 
     public class RatingModelDescription
@@ -4103,6 +4125,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
             Attachments = new List<Attachment>{};
             DischargeActivities = new List<DischargeActivity>{};
             CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
+            HydraulicTestActivities = new List<HydraulicTestActivity>{};
         }
 
         ///<summary>
@@ -4158,6 +4181,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DatumConversionResult", Description="Summary results for a requested datum conversion")]
         public DatumConversionResult DatumConversionResult { get; set; }
+
+        ///<summary>
+        ///Hydraulic Test Activities
+        ///</summary>
+        [ApiMember(DataType="array", Description="Hydraulic Test Activities")]
+        public List<HydraulicTestActivity> HydraulicTestActivities { get; set; }
+
+        ///<summary>
+        ///Well integrity activity
+        ///</summary>
+        [ApiMember(DataType="WellIntegrityActivity", Description="Well integrity activity")]
+        public WellIntegrityActivity WellIntegrityActivity { get; set; }
     }
 
     public class FieldVisitApproval
@@ -4511,6 +4546,109 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DoubleWithDisplay WaterLevel { get; set; }
     }
 
+    public class HydraulicTestActivity
+    {
+        public HydraulicTestActivity()
+        {
+            RelatedTimeSeriesUniqueIds = new List<Guid>{};
+            RelatedFieldVisitIdentifiers = new List<Guid>{};
+            Results = new List<HydraulicTestResult>{};
+        }
+
+        ///<summary>
+        ///The name of the test
+        ///</summary>
+        [ApiMember(Description="The name of the test", Name="TestName")]
+        public string TestName { get; set; }
+
+        ///<summary>
+        ///The context or purpose of the test
+        ///</summary>
+        [ApiMember(Description="The context or purpose of the test", Name="TestContext")]
+        public string TestContext { get; set; }
+
+        ///<summary>
+        ///The method used for the test
+        ///</summary>
+        [ApiMember(Description="The method used for the test", Name="TestMethod")]
+        public string TestMethod { get; set; }
+
+        ///<summary>
+        ///The code identifying the aquifer
+        ///</summary>
+        [ApiMember(Description="The code identifying the aquifer", Name="AquiferCode")]
+        public string AquiferCode { get; set; }
+
+        ///<summary>
+        ///The type of aquifer
+        ///</summary>
+        [ApiMember(Description="The type of aquifer", Name="AquiferType")]
+        public string AquiferType { get; set; }
+
+        ///<summary>
+        ///The start time of the test
+        ///</summary>
+        [ApiMember(DataType="string", Description="The start time of the test", Format="date-time", Name="StartTime")]
+        public DateTimeOffset StartTime { get; set; }
+
+        ///<summary>
+        ///The end time of the test
+        ///</summary>
+        [ApiMember(DataType="string", Description="The end time of the test", Format="date-time", Name="EndTime")]
+        public DateTimeOffset EndTime { get; set; }
+
+        ///<summary>
+        ///Indicates whether the test should be published
+        ///</summary>
+        [ApiMember(DataType="boolean", Description="Indicates whether the test should be published", Name="Publish")]
+        public bool Publish { get; set; }
+
+        ///<summary>
+        ///List of related time series unique ids
+        ///</summary>
+        [ApiMember(DataType="array", Description="List of related time series unique ids", Name="RelatedTimeSeriesUniqueIds")]
+        public List<Guid> RelatedTimeSeriesUniqueIds { get; set; }
+
+        ///<summary>
+        ///List of related field visit identifiers
+        ///</summary>
+        [ApiMember(DataType="array", Description="List of related field visit identifiers", Name="RelatedFieldVisitIdentifiers")]
+        public List<Guid> RelatedFieldVisitIdentifiers { get; set; }
+
+        ///<summary>
+        ///List of hydraulic test results
+        ///</summary>
+        [ApiMember(DataType="array", Description="List of hydraulic test results", Name="Results")]
+        public List<HydraulicTestResult> Results { get; set; }
+    }
+
+    public class HydraulicTestResult
+    {
+        ///<summary>
+        ///Identifier for the test parameter
+        ///</summary>
+        [ApiMember(Description="Identifier for the test parameter", Name="ParameterId")]
+        public string ParameterId { get; set; }
+
+        ///<summary>
+        ///Identifier for the unit of measurement
+        ///</summary>
+        [ApiMember(Description="Identifier for the unit of measurement", Name="UnitId")]
+        public string UnitId { get; set; }
+
+        ///<summary>
+        ///Method used for analysis
+        ///</summary>
+        [ApiMember(Description="Method used for analysis", Name="AnalysisMethod")]
+        public string AnalysisMethod { get; set; }
+
+        ///<summary>
+        ///Measured value of the parameter
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Measured value of the parameter", Name="Value")]
+        public QuantityWithDisplay Value { get; set; }
+    }
+
     public class IceCoveredData
     {
         ///<summary>
@@ -4568,6 +4706,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         LevelSurveyActivity LevelSurveyActivity { get; set; }
         FieldVisitApproval Approval { get; set; }
         DatumConversionResult DatumConversionResult { get; set; }
+        List<HydraulicTestActivity> HydraulicTestActivities { get; set; }
+        WellIntegrityActivity WellIntegrityActivity { get; set; }
     }
 
     public class Inspection
@@ -5449,6 +5589,179 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public DoubleWithDisplay VolumeChange { get; set; }
     }
 
+    public class WellAquiferConnection
+    {
+        ///<summary>
+        ///The UTC start date of the aquifer connection
+        ///</summary>
+        [ApiMember(DataType="string", Description="The UTC start date of the aquifer connection", Format="date-time", Name="StartDateUtc")]
+        public DateTimeOffset StartDate { get; set; }
+
+        ///<summary>
+        ///Type of connectivity between the well and aquifer
+        ///</summary>
+        [ApiMember(Description="Type of connectivity between the well and aquifer", Name="WellAquiferConnectivityType")]
+        public string WellAquiferConnectivityType { get; set; }
+
+        ///<summary>
+        ///Method used to determine the inspection result
+        ///</summary>
+        [ApiMember(Description="Method used to determine the inspection result", Name="WellInspectionDeterminationMethodType")]
+        public string WellInspectionDeterminationMethodType { get; set; }
+
+        ///<summary>
+        ///Additional comments or notes
+        ///</summary>
+        [ApiMember(Description="Additional comments or notes", Name="Comments")]
+        public string Comments { get; set; }
+    }
+
+    public class WellInspection
+    {
+        ///<summary>
+        ///The start date of the inspection
+        ///</summary>
+        [ApiMember(DataType="string", Description="The start date of the inspection", Format="date-time", Name="StartDate")]
+        public DateTimeOffset StartDate { get; set; }
+
+        ///<summary>
+        ///Type of well component inspected
+        ///</summary>
+        [ApiMember(Description="Type of well component inspected", Name="WellComponentType")]
+        public string WellComponentType { get; set; }
+
+        ///<summary>
+        ///Condition type of the well component
+        ///</summary>
+        [ApiMember(Description="Condition type of the well component", Name="WellConditionType")]
+        public string WellConditionType { get; set; }
+
+        ///<summary>
+        ///Method used for the inspection
+        ///</summary>
+        [ApiMember(Description="Method used for the inspection", Name="WellInspectionMethodType")]
+        public string WellInspectionMethodType { get; set; }
+
+        ///<summary>
+        ///Starting distance of the inspection range
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Starting distance of the inspection range", Name="DistanceFrom")]
+        public QuantityWithDisplay DistanceFrom { get; set; }
+
+        ///<summary>
+        ///Ending distance of the inspection range
+        ///</summary>
+        [ApiMember(DataType="QuantityWithDisplay", Description="Ending distance of the inspection range", Name="DistanceTo")]
+        public QuantityWithDisplay DistanceTo { get; set; }
+
+        ///<summary>
+        ///Unit of measurement for distance
+        ///</summary>
+        [ApiMember(Description="Unit of measurement for distance", Name="DistanceUnitId")]
+        public string DistanceUnitId { get; set; }
+
+        ///<summary>
+        ///Additional comments or notes
+        ///</summary>
+        [ApiMember(Description="Additional comments or notes", Name="Comments")]
+        public string Comments { get; set; }
+    }
+
+    public class WellIntegrityActivity
+    {
+        public WellIntegrityActivity()
+        {
+            WellAquiferConnections = new List<WellAquiferConnection>{};
+            WellInspections = new List<WellInspection>{};
+            WellRedevelopments = new List<WellRedevelopment>{};
+            WellRepairs = new List<WellRepair>{};
+        }
+
+        ///<summary>
+        ///List of aquifer connections associated with the well
+        ///</summary>
+        [ApiMember(DataType="array", Description="List of aquifer connections associated with the well", Name="WellAquiferConnections")]
+        public List<WellAquiferConnection> WellAquiferConnections { get; set; }
+
+        ///<summary>
+        ///List of inspections performed on the well
+        ///</summary>
+        [ApiMember(DataType="array", Description="List of inspections performed on the well", Name="WellInspections")]
+        public List<WellInspection> WellInspections { get; set; }
+
+        ///<summary>
+        ///List of redevelopment activities for the well
+        ///</summary>
+        [ApiMember(DataType="array", Description="List of redevelopment activities for the well", Name="WellRedevelopments")]
+        public List<WellRedevelopment> WellRedevelopments { get; set; }
+
+        ///<summary>
+        ///List of repair activities performed on the well
+        ///</summary>
+        [ApiMember(DataType="array", Description="List of repair activities performed on the well", Name="WellRepairs")]
+        public List<WellRepair> WellRepairs { get; set; }
+    }
+
+    public class WellRedevelopment
+    {
+        ///<summary>
+        ///The number of the redevelopment attempt
+        ///</summary>
+        [ApiMember(DataType="integer", Description="The number of the redevelopment attempt", Format="int32", Name="Attempt")]
+        public int Attempt { get; set; }
+
+        ///<summary>
+        ///The start date of the redevelopment activity
+        ///</summary>
+        [ApiMember(DataType="string", Description="The start date of the redevelopment activity", Format="date-time", Name="StartDate")]
+        public DateTimeOffset StartDate { get; set; }
+
+        ///<summary>
+        ///The end date of the redevelopment activity
+        ///</summary>
+        [ApiMember(DataType="string", Description="The end date of the redevelopment activity", Format="date-time", Name="EndDate")]
+        public DateTimeOffset EndDate { get; set; }
+
+        ///<summary>
+        ///Type of redevelopment performed on the well
+        ///</summary>
+        [ApiMember(Description="Type of redevelopment performed on the well", Name="WellRedevelopmentType")]
+        public string WellRedevelopmentType { get; set; }
+
+        ///<summary>
+        ///Additional comments or notes about the redevelopment
+        ///</summary>
+        [ApiMember(Description="Additional comments or notes about the redevelopment", Name="Comments")]
+        public string Comments { get; set; }
+    }
+
+    public class WellRepair
+    {
+        ///<summary>
+        ///The start date of the repair activity
+        ///</summary>
+        [ApiMember(DataType="string", Description="The start date of the repair activity", Format="date-time", Name="StartDate")]
+        public DateTimeOffset StartDate { get; set; }
+
+        ///<summary>
+        ///The end date of the repair activity
+        ///</summary>
+        [ApiMember(DataType="string", Description="The end date of the repair activity", Format="date-time", Name="EndDate")]
+        public DateTimeOffset EndDate { get; set; }
+
+        ///<summary>
+        ///Type of repair performed on the well
+        ///</summary>
+        [ApiMember(Description="Type of repair performed on the well", Name="WellRepairType")]
+        public string WellRepairType { get; set; }
+
+        ///<summary>
+        ///Additional comments or notes about the repair
+        ///</summary>
+        [ApiMember(Description="Additional comments or notes about the repair", Name="Comments")]
+        public string Comments { get; set; }
+    }
+
     public class ActiveMeterCalibration
     {
         public ActiveMeterCalibration()
@@ -5529,6 +5842,8 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         CrossSectionSurvey,
         LevelSurvey,
         Attachment,
+        HydraulicTest,
+        WellIntegrity,
     }
 
     public enum AdjustmentType
@@ -6073,9 +6388,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string LocationIdentifier { get; set; }
 
         ///<summary>
-        ///If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment
+        ///If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment, HydraulicTest or WellIntegrity
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment")]
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment, HydraulicTest or WellIntegrity")]
         public List<ActivityType> Activities { get; set; }
 
         ///<summary>
@@ -6144,9 +6459,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public string FieldVisitIdentifier { get; set; }
 
         ///<summary>
-        ///If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey or LevelSurvey
+        ///If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, HydraulicTest or WellIntegrity
         ///</summary>
-        [ApiMember(Description="If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey or LevelSurvey")]
+        [ApiMember(Description="If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, HydraulicTest or WellIntegrity")]
         public string DiscreteMeasurementActivity { get; set; }
 
         ///<summary>
@@ -7307,6 +7622,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
             Attachments = new List<Attachment>{};
             DischargeActivities = new List<DischargeActivity>{};
             CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
+            HydraulicTestActivities = new List<HydraulicTestActivity>{};
         }
 
         ///<summary>
@@ -7368,6 +7684,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="DatumConversionResult", Description="Summary results for a requested datum conversion")]
         public DatumConversionResult DatumConversionResult { get; set; }
+
+        ///<summary>
+        ///Hydraulic Test Activities
+        ///</summary>
+        [ApiMember(DataType="array", Description="Hydraulic Test Activities")]
+        public List<HydraulicTestActivity> HydraulicTestActivities { get; set; }
+
+        ///<summary>
+        ///Well integrity activity
+        ///</summary>
+        [ApiMember(DataType="WellIntegrityActivity", Description="Well integrity activity")]
+        public WellIntegrityActivity WellIntegrityActivity { get; set; }
     }
 
     public class FieldVisitDescriptionListServiceResponse
@@ -8120,6 +8448,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.1.61.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.2.72.0");
     }
 }
