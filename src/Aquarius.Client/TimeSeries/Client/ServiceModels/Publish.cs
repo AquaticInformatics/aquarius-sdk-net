@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-07-15 01:03:45
+Date: 2025-08-22 01:40:33
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
@@ -8460,6 +8460,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.2.81.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.3.46.0");
     }
 }
