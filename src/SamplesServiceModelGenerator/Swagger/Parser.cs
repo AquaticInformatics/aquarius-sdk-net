@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Humanizer;
+using log4net;
+using ServiceStack;
+using ServiceStack.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using Humanizer;
-using ServiceStack;
-using log4net;
-using ServiceStack.Text;
+using System.Xml;
+using static ServiceStack.Diagnostics;
 
 namespace SamplesServiceModelGenerator.Swagger
 {
@@ -46,13 +49,14 @@ namespace SamplesServiceModelGenerator.Swagger
 
         private List<Definition> ParseDefinitions(JsonObject json)
         {
-            var definitions = json
-                .Select(kvp => ParseDefinition(kvp.Key, kvp.Value))
-                .ToList();
 
-            return definitions
+            string jsonText = ServiceStack.Text.JsonSerializer.SerializeToString(json);
+
+
+            return MapJsonText<string, Definition>(jsonText, ParseDefinition)
                 .OrderBy(d => d.Name)
                 .ToList();
+
         }
 
         private Definition ParseDefinition(string name, string jsonText)
@@ -62,13 +66,17 @@ namespace SamplesServiceModelGenerator.Swagger
             if (string.IsNullOrEmpty(definition.Name))
                 definition.Name = name;
 
-            var properties = JsonObject.Parse(jsonText).Object("properties");
+            using var doc = JsonDocument.Parse(jsonText);
+            var root = doc.RootElement;
 
-            if (properties != null)
+
+            if (root.TryGetProperty("properties", out var properties) && properties.ValueKind == JsonValueKind.Object)
             {
-                definition.Properties = properties
-                    .Select(kvp => ParseProperty(kvp.Key, kvp.Value, definition))
-                    .ToArray();
+                definition.Properties = MapJsonText<string, Property>(
+                    properties.GetRawText(),
+                    (name, value) => ParseProperty(name, value, definition)
+                ).ToArray();
+
             }
 
             return definition;
@@ -246,13 +254,20 @@ namespace SamplesServiceModelGenerator.Swagger
         }
         private IEnumerable<Path> ParsePaths(JsonObject json)
         {
-            return json.Select(pathKvp => new Path
+
+            string jsonString = ServiceStack.Text.JsonSerializer.SerializeToString(json);
+
+            var doc = JsonDocument.Parse(jsonString);
+            var root = doc.RootElement;
+
+            return root.EnumerateObject().Select(path => new Path
             {
-                Route = pathKvp.Key,
-                Operations = JsonObject.Parse(pathKvp.Value).Where(operationKvp => SupportedMethods.Contains(operationKvp.Key))
-                    .ToDictionary(
-                        operationKvp => operationKvp.Key.ToUpperInvariant(),
-                        operationKvp => ParseOperation(pathKvp.Key, operationKvp.Key, operationKvp.Value))
+                Route = path.Name,
+                Operations = path.Value.EnumerateObject()
+                                .Where(operationKvp => SupportedMethods.Contains(operationKvp.Name))
+                                .ToDictionary(
+                                    operationKvp => operationKvp.Name.ToUpperInvariant(),
+                                    operationKvp => ParseOperation(path.Name, operationKvp.Name, operationKvp.Value.GetRawText()))
             })
             .OrderBy(p => p.Route);
         }
@@ -281,14 +296,19 @@ namespace SamplesServiceModelGenerator.Swagger
                 ParseSchema(operation.Parameters[i].Schema, parameters[i]?.Object("schema"));
             }
 
-            var responses = json.Object("responses");
+            using var doc = JsonDocument.Parse(jsonText);
+            var root = doc.RootElement;
 
-            foreach (var responseKvp in responses)
+            if (root.TryGetProperty("responses", out var responsesElement) && responsesElement.ValueKind == JsonValueKind.Object)
             {
-                var statusCode = responseKvp.Key;
-                var responseJsonText = responseKvp.Value;
+                foreach (var responseProperty in responsesElement.EnumerateObject())
+                {
+                    var statusCode = responseProperty.Name;
+                    var responseJsonText = responseProperty.Value.GetRawText();
 
-                AdjustResponse(operation.Responses[statusCode], responseJsonText);
+                    AdjustResponse(operation.Responses[statusCode], responseJsonText);
+                }
+
             }
 
             NormalizeOperation(operation);
@@ -430,7 +450,6 @@ namespace SamplesServiceModelGenerator.Swagger
         private void AdjustResponse(OperationResponse response, string jsonText)
         {
             var json = JsonObject.Parse(jsonText);
-
             var schema = json.Object("schema");
 
             if (schema == null)
@@ -438,6 +457,16 @@ namespace SamplesServiceModelGenerator.Swagger
 
             ParseRef(response.Schema, schema);
             ParseRef(response.Schema.Items, schema.Object("items"));
+        }
+
+        private static List<TResult> MapJsonText<T, TResult>(string jsonText, Func<string, string, TResult> selector)
+        {
+            using var doc = JsonDocument.Parse(jsonText);
+            var root = doc.RootElement;
+
+            return root.EnumerateObject()
+                .Select(kvp => selector(kvp.Name, kvp.Value.GetRawText()))
+                .ToList();
         }
     }
 }
