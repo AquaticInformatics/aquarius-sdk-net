@@ -8,8 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Xml;
-using static ServiceStack.Diagnostics;
 
 namespace SamplesServiceModelGenerator.Swagger
 {
@@ -51,7 +49,6 @@ namespace SamplesServiceModelGenerator.Swagger
         {
 
             string jsonText = ServiceStack.Text.JsonSerializer.SerializeToString(json);
-
 
             return MapJsonText<string, Definition>(jsonText, ParseDefinition)
                 .OrderBy(d => d.Name)
@@ -256,12 +253,11 @@ namespace SamplesServiceModelGenerator.Swagger
         {
 
             string jsonString = ServiceStack.Text.JsonSerializer.SerializeToString(json);
-
             var doc = JsonDocument.Parse(jsonString);
             var root = doc.RootElement;
 
             return root.EnumerateObject().Select(path => new Path
-            {
+            { 
                 Route = path.Name,
                 Operations = path.Value.EnumerateObject()
                                 .Where(operationKvp => SupportedMethods.Contains(operationKvp.Name))
