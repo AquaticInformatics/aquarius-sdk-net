@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aquarius.Client.Legacy", "A
 		{E1A97713-66CD-424D-8CBC-698224FAC01F} = {E1A97713-66CD-424D-8CBC-698224FAC01F}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplesServiceModelGenerator.Tests", "SamplesServiceModelGenerator.Tests\SamplesServiceModelGenerator.Tests.csproj", "{D17AD4DA-D79C-4930-8E48-CA641AA1E369}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD4CCA5D-D6F0-422C-BD83-F7F615AB4423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D17AD4DA-D79C-4930-8E48-CA641AA1E369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D17AD4DA-D79C-4930-8E48-CA641AA1E369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D17AD4DA-D79C-4930-8E48-CA641AA1E369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D17AD4DA-D79C-4930-8E48-CA641AA1E369}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

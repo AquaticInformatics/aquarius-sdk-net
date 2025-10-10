@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -10,7 +9,6 @@ using SamplesServiceModelGenerator.CodeGenerators;
 using SamplesServiceModelGenerator.Swagger;
 using log4net;
 using log4net.Config;
-using Enum = SamplesServiceModelGenerator.Swagger.Enum;
 using Path = System.IO.Path;
 
 namespace SamplesServiceModelGenerator
@@ -293,19 +291,7 @@ namespace SamplesServiceModelGenerator
 
             var jsonText = LoadStringFromUrl(_url);
 
-            var parser = new Parser
-            {
-                EnumOverrides = _enums
-                    .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => EnumRegex.Match(s))
-                    .Where(m => m.Success)
-                    .ToDictionary(
-                        m => $"{m.Groups["fieldName"].Value.Trim()}.{string.Join(",", m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries))}",
-                        m => new Enum(
-                            new Property {Name = m.Groups["enumName"].Value.Trim()},
-                            new Property {Name = m.Groups["enumName"].Value.Trim()},
-                            m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries)))
-            };
+            var parser = new Parser();
 
             var api = parser.Parse(jsonText, _url);
 
@@ -322,10 +308,8 @@ namespace SamplesServiceModelGenerator
         }
 
         private static readonly char[] ItemSeparators = { ';' };
-        private static readonly char[] ListSeparators = { ',', ' ' };
         private static readonly Regex AliasRegex = new Regex(@"^\s*(?<swaggerType>[^= ]+)\s*=\s*(?<aliasType>[^ ]+)\s*$", RegexOptions.Compiled);
         private static readonly Regex FixupRegex = new Regex(@"^\s*(?<methodRoute>[^= ]+)\s*=\s*(?<requestDtoName>[^ ]+)\s*$", RegexOptions.Compiled);
-        private static readonly Regex EnumRegex = new Regex(@"^\s*(?<enumName>[^= ]+)\s*=\s*(?<fieldName>[^. ]+)\s*\.\s*(?<valueList>[^ ]+)\s*$", RegexOptions.Compiled);
         private static readonly Regex ObsoleteRegex = new Regex(@"^\s*(?<obsoleteDtoName>[^: ]+)\s*:\s*(?<preferredDtoName>[^ ]+)\s*$", RegexOptions.Compiled);
 
         private string LoadStringFromUrl(string url)

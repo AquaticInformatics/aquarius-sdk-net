@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Humanizer;
+using log4net;
+using ServiceStack;
+using ServiceStack.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using Humanizer;
-using ServiceStack;
-using log4net;
-using ServiceStack.Text;
 
 namespace SamplesServiceModelGenerator.Swagger
 {
@@ -14,7 +15,31 @@ namespace SamplesServiceModelGenerator.Swagger
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Dictionary<string,Enum> EnumOverrides { get; set; }
+        public Dictionary<string, Enum> EnumOverrides { get; set; }
+
+        private string _enums = string.Join(";",
+                                "ActivityType=type.SAMPLE_INTEGRATED_VERTICAL_PROFILE,SAMPLE_ROUTINE,QC_SAMPLE_REPLICATE,QC_TRIP_BLANK,FIELD_SURVEY,NONE",
+                                "AnalyticalGroupType=type.KNOWN,UNKNOWN",
+                                "ImportItemStatusType=status.ERROR,NEW,UPDATE,EXPECTED,SKIPPED",
+                                "SpecimenViewStatusType=status.REQUESTED,RECEIVED_SOME,RECEIVED_ALL");
+        private static readonly Regex EnumRegex = new Regex(@"^\s*(?<enumName>[^= ]+)\s*=\s*(?<fieldName>[^. ]+)\s*\.\s*(?<valueList>[^ ]+)\s*$", RegexOptions.Compiled);
+        private static readonly char[] ListSeparators = { ',', ' ' };
+        private static readonly char[] ItemSeparators = { ';' };
+
+
+        public Parser()
+        {
+            EnumOverrides = _enums
+                   .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
+                   .Select(s => EnumRegex.Match(s))
+                   .Where(m => m.Success)
+                   .ToDictionary(
+                       m => $"{m.Groups["fieldName"].Value.Trim()}.{string.Join(",", m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries))}",
+                       m => new Enum(
+                           new Property { Name = m.Groups["enumName"].Value.Trim() },
+                           new Property { Name = m.Groups["enumName"].Value.Trim() },
+                           m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries)));
+        }
 
         public Api Parse(string jsonText, string baseUrl)
         {
@@ -46,13 +71,13 @@ namespace SamplesServiceModelGenerator.Swagger
 
         private List<Definition> ParseDefinitions(JsonObject json)
         {
-            var definitions = json
-                .Select(kvp => ParseDefinition(kvp.Key, kvp.Value))
-                .ToList();
 
-            return definitions
+            string jsonText = ServiceStack.Text.JsonSerializer.SerializeToString(json);
+
+            return MapJsonText<string, Definition>(jsonText, ParseDefinition)
                 .OrderBy(d => d.Name)
                 .ToList();
+
         }
 
         private Definition ParseDefinition(string name, string jsonText)
@@ -62,13 +87,17 @@ namespace SamplesServiceModelGenerator.Swagger
             if (string.IsNullOrEmpty(definition.Name))
                 definition.Name = name;
 
-            var properties = JsonObject.Parse(jsonText).Object("properties");
+            using var doc = JsonDocument.Parse(jsonText);
+            var root = doc.RootElement;
 
-            if (properties != null)
+
+            if (root.TryGetProperty("properties", out var properties) && properties.ValueKind == JsonValueKind.Object)
             {
-                definition.Properties = properties
-                    .Select(kvp => ParseProperty(kvp.Key, kvp.Value, definition))
-                    .ToArray();
+                definition.Properties = MapJsonText<string, Property>(
+                    properties.GetRawText(),
+                    (name, value) => ParseProperty(name, value, definition)
+                ).ToArray();
+
             }
 
             return definition;
@@ -134,20 +163,20 @@ namespace SamplesServiceModelGenerator.Swagger
             allEnums.AddRange(paths
                 .SelectMany(path => path.Operations.Values.SelectMany(operation =>
                     operation.Parameters.Where(IsEnumRequiringNormalization)
-                        .Select(parameter => new Enum(new Property {Name = operation.OperationId}, parameter, parameter.Enum)))));
+                        .Select(parameter => new Enum(new Property { Name = operation.OperationId }, parameter, parameter.Enum)))));
 
             allEnums.AddRange(paths
                 .SelectMany(p => p.Operations.Values.SelectMany(o =>
                 {
                     var schema = o.SuccessResponse()?.Schema;
 
-                    if (schema == null ||!IsEnumRequiringNormalization(schema))
+                    if (schema == null || !IsEnumRequiringNormalization(schema))
                         return new Enum[0];
 
                     if (string.IsNullOrEmpty(schema.Name))
                         schema.Name = o.OperationId;
 
-                    return new [] {new Enum(new Property {Name = o.OperationId}, schema, schema.Enum)};
+                    return new[] { new Enum(new Property { Name = o.OperationId }, schema, schema.Enum) };
                 })));
 
             // Pass 2: Consolidate any enum overrides
@@ -246,13 +275,19 @@ namespace SamplesServiceModelGenerator.Swagger
         }
         private IEnumerable<Path> ParsePaths(JsonObject json)
         {
-            return json.Select(pathKvp => new Path
+
+            string jsonString = ServiceStack.Text.JsonSerializer.SerializeToString(json);
+            var doc = JsonDocument.Parse(jsonString);
+            var root = doc.RootElement;
+
+            return root.EnumerateObject().Select(path => new Path
             {
-                Route = pathKvp.Key,
-                Operations = JsonObject.Parse(pathKvp.Value).Where(operationKvp => SupportedMethods.Contains(operationKvp.Key))
-                    .ToDictionary(
-                        operationKvp => operationKvp.Key.ToUpperInvariant(),
-                        operationKvp => ParseOperation(pathKvp.Key, operationKvp.Key, operationKvp.Value))
+                Route = path.Name,
+                Operations = path.Value.EnumerateObject()
+                                .Where(operationKvp => SupportedMethods.Contains(operationKvp.Name))
+                                .ToDictionary(
+                                    operationKvp => operationKvp.Name.ToUpperInvariant(),
+                                    operationKvp => ParseOperation(path.Name, operationKvp.Name, operationKvp.Value.GetRawText()))
             })
             .OrderBy(p => p.Route);
         }
@@ -275,20 +310,25 @@ namespace SamplesServiceModelGenerator.Swagger
             var json = JsonObject.Parse(jsonText);
 
             var parameters = json.ArrayObjects("parameters");
-            for(var i = 0; i < parameters.Count; ++i)
+            for (var i = 0; i < parameters.Count; ++i)
             {
                 ParseRef(operation.Parameters[i], parameters[i]);
                 ParseSchema(operation.Parameters[i].Schema, parameters[i]?.Object("schema"));
             }
 
-            var responses = json.Object("responses");
+            using var doc = JsonDocument.Parse(jsonText);
+            var root = doc.RootElement;
 
-            foreach (var responseKvp in responses)
+            if (root.TryGetProperty("responses", out var responsesElement) && responsesElement.ValueKind == JsonValueKind.Object)
             {
-                var statusCode = responseKvp.Key;
-                var responseJsonText = responseKvp.Value;
+                foreach (var responseProperty in responsesElement.EnumerateObject())
+                {
+                    var statusCode = responseProperty.Name;
+                    var responseJsonText = responseProperty.Value.GetRawText();
 
-                AdjustResponse(operation.Responses[statusCode], responseJsonText);
+                    AdjustResponse(operation.Responses[statusCode], responseJsonText);
+                }
+
             }
 
             NormalizeOperation(operation);
@@ -338,7 +378,7 @@ namespace SamplesServiceModelGenerator.Swagger
             return operation.OperationId.Split('_')[0];
         }
 
-        private static readonly Regex DomainObjectRegex = new Regex(@"domainObjects?", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase);
+        private static readonly Regex DomainObjectRegex = new Regex(@"domainObjects?", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
         private static string InferOperationClass(Operation operation)
         {
@@ -425,12 +465,11 @@ namespace SamplesServiceModelGenerator.Swagger
         private static readonly char[] RouteSeparators = { '/' };
 
         private static readonly Regex VersionComponentRegex = new Regex(@"^[vV]\d+$");
-        private static readonly Regex TemplateComponentRegex = new Regex(@"^{\w+}$", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase);
+        private static readonly Regex TemplateComponentRegex = new Regex(@"^{\w+}$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
         private void AdjustResponse(OperationResponse response, string jsonText)
         {
             var json = JsonObject.Parse(jsonText);
-
             var schema = json.Object("schema");
 
             if (schema == null)
@@ -438,6 +477,16 @@ namespace SamplesServiceModelGenerator.Swagger
 
             ParseRef(response.Schema, schema);
             ParseRef(response.Schema.Items, schema.Object("items"));
+        }
+
+        private static List<TResult> MapJsonText<T, TResult>(string jsonText, Func<string, string, TResult> selector)
+        {
+            using var doc = JsonDocument.Parse(jsonText);
+            var root = doc.RootElement;
+
+            return root.EnumerateObject()
+                .Select(kvp => selector(kvp.Name, kvp.Value.GetRawText()))
+                .ToList();
         }
     }
 }
