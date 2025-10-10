@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SamplesServiceModelGenerator.Swagger;
@@ -11,7 +12,6 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
     {
         const string _baseUrl = "https://demo.aqsamples.com/api/swagger.json";
         private string _jsonText = "";
-
         private Parser _testparser = new Parser();
         private Api _parseOutput = new Api();
         private JObject _json = new JObject();
@@ -30,7 +30,7 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
         }
 
         [OneTimeSetUp]
-        public void ForEachTest()
+        public void BeforeAll()
         {
             _jsonText = LoadStringFromUrl(_baseUrl);
 
@@ -46,19 +46,33 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
         }
 
         [Test]
-        public void ParseBaseUrl()
+        public void Parse_SamplesSwaggerDoc_Succeeds()
+        {
+            AssertExpectedBaseUrl();
+            AssertExpectedTitle();
+            AssertExpectedDefinitions();
+            AssertExpectedPaths();
+            AssertExpectedEnums();
+        }
+
+        [Test]
+        public void Parse_InvalidSamplesSwaggerDoc_Throws()
+        {
+            var invalidJson = "{ baseUrl: invalidUrl, title: fakeTitle }";
+            Assert.Throws<ExpectedException>(() => _testparser.Parse(invalidJson, _baseUrl));
+        }
+
+        public void AssertExpectedBaseUrl()
         {
             Assert.AreEqual(_baseUrl, _parseOutput.BaseUrl);
         }
 
-        [Test]
-        public void ParseTitle()
+        public void AssertExpectedTitle()
         {
             Assert.AreEqual(_json["info"]["title"].ToString(), _parseOutput.Title);
         }
 
-        [Test]
-        public void ParseDefinitions()
+        public void AssertExpectedDefinitions()
         {
             _parseOutput.Definitions.Should().NotBeEmpty();
 
@@ -91,8 +105,7 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
             }
         }
 
-        [Test]
-        public void ParsePaths()
+        public void AssertExpectedPaths()
         {
             _parseOutput.Paths.Should().NotBeEmpty();
 
@@ -131,8 +144,7 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
             parsedOperationIds.Count().Equals(expectedOperationIds.Count());
         }
 
-        [Test]
-        public void ParseEnums()
+        public void AssertExpectedEnums()
         {
             _parseOutput.Enums.Should().NotBeEmpty();
         }
