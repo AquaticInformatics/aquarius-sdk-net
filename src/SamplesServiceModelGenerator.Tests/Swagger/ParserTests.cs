@@ -2,28 +2,19 @@
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SamplesServiceModelGenerator.Swagger;
-using System.Text.RegularExpressions;
+using Property = SamplesServiceModelGenerator.Swagger.Property;
 
 namespace SamplesServiceModelGenerator.Tests.Swagger
 {
     [TestFixture]
     public class ParserTests
     {
-        private string baseUrl = "https://demo.aqsamples.com/api/swagger.json";
-        private string jsonText = "";
+        const string _baseUrl = "https://demo.aqsamples.com/api/swagger.json";
+        private string _jsonText = "";
 
-        private string _enums = string.Join(";",
-                                "ActivityType=type.SAMPLE_INTEGRATED_VERTICAL_PROFILE,SAMPLE_ROUTINE,QC_SAMPLE_REPLICATE,QC_TRIP_BLANK,FIELD_SURVEY,NONE",
-                                "AnalyticalGroupType=type.KNOWN,UNKNOWN",
-                                "ImportItemStatusType=status.ERROR,NEW,UPDATE,EXPECTED,SKIPPED",
-                                "SpecimenViewStatusType=status.REQUESTED,RECEIVED_SOME,RECEIVED_ALL");
-        private static readonly char[] ItemSeparators = { ';' };
-        private static readonly Regex EnumRegex = new Regex(@"^\s*(?<enumName>[^= ]+)\s*=\s*(?<fieldName>[^. ]+)\s*\.\s*(?<valueList>[^ ]+)\s*$", RegexOptions.Compiled);
-        private static readonly char[] ListSeparators = { ',', ' ' };
-
-        private Parser testparser = new Parser();
-        private Api parseOutput = new Api();
-        private JObject json = new JObject();
+        private Parser _testparser = new Parser();
+        private Api _parseOutput = new Api();
+        private JObject _json = new JObject();
 
         private string LoadStringFromUrl(string url)
         {
@@ -38,94 +29,112 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
             }
         }
 
-        [SetUp]
+        [OneTimeSetUp]
         public void ForEachTest()
         {
-            jsonText = LoadStringFromUrl(baseUrl);
-
-            testparser = new Parser {
-                EnumOverrides = _enums
-                    .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => EnumRegex.Match(s))
-                    .Where(m => m.Success)
-                    .ToDictionary(
-                        m => $"{m.Groups["fieldName"].Value.Trim()}.{string.Join(",", m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries))}",
-                        m => new SamplesServiceModelGenerator.Swagger.Enum(
-                            new Property { Name = m.Groups["enumName"].Value.Trim() },
-                            new Property { Name = m.Groups["enumName"].Value.Trim() },
-                            m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries)))
-            };
+            _jsonText = LoadStringFromUrl(_baseUrl);
 
             try
             {
-                json = JObject.Parse(jsonText);
+                _json = JObject.Parse(_jsonText);
             }
             catch (Exception ex)
             {
                 throw new Exception("Test Swagger is not a Valid Json", ex);
             }
-
-            parseOutput = testparser.Parse(jsonText, baseUrl);
+            _parseOutput = _testparser.Parse(_jsonText, _baseUrl);
         }
 
         [Test]
         public void ParseBaseUrl()
         {
-            Assert.AreEqual(baseUrl, parseOutput.BaseUrl);
+            Assert.AreEqual(_baseUrl, _parseOutput.BaseUrl);
         }
 
         [Test]
         public void ParseTitle()
         {
-            Assert.AreEqual(json["info"]["title"].ToString(), parseOutput.Title);
+            Assert.AreEqual(_json["info"]["title"].ToString(), _parseOutput.Title);
         }
 
         [Test]
         public void ParseDefinitions()
         {
-            parseOutput.Definitions.Should().NotBeEmpty();
+            _parseOutput.Definitions.Should().NotBeEmpty();
 
-            parseOutput.Definitions.Count().Equals(json["definitions"].Count());
+            _parseOutput.Definitions.Count().Equals(_json["definitions"].Count());
 
-            JObject expectedDefinitions = (JObject)json["definitions"];
-            List<String> expectedProperties = ["message", "localizationKey", "localizationParameters", "requestId", "id", "name", "description", "canEditAllData", "samplingLocationGroups", "auditAttributes"];
+            var expectedDefinitions = _json["definitions"] as JObject;
+            var expectedProperties = new List<string>();
 
-            foreach (Definition parsedDefinition in parseOutput.Definitions)
+            foreach (var def in expectedDefinitions.Properties())
             {
-                Assert.IsTrue(expectedDefinitions.ContainsKey(parsedDefinition.Name.ToString()));
-                foreach (Property parsedProperty in parsedDefinition.Properties)
+                var expectedDefinition = (JObject)def.Value;
+                var properties = expectedDefinition["properties"] as JObject;
+
+                if (properties != null)
                 {
-                    expectedProperties.Contains(parsedProperty.Name);
+                    foreach (var prop in properties.Properties())
+                    {
+                        expectedProperties.Add(prop.Name);
+                    }
                 }
             }
 
+            foreach (Definition parsedDefinition in _parseOutput.Definitions)
+            {
+                Assert.IsTrue(expectedDefinitions.ContainsKey(parsedDefinition.Name));
+                foreach (Property parsedProperty in parsedDefinition.Properties)
+                {
+                    Assert.IsTrue(expectedProperties.Contains(parsedProperty.Name));
+                }
+            }
         }
 
         [Test]
         public void ParsePaths()
         {
-            parseOutput.Paths.Should().NotBeEmpty();
+            _parseOutput.Paths.Should().NotBeEmpty();
 
-            parseOutput.Paths.Count().Equals(json["paths"].Count());
+            _parseOutput.Paths.Count().Equals(_json["paths"].Count());
 
-            JObject expectedPaths = (JObject)json["paths"];
-            List<String> expectedOperationKeys = ["getLaboratories", "postLaboratory", "addOrUpdateIndex", "getFilterHistory", "getSpecimenHistory", "getActivities", "postActivity", "deleteActivities"];
+            var expectedPaths = _json["paths"] as JObject;
+            List<string> verbs = ["get", "delete", "post", "put"];
+            var expectedOperationIds = new List<string>();
+            var parsedOperationIds = new List<string>();
 
-            foreach (SamplesServiceModelGenerator.Swagger.Path parsedPath in parseOutput.Paths)
+            foreach (var path in expectedPaths.Properties())
             {
-                Assert.IsTrue(expectedPaths.ContainsKey(parsedPath.Route.ToString()));
-                foreach (Operation parsedOperation in parsedPath.Operations.Values)
+                var pathItem = (JObject)path.Value;
+
+                foreach (var verb in verbs)
                 {
-                    expectedOperationKeys.Contains(parsedOperation.OperationId);
+                    if (pathItem.TryGetValue(verb, out var verbObj))
+                    {
+                        var operationId = verbObj["operationId"]?.ToString();
+                        if (!string.IsNullOrEmpty(operationId))
+                        {
+                            expectedOperationIds.Add(operationId);
+                        }
+                    }
                 }
             }
 
+            foreach (SamplesServiceModelGenerator.Swagger.Path parsedPath in _parseOutput.Paths)
+            {
+                Assert.IsTrue(expectedPaths.ContainsKey(parsedPath.Route));
+                foreach (Operation parsedOperation in parsedPath.Operations.Values)
+                {
+                    parsedOperationIds.Add(parsedOperation.OperationId);
+                }
+            }
+            parsedOperationIds.Count().Equals(expectedOperationIds.Count());
         }
 
         [Test]
         public void ParseEnums()
         {
-            parseOutput.Enums.Should().NotBeEmpty();
+            _parseOutput.Enums.Should().NotBeEmpty();
         }
 
     }

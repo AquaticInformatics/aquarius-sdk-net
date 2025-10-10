@@ -15,7 +15,31 @@ namespace SamplesServiceModelGenerator.Swagger
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Dictionary<string,Enum> EnumOverrides { get; set; }
+        public Dictionary<string, Enum> EnumOverrides { get; set; }
+
+        private string _enums = string.Join(";",
+                                "ActivityType=type.SAMPLE_INTEGRATED_VERTICAL_PROFILE,SAMPLE_ROUTINE,QC_SAMPLE_REPLICATE,QC_TRIP_BLANK,FIELD_SURVEY,NONE",
+                                "AnalyticalGroupType=type.KNOWN,UNKNOWN",
+                                "ImportItemStatusType=status.ERROR,NEW,UPDATE,EXPECTED,SKIPPED",
+                                "SpecimenViewStatusType=status.REQUESTED,RECEIVED_SOME,RECEIVED_ALL");
+        private static readonly Regex EnumRegex = new Regex(@"^\s*(?<enumName>[^= ]+)\s*=\s*(?<fieldName>[^. ]+)\s*\.\s*(?<valueList>[^ ]+)\s*$", RegexOptions.Compiled);
+        private static readonly char[] ListSeparators = { ',', ' ' };
+        private static readonly char[] ItemSeparators = { ';' };
+
+
+        public Parser()
+        {
+            EnumOverrides = _enums
+                   .Split(ItemSeparators, StringSplitOptions.RemoveEmptyEntries)
+                   .Select(s => EnumRegex.Match(s))
+                   .Where(m => m.Success)
+                   .ToDictionary(
+                       m => $"{m.Groups["fieldName"].Value.Trim()}.{string.Join(",", m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries))}",
+                       m => new Enum(
+                           new Property { Name = m.Groups["enumName"].Value.Trim() },
+                           new Property { Name = m.Groups["enumName"].Value.Trim() },
+                           m.Groups["valueList"].Value.Split(ListSeparators, StringSplitOptions.RemoveEmptyEntries)));
+        }
 
         public Api Parse(string jsonText, string baseUrl)
         {
@@ -139,20 +163,20 @@ namespace SamplesServiceModelGenerator.Swagger
             allEnums.AddRange(paths
                 .SelectMany(path => path.Operations.Values.SelectMany(operation =>
                     operation.Parameters.Where(IsEnumRequiringNormalization)
-                        .Select(parameter => new Enum(new Property {Name = operation.OperationId}, parameter, parameter.Enum)))));
+                        .Select(parameter => new Enum(new Property { Name = operation.OperationId }, parameter, parameter.Enum)))));
 
             allEnums.AddRange(paths
                 .SelectMany(p => p.Operations.Values.SelectMany(o =>
                 {
                     var schema = o.SuccessResponse()?.Schema;
 
-                    if (schema == null ||!IsEnumRequiringNormalization(schema))
+                    if (schema == null || !IsEnumRequiringNormalization(schema))
                         return new Enum[0];
 
                     if (string.IsNullOrEmpty(schema.Name))
                         schema.Name = o.OperationId;
 
-                    return new [] {new Enum(new Property {Name = o.OperationId}, schema, schema.Enum)};
+                    return new[] { new Enum(new Property { Name = o.OperationId }, schema, schema.Enum) };
                 })));
 
             // Pass 2: Consolidate any enum overrides
@@ -257,7 +281,7 @@ namespace SamplesServiceModelGenerator.Swagger
             var root = doc.RootElement;
 
             return root.EnumerateObject().Select(path => new Path
-            { 
+            {
                 Route = path.Name,
                 Operations = path.Value.EnumerateObject()
                                 .Where(operationKvp => SupportedMethods.Contains(operationKvp.Name))
@@ -286,7 +310,7 @@ namespace SamplesServiceModelGenerator.Swagger
             var json = JsonObject.Parse(jsonText);
 
             var parameters = json.ArrayObjects("parameters");
-            for(var i = 0; i < parameters.Count; ++i)
+            for (var i = 0; i < parameters.Count; ++i)
             {
                 ParseRef(operation.Parameters[i], parameters[i]);
                 ParseSchema(operation.Parameters[i].Schema, parameters[i]?.Object("schema"));
@@ -354,7 +378,7 @@ namespace SamplesServiceModelGenerator.Swagger
             return operation.OperationId.Split('_')[0];
         }
 
-        private static readonly Regex DomainObjectRegex = new Regex(@"domainObjects?", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase);
+        private static readonly Regex DomainObjectRegex = new Regex(@"domainObjects?", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
         private static string InferOperationClass(Operation operation)
         {
@@ -441,7 +465,7 @@ namespace SamplesServiceModelGenerator.Swagger
         private static readonly char[] RouteSeparators = { '/' };
 
         private static readonly Regex VersionComponentRegex = new Regex(@"^[vV]\d+$");
-        private static readonly Regex TemplateComponentRegex = new Regex(@"^{\w+}$", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase);
+        private static readonly Regex TemplateComponentRegex = new Regex(@"^{\w+}$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
         private void AdjustResponse(OperationResponse response, string jsonText)
         {
