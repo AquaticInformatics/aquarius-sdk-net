@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-07-15 01:03:45
+Date: 2025-10-22 02:07:38
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
@@ -4620,6 +4620,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="array", Description="List of hydraulic test results", Name="Results")]
         public List<HydraulicTestResult> Results { get; set; }
+
+        ///<summary>
+        ///Additional comments or notes
+        ///</summary>
+        [ApiMember(Description="Additional comments or notes", Name="Comments")]
+        public string Comments { get; set; }
     }
 
     public class HydraulicTestResult
@@ -8460,6 +8466,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.2.81.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.3.106.0");
     }
 }
