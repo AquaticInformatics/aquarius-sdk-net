@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-10-22 02:07:41
+Date: 2025-10-22 14:27:42
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Acquisition/v2
