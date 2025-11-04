@@ -24,7 +24,7 @@ Generator=../../../SamplesServiceModelGenerator/bin/Release/net8.0/SamplesServic
 ServerName=$1
 OutputPath=$2
 
-command -v dotnet >/dev/null 2>&1 || exit_abort "This script requires the .NET CORE runtime. Grab it from here: https://www.microsoft.com/net/download"
+command -v dotnet >/dev/null 2>&1 || exit_abort "This script requires the .NET 8 runtime. Grab it from here: https://www.microsoft.com/net/download"
 
 [ -f "$Generator" ]    || dotnet build "$GeneratorProjectPath" -c Release || exit_abort "Can't find or build SamplesServiceModelGenerator.dll"
 [ ! -z "$ServerName" ] || ServerName=https://demo.aqsamples.com
