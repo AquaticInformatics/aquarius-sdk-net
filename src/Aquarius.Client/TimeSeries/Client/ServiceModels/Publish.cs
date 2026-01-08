@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-10-22 02:07:38
+Date: 2026-01-08 01:51:02
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
@@ -4277,6 +4277,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="string", Description="Last time the deleted field visit matched the given filters; set only when request includes ChangesSinceToken", Format="date-time")]
         public DateTimeOffset? LastMatchedTime { get; set; }
+
+        ///<summary>
+        ///Extended attributes
+        ///</summary>
+        [ApiMember(DataType="array", Description="Extended attributes")]
+        public IList<ExtendedAttribute> ExtendedAttributes { get; set; }
     }
 
     public class FieldVisitReading
@@ -4572,12 +4578,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="The method used for the test", Name="TestMethod")]
         public string TestMethod { get; set; }
-
-        ///<summary>
-        ///The code identifying the aquifer
-        ///</summary>
-        [ApiMember(Description="The code identifying the aquifer", Name="AquiferCode")]
-        public string AquiferCode { get; set; }
 
         ///<summary>
         ///The type of aquifer
@@ -6397,6 +6397,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
             Activities = new List<ActivityType>{};
             Parameters = new List<string>{};
             InspectionTypes = new List<InspectionType>{};
+            ExtendedFilters = new List<ExtendedAttributeFilter>{};
         }
 
         ///<summary>
@@ -6464,6 +6465,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="If set, length reading values will be converted to the specified Standard Reference Datum")]
         public string ConvertToStandardReferenceDatum { get; set; }
+
+        ///<summary>
+        ///Filter results to items matching the given extended attribute values
+        ///</summary>
+        [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
+        public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
     }
 
     [Route("/GetFieldVisitData", "GET")]
@@ -6529,6 +6536,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitDescriptionListServiceRequest
         : IReturn<FieldVisitDescriptionListServiceResponse>
     {
+        public FieldVisitDescriptionListServiceRequest()
+        {
+            ExtendedFilters = new List<ExtendedAttributeFilter>{};
+        }
+
         ///<summary>
         ///Filter results to the given location
         ///</summary>
@@ -6558,6 +6570,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="string", Description="Filter results to items modified at or after the ChangesSinceToken time", Format="date-time")]
         public DateTime? ChangesSinceToken { get; set; }
+
+        ///<summary>
+        ///Filter results to items matching the given extended attribute values
+        ///</summary>
+        [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
+        public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
     }
 
     [Route("/GetAuthToken", "GET")]
@@ -7714,6 +7732,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(DataType="WellIntegrityActivity", Description="Well integrity activity")]
         public WellIntegrityActivity WellIntegrityActivity { get; set; }
+
+        ///<summary>
+        ///Extended attributes
+        ///</summary>
+        [ApiMember(DataType="array", Description="Extended attributes")]
+        public IList<ExtendedAttribute> ExtendedAttributes { get; set; }
     }
 
     public class FieldVisitDescriptionListServiceResponse
@@ -8466,6 +8490,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.3.106.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.4.67.0");
     }
 }
