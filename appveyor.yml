@@ -60,7 +60,7 @@ deploy:
 
   - provider: NuGet
     api_key:
-      secure: vAD34IxSthEP1RXr3dpfTr2TM9jMRQnsuusgdS4ETrYtswt9WWAG2fKCEYAVVpVv
+      secure: GWhzqD1cF0qXfT4YhIGfDFZr3NDQs0GK/BFGZyYcCZb4mg6+jtHVpgWiFi38em6g
     skip_symbols: false
     artifact: AllPackages
     on:
