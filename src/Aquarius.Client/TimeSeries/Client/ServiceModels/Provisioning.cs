@@ -1,5 +1,5 @@
 /* Options:
-Date: 2025-10-22 02:07:40
+Date: 2026-01-08 01:51:04
 Version: 6.02
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -39,6 +39,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         AppliesToLocations,
         AppliesToLocationTypes,
         AppliesToTimeSeries,
+        AppliesToVisits,
     }
 
     public enum TagApplicability
@@ -573,9 +574,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public List<string> PickListValues { get; set; }
 
         ///<summary>
-        ///Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.
+        ///Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.
         ///</summary>
-        [ApiMember(DataType="array", Description="Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.")]
+        [ApiMember(DataType="array", Description="Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
 
         ///<summary>
@@ -624,9 +625,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         }
 
         ///<summary>
-        ///If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries
+        ///If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits
         ///</summary>
-        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries")]
+        [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
     }
 
@@ -4559,9 +4560,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public bool AppliesToTimeSeries { get; set; }
 
         ///<summary>
-        ///Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.
+        ///DEPRECATED: Use Applicability instead. True if extended attribute is applicable to Visits
         ///</summary>
-        [ApiMember(DataType="array", Description="Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries.")]
+        [ApiMember(DataType="boolean", Description="DEPRECATED: Use Applicability instead. True if extended attribute is applicable to Visits")]
+        public bool AppliesToVisits { get; set; }
+
+        ///<summary>
+        ///Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.
+        ///</summary>
+        [ApiMember(DataType="array", Description="Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.")]
         public List<ExtendedAttributeApplicability> Applicability { get; set; }
 
         ///<summary>
@@ -6726,6 +6733,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.3.106.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.4.67.0");
     }
 }
