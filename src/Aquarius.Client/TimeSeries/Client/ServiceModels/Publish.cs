@@ -1,6 +1,6 @@
 /* Options:
-Date: 2026-01-08 01:51:02
-Version: 6.02
+Date: 2026-01-28 03:36:01
+Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
 
@@ -9,6 +9,7 @@ MakePartial: False
 MakeVirtual: False
 //MakeInternal: False
 //MakeDataContractsExtensible: False
+//AddNullableAnnotations: True
 //AddReturnMarker: True
 //AddDescriptionAsComments: True
 //AddDataContractAttributes: False
@@ -16,7 +17,7 @@ MakeVirtual: False
 //AddGeneratedCodeAttributes: False
 //AddResponseStatus: False
 //AddImplicitVersion: 
-//InitializeCollections: True
+//InitializeCollections: False
 ExportValueTypes: True
 //IncludeTypes: 
 //ExcludeTypes: 
@@ -69,19 +70,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Username
         ///</summary>
         [ApiMember(Description="Username")]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         ///<summary>
         ///Encrypted password
         ///</summary>
         [ApiMember(Description="Encrypted password")]
-        public string EncryptedPassword { get; set; }
+        public string? EncryptedPassword { get; set; }
 
         ///<summary>
         ///Optional locale. Defaults to English
         ///</summary>
         [ApiMember(Description="Optional locale. Defaults to English")]
-        public string Locale { get; set; }
+        public string? Locale { get; set; }
     }
 
     public class PublicKey
@@ -96,7 +97,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///XML blob containing the RSA public key components
         ///</summary>
         [ApiMember(Description="XML blob containing the RSA public key components")]
-        public string Xml { get; set; }
+        public string? Xml { get; set; }
     }
 
     public class Approval
@@ -118,19 +119,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
         ///<summary>
         ///Level description
         ///</summary>
         [ApiMember(Description="Level description")]
-        public string LevelDescription { get; set; }
+        public string? LevelDescription { get; set; }
 
         ///<summary>
         ///Comment
         ///</summary>
         [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
     }
 
     public class ApprovalMetadata
@@ -139,19 +140,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
         [ApiMember(Description="Display name")]
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         ///<summary>
         ///Color
         ///</summary>
         [ApiMember(Description="Color")]
-        public string Color { get; set; }
+        public string? Color { get; set; }
     }
 
     public class ApprovalsTransaction
@@ -189,15 +190,15 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comment
         ///</summary>
         [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         ///<summary>
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
-        public IDictionary<string, Object> Parameters { get; set; }
+        public IDictionary<string, Object>? Parameters { get; set; }
         ///<summary>
         ///Processing order
         ///</summary>
@@ -214,7 +215,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         [ApiMember(DataType="string", Description="Type")]
         public CorrectionType Type { get; set; }
 
-        public IDictionary<string, Object> Parameters { get; set; }
+        public IDictionary<string, Object>? Parameters { get; set; }
         ///<summary>
         ///Processing order
         ///</summary>
@@ -231,7 +232,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
         ///<summary>
         ///Operation type
@@ -249,7 +250,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public enum CorrectionProcessingOrder
@@ -297,7 +298,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display
         ///</summary>
         [ApiMember(Description="Display")]
-        public string Display { get; set; }
+        public string? Display { get; set; }
     }
 
     public class EffectiveShift
@@ -317,20 +318,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class ExpandedRatingCurve
     {
-        public ExpandedRatingCurve()
-        {
-            PeriodsOfApplicability = new List<PeriodOfApplicability>{};
-            Shifts = new List<RatingShift>{};
-            Offsets = new List<OffsetPoint>{};
-            BaseRatingTable = new List<RatingPoint>{};
-            AdjustedRatingTable = new List<RatingPoint>{};
-        }
-
         ///<summary>
         ///Id
         ///</summary>
         [ApiMember(Description="Id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         ///<summary>
         ///Type
@@ -342,37 +334,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Remarks
         ///</summary>
         [ApiMember(Description="Remarks")]
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
 
         ///<summary>
         ///Input parameter
         ///</summary>
         [ApiMember(DataType="ParameterWithUnit", Description="Input parameter")]
-        public ParameterWithUnit InputParameter { get; set; }
+        public ParameterWithUnit? InputParameter { get; set; }
 
         ///<summary>
         ///Output parameter
         ///</summary>
         [ApiMember(DataType="ParameterWithUnit", Description="Output parameter")]
-        public ParameterWithUnit OutputParameter { get; set; }
+        public ParameterWithUnit? OutputParameter { get; set; }
 
         ///<summary>
         ///Periods of applicability
         ///</summary>
         [ApiMember(DataType="array", Description="Periods of applicability")]
-        public List<PeriodOfApplicability> PeriodsOfApplicability { get; set; }
+        public List<PeriodOfApplicability>? PeriodsOfApplicability { get; set; }
 
         ///<summary>
         ///Shifts
         ///</summary>
         [ApiMember(DataType="array", Description="Shifts")]
-        public List<RatingShift> Shifts { get; set; }
+        public List<RatingShift>? Shifts { get; set; }
 
         ///<summary>
         ///Offsets
         ///</summary>
         [ApiMember(DataType="array", Description="Offsets")]
-        public List<OffsetPoint> Offsets { get; set; }
+        public List<OffsetPoint>? Offsets { get; set; }
 
         ///<summary>
         ///Is blended
@@ -384,13 +376,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Base rating table
         ///</summary>
         [ApiMember(DataType="array", Description="Base rating table")]
-        public List<RatingPoint> BaseRatingTable { get; set; }
+        public List<RatingPoint>? BaseRatingTable { get; set; }
 
         ///<summary>
         ///Adjusted rating table
         ///</summary>
         [ApiMember(DataType="array", Description="Adjusted rating table")]
-        public List<RatingPoint> AdjustedRatingTable { get; set; }
+        public List<RatingPoint>? AdjustedRatingTable { get; set; }
     }
 
     public class ExtendedAttribute
@@ -405,19 +397,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Name
         ///</summary>
         [ApiMember(Description="Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         ///<summary>
         ///Type
         ///</summary>
         [ApiMember(Description="Type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         ///<summary>
         ///Value
         ///</summary>
         [ApiMember(DataType="object", Description="Value")]
-        public Object Value { get; set; }
+        public Object? Value { get; set; }
     }
 
     public class ExtendedAttributeFilter
@@ -426,13 +418,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter name
         ///</summary>
         [ApiMember(Description="Filter name")]
-        public string FilterName { get; set; }
+        public string? FilterName { get; set; }
 
         ///<summary>
         ///Filter value
         ///</summary>
         [ApiMember(Description="Filter value")]
-        public string FilterValue { get; set; }
+        public string? FilterValue { get; set; }
     }
 
     public class GapTolerance
@@ -464,7 +456,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
         ///<summary>
         ///Stack position
@@ -476,7 +468,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class Grade
@@ -486,7 +478,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade code
         ///</summary>
         [ApiMember(Description="Grade code")]
-        public string GradeCode { get; set; }
+        public string? GradeCode { get; set; }
     }
 
     public class GradeMetadata
@@ -495,25 +487,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
         [ApiMember(Description="Display name")]
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Color
         ///</summary>
         [ApiMember(Description="Color")]
-        public string Color { get; set; }
+        public string? Color { get; set; }
     }
 
     public class GradeOperation
@@ -529,7 +521,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
         ///<summary>
         ///Operation type
@@ -547,13 +539,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public interface IMetadataChangeOperation
     {
         DateTime DateAppliedUtc { get; set; }
-        string User { get; set; }
+        string? User { get; set; }
         MetadataChangeOperationType OperationType { get; set; }
     }
 
@@ -564,7 +556,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Type
         ///</summary>
         [ApiMember(Description="Type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
     }
 
     public class InterpolationTypeOperation
@@ -580,7 +572,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
         ///<summary>
         ///Operation type
@@ -598,34 +590,29 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public interface IStackPositionMetadataOperation
         : IMetadataChangeOperation
     {
         int StackPosition { get; set; }
-        string Comments { get; set; }
+        string? Comments { get; set; }
     }
 
     public class LocationDatum
     {
-        public LocationDatum()
-        {
-            DatumPeriods = new List<LocationDatumPeriod>{};
-        }
-
         ///<summary>
         ///Reference standard
         ///</summary>
         [ApiMember(DataType="LocationReferenceStandard", Description="Reference standard")]
-        public LocationReferenceStandard ReferenceStandard { get; set; }
+        public LocationReferenceStandard? ReferenceStandard { get; set; }
 
         ///<summary>
         ///Datum periods
         ///</summary>
         [ApiMember(DataType="array", Description="Datum periods")]
-        public List<LocationDatumPeriod> DatumPeriods { get; set; }
+        public List<LocationDatumPeriod>? DatumPeriods { get; set; }
     }
 
     public class LocationDatumPeriod
@@ -634,19 +621,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Standard
         ///</summary>
         [ApiMember(Description="Standard")]
-        public string Standard { get; set; }
+        public string? Standard { get; set; }
 
         ///<summary>
         ///Time range
         ///</summary>
         [ApiMember(DataType="TimeRange", Description="Time range")]
-        public TimeRange TimeRange { get; set; }
+        public TimeRange? TimeRange { get; set; }
 
         ///<summary>
         ///Unit identifier
         ///</summary>
         [ApiMember(Description="Unit identifier")]
-        public string UnitIdentifier { get; set; }
+        public string? UnitIdentifier { get; set; }
 
         ///<summary>
         ///Offset to standard
@@ -664,7 +651,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Method used to determine the offset
         ///</summary>
         [ApiMember(Description="Method used to determine the offset")]
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         ///<summary>
         ///Direction that positive measurements are taken in relation to the reference point
@@ -676,7 +663,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Applied time utc
@@ -688,28 +675,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
     }
 
     public class LocationDescription
     {
-        public LocationDescription()
-        {
-            SecondaryFolders = new List<string>{};
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///Name
         ///</summary>
         [ApiMember(Description="Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         ///<summary>
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Unique id
@@ -727,13 +708,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Primary folder
         ///</summary>
         [ApiMember(Description="Primary folder")]
-        public string PrimaryFolder { get; set; }
+        public string? PrimaryFolder { get; set; }
 
         ///<summary>
         ///Secondary folders
         ///</summary>
         [ApiMember(DataType="array", Description="Secondary folders")]
-        public List<string> SecondaryFolders { get; set; }
+        public List<string>? SecondaryFolders { get; set; }
 
         ///<summary>
         ///Last modified
@@ -751,7 +732,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Tags
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
-        public List<TagMetadata> Tags { get; set; }
+        public List<TagMetadata>? Tags { get; set; }
 
         ///<summary>
         ///Utc offset
@@ -762,11 +743,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LocationMonitoringMethod
     {
-        public LocationMonitoringMethod()
-        {
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///UniqueId
         ///</summary>
@@ -777,37 +753,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Location Identifier
         ///</summary>
         [ApiMember(Description="Location Identifier")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Name
         ///</summary>
         [ApiMember(Description="Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         ///<summary>
         ///Method Code
         ///</summary>
         [ApiMember(Description="Method Code")]
-        public string MethodCode { get; set; }
+        public string? MethodCode { get; set; }
 
         ///<summary>
         ///Method Display Name
         ///</summary>
         [ApiMember(Description="Method Display Name")]
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         ///<summary>
         ///Parameter Name
         ///</summary>
         [ApiMember(Description="Parameter Name")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Parameter Id
         ///</summary>
         [ApiMember(Description="Parameter Id")]
-        public string ParameterId { get; set; }
+        public string? ParameterId { get; set; }
 
         ///<summary>
         ///Parameter Unique Id
@@ -819,43 +795,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Unit Id
         ///</summary>
         [ApiMember(Description="Unit Id")]
-        public string UnitId { get; set; }
+        public string? UnitId { get; set; }
 
         ///<summary>
         ///Unit Name
         ///</summary>
         [ApiMember(Description="Unit Name")]
-        public string UnitName { get; set; }
+        public string? UnitName { get; set; }
 
         ///<summary>
         ///Sub location identifier
         ///</summary>
         [ApiMember(Description="Sub location identifier")]
-        public string SubLocationIdentifier { get; set; }
+        public string? SubLocationIdentifier { get; set; }
 
         ///<summary>
         ///Comment
         ///</summary>
         [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         ///<summary>
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Serial Number
         ///</summary>
         [ApiMember(Description="Serial Number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Last modified time (UTC)
@@ -867,16 +843,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Tags
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
-        public List<TagMetadata> Tags { get; set; }
+        public List<TagMetadata>? Tags { get; set; }
     }
 
     public class LocationNote
     {
-        public LocationNote()
-        {
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///UniqueId
         ///</summary>
@@ -911,7 +882,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Details
         ///</summary>
         [ApiMember(Description="Details")]
-        public string Details { get; set; }
+        public string? Details { get; set; }
 
         ///<summary>
         ///Time-series unique id
@@ -923,51 +894,46 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Location note tags
         ///</summary>
         [ApiMember(DataType="array", Description="Location note tags")]
-        public List<TagMetadata> Tags { get; set; }
+        public List<TagMetadata>? Tags { get; set; }
 
         ///<summary>
         ///User who last modified this note
         ///</summary>
         [ApiMember(Description="User who last modified this note")]
-        public string LastModifiedByUser { get; set; }
+        public string? LastModifiedByUser { get; set; }
 
         ///<summary>
         ///User who created this note
         ///</summary>
         [ApiMember(Description="User who created this note")]
-        public string CreatedByUser { get; set; }
+        public string? CreatedByUser { get; set; }
     }
 
     public class LocationReferenceStandard
     {
-        public LocationReferenceStandard()
-        {
-            ReferenceStandardOffsets = new List<ReferenceStandardOffset>{};
-        }
-
         ///<summary>
         ///Reference standard
         ///</summary>
         [ApiMember(Description="Reference standard")]
-        public string ReferenceStandard { get; set; }
+        public string? ReferenceStandard { get; set; }
 
         ///<summary>
         ///Reference standard offsets
         ///</summary>
         [ApiMember(DataType="array", Description="Reference standard offsets")]
-        public List<ReferenceStandardOffset> ReferenceStandardOffsets { get; set; }
+        public List<ReferenceStandardOffset>? ReferenceStandardOffsets { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Method
         ///</summary>
         [ApiMember(Description="Method")]
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         ///<summary>
         ///Uncertainty
@@ -1000,19 +966,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Type name
         ///</summary>
         [ApiMember(Description="Type name")]
-        public string TypeName { get; set; }
+        public string? TypeName { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Remark
         ///</summary>
         [ApiMember(Description="Remark")]
-        public string Remark { get; set; }
+        public string? Remark { get; set; }
     }
 
     public enum MeasurementDirection
@@ -1046,7 +1012,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Applied by user
         ///</summary>
         [ApiMember(Description="Applied by user")]
-        public string AppliedByUser { get; set; }
+        public string? AppliedByUser { get; set; }
 
         ///<summary>
         ///Content type
@@ -1058,43 +1024,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Gap tolerance operations
         ///</summary>
         [ApiMember(DataType="array", Description="Gap tolerance operations")]
-        public IList<GapToleranceOperation> GapToleranceOperations { get; set; }
+        public IList<GapToleranceOperation>? GapToleranceOperations { get; set; }
 
         ///<summary>
         ///Grade operations
         ///</summary>
         [ApiMember(DataType="array", Description="Grade operations")]
-        public IList<GradeOperation> GradeOperations { get; set; }
+        public IList<GradeOperation>? GradeOperations { get; set; }
 
         ///<summary>
         ///Interpolation type operations
         ///</summary>
         [ApiMember(DataType="array", Description="Interpolation type operations")]
-        public IList<InterpolationTypeOperation> InterpolationTypeOperations { get; set; }
+        public IList<InterpolationTypeOperation>? InterpolationTypeOperations { get; set; }
 
         ///<summary>
         ///Method operations
         ///</summary>
         [ApiMember(DataType="array", Description="Method operations")]
-        public IList<MethodOperation> MethodOperations { get; set; }
+        public IList<MethodOperation>? MethodOperations { get; set; }
 
         ///<summary>
         ///Note operations
         ///</summary>
         [ApiMember(DataType="array", Description="Note operations")]
-        public IList<NoteOperation> NoteOperations { get; set; }
+        public IList<NoteOperation>? NoteOperations { get; set; }
 
         ///<summary>
         ///Qualifier operations
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifier operations")]
-        public IList<QualifierOperation> QualifierOperations { get; set; }
+        public IList<QualifierOperation>? QualifierOperations { get; set; }
 
         ///<summary>
         ///Correction operations
         ///</summary>
         [ApiMember(DataType="array", Description="Correction operations")]
-        public IList<CorrectionOperation> CorrectionOperations { get; set; }
+        public IList<CorrectionOperation>? CorrectionOperations { get; set; }
     }
 
     public class Method
@@ -1104,7 +1070,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Method code
         ///</summary>
         [ApiMember(Description="Method code")]
-        public string MethodCode { get; set; }
+        public string? MethodCode { get; set; }
     }
 
     public class MethodOperation
@@ -1120,7 +1086,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
         ///<summary>
         ///Operation type
@@ -1138,7 +1104,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class MonitoringMethod
@@ -1147,31 +1113,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Method code
         ///</summary>
         [ApiMember(Description="Method code")]
-        public string MethodCode { get; set; }
+        public string? MethodCode { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
         [ApiMember(Description="Display name")]
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Parameter
         ///</summary>
         [ApiMember(Description="Parameter")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Rounding spec
         ///</summary>
         [ApiMember(Description="Rounding spec")]
-        public string RoundingSpec { get; set; }
+        public string? RoundingSpec { get; set; }
     }
 
     public class Note
@@ -1181,7 +1147,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Note text
         ///</summary>
         [ApiMember(Description="Note text")]
-        public string NoteText { get; set; }
+        public string? NoteText { get; set; }
     }
 
     public class NoteOperation
@@ -1197,7 +1163,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
 
         ///<summary>
         ///Operation type
@@ -1227,37 +1193,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Unit group identifier
         ///</summary>
         [ApiMember(Description="Unit group identifier")]
-        public string UnitGroupIdentifier { get; set; }
+        public string? UnitGroupIdentifier { get; set; }
 
         ///<summary>
         ///Unit identifier
         ///</summary>
         [ApiMember(Description="Unit identifier")]
-        public string UnitIdentifier { get; set; }
+        public string? UnitIdentifier { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
         [ApiMember(Description="Display name")]
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         ///<summary>
         ///Interpolation type
         ///</summary>
         [ApiMember(Description="Interpolation type")]
-        public string InterpolationType { get; set; }
+        public string? InterpolationType { get; set; }
 
         ///<summary>
         ///Rounding spec
         ///</summary>
         [ApiMember(Description="Rounding spec")]
-        public string RoundingSpec { get; set; }
+        public string? RoundingSpec { get; set; }
     }
 
     public class ParameterWithUnit
@@ -1266,13 +1232,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Parameter name
         ///</summary>
         [ApiMember(Description="Parameter name")]
-        public string ParameterName { get; set; }
+        public string? ParameterName { get; set; }
 
         ///<summary>
         ///Parameter unit
         ///</summary>
         [ApiMember(Description="Parameter unit")]
-        public string ParameterUnit { get; set; }
+        public string? ParameterUnit { get; set; }
     }
 
     public class PeriodOfApplicability
@@ -1293,28 +1259,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Remarks
         ///</summary>
         [ApiMember(Description="Remarks")]
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
     }
 
     public class Processor
     {
-        public Processor()
-        {
-            InputTimeSeriesUniqueIds = new List<Guid>{};
-            Settings = new Dictionary<string, string>{};
-        }
-
         ///<summary>
         ///Processor type
         ///</summary>
         [ApiMember(Description="Processor type")]
-        public string ProcessorType { get; set; }
+        public string? ProcessorType { get; set; }
 
         ///<summary>
         ///Input time series unique ids
         ///</summary>
         [ApiMember(DataType="array", Description="Input time series unique ids")]
-        public List<Guid> InputTimeSeriesUniqueIds { get; set; }
+        public List<Guid>? InputTimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Output time series unique id
@@ -1326,21 +1286,21 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Processor period
         ///</summary>
         [ApiMember(DataType="TimeRange", Description="Processor period")]
-        public TimeRange ProcessorPeriod { get; set; }
+        public TimeRange? ProcessorPeriod { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Input rating model identifier
         ///</summary>
         [ApiMember(Description="Input rating model identifier")]
-        public string InputRatingModelIdentifier { get; set; }
+        public string? InputRatingModelIdentifier { get; set; }
 
-        public Dictionary<string, string> Settings { get; set; }
+        public Dictionary<string, string>? Settings { get; set; }
     }
 
     public class Qualifier
@@ -1350,7 +1310,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Date applied
@@ -1362,7 +1322,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
     }
 
     public class QualifierMetadata
@@ -1371,19 +1331,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Code
         ///</summary>
         [ApiMember(Description="Code")]
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
         [ApiMember(Description="Display name")]
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
     }
 
     public class QualifierOperation
@@ -1393,7 +1353,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Operation type
@@ -1411,25 +1371,16 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///User
         ///</summary>
         [ApiMember(Description="User")]
-        public string User { get; set; }
+        public string? User { get; set; }
     }
 
     public class RatingCurve
     {
-        public RatingCurve()
-        {
-            PeriodsOfApplicability = new List<PeriodOfApplicability>{};
-            Shifts = new List<RatingShift>{};
-            BaseRatingTable = new List<RatingPoint>{};
-            Offsets = new List<OffsetPoint>{};
-            GradeRanges = new List<RatingGrade>{};
-        }
-
         ///<summary>
         ///Id
         ///</summary>
         [ApiMember(Description="Id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         ///<summary>
         ///Type
@@ -1441,55 +1392,55 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Equation
         ///</summary>
         [ApiMember(Description="Equation")]
-        public string Equation { get; set; }
+        public string? Equation { get; set; }
 
         ///<summary>
         ///Remarks
         ///</summary>
         [ApiMember(Description="Remarks")]
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
 
         ///<summary>
         ///Input parameter
         ///</summary>
         [ApiMember(DataType="ParameterWithUnit", Description="Input parameter")]
-        public ParameterWithUnit InputParameter { get; set; }
+        public ParameterWithUnit? InputParameter { get; set; }
 
         ///<summary>
         ///Output parameter
         ///</summary>
         [ApiMember(DataType="ParameterWithUnit", Description="Output parameter")]
-        public ParameterWithUnit OutputParameter { get; set; }
+        public ParameterWithUnit? OutputParameter { get; set; }
 
         ///<summary>
         ///Periods of applicability
         ///</summary>
         [ApiMember(DataType="array", Description="Periods of applicability")]
-        public List<PeriodOfApplicability> PeriodsOfApplicability { get; set; }
+        public List<PeriodOfApplicability>? PeriodsOfApplicability { get; set; }
 
         ///<summary>
         ///Shifts
         ///</summary>
         [ApiMember(DataType="array", Description="Shifts")]
-        public List<RatingShift> Shifts { get; set; }
+        public List<RatingShift>? Shifts { get; set; }
 
         ///<summary>
         ///Base rating table
         ///</summary>
         [ApiMember(DataType="array", Description="Base rating table")]
-        public List<RatingPoint> BaseRatingTable { get; set; }
+        public List<RatingPoint>? BaseRatingTable { get; set; }
 
         ///<summary>
         ///Offsets
         ///</summary>
         [ApiMember(DataType="array", Description="Offsets")]
-        public List<OffsetPoint> Offsets { get; set; }
+        public List<OffsetPoint>? Offsets { get; set; }
 
         ///<summary>
         ///Grade Ranges
         ///</summary>
         [ApiMember(DataType="array", Description="Grade Ranges")]
-        public List<RatingGrade> GradeRanges { get; set; }
+        public List<RatingGrade>? GradeRanges { get; set; }
     }
 
     public enum RatingCurveType
@@ -1523,61 +1474,61 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Label
         ///</summary>
         [ApiMember(Description="Label")]
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         ///<summary>
         ///Location identifier
         ///</summary>
         [ApiMember(Description="Location identifier")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Input parameter
         ///</summary>
         [ApiMember(Description="Input parameter")]
-        public string InputParameter { get; set; }
+        public string? InputParameter { get; set; }
 
         ///<summary>
         ///Input unit
         ///</summary>
         [ApiMember(Description="Input unit")]
-        public string InputUnit { get; set; }
+        public string? InputUnit { get; set; }
 
         ///<summary>
         ///Output parameter
         ///</summary>
         [ApiMember(Description="Output parameter")]
-        public string OutputParameter { get; set; }
+        public string? OutputParameter { get; set; }
 
         ///<summary>
         ///Output unit
         ///</summary>
         [ApiMember(Description="Output unit")]
-        public string OutputUnit { get; set; }
+        public string? OutputUnit { get; set; }
 
         ///<summary>
         ///Template name
         ///</summary>
         [ApiMember(Description="Template name")]
-        public string TemplateName { get; set; }
+        public string? TemplateName { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Comment
         ///</summary>
         [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         ///<summary>
         ///Last modified
@@ -1609,22 +1560,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class RatingShift
     {
-        public RatingShift()
-        {
-            ShiftPoints = new List<RatingShiftPoint>{};
-        }
-
         ///<summary>
         ///Period of applicability
         ///</summary>
         [ApiMember(DataType="PeriodOfApplicability", Description="Period of applicability")]
-        public PeriodOfApplicability PeriodOfApplicability { get; set; }
+        public PeriodOfApplicability? PeriodOfApplicability { get; set; }
 
         ///<summary>
         ///Shift points
         ///</summary>
         [ApiMember(DataType="array", Description="Shift points")]
-        public List<RatingShiftPoint> ShiftPoints { get; set; }
+        public List<RatingShiftPoint>? ShiftPoints { get; set; }
     }
 
     public class RatingShiftPoint
@@ -1644,11 +1590,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class ReferencePoint
     {
-        public ReferencePoint()
-        {
-            ReferencePointPeriods = new List<ReferencePointPeriod>{};
-        }
-
         ///<summary>
         ///Unique ID of the reference point
         ///</summary>
@@ -1659,13 +1600,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Name
         ///</summary>
         [ApiMember(Description="Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Decommissioned date
@@ -1677,7 +1618,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Decommissioned reason
         ///</summary>
         [ApiMember(Description="Decommissioned reason")]
-        public string DecommissionedReason { get; set; }
+        public string? DecommissionedReason { get; set; }
 
         ///<summary>
         ///Point has been the primary reference point since this date. If no date is provided, the point is treated as a regular point.
@@ -1701,7 +1642,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Periods of applicability
         ///</summary>
         [ApiMember(DataType="array", Description="Periods of applicability")]
-        public List<ReferencePointPeriod> ReferencePointPeriods { get; set; }
+        public List<ReferencePointPeriod>? ReferencePointPeriods { get; set; }
     }
 
     public class ReferencePointPeriod
@@ -1710,7 +1651,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Standard Identifier. Empty when the elevation is measured against the local assumed datum.
         ///</summary>
         [ApiMember(Description="Standard Identifier. Empty when the elevation is measured against the local assumed datum.")]
-        public string StandardIdentifier { get; set; }
+        public string? StandardIdentifier { get; set; }
 
         ///<summary>
         ///True if this period is measured against the location's local assumed datum instead of a standard datum
@@ -1728,7 +1669,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Unit identifier
         ///</summary>
         [ApiMember(Description="Unit identifier")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Elevation of the reference point relative to the standard or local assumed datum
@@ -1746,7 +1687,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Optional method used to determine the elevation
         ///</summary>
         [ApiMember(Description="Optional method used to determine the elevation")]
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         ///<summary>
         ///Direction of positive elevations in relation to the reference point
@@ -1758,7 +1699,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comment
         ///</summary>
         [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         ///<summary>
         ///Applied date
@@ -1770,7 +1711,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Applied by user
         ///</summary>
         [ApiMember(Description="Applied by user")]
-        public string AppliedByUser { get; set; }
+        public string? AppliedByUser { get; set; }
     }
 
     public class ReferenceStandardOffset
@@ -1779,7 +1720,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Standard
         ///</summary>
         [ApiMember(Description="Standard")]
-        public string Standard { get; set; }
+        public string? Standard { get; set; }
 
         ///<summary>
         ///Offset to reference standard
@@ -1791,13 +1732,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Method
         ///</summary>
         [ApiMember(Description="Method")]
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         ///<summary>
         ///Uncertainty
@@ -1808,12 +1749,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Report
     {
-        public Report()
-        {
-            SourceTimeSeriesUniqueIds = new List<Guid>{};
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///ReportUniqueId
         ///</summary>
@@ -1824,19 +1759,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Title
         ///</summary>
         [ApiMember(Description="Title")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Created time (UTC)
@@ -1848,7 +1783,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Time range of source data displayed in report (UTC)
         ///</summary>
         [ApiMember(DataType="TimeRange", Description="Time range of source data displayed in report (UTC)")]
-        public TimeRange SourceTimeRange { get; set; }
+        public TimeRange? SourceTimeRange { get; set; }
 
         ///<summary>
         ///Is transient
@@ -1860,7 +1795,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Source time-series unique IDs
         ///</summary>
         [ApiMember(DataType="array", Description="Source time-series unique IDs")]
-        public List<Guid> SourceTimeSeriesUniqueIds { get; set; }
+        public List<Guid>? SourceTimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Location unique ID
@@ -1872,7 +1807,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Tags
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
-        public List<TagMetadata> Tags { get; set; }
+        public List<TagMetadata>? Tags { get; set; }
 
         ///<summary>
         ///Report creator's user unique ID
@@ -1884,13 +1819,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Report creator's user name
         ///</summary>
         [ApiMember(Description="Report creator's user name")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         ///<summary>
         ///Attachment URL
         ///</summary>
         [ApiMember(Description="Attachment URL")]
-        public string Url { get; set; }
+        public string? Url { get; set; }
     }
 
     public class StagePoint
@@ -1935,27 +1870,22 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Start time
         ///</summary>
         [ApiMember(DataType="StatisticalDateTimeOffset", Description="Start time")]
-        public StatisticalDateTimeOffset StartTime { get; set; }
+        public StatisticalDateTimeOffset? StartTime { get; set; }
 
         ///<summary>
         ///End time
         ///</summary>
         [ApiMember(DataType="StatisticalDateTimeOffset", Description="End time")]
-        public StatisticalDateTimeOffset EndTime { get; set; }
+        public StatisticalDateTimeOffset? EndTime { get; set; }
     }
 
     public class TagDefinition
     {
-        public TagDefinition()
-        {
-            PickListValues = new List<string>{};
-        }
-
         ///<summary>
         ///Key of the tag
         ///</summary>
         [ApiMember(Description="Key of the tag")]
-        public string Key { get; set; }
+        public string? Key { get; set; }
 
         ///<summary>
         ///UniqueId
@@ -1973,7 +1903,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Set of pick-list values if ValueType is PickList
         ///</summary>
         [ApiMember(DataType="array", Description="Set of pick-list values if ValueType is PickList")]
-        public List<string> PickListValues { get; set; }
+        public List<string>? PickListValues { get; set; }
 
         ///<summary>
         ///True if tag is applicable to Attachments
@@ -2018,13 +1948,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Key of the tag
         ///</summary>
         [ApiMember(Description="Key of the tag")]
-        public string Key { get; set; }
+        public string? Key { get; set; }
 
         ///<summary>
         ///Value of the applied tag, if the tag's ValueType is PickList
         ///</summary>
         [ApiMember(Description="Value of the applied tag, if the tag's ValueType is PickList")]
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 
     public enum TagValueType
@@ -2063,7 +1993,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 1
         ///</summary>
         [ApiMember(Description="Display value of output time-series 1")]
-        public string DisplayValue1 { get; set; }
+        public string? DisplayValue1 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 1
@@ -2075,19 +2005,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 1
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 1")]
-        public string GradeName1 { get; set; }
+        public string? GradeName1 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 1
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 1")]
-        public string Qualifiers1 { get; set; }
+        public string? Qualifiers1 { get; set; }
 
         ///<summary>
         ///Method of output time-series 1
         ///</summary>
         [ApiMember(Description="Method of output time-series 1")]
-        public string Method1 { get; set; }
+        public string? Method1 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 1
@@ -2099,7 +2029,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 1
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 1")]
-        public string ApprovalName1 { get; set; }
+        public string? ApprovalName1 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 2
@@ -2111,7 +2041,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 2
         ///</summary>
         [ApiMember(Description="Display value of output time-series 2")]
-        public string DisplayValue2 { get; set; }
+        public string? DisplayValue2 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 2
@@ -2123,19 +2053,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 2
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 2")]
-        public string GradeName2 { get; set; }
+        public string? GradeName2 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 2
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 2")]
-        public string Qualifiers2 { get; set; }
+        public string? Qualifiers2 { get; set; }
 
         ///<summary>
         ///Method of output time-series 2
         ///</summary>
         [ApiMember(Description="Method of output time-series 2")]
-        public string Method2 { get; set; }
+        public string? Method2 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 2
@@ -2147,7 +2077,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 2
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 2")]
-        public string ApprovalName2 { get; set; }
+        public string? ApprovalName2 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 3
@@ -2159,7 +2089,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 3
         ///</summary>
         [ApiMember(Description="Display value of output time-series 3")]
-        public string DisplayValue3 { get; set; }
+        public string? DisplayValue3 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 3
@@ -2171,19 +2101,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 3
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 3")]
-        public string GradeName3 { get; set; }
+        public string? GradeName3 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 3
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 3")]
-        public string Qualifiers3 { get; set; }
+        public string? Qualifiers3 { get; set; }
 
         ///<summary>
         ///Method of output time-series 3
         ///</summary>
         [ApiMember(Description="Method of output time-series 3")]
-        public string Method3 { get; set; }
+        public string? Method3 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 3
@@ -2195,7 +2125,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 3
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 3")]
-        public string ApprovalName3 { get; set; }
+        public string? ApprovalName3 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 4
@@ -2207,7 +2137,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 4
         ///</summary>
         [ApiMember(Description="Display value of output time-series 4")]
-        public string DisplayValue4 { get; set; }
+        public string? DisplayValue4 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 4
@@ -2219,19 +2149,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 4
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 4")]
-        public string GradeName4 { get; set; }
+        public string? GradeName4 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 4
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 4")]
-        public string Qualifiers4 { get; set; }
+        public string? Qualifiers4 { get; set; }
 
         ///<summary>
         ///Method of output time-series 4
         ///</summary>
         [ApiMember(Description="Method of output time-series 4")]
-        public string Method4 { get; set; }
+        public string? Method4 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 4
@@ -2243,7 +2173,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 4
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 4")]
-        public string ApprovalName4 { get; set; }
+        public string? ApprovalName4 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 5
@@ -2255,7 +2185,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 5
         ///</summary>
         [ApiMember(Description="Display value of output time-series 5")]
-        public string DisplayValue5 { get; set; }
+        public string? DisplayValue5 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 5
@@ -2267,19 +2197,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 5
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 5")]
-        public string GradeName5 { get; set; }
+        public string? GradeName5 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 5
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 5")]
-        public string Qualifiers5 { get; set; }
+        public string? Qualifiers5 { get; set; }
 
         ///<summary>
         ///Method of output time-series 5
         ///</summary>
         [ApiMember(Description="Method of output time-series 5")]
-        public string Method5 { get; set; }
+        public string? Method5 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 5
@@ -2291,7 +2221,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 5
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 5")]
-        public string ApprovalName5 { get; set; }
+        public string? ApprovalName5 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 6
@@ -2303,7 +2233,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 6
         ///</summary>
         [ApiMember(Description="Display value of output time-series 6")]
-        public string DisplayValue6 { get; set; }
+        public string? DisplayValue6 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 6
@@ -2315,19 +2245,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 6
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 6")]
-        public string GradeName6 { get; set; }
+        public string? GradeName6 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 6
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 6")]
-        public string Qualifiers6 { get; set; }
+        public string? Qualifiers6 { get; set; }
 
         ///<summary>
         ///Method of output time-series 6
         ///</summary>
         [ApiMember(Description="Method of output time-series 6")]
-        public string Method6 { get; set; }
+        public string? Method6 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 6
@@ -2339,7 +2269,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 6
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 6")]
-        public string ApprovalName6 { get; set; }
+        public string? ApprovalName6 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 7
@@ -2351,7 +2281,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 7
         ///</summary>
         [ApiMember(Description="Display value of output time-series 7")]
-        public string DisplayValue7 { get; set; }
+        public string? DisplayValue7 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 7
@@ -2363,19 +2293,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 7
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 7")]
-        public string GradeName7 { get; set; }
+        public string? GradeName7 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 7
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 7")]
-        public string Qualifiers7 { get; set; }
+        public string? Qualifiers7 { get; set; }
 
         ///<summary>
         ///Method of output time-series 7
         ///</summary>
         [ApiMember(Description="Method of output time-series 7")]
-        public string Method7 { get; set; }
+        public string? Method7 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 7
@@ -2387,7 +2317,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 7
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 7")]
-        public string ApprovalName7 { get; set; }
+        public string? ApprovalName7 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 8
@@ -2399,7 +2329,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 8
         ///</summary>
         [ApiMember(Description="Display value of output time-series 8")]
-        public string DisplayValue8 { get; set; }
+        public string? DisplayValue8 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 8
@@ -2411,19 +2341,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 8
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 8")]
-        public string GradeName8 { get; set; }
+        public string? GradeName8 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 8
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 8")]
-        public string Qualifiers8 { get; set; }
+        public string? Qualifiers8 { get; set; }
 
         ///<summary>
         ///Method of output time-series 8
         ///</summary>
         [ApiMember(Description="Method of output time-series 8")]
-        public string Method8 { get; set; }
+        public string? Method8 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 8
@@ -2435,7 +2365,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 8
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 8")]
-        public string ApprovalName8 { get; set; }
+        public string? ApprovalName8 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 9
@@ -2447,7 +2377,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 9
         ///</summary>
         [ApiMember(Description="Display value of output time-series 9")]
-        public string DisplayValue9 { get; set; }
+        public string? DisplayValue9 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 9
@@ -2459,19 +2389,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 9
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 9")]
-        public string GradeName9 { get; set; }
+        public string? GradeName9 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 9
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 9")]
-        public string Qualifiers9 { get; set; }
+        public string? Qualifiers9 { get; set; }
 
         ///<summary>
         ///Method of output time-series 9
         ///</summary>
         [ApiMember(Description="Method of output time-series 9")]
-        public string Method9 { get; set; }
+        public string? Method9 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 9
@@ -2483,7 +2413,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 9
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 9")]
-        public string ApprovalName9 { get; set; }
+        public string? ApprovalName9 { get; set; }
 
         ///<summary>
         ///Numeric value of output time-series 10
@@ -2495,7 +2425,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display value of output time-series 10
         ///</summary>
         [ApiMember(Description="Display value of output time-series 10")]
-        public string DisplayValue10 { get; set; }
+        public string? DisplayValue10 { get; set; }
 
         ///<summary>
         ///Grade code of output time-series 10
@@ -2507,19 +2437,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Grade name of output time-series 10
         ///</summary>
         [ApiMember(Description="Grade name of output time-series 10")]
-        public string GradeName10 { get; set; }
+        public string? GradeName10 { get; set; }
 
         ///<summary>
         ///Comma-separated list of qualifiers of output time-series 10
         ///</summary>
         [ApiMember(Description="Comma-separated list of qualifiers of output time-series 10")]
-        public string Qualifiers10 { get; set; }
+        public string? Qualifiers10 { get; set; }
 
         ///<summary>
         ///Method of output time-series 10
         ///</summary>
         [ApiMember(Description="Method of output time-series 10")]
-        public string Method10 { get; set; }
+        public string? Method10 { get; set; }
 
         ///<summary>
         ///Approval level of output time-series 10
@@ -2531,7 +2461,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approval name of output time-series 10
         ///</summary>
         [ApiMember(Description="Approval name of output time-series 10")]
-        public string ApprovalName10 { get; set; }
+        public string? ApprovalName10 { get; set; }
     }
 
     public class TimeAlignedTimeSeriesInfo
@@ -2546,37 +2476,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Parameter
         ///</summary>
         [ApiMember(Description="Parameter")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Label
         ///</summary>
         [ApiMember(Description="Label")]
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         ///<summary>
         ///Unit
         ///</summary>
         [ApiMember(Description="Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Location identifier
         ///</summary>
         [ApiMember(Description="Location identifier")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Interpolation type
         ///</summary>
         [ApiMember(Description="Interpolation type")]
-        public string InterpolationType { get; set; }
+        public string? InterpolationType { get; set; }
     }
 
     public class TimeRange
@@ -2600,7 +2530,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Unique id
@@ -2612,25 +2542,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Location identifier
         ///</summary>
         [ApiMember(Description="Location identifier")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Parameter
         ///</summary>
         [ApiMember(Description="Parameter")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Parameter Id
         ///</summary>
         [ApiMember(Description="Parameter Id")]
-        public string ParameterId { get; set; }
+        public string? ParameterId { get; set; }
 
         ///<summary>
         ///Unit
         ///</summary>
         [ApiMember(Description="Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Utc offset
@@ -2678,25 +2608,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Time series type
         ///</summary>
         [ApiMember(Description="Time series type")]
-        public string TimeSeriesType { get; set; }
+        public string? TimeSeriesType { get; set; }
 
         ///<summary>
         ///Label
         ///</summary>
         [ApiMember(Description="Label")]
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         ///<summary>
         ///Comment
         ///</summary>
         [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Publish
@@ -2708,37 +2638,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Computation identifier
         ///</summary>
         [ApiMember(Description="Computation identifier")]
-        public string ComputationIdentifier { get; set; }
+        public string? ComputationIdentifier { get; set; }
 
         ///<summary>
         ///Computation period identifier
         ///</summary>
         [ApiMember(Description="Computation period identifier")]
-        public string ComputationPeriodIdentifier { get; set; }
+        public string? ComputationPeriodIdentifier { get; set; }
 
         ///<summary>
         ///Sub location identifier
         ///</summary>
         [ApiMember(Description="Sub location identifier")]
-        public string SubLocationIdentifier { get; set; }
+        public string? SubLocationIdentifier { get; set; }
 
         ///<summary>
         ///Extended attributes
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attributes")]
-        public IList<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public IList<ExtendedAttribute>? ExtendedAttributes { get; set; }
 
         ///<summary>
         ///Thresholds
         ///</summary>
         [ApiMember(DataType="array", Description="Thresholds")]
-        public IList<TimeSeriesThreshold> Thresholds { get; set; }
+        public IList<TimeSeriesThreshold>? Thresholds { get; set; }
 
         ///<summary>
         ///Property Bag
         ///</summary>
         [ApiMember(Description="Property Bag")]
-        public string PropertyBag { get; set; }
+        public string? PropertyBag { get; set; }
     }
 
     public class TimeSeriesPoint
@@ -2747,39 +2677,34 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Timestamp
         ///</summary>
         [ApiMember(DataType="StatisticalDateTimeOffset", Description="Timestamp")]
-        public StatisticalDateTimeOffset Timestamp { get; set; }
+        public StatisticalDateTimeOffset? Timestamp { get; set; }
 
         ///<summary>
         ///Value
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Value")]
-        public DoubleWithDisplay Value { get; set; }
+        public DoubleWithDisplay? Value { get; set; }
     }
 
     public class TimeSeriesThreshold
     {
-        public TimeSeriesThreshold()
-        {
-            Periods = new List<TimeSeriesThresholdPeriod>{};
-        }
-
         ///<summary>
         ///Name
         ///</summary>
         [ApiMember(Description="Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Reference code
         ///</summary>
         [ApiMember(Description="Reference code")]
-        public string ReferenceCode { get; set; }
+        public string? ReferenceCode { get; set; }
 
         ///<summary>
         ///Severity
@@ -2803,13 +2728,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Display color
         ///</summary>
         [ApiMember(Description="Display color")]
-        public string DisplayColor { get; set; }
+        public string? DisplayColor { get; set; }
 
         ///<summary>
         ///Periods
         ///</summary>
         [ApiMember(DataType="array", Description="Periods")]
-        public List<TimeSeriesThresholdPeriod> Periods { get; set; }
+        public List<TimeSeriesThresholdPeriod>? Periods { get; set; }
     }
 
     public class TimeSeriesThresholdPeriod
@@ -2836,7 +2761,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Reference value
@@ -2902,97 +2827,97 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Start point of period
         ///</summary>
         [ApiMember(DataType="TimeSeriesPoint", Description="Start point of period")]
-        public TimeSeriesPoint StartPoint { get; set; }
+        public TimeSeriesPoint? StartPoint { get; set; }
 
         ///<summary>
         ///End point of period
         ///</summary>
         [ApiMember(DataType="TimeSeriesPoint", Description="End point of period")]
-        public TimeSeriesPoint EndPoint { get; set; }
+        public TimeSeriesPoint? EndPoint { get; set; }
 
         ///<summary>
         ///Actual absolute change, as the difference between the first and last measurement values
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Actual absolute change, as the difference between the first and last measurement values")]
-        public DoubleWithDisplay ActualAbsoluteChange { get; set; }
+        public DoubleWithDisplay? ActualAbsoluteChange { get; set; }
 
         ///<summary>
         ///Modeled absolute change, as the difference between the first and last trend line values
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Modeled absolute change, as the difference between the first and last trend line values")]
-        public DoubleWithDisplay ModeledAbsoluteChange { get; set; }
+        public DoubleWithDisplay? ModeledAbsoluteChange { get; set; }
 
         ///<summary>
         ///Actual percentage change, as the actual absolute change relative to the first measurement value
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Actual percentage change, as the actual absolute change relative to the first measurement value")]
-        public DoubleWithDisplay ActualPercentageChange { get; set; }
+        public DoubleWithDisplay? ActualPercentageChange { get; set; }
 
         ///<summary>
         ///Modeled percentage change, as the modeled absolute change relative to the first trend line value
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Modeled percentage change, as the modeled absolute change relative to the first trend line value")]
-        public DoubleWithDisplay ModeledPercentageChange { get; set; }
+        public DoubleWithDisplay? ModeledPercentageChange { get; set; }
 
         ///<summary>
         ///Minimum value
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Minimum value")]
-        public DoubleWithDisplay MinValue { get; set; }
+        public DoubleWithDisplay? MinValue { get; set; }
 
         ///<summary>
         ///Maximum value
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Maximum value")]
-        public DoubleWithDisplay MaxValue { get; set; }
+        public DoubleWithDisplay? MaxValue { get; set; }
 
         ///<summary>
         ///Lower Quartile (Q1) of residuals
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Lower Quartile (Q1) of residuals")]
-        public DoubleWithDisplay LowerQuartileOfResiduals { get; set; }
+        public DoubleWithDisplay? LowerQuartileOfResiduals { get; set; }
 
         ///<summary>
         ///Median (Q2) of residuals
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Median (Q2) of residuals")]
-        public DoubleWithDisplay MedianOfResiduals { get; set; }
+        public DoubleWithDisplay? MedianOfResiduals { get; set; }
 
         ///<summary>
         ///Upper Quartile (Q3) of residuals
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Upper Quartile (Q3) of residuals")]
-        public DoubleWithDisplay UpperQuartileOfResiduals { get; set; }
+        public DoubleWithDisplay? UpperQuartileOfResiduals { get; set; }
 
         ///<summary>
         ///Trend line slope measured in data units per year
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Trend line slope measured in data units per year")]
-        public DoubleWithDisplay Slope { get; set; }
+        public DoubleWithDisplay? Slope { get; set; }
 
         ///<summary>
         ///Trend line intercept, as the value of the trend line at the time of QueryFrom
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Trend line intercept, as the value of the trend line at the time of QueryFrom")]
-        public DoubleWithDisplay Intercept { get; set; }
+        public DoubleWithDisplay? Intercept { get; set; }
 
         ///<summary>
         ///Standard error in trend line slope
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Standard error in trend line slope")]
-        public DoubleWithDisplay SlopeStandardError { get; set; }
+        public DoubleWithDisplay? SlopeStandardError { get; set; }
 
         ///<summary>
         ///Standard deviation of results
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Standard deviation of results")]
-        public DoubleWithDisplay StandardDeviation { get; set; }
+        public DoubleWithDisplay? StandardDeviation { get; set; }
 
         ///<summary>
         ///Trend line correlation coefficient
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Trend line correlation coefficient")]
-        public DoubleWithDisplay CorrelationCoefficient { get; set; }
+        public DoubleWithDisplay? CorrelationCoefficient { get; set; }
     }
 
     public enum TrendLineAnalysisType
@@ -3012,37 +2937,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Group identifier
         ///</summary>
         [ApiMember(Description="Group identifier")]
-        public string GroupIdentifier { get; set; }
+        public string? GroupIdentifier { get; set; }
 
         ///<summary>
         ///Symbol
         ///</summary>
         [ApiMember(Description="Symbol")]
-        public string Symbol { get; set; }
+        public string? Symbol { get; set; }
 
         ///<summary>
         ///Display name
         ///</summary>
         [ApiMember(Description="Display name")]
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         ///<summary>
         ///Base multiplier
         ///</summary>
         [ApiMember(Description="Base multiplier")]
-        public string BaseMultiplier { get; set; }
+        public string? BaseMultiplier { get; set; }
 
         ///<summary>
         ///Base offset
         ///</summary>
         [ApiMember(Description="Base offset")]
-        public string BaseOffset { get; set; }
+        public string? BaseOffset { get; set; }
     }
 
     public class AdcpDischargeActivity
@@ -3051,7 +2976,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Discharge channel measurement
         ///</summary>
         [ApiMember(DataType="DischargeChannelMeasurement", Description="Discharge channel measurement")]
-        public DischargeChannelMeasurement DischargeChannelMeasurement { get; set; }
+        public DischargeChannelMeasurement? DischargeChannelMeasurement { get; set; }
 
         ///<summary>
         ///Is valid
@@ -3069,121 +2994,121 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Magnetic variation
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Magnetic variation")]
-        public DoubleWithDisplay MagneticVariation { get; set; }
+        public DoubleWithDisplay? MagneticVariation { get; set; }
 
         ///<summary>
         ///Discharge coefficient variation
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Discharge coefficient variation")]
-        public DoubleWithDisplay DischargeCoefficientVariation { get; set; }
+        public DoubleWithDisplay? DischargeCoefficientVariation { get; set; }
 
         ///<summary>
         ///Percent of discharge measured
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Percent of discharge measured")]
-        public DoubleWithDisplay PercentOfDischargeMeasured { get; set; }
+        public DoubleWithDisplay? PercentOfDischargeMeasured { get; set; }
 
         ///<summary>
         ///Top estimate exponent
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Top estimate exponent")]
-        public DoubleWithDisplay TopEstimateExponent { get; set; }
+        public DoubleWithDisplay? TopEstimateExponent { get; set; }
 
         ///<summary>
         ///Bottom estimate exponent
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Bottom estimate exponent")]
-        public DoubleWithDisplay BottomEstimateExponent { get; set; }
+        public DoubleWithDisplay? BottomEstimateExponent { get; set; }
 
         ///<summary>
         ///Width
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Width")]
-        public QuantityWithDisplay Width { get; set; }
+        public QuantityWithDisplay? Width { get; set; }
 
         ///<summary>
         ///Area
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Area")]
-        public QuantityWithDisplay Area { get; set; }
+        public QuantityWithDisplay? Area { get; set; }
 
         ///<summary>
         ///Velocity average
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Velocity average")]
-        public QuantityWithDisplay VelocityAverage { get; set; }
+        public QuantityWithDisplay? VelocityAverage { get; set; }
 
         ///<summary>
         ///Transducer depth
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Transducer depth")]
-        public QuantityWithDisplay TransducerDepth { get; set; }
+        public QuantityWithDisplay? TransducerDepth { get; set; }
 
         ///<summary>
         ///Adcp device type
         ///</summary>
         [ApiMember(Description="Adcp device type")]
-        public string AdcpDeviceType { get; set; }
+        public string? AdcpDeviceType { get; set; }
 
         ///<summary>
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Serial number
         ///</summary>
         [ApiMember(Description="Serial number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Navigation method
         ///</summary>
         [ApiMember(Description="Navigation method")]
-        public string NavigationMethod { get; set; }
+        public string? NavigationMethod { get; set; }
 
         ///<summary>
         ///Firmware version
         ///</summary>
         [ApiMember(Description="Firmware version")]
-        public string FirmwareVersion { get; set; }
+        public string? FirmwareVersion { get; set; }
 
         ///<summary>
         ///Software version
         ///</summary>
         [ApiMember(Description="Software version")]
-        public string SoftwareVersion { get; set; }
+        public string? SoftwareVersion { get; set; }
 
         ///<summary>
         ///Top estimate method
         ///</summary>
         [ApiMember(Description="Top estimate method")]
-        public string TopEstimateMethod { get; set; }
+        public string? TopEstimateMethod { get; set; }
 
         ///<summary>
         ///Bottom estimate method
         ///</summary>
         [ApiMember(Description="Bottom estimate method")]
-        public string BottomEstimateMethod { get; set; }
+        public string? BottomEstimateMethod { get; set; }
 
         ///<summary>
         ///Depth reference
         ///</summary>
         [ApiMember(Description="Depth reference")]
-        public string DepthReference { get; set; }
+        public string? DepthReference { get; set; }
 
         ///<summary>
         ///Node details
         ///</summary>
         [ApiMember(Description="Node details")]
-        public string NodeDetails { get; set; }
+        public string? NodeDetails { get; set; }
     }
 
     public class Adjustment
@@ -3209,11 +3134,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Attachment
     {
-        public Attachment()
-        {
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///Attachment type
         ///</summary>
@@ -3230,7 +3150,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///File name
         ///</summary>
         [ApiMember(Description="File name")]
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
 
         ///<summary>
         ///Unique ID of the attachment
@@ -3260,13 +3180,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Uploaded by user
         ///</summary>
         [ApiMember(Description="Uploaded by user")]
-        public string UploadedByUser { get; set; }
+        public string? UploadedByUser { get; set; }
 
         ///<summary>
         ///Comment
         ///</summary>
         [ApiMember(Description="Comment")]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         ///<summary>
         ///Gps latitude
@@ -3284,13 +3204,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Url
         ///</summary>
         [ApiMember(Description="Url")]
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         ///<summary>
         ///Tags
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
-        public List<TagMetadata> Tags { get; set; }
+        public List<TagMetadata>? Tags { get; set; }
     }
 
     public class Calibration
@@ -3323,7 +3243,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Intercept unit
         ///</summary>
         [ApiMember(Description="Intercept unit")]
-        public string InterceptUnit { get; set; }
+        public string? InterceptUnit { get; set; }
     }
 
     public class CalibrationCheck
@@ -3332,55 +3252,55 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Parameter Name
         ///</summary>
         [ApiMember(Description="Parameter Name")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Parameter Id
         ///</summary>
         [ApiMember(Description="Parameter Id")]
-        public string ParameterId { get; set; }
+        public string? ParameterId { get; set; }
 
         ///<summary>
         ///Standard
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Standard")]
-        public DoubleWithDisplay Standard { get; set; }
+        public DoubleWithDisplay? Standard { get; set; }
 
         ///<summary>
         ///Standard details
         ///</summary>
         [ApiMember(DataType="StandardDetails", Description="Standard details")]
-        public StandardDetails StandardDetails { get; set; }
+        public StandardDetails? StandardDetails { get; set; }
 
         ///<summary>
         ///Monitoring method
         ///</summary>
         [ApiMember(Description="Monitoring method")]
-        public string MonitoringMethod { get; set; }
+        public string? MonitoringMethod { get; set; }
 
         ///<summary>
         ///Value
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Value")]
-        public DoubleWithDisplay Value { get; set; }
+        public DoubleWithDisplay? Value { get; set; }
 
         ///<summary>
         ///Difference
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Difference")]
-        public DoubleWithDisplay Difference { get; set; }
+        public DoubleWithDisplay? Difference { get; set; }
 
         ///<summary>
         ///Percent difference
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Percent difference")]
-        public DoubleWithDisplay PercentDifference { get; set; }
+        public DoubleWithDisplay? PercentDifference { get; set; }
 
         ///<summary>
         ///Unit
         ///</summary>
         [ApiMember(Description="Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Calibration check type
@@ -3392,19 +3312,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Serial number
         ///</summary>
         [ApiMember(Description="Serial number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Time
@@ -3416,19 +3336,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Sub location identifier
         ///</summary>
         [ApiMember(Description="Sub location identifier")]
-        public string SubLocationIdentifier { get; set; }
+        public string? SubLocationIdentifier { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Node details
         ///</summary>
         [ApiMember(Description="Node details")]
-        public string NodeDetails { get; set; }
+        public string? NodeDetails { get; set; }
 
         ///<summary>
         ///Publish
@@ -3455,7 +3375,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Collection agency
         ///</summary>
         [ApiMember(Description="Collection agency")]
-        public string CollectionAgency { get; set; }
+        public string? CollectionAgency { get; set; }
 
         ///<summary>
         ///Biological sample taken
@@ -3518,13 +3438,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Control code
         ///</summary>
         [ApiMember(Description="Control code")]
-        public string ControlCode { get; set; }
+        public string? ControlCode { get; set; }
 
         ///<summary>
         ///Flow over control
         ///</summary>
         [ApiMember(Description="Flow over control")]
-        public string FlowOverControl { get; set; }
+        public string? FlowOverControl { get; set; }
 
         ///<summary>
         ///Control cleaned
@@ -3536,7 +3456,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Control condition
         ///</summary>
         [ApiMember(Description="Control condition")]
-        public string ControlCondition { get; set; }
+        public string? ControlCondition { get; set; }
 
         ///<summary>
         ///Date cleaned
@@ -3548,19 +3468,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Distance to gage
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Distance to gage")]
-        public QuantityWithDisplay DistanceToGage { get; set; }
+        public QuantityWithDisplay? DistanceToGage { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Is valid
@@ -3581,34 +3501,29 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Distance
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Distance")]
-        public QuantityWithDisplay Distance { get; set; }
+        public QuantityWithDisplay? Distance { get; set; }
 
         ///<summary>
         ///Elevation
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Elevation")]
-        public QuantityWithDisplay Elevation { get; set; }
+        public QuantityWithDisplay? Elevation { get; set; }
 
         ///<summary>
         ///Depth
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Depth")]
-        public QuantityWithDisplay Depth { get; set; }
+        public QuantityWithDisplay? Depth { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class CrossSectionSurveyActivity
     {
-        public CrossSectionSurveyActivity()
-        {
-            CrossSectionPoints = new List<CrossSectionPoint>{};
-        }
-
         ///<summary>
         ///Start time
         ///</summary>
@@ -3625,19 +3540,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Channel
         ///</summary>
         [ApiMember(Description="Channel")]
-        public string Channel { get; set; }
+        public string? Channel { get; set; }
 
         ///<summary>
         ///Relative location
         ///</summary>
         [ApiMember(Description="Relative location")]
-        public string RelativeLocation { get; set; }
+        public string? RelativeLocation { get; set; }
 
         ///<summary>
         ///Starting point
@@ -3649,19 +3564,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Stage
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Stage")]
-        public QuantityWithDisplay Stage { get; set; }
+        public QuantityWithDisplay? Stage { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Cross-section points
         ///</summary>
         [ApiMember(DataType="array", Description="Cross-section points")]
-        public List<CrossSectionPoint> CrossSectionPoints { get; set; }
+        public List<CrossSectionPoint>? CrossSectionPoints { get; set; }
     }
 
     public class CurrentMeter
@@ -3670,19 +3585,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Serial number
         ///</summary>
         [ApiMember(Description="Serial number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
     }
 
     public class DatumConversionResult
@@ -3697,13 +3612,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///The reason, if any, that values could not be converted to the target reference datum
         ///</summary>
         [ApiMember(Description="The reason, if any, that values could not be converted to the target reference datum")]
-        public string FailureReason { get; set; }
+        public string? FailureReason { get; set; }
 
         ///<summary>
         ///Target reference datum
         ///</summary>
         [ApiMember(Description="Target reference datum")]
-        public string TargetDatum { get; set; }
+        public string? TargetDatum { get; set; }
     }
 
     public class DatumConvertedQuantityWithDisplay
@@ -3713,55 +3628,46 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Target reference datum
         ///</summary>
         [ApiMember(Description="Target reference datum")]
-        public string TargetDatum { get; set; }
+        public string? TargetDatum { get; set; }
     }
 
     public class DischargeActivity
     {
-        public DischargeActivity()
-        {
-            VolumetricDischargeActivities = new List<VolumetricDischargeActivity>{};
-            EngineeredStructureDischargeActivities = new List<EngineeredStructureDischargeActivity>{};
-            PointVelocityDischargeActivities = new List<PointVelocityDischargeActivity>{};
-            OtherMethodDischargeActivities = new List<OtherMethodDischargeActivity>{};
-            AdcpDischargeActivities = new List<AdcpDischargeActivity>{};
-        }
-
         ///<summary>
         ///Discharge summary
         ///</summary>
         [ApiMember(DataType="DischargeSummary", Description="Discharge summary")]
-        public DischargeSummary DischargeSummary { get; set; }
+        public DischargeSummary? DischargeSummary { get; set; }
 
         ///<summary>
         ///Volumetric discharge activities
         ///</summary>
         [ApiMember(DataType="array", Description="Volumetric discharge activities")]
-        public List<VolumetricDischargeActivity> VolumetricDischargeActivities { get; set; }
+        public List<VolumetricDischargeActivity>? VolumetricDischargeActivities { get; set; }
 
         ///<summary>
         ///Engineered structure discharge activities
         ///</summary>
         [ApiMember(DataType="array", Description="Engineered structure discharge activities")]
-        public List<EngineeredStructureDischargeActivity> EngineeredStructureDischargeActivities { get; set; }
+        public List<EngineeredStructureDischargeActivity>? EngineeredStructureDischargeActivities { get; set; }
 
         ///<summary>
         ///Point velocity discharge activities
         ///</summary>
         [ApiMember(DataType="array", Description="Point velocity discharge activities")]
-        public List<PointVelocityDischargeActivity> PointVelocityDischargeActivities { get; set; }
+        public List<PointVelocityDischargeActivity>? PointVelocityDischargeActivities { get; set; }
 
         ///<summary>
         ///Other method discharge activities
         ///</summary>
         [ApiMember(DataType="array", Description="Other method discharge activities")]
-        public List<OtherMethodDischargeActivity> OtherMethodDischargeActivities { get; set; }
+        public List<OtherMethodDischargeActivity>? OtherMethodDischargeActivities { get; set; }
 
         ///<summary>
         ///Adcp discharge activities
         ///</summary>
         [ApiMember(DataType="array", Description="Adcp discharge activities")]
-        public List<AdcpDischargeActivity> AdcpDischargeActivities { get; set; }
+        public List<AdcpDischargeActivity>? AdcpDischargeActivities { get; set; }
     }
 
     public class DischargeChannelMeasurement
@@ -3770,7 +3676,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Channel
         ///</summary>
         [ApiMember(Description="Channel")]
-        public string Channel { get; set; }
+        public string? Channel { get; set; }
 
         ///<summary>
         ///Start time
@@ -3788,25 +3694,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Discharge
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Discharge")]
-        public QuantityWithDisplay Discharge { get; set; }
+        public QuantityWithDisplay? Discharge { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Distance to gage
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Distance to gage")]
-        public QuantityWithDisplay DistanceToGage { get; set; }
+        public QuantityWithDisplay? DistanceToGage { get; set; }
 
         ///<summary>
         ///Horizontal flow
@@ -3872,16 +3778,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Monitoring method
         ///</summary>
         [ApiMember(Description="Monitoring method")]
-        public string MonitoringMethod { get; set; }
+        public string? MonitoringMethod { get; set; }
     }
 
     public class DischargeSummary
     {
-        public DischargeSummary()
-        {
-            GageHeightReadings = new List<GageHeightReading>{};
-        }
-
         ///<summary>
         ///Measurement start time
         ///</summary>
@@ -3904,7 +3805,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Base flow
@@ -3916,37 +3817,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Adjustment
         ///</summary>
         [ApiMember(DataType="Adjustment", Description="Adjustment")]
-        public Adjustment Adjustment { get; set; }
+        public Adjustment? Adjustment { get; set; }
 
         ///<summary>
         ///Alternate rating discharge
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Alternate rating discharge")]
-        public QuantityWithDisplay AlternateRatingDischarge { get; set; }
+        public QuantityWithDisplay? AlternateRatingDischarge { get; set; }
 
         ///<summary>
         ///Discharge
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Discharge")]
-        public QuantityWithDisplay Discharge { get; set; }
+        public QuantityWithDisplay? Discharge { get; set; }
 
         ///<summary>
         ///Discharge method
         ///</summary>
         [ApiMember(Description="Discharge method")]
-        public string DischargeMethod { get; set; }
+        public string? DischargeMethod { get; set; }
 
         ///<summary>
         ///Mean gage height
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Mean gage height")]
-        public QuantityWithDisplay MeanGageHeight { get; set; }
+        public QuantityWithDisplay? MeanGageHeight { get; set; }
 
         ///<summary>
         ///Gage height adjustment amount
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Gage height adjustment amount")]
-        public QuantityWithDisplay GageHeightAdjustmentAmount { get; set; }
+        public QuantityWithDisplay? GageHeightAdjustmentAmount { get; set; }
 
         ///<summary>
         ///Gage Height Reference Point name at this Visit's Location
@@ -3964,13 +3865,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Mean gage height method
         ///</summary>
         [ApiMember(Description="Mean gage height method")]
-        public string MeanGageHeightMethod { get; set; }
+        public string? MeanGageHeightMethod { get; set; }
 
         ///<summary>
         ///Mean index velocity
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Mean index velocity")]
-        public QuantityWithDisplay MeanIndexVelocity { get; set; }
+        public QuantityWithDisplay? MeanIndexVelocity { get; set; }
 
         ///<summary>
         ///Discharge measurement reason
@@ -3982,13 +3883,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Gage height comments
         ///</summary>
         [ApiMember(Description="Gage height comments")]
-        public string GageHeightComments { get; set; }
+        public string? GageHeightComments { get; set; }
 
         ///<summary>
         ///Gage height calculation
@@ -4000,31 +3901,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Gage height readings
         ///</summary>
         [ApiMember(DataType="array", Description="Gage height readings")]
-        public List<GageHeightReading> GageHeightReadings { get; set; }
+        public List<GageHeightReading>? GageHeightReadings { get; set; }
 
         ///<summary>
         ///Difference during visit
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Difference during visit")]
-        public DoubleWithDisplay DifferenceDuringVisit { get; set; }
+        public DoubleWithDisplay? DifferenceDuringVisit { get; set; }
 
         ///<summary>
         ///Duration in hours
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Duration in hours")]
-        public DoubleWithDisplay DurationInHours { get; set; }
+        public DoubleWithDisplay? DurationInHours { get; set; }
 
         ///<summary>
         ///Quality Assurance Comments
         ///</summary>
         [ApiMember(Description="Quality Assurance Comments")]
-        public string QualityAssuranceComments { get; set; }
+        public string? QualityAssuranceComments { get; set; }
 
         ///<summary>
         ///Discharge Uncertainty
         ///</summary>
         [ApiMember(DataType="DischargeUncertainty", Description="Discharge Uncertainty")]
-        public DischargeUncertainty DischargeUncertainty { get; set; }
+        public DischargeUncertainty? DischargeUncertainty { get; set; }
 
         ///<summary>
         ///DEPRECATED: Use DischargeUncertainty.QualitativeUncertainty instead.
@@ -4042,13 +3943,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Measurement id
         ///</summary>
         [ApiMember(Description="Measurement id")]
-        public string MeasurementId { get; set; }
+        public string? MeasurementId { get; set; }
 
         ///<summary>
         ///Reviewer
         ///</summary>
         [ApiMember(Description="Reviewer")]
-        public string Reviewer { get; set; }
+        public string? Reviewer { get; set; }
 
         ///<summary>
         ///Is valid
@@ -4075,7 +3976,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Quantitative (Type A) Uncertainty
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Quantitative (Type A) Uncertainty")]
-        public DoubleWithDisplay QuantitativeUncertainty { get; set; }
+        public DoubleWithDisplay? QuantitativeUncertainty { get; set; }
 
         ///<summary>
         ///Qualitative (Type B) Uncertainty
@@ -4090,25 +3991,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Discharge channel measurement
         ///</summary>
         [ApiMember(DataType="DischargeChannelMeasurement", Description="Discharge channel measurement")]
-        public DischargeChannelMeasurement DischargeChannelMeasurement { get; set; }
+        public DischargeChannelMeasurement? DischargeChannelMeasurement { get; set; }
 
         ///<summary>
         ///Structure type
         ///</summary>
         [ApiMember(Description="Structure type")]
-        public string StructureType { get; set; }
+        public string? StructureType { get; set; }
 
         ///<summary>
         ///Equation for selected structure
         ///</summary>
         [ApiMember(Description="Equation for selected structure")]
-        public string EquationForSelectedStructure { get; set; }
+        public string? EquationForSelectedStructure { get; set; }
 
         ///<summary>
         ///Mean head
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Mean head")]
-        public QuantityWithDisplay MeanHead { get; set; }
+        public QuantityWithDisplay? MeanHead { get; set; }
 
         ///<summary>
         ///Is valid
@@ -4120,79 +4021,71 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisit
         : FieldVisitDescription, IFieldVisitData
     {
-        public FieldVisit()
-        {
-            Attachments = new List<Attachment>{};
-            DischargeActivities = new List<DischargeActivity>{};
-            CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
-            HydraulicTestActivities = new List<HydraulicTestActivity>{};
-        }
-
         ///<summary>
         ///Attachments
         ///</summary>
         [ApiMember(DataType="array", Description="Attachments")]
-        public List<Attachment> Attachments { get; set; }
+        public List<Attachment>? Attachments { get; set; }
 
         ///<summary>
         ///Discharge activities
         ///</summary>
         [ApiMember(DataType="array", Description="Discharge activities")]
-        public List<DischargeActivity> DischargeActivities { get; set; }
+        public List<DischargeActivity>? DischargeActivities { get; set; }
 
         ///<summary>
         ///Gage height at zero flow activity
         ///</summary>
         [ApiMember(DataType="GageHeightAtZeroFlowActivity", Description="Gage height at zero flow activity")]
-        public GageHeightAtZeroFlowActivity GageHeightAtZeroFlowActivity { get; set; }
+        public GageHeightAtZeroFlowActivity? GageHeightAtZeroFlowActivity { get; set; }
 
         ///<summary>
         ///Control condition activity
         ///</summary>
         [ApiMember(DataType="ControlConditionActivity", Description="Control condition activity")]
-        public ControlConditionActivity ControlConditionActivity { get; set; }
+        public ControlConditionActivity? ControlConditionActivity { get; set; }
 
         ///<summary>
         ///Inspection activity
         ///</summary>
         [ApiMember(DataType="InspectionActivity", Description="Inspection activity")]
-        public InspectionActivity InspectionActivity { get; set; }
+        public InspectionActivity? InspectionActivity { get; set; }
 
         ///<summary>
         ///Cross-section survey activity
         ///</summary>
         [ApiMember(DataType="array", Description="Cross-section survey activity")]
-        public List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
+        public List<CrossSectionSurveyActivity>? CrossSectionSurveyActivity { get; set; }
 
         ///<summary>
         ///Level survey activity
         ///</summary>
         [ApiMember(DataType="LevelSurveyActivity", Description="Level survey activity")]
-        public LevelSurveyActivity LevelSurveyActivity { get; set; }
+        public LevelSurveyActivity? LevelSurveyActivity { get; set; }
 
         ///<summary>
         ///Approval
         ///</summary>
         [ApiMember(DataType="FieldVisitApproval", Description="Approval")]
-        public FieldVisitApproval Approval { get; set; }
+        public FieldVisitApproval? Approval { get; set; }
 
         ///<summary>
         ///Summary results for a requested datum conversion
         ///</summary>
         [ApiMember(DataType="DatumConversionResult", Description="Summary results for a requested datum conversion")]
-        public DatumConversionResult DatumConversionResult { get; set; }
+        public DatumConversionResult? DatumConversionResult { get; set; }
 
         ///<summary>
         ///Hydraulic Test Activities
         ///</summary>
         [ApiMember(DataType="array", Description="Hydraulic Test Activities")]
-        public List<HydraulicTestActivity> HydraulicTestActivities { get; set; }
+        public List<HydraulicTestActivity>? HydraulicTestActivities { get; set; }
 
         ///<summary>
         ///Well integrity activity
         ///</summary>
         [ApiMember(DataType="WellIntegrityActivity", Description="Well integrity activity")]
-        public WellIntegrityActivity WellIntegrityActivity { get; set; }
+        public WellIntegrityActivity? WellIntegrityActivity { get; set; }
     }
 
     public class FieldVisitApproval
@@ -4207,7 +4100,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Level description
         ///</summary>
         [ApiMember(Description="Level description")]
-        public string LevelDescription { get; set; }
+        public string? LevelDescription { get; set; }
     }
 
     public class FieldVisitDescription
@@ -4216,13 +4109,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Location identifier
         ///</summary>
         [ApiMember(Description="Location identifier")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Start time
@@ -4240,19 +4133,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Remarks
         ///</summary>
         [ApiMember(Description="Remarks")]
-        public string Remarks { get; set; }
+        public string? Remarks { get; set; }
 
         ///<summary>
         ///Weather
         ///</summary>
         [ApiMember(Description="Weather")]
-        public string Weather { get; set; }
+        public string? Weather { get; set; }
 
         ///<summary>
         ///Is valid
@@ -4264,7 +4157,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Completed work
         ///</summary>
         [ApiMember(DataType="CompletedWork", Description="Completed work")]
-        public CompletedWork CompletedWork { get; set; }
+        public CompletedWork? CompletedWork { get; set; }
 
         ///<summary>
         ///Last modified
@@ -4282,100 +4175,94 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Extended attributes
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attributes")]
-        public IList<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public IList<ExtendedAttribute>? ExtendedAttributes { get; set; }
     }
 
     public class FieldVisitReading
     {
-        public FieldVisitReading()
-        {
-            DatumConvertedValues = new List<DatumConvertedQuantityWithDisplay>{};
-            Qualifiers = new List<string>{};
-        }
-
         ///<summary>
         ///Approval
         ///</summary>
         [ApiMember(DataType="FieldVisitApproval", Description="Approval")]
-        public FieldVisitApproval Approval { get; set; }
+        public FieldVisitApproval? Approval { get; set; }
 
         ///<summary>
         ///Control condition
         ///</summary>
         [ApiMember(Description="Control condition")]
-        public string ControlCondition { get; set; }
+        public string? ControlCondition { get; set; }
 
         ///<summary>
         ///Field visit identifier
         ///</summary>
         [ApiMember(Description="Field visit identifier")]
-        public string FieldVisitIdentifier { get; set; }
+        public string? FieldVisitIdentifier { get; set; }
 
         ///<summary>
         ///Value
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Value")]
-        public QuantityWithDisplay Value { get; set; }
+        public QuantityWithDisplay? Value { get; set; }
 
         ///<summary>
         ///Value
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Value")]
-        public QuantityWithDisplay AdjustmentAmount { get; set; }
+        public QuantityWithDisplay? AdjustmentAmount { get; set; }
 
         ///<summary>
         ///Uncertainty
         ///</summary>
         [ApiMember(DataType="Uncertainty", Description="Uncertainty")]
-        public Uncertainty Uncertainty { get; set; }
+        public Uncertainty? Uncertainty { get; set; }
 
         ///<summary>
         ///Datum converted values where applicable.
         ///</summary>
         [ApiMember(DataType="array", Description="Datum converted values where applicable.")]
-        public List<DatumConvertedQuantityWithDisplay> DatumConvertedValues { get; set; }
+        public List<DatumConvertedQuantityWithDisplay>? DatumConvertedValues { get; set; }
 
         ///<summary>
         ///Parameter Name
         ///</summary>
         [ApiMember(Description="Parameter Name")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Parameter Id
         ///</summary>
         [ApiMember(Description="Parameter Id")]
-        public string ParameterId { get; set; }
+        public string? ParameterId { get; set; }
 
         ///<summary>
         ///Monitoring method
         ///</summary>
         [ApiMember(Description="Monitoring method")]
-        public string MonitoringMethod { get; set; }
+        public string? MonitoringMethod { get; set; }
 
         ///<summary>
         ///Sub location identifier
         ///</summary>
         [ApiMember(Description="Sub location identifier")]
-        public string SubLocationIdentifier { get; set; }
+        public string? SubLocationIdentifier { get; set; }
 
         ///<summary>
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Serial number
         ///</summary>
         [ApiMember(Description="Serial number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Time
@@ -4387,7 +4274,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Publish
@@ -4405,7 +4292,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Qualifiers
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifiers")]
-        public List<string> Qualifiers { get; set; }
+        public List<string>? Qualifiers { get; set; }
 
         ///<summary>
         ///Field visit reading type
@@ -4444,7 +4331,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Zero flow height
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Zero flow height")]
-        public DoubleWithDisplay ZeroFlowHeight { get; set; }
+        public DoubleWithDisplay? ZeroFlowHeight { get; set; }
 
         ///<summary>
         ///Is observed
@@ -4456,25 +4343,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Calculated details
         ///</summary>
         [ApiMember(DataType="GageHeightAtZeroFlowCalculatedDetails", Description="Calculated details")]
-        public GageHeightAtZeroFlowCalculatedDetails CalculatedDetails { get; set; }
+        public GageHeightAtZeroFlowCalculatedDetails? CalculatedDetails { get; set; }
 
         ///<summary>
         ///Unit
         ///</summary>
         [ApiMember(Description="Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Is valid
@@ -4489,19 +4376,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Stage
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Stage")]
-        public DoubleWithDisplay Stage { get; set; }
+        public DoubleWithDisplay? Stage { get; set; }
 
         ///<summary>
         ///Depth
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Depth")]
-        public DoubleWithDisplay Depth { get; set; }
+        public DoubleWithDisplay? Depth { get; set; }
 
         ///<summary>
         ///Depth certainty
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Depth certainty")]
-        public DoubleWithDisplay DepthCertainty { get; set; }
+        public DoubleWithDisplay? DepthCertainty { get; set; }
     }
 
     public class GageHeightReading
@@ -4522,7 +4409,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Gage height
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Gage height")]
-        public DoubleWithDisplay GageHeight { get; set; }
+        public DoubleWithDisplay? GageHeight { get; set; }
     }
 
     public class GroundWaterMeasurement
@@ -4531,59 +4418,52 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Cut
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Cut")]
-        public DoubleWithDisplay Cut { get; set; }
+        public DoubleWithDisplay? Cut { get; set; }
 
         ///<summary>
         ///Hold
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Hold")]
-        public DoubleWithDisplay Hold { get; set; }
+        public DoubleWithDisplay? Hold { get; set; }
 
         ///<summary>
         ///Tape correction
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Tape correction")]
-        public DoubleWithDisplay TapeCorrection { get; set; }
+        public DoubleWithDisplay? TapeCorrection { get; set; }
 
         ///<summary>
         ///Water level
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Water level")]
-        public DoubleWithDisplay WaterLevel { get; set; }
+        public DoubleWithDisplay? WaterLevel { get; set; }
     }
 
     public class HydraulicTestActivity
     {
-        public HydraulicTestActivity()
-        {
-            RelatedTimeSeriesUniqueIds = new List<Guid>{};
-            RelatedFieldVisitIdentifiers = new List<Guid>{};
-            Results = new List<HydraulicTestResult>{};
-        }
-
         ///<summary>
         ///The name of the test
         ///</summary>
         [ApiMember(Description="The name of the test", Name="TestName")]
-        public string TestName { get; set; }
+        public string? TestName { get; set; }
 
         ///<summary>
         ///The context or purpose of the test
         ///</summary>
         [ApiMember(Description="The context or purpose of the test", Name="TestContext")]
-        public string TestContext { get; set; }
+        public string? TestContext { get; set; }
 
         ///<summary>
         ///The method used for the test
         ///</summary>
         [ApiMember(Description="The method used for the test", Name="TestMethod")]
-        public string TestMethod { get; set; }
+        public string? TestMethod { get; set; }
 
         ///<summary>
         ///The type of aquifer
         ///</summary>
         [ApiMember(Description="The type of aquifer", Name="AquiferType")]
-        public string AquiferType { get; set; }
+        public string? AquiferType { get; set; }
 
         ///<summary>
         ///The start time of the test
@@ -4607,25 +4487,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///List of related time series unique ids
         ///</summary>
         [ApiMember(DataType="array", Description="List of related time series unique ids", Name="RelatedTimeSeriesUniqueIds")]
-        public List<Guid> RelatedTimeSeriesUniqueIds { get; set; }
+        public List<Guid>? RelatedTimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///List of related field visit identifiers
         ///</summary>
         [ApiMember(DataType="array", Description="List of related field visit identifiers", Name="RelatedFieldVisitIdentifiers")]
-        public List<Guid> RelatedFieldVisitIdentifiers { get; set; }
+        public List<Guid>? RelatedFieldVisitIdentifiers { get; set; }
 
         ///<summary>
         ///List of hydraulic test results
         ///</summary>
         [ApiMember(DataType="array", Description="List of hydraulic test results", Name="Results")]
-        public List<HydraulicTestResult> Results { get; set; }
+        public List<HydraulicTestResult>? Results { get; set; }
 
         ///<summary>
         ///Additional comments or notes
         ///</summary>
         [ApiMember(Description="Additional comments or notes", Name="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class HydraulicTestResult
@@ -4634,37 +4514,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Parameter identifier used for the analysis
         ///</summary>
         [ApiMember(Description="Parameter identifier used for the analysis", Name="ParameterId")]
-        public string ParameterId { get; set; }
+        public string? ParameterId { get; set; }
 
         ///<summary>
         ///Parameter display name used for the analysis
         ///</summary>
         [ApiMember(Description="Parameter display name used for the analysis", Name="Parameter")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Identifier for the unit of measurement
         ///</summary>
         [ApiMember(Description="Identifier for the unit of measurement", Name="UnitId")]
-        public string UnitId { get; set; }
+        public string? UnitId { get; set; }
 
         ///<summary>
         ///Method used for the analysis
         ///</summary>
         [ApiMember(Description="Method used for the analysis", Name="AnalysisMethod")]
-        public string AnalysisMethod { get; set; }
+        public string? AnalysisMethod { get; set; }
 
         ///<summary>
         ///Method code used for the analysis
         ///</summary>
         [ApiMember(Description="Method code used for the analysis", Name="AnalysisMethodCode")]
-        public string AnalysisMethodCode { get; set; }
+        public string? AnalysisMethodCode { get; set; }
 
         ///<summary>
         ///Measured value of the parameter
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Measured value of the parameter", Name="Value")]
-        public QuantityWithDisplay Value { get; set; }
+        public QuantityWithDisplay? Value { get; set; }
     }
 
     public class IceCoveredData
@@ -4673,37 +4553,37 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Ice thickness
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Ice thickness")]
-        public QuantityWithDisplay IceThickness { get; set; }
+        public QuantityWithDisplay? IceThickness { get; set; }
 
         ///<summary>
         ///Water surface to bottom of slush
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Water surface to bottom of slush")]
-        public QuantityWithDisplay WaterSurfaceToBottomOfSlush { get; set; }
+        public QuantityWithDisplay? WaterSurfaceToBottomOfSlush { get; set; }
 
         ///<summary>
         ///Water surface to bottom of ice
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Water surface to bottom of ice")]
-        public QuantityWithDisplay WaterSurfaceToBottomOfIce { get; set; }
+        public QuantityWithDisplay? WaterSurfaceToBottomOfIce { get; set; }
 
         ///<summary>
         ///Ice assembly type
         ///</summary>
         [ApiMember(Description="Ice assembly type")]
-        public string IceAssemblyType { get; set; }
+        public string? IceAssemblyType { get; set; }
 
         ///<summary>
         ///Above footing
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Above footing")]
-        public QuantityWithDisplay AboveFooting { get; set; }
+        public QuantityWithDisplay? AboveFooting { get; set; }
 
         ///<summary>
         ///Below footing
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Below footing")]
-        public QuantityWithDisplay BelowFooting { get; set; }
+        public QuantityWithDisplay? BelowFooting { get; set; }
 
         ///<summary>
         ///Under ice coefficient
@@ -4714,18 +4594,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public interface IFieldVisitData
     {
-        string Identifier { get; set; }
-        List<Attachment> Attachments { get; set; }
-        List<DischargeActivity> DischargeActivities { get; set; }
-        GageHeightAtZeroFlowActivity GageHeightAtZeroFlowActivity { get; set; }
-        ControlConditionActivity ControlConditionActivity { get; set; }
-        InspectionActivity InspectionActivity { get; set; }
-        List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
-        LevelSurveyActivity LevelSurveyActivity { get; set; }
-        FieldVisitApproval Approval { get; set; }
-        DatumConversionResult DatumConversionResult { get; set; }
-        List<HydraulicTestActivity> HydraulicTestActivities { get; set; }
-        WellIntegrityActivity WellIntegrityActivity { get; set; }
+        string? Identifier { get; set; }
+        List<Attachment>? Attachments { get; set; }
+        List<DischargeActivity>? DischargeActivities { get; set; }
+        GageHeightAtZeroFlowActivity? GageHeightAtZeroFlowActivity { get; set; }
+        ControlConditionActivity? ControlConditionActivity { get; set; }
+        InspectionActivity? InspectionActivity { get; set; }
+        List<CrossSectionSurveyActivity>? CrossSectionSurveyActivity { get; set; }
+        LevelSurveyActivity? LevelSurveyActivity { get; set; }
+        FieldVisitApproval? Approval { get; set; }
+        DatumConversionResult? DatumConversionResult { get; set; }
+        List<HydraulicTestActivity>? HydraulicTestActivities { get; set; }
+        WellIntegrityActivity? WellIntegrityActivity { get; set; }
     }
 
     public class Inspection
@@ -4740,19 +4620,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Serial number
         ///</summary>
         [ApiMember(Description="Serial number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Time
@@ -4764,35 +4644,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Sub location identifier
         ///</summary>
         [ApiMember(Description="Sub location identifier")]
-        public string SubLocationIdentifier { get; set; }
+        public string? SubLocationIdentifier { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class InspectionActivity
     {
-        public InspectionActivity()
-        {
-            Readings = new List<Reading>{};
-            CalibrationChecks = new List<CalibrationCheck>{};
-            Inspections = new List<Inspection>{};
-        }
-
         ///<summary>
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Readings
         ///</summary>
         [ApiMember(DataType="array", Description="Readings")]
-        public List<Reading> Readings { get; set; }
+        public List<Reading>? Readings { get; set; }
 
         ///<summary>
         ///Number of readings which could not be converted to the target datum
@@ -4804,13 +4677,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Calibration checks
         ///</summary>
         [ApiMember(DataType="array", Description="Calibration checks")]
-        public List<CalibrationCheck> CalibrationChecks { get; set; }
+        public List<CalibrationCheck>? CalibrationChecks { get; set; }
 
         ///<summary>
         ///Inspections
         ///</summary>
         [ApiMember(DataType="array", Description="Inspections")]
-        public List<Inspection> Inspections { get; set; }
+        public List<Inspection>? Inspections { get; set; }
 
         ///<summary>
         ///Is valid
@@ -4821,16 +4694,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LevelSurveyActivity
     {
-        public LevelSurveyActivity()
-        {
-            LevelMeasurements = new List<LevelSurveyMeasurement>{};
-        }
-
         ///<summary>
         ///Party
         ///</summary>
         [ApiMember(Description="Party")]
-        public string Party { get; set; }
+        public string? Party { get; set; }
 
         ///<summary>
         ///Origin reference point unique ID
@@ -4842,19 +4710,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Measurement method
         ///</summary>
         [ApiMember(Description="Measurement method")]
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Level survey measurements
         ///</summary>
         [ApiMember(DataType="array", Description="Level survey measurements")]
-        public List<LevelSurveyMeasurement> LevelMeasurements { get; set; }
+        public List<LevelSurveyMeasurement>? LevelMeasurements { get; set; }
     }
 
     public class LevelSurveyMeasurement
@@ -4869,7 +4737,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Measured elevation
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Measured elevation")]
-        public QuantityWithDisplay MeasuredElevation { get; set; }
+        public QuantityWithDisplay? MeasuredElevation { get; set; }
 
         ///<summary>
         ///Measurement time
@@ -4881,7 +4749,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class OpenWaterData
@@ -4890,13 +4758,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Suspension Weight
         ///</summary>
         [ApiMember(Description="Suspension Weight")]
-        public string SuspensionWeight { get; set; }
+        public string? SuspensionWeight { get; set; }
 
         ///<summary>
         ///Distance to meter
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Distance to meter")]
-        public QuantityWithDisplay DistanceToMeter { get; set; }
+        public QuantityWithDisplay? DistanceToMeter { get; set; }
 
         ///<summary>
         ///Dry Line Angle
@@ -4914,7 +4782,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Distance to water surface
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Distance to water surface")]
-        public QuantityWithDisplay DistanceToWaterSurface { get; set; }
+        public QuantityWithDisplay? DistanceToWaterSurface { get; set; }
 
         ///<summary>
         ///Dry Line Correction
@@ -4935,7 +4803,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Discharge channel measurement
         ///</summary>
         [ApiMember(DataType="DischargeChannelMeasurement", Description="Discharge channel measurement")]
-        public DischargeChannelMeasurement DischargeChannelMeasurement { get; set; }
+        public DischargeChannelMeasurement? DischargeChannelMeasurement { get; set; }
 
         ///<summary>
         ///Is valid
@@ -4946,46 +4814,41 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class PointVelocityDischargeActivity
     {
-        public PointVelocityDischargeActivity()
-        {
-            Verticals = new List<Vertical>{};
-        }
-
         ///<summary>
         ///Discharge channel measurement
         ///</summary>
         [ApiMember(DataType="DischargeChannelMeasurement", Description="Discharge channel measurement")]
-        public DischargeChannelMeasurement DischargeChannelMeasurement { get; set; }
+        public DischargeChannelMeasurement? DischargeChannelMeasurement { get; set; }
 
         ///<summary>
         ///Distance to meter
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Distance to meter")]
-        public QuantityWithDisplay DistanceToMeter { get; set; }
+        public QuantityWithDisplay? DistanceToMeter { get; set; }
 
         ///<summary>
         ///Width
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Width")]
-        public QuantityWithDisplay Width { get; set; }
+        public QuantityWithDisplay? Width { get; set; }
 
         ///<summary>
         ///Area
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Area")]
-        public QuantityWithDisplay Area { get; set; }
+        public QuantityWithDisplay? Area { get; set; }
 
         ///<summary>
         ///Velocity average
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Velocity average")]
-        public QuantityWithDisplay VelocityAverage { get; set; }
+        public QuantityWithDisplay? VelocityAverage { get; set; }
 
         ///<summary>
         ///Mean observation duration in seconds
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Mean observation duration in seconds")]
-        public DoubleWithDisplay MeanObservationDurationInSeconds { get; set; }
+        public DoubleWithDisplay? MeanObservationDurationInSeconds { get; set; }
 
         ///<summary>
         ///Suspension coefficient used
@@ -5027,25 +4890,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Meter equation
         ///</summary>
         [ApiMember(Description="Meter equation")]
-        public string MeterEquation { get; set; }
+        public string? MeterEquation { get; set; }
 
         ///<summary>
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Serial number
         ///</summary>
         [ApiMember(Description="Serial number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Discharge method
@@ -5057,25 +4920,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Suspension weight
         ///</summary>
         [ApiMember(Description="Suspension weight")]
-        public string SuspensionWeight { get; set; }
+        public string? SuspensionWeight { get; set; }
 
         ///<summary>
         ///Velocity observation method
         ///</summary>
         [ApiMember(Description="Velocity observation method")]
-        public string VelocityObservationMethod { get; set; }
+        public string? VelocityObservationMethod { get; set; }
 
         ///<summary>
         ///Firmware version
         ///</summary>
         [ApiMember(Description="Firmware version")]
-        public string FirmwareVersion { get; set; }
+        public string? FirmwareVersion { get; set; }
 
         ///<summary>
         ///Software version
         ///</summary>
         [ApiMember(Description="Software version")]
-        public string SoftwareVersion { get; set; }
+        public string? SoftwareVersion { get; set; }
 
         ///<summary>
         ///Starting point
@@ -5087,7 +4950,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Node details
         ///</summary>
         [ApiMember(Description="Node details")]
-        public string NodeDetails { get; set; }
+        public string? NodeDetails { get; set; }
 
         ///<summary>
         ///Is valid
@@ -5099,7 +4962,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Verticals
         ///</summary>
         [ApiMember(DataType="array", Description="Verticals")]
-        public List<Vertical> Verticals { get; set; }
+        public List<Vertical>? Verticals { get; set; }
     }
 
     public class QuantityWithDisplay
@@ -5109,57 +4972,52 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Unit
         ///</summary>
         [ApiMember(Description="Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
     }
 
     public class Reading
     {
-        public Reading()
-        {
-            ReadingQualifiers = new List<string>{};
-        }
-
         ///<summary>
         ///Parameter Name
         ///</summary>
         [ApiMember(Description="Parameter Name")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Parameter Id
         ///</summary>
         [ApiMember(Description="Parameter Id")]
-        public string ParameterId { get; set; }
+        public string? ParameterId { get; set; }
 
         ///<summary>
         ///Monitoring method
         ///</summary>
         [ApiMember(Description="Monitoring method")]
-        public string MonitoringMethod { get; set; }
+        public string? MonitoringMethod { get; set; }
 
         ///<summary>
         ///Value
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Value")]
-        public DoubleWithDisplay Value { get; set; }
+        public DoubleWithDisplay? Value { get; set; }
 
         ///<summary>
         ///AdjustmentAmount
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="AdjustmentAmount")]
-        public DoubleWithDisplay AdjustmentAmount { get; set; }
+        public DoubleWithDisplay? AdjustmentAmount { get; set; }
 
         ///<summary>
         ///Unit
         ///</summary>
         [ApiMember(Description="Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Uncertainty
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Uncertainty")]
-        public DoubleWithDisplay Uncertainty { get; set; }
+        public DoubleWithDisplay? Uncertainty { get; set; }
 
         ///<summary>
         ///Reading type
@@ -5171,19 +5029,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Manufacturer
         ///</summary>
         [ApiMember(Description="Manufacturer")]
-        public string Manufacturer { get; set; }
+        public string? Manufacturer { get; set; }
 
         ///<summary>
         ///Model
         ///</summary>
         [ApiMember(Description="Model")]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         ///<summary>
         ///Serial number
         ///</summary>
         [ApiMember(Description="Serial number")]
-        public string SerialNumber { get; set; }
+        public string? SerialNumber { get; set; }
 
         ///<summary>
         ///Time
@@ -5195,19 +5053,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Sub location identifier
         ///</summary>
         [ApiMember(Description="Sub location identifier")]
-        public string SubLocationIdentifier { get; set; }
+        public string? SubLocationIdentifier { get; set; }
 
         ///<summary>
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Node details
         ///</summary>
         [ApiMember(Description="Node details")]
-        public string NodeDetails { get; set; }
+        public string? NodeDetails { get; set; }
 
         ///<summary>
         ///Publish
@@ -5237,19 +5095,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Reading Qualifier
         ///</summary>
         [ApiMember(Description="Reading Qualifier")]
-        public string ReadingQualifier { get; set; }
+        public string? ReadingQualifier { get; set; }
 
         ///<summary>
         ///Reading Qualifiers
         ///</summary>
         [ApiMember(DataType="array", Description="Reading Qualifiers")]
-        public List<string> ReadingQualifiers { get; set; }
+        public List<string>? ReadingQualifiers { get; set; }
 
         ///<summary>
         ///Groundwater measurements
         ///</summary>
         [ApiMember(DataType="GroundWaterMeasurement", Description="Groundwater measurements")]
-        public GroundWaterMeasurement GroundWaterMeasurement { get; set; }
+        public GroundWaterMeasurement? GroundWaterMeasurement { get; set; }
 
         ///<summary>
         ///Sensor unique ID
@@ -5270,19 +5128,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Standard code
         ///</summary>
         [ApiMember(Description="Standard code")]
-        public string StandardCode { get; set; }
+        public string? StandardCode { get; set; }
 
         ///<summary>
         ///Lot number
         ///</summary>
         [ApiMember(Description="Lot number")]
-        public string LotNumber { get; set; }
+        public string? LotNumber { get; set; }
 
         ///<summary>
         ///Temperature
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Temperature")]
-        public DoubleWithDisplay Temperature { get; set; }
+        public DoubleWithDisplay? Temperature { get; set; }
 
         ///<summary>
         ///Expiration date
@@ -5303,7 +5161,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Quantitative (Type A) Uncertainty
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Quantitative (Type A) Uncertainty")]
-        public DoubleWithDisplay QuantitativeUncertainty { get; set; }
+        public DoubleWithDisplay? QuantitativeUncertainty { get; set; }
 
         ///<summary>
         ///Qualitative (Type B) Uncertainty
@@ -5318,7 +5176,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Depth
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Depth")]
-        public QuantityWithDisplay Depth { get; set; }
+        public QuantityWithDisplay? Depth { get; set; }
 
         ///<summary>
         ///Revolution count
@@ -5330,13 +5188,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Observation interval in seconds
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Observation interval in seconds")]
-        public DoubleWithDisplay ObservationIntervalInSeconds { get; set; }
+        public DoubleWithDisplay? ObservationIntervalInSeconds { get; set; }
 
         ///<summary>
         ///Velocity
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Velocity")]
-        public QuantityWithDisplay Velocity { get; set; }
+        public QuantityWithDisplay? Velocity { get; set; }
 
         ///<summary>
         ///Is velocity estimated
@@ -5369,16 +5227,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Velocity Depth Observations
         ///</summary>
         [ApiMember(DataType="array", Description="Velocity Depth Observations")]
-        public IList<VelocityDepthObservation> Observations { get; set; }
+        public IList<VelocityDepthObservation>? Observations { get; set; }
     }
 
     public class Vertical
     {
-        public Vertical()
-        {
-            Calibrations = new List<Calibration>{};
-        }
-
         ///<summary>
         ///Vertical number
         ///</summary>
@@ -5389,13 +5242,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Tagline position
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Tagline position")]
-        public QuantityWithDisplay TaglinePosition { get; set; }
+        public QuantityWithDisplay? TaglinePosition { get; set; }
 
         ///<summary>
         ///Effective depth
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Effective depth")]
-        public QuantityWithDisplay EffectiveDepth { get; set; }
+        public QuantityWithDisplay? EffectiveDepth { get; set; }
 
         ///<summary>
         ///Velocity method
@@ -5407,25 +5260,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Mean velocity
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Mean velocity")]
-        public QuantityWithDisplay MeanVelocity { get; set; }
+        public QuantityWithDisplay? MeanVelocity { get; set; }
 
         ///<summary>
         ///Segment width
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Segment width")]
-        public QuantityWithDisplay SegmentWidth { get; set; }
+        public QuantityWithDisplay? SegmentWidth { get; set; }
 
         ///<summary>
         ///Segment velocity
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Segment velocity")]
-        public QuantityWithDisplay SegmentVelocity { get; set; }
+        public QuantityWithDisplay? SegmentVelocity { get; set; }
 
         ///<summary>
         ///Segment area
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Segment area")]
-        public QuantityWithDisplay SegmentArea { get; set; }
+        public QuantityWithDisplay? SegmentArea { get; set; }
 
         ///<summary>
         ///Is discharge estimated
@@ -5437,7 +5290,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Segment discharge
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Segment discharge")]
-        public QuantityWithDisplay SegmentDischarge { get; set; }
+        public QuantityWithDisplay? SegmentDischarge { get; set; }
 
         ///<summary>
         ///Percentage of total discharge
@@ -5461,13 +5314,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Ice covered data
         ///</summary>
         [ApiMember(DataType="string", Description="Ice covered data")]
-        public IceCoveredData IceCoveredData { get; set; }
+        public IceCoveredData? IceCoveredData { get; set; }
 
         ///<summary>
         ///Open water data
         ///</summary>
         [ApiMember(DataType="string", Description="Open water data")]
-        public OpenWaterData OpenWaterData { get; set; }
+        public OpenWaterData? OpenWaterData { get; set; }
 
         ///<summary>
         ///Flow direction type
@@ -5491,7 +5344,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Sounded depth
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Sounded depth")]
-        public QuantityWithDisplay SoundedDepth { get; set; }
+        public QuantityWithDisplay? SoundedDepth { get; set; }
 
         ///<summary>
         ///Cosine of unique flow
@@ -5503,51 +5356,46 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Comments
         ///</summary>
         [ApiMember(Description="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
 
         ///<summary>
         ///Velocity observation
         ///</summary>
         [ApiMember(DataType="string", Description="Velocity observation")]
-        public VelocityObservation VelocityObservation { get; set; }
+        public VelocityObservation? VelocityObservation { get; set; }
 
         ///<summary>
         ///Current Meter
         ///</summary>
         [ApiMember(DataType="string", Description="Current Meter")]
-        public CurrentMeter CurrentMeter { get; set; }
+        public CurrentMeter? CurrentMeter { get; set; }
 
         ///<summary>
         ///Calibration
         ///</summary>
         [ApiMember(DataType="array", Description="Calibration")]
-        public List<Calibration> Calibrations { get; set; }
+        public List<Calibration>? Calibrations { get; set; }
     }
 
     public class VolumetricDischargeActivity
     {
-        public VolumetricDischargeActivity()
-        {
-            VolumetricDischargeReadings = new List<VolumetricDischargeReading>{};
-        }
-
         ///<summary>
         ///Discharge channel measurement
         ///</summary>
         [ApiMember(DataType="DischargeChannelMeasurement", Description="Discharge channel measurement")]
-        public DischargeChannelMeasurement DischargeChannelMeasurement { get; set; }
+        public DischargeChannelMeasurement? DischargeChannelMeasurement { get; set; }
 
         ///<summary>
         ///Volumetric discharge readings
         ///</summary>
         [ApiMember(DataType="array", Description="Volumetric discharge readings")]
-        public List<VolumetricDischargeReading> VolumetricDischargeReadings { get; set; }
+        public List<VolumetricDischargeReading>? VolumetricDischargeReadings { get; set; }
 
         ///<summary>
         ///Measurement container volume
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Measurement container volume")]
-        public QuantityWithDisplay MeasurementContainerVolume { get; set; }
+        public QuantityWithDisplay? MeasurementContainerVolume { get; set; }
 
         ///<summary>
         ///Is observed
@@ -5568,31 +5416,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Name
         ///</summary>
         [ApiMember(Description="Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         ///<summary>
         ///Duration in seconds
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Duration in seconds")]
-        public DoubleWithDisplay DurationInSeconds { get; set; }
+        public DoubleWithDisplay? DurationInSeconds { get; set; }
 
         ///<summary>
         ///Starting volume
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Starting volume")]
-        public DoubleWithDisplay StartingVolume { get; set; }
+        public DoubleWithDisplay? StartingVolume { get; set; }
 
         ///<summary>
         ///Ending volume
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Ending volume")]
-        public DoubleWithDisplay EndingVolume { get; set; }
+        public DoubleWithDisplay? EndingVolume { get; set; }
 
         ///<summary>
         ///Discharge
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Discharge")]
-        public DoubleWithDisplay Discharge { get; set; }
+        public DoubleWithDisplay? Discharge { get; set; }
 
         ///<summary>
         ///Is used
@@ -5604,7 +5452,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Volume change
         ///</summary>
         [ApiMember(DataType="DoubleWithDisplay", Description="Volume change")]
-        public DoubleWithDisplay VolumeChange { get; set; }
+        public DoubleWithDisplay? VolumeChange { get; set; }
     }
 
     public class WellAquiferConnection
@@ -5619,19 +5467,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Type of connectivity between the well and aquifer
         ///</summary>
         [ApiMember(Description="Type of connectivity between the well and aquifer", Name="WellAquiferConnectivityType")]
-        public string WellAquiferConnectivityType { get; set; }
+        public string? WellAquiferConnectivityType { get; set; }
 
         ///<summary>
         ///Method used to determine the inspection result
         ///</summary>
         [ApiMember(Description="Method used to determine the inspection result", Name="WellInspectionDeterminationMethodType")]
-        public string WellInspectionDeterminationMethodType { get; set; }
+        public string? WellInspectionDeterminationMethodType { get; set; }
 
         ///<summary>
         ///Additional comments or notes
         ///</summary>
         [ApiMember(Description="Additional comments or notes", Name="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class WellInspection
@@ -5646,78 +5494,70 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Type of well component inspected
         ///</summary>
         [ApiMember(Description="Type of well component inspected", Name="WellComponentType")]
-        public string WellComponentType { get; set; }
+        public string? WellComponentType { get; set; }
 
         ///<summary>
         ///Condition type of the well component
         ///</summary>
         [ApiMember(Description="Condition type of the well component", Name="WellConditionType")]
-        public string WellConditionType { get; set; }
+        public string? WellConditionType { get; set; }
 
         ///<summary>
         ///Method used for the inspection
         ///</summary>
         [ApiMember(Description="Method used for the inspection", Name="WellInspectionMethodType")]
-        public string WellInspectionMethodType { get; set; }
+        public string? WellInspectionMethodType { get; set; }
 
         ///<summary>
         ///Starting distance of the inspection range
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Starting distance of the inspection range", Name="DistanceFrom")]
-        public QuantityWithDisplay DistanceFrom { get; set; }
+        public QuantityWithDisplay? DistanceFrom { get; set; }
 
         ///<summary>
         ///Ending distance of the inspection range
         ///</summary>
         [ApiMember(DataType="QuantityWithDisplay", Description="Ending distance of the inspection range", Name="DistanceTo")]
-        public QuantityWithDisplay DistanceTo { get; set; }
+        public QuantityWithDisplay? DistanceTo { get; set; }
 
         ///<summary>
         ///Unit of measurement for distance
         ///</summary>
         [ApiMember(Description="Unit of measurement for distance", Name="DistanceUnitId")]
-        public string DistanceUnitId { get; set; }
+        public string? DistanceUnitId { get; set; }
 
         ///<summary>
         ///Additional comments or notes
         ///</summary>
         [ApiMember(Description="Additional comments or notes", Name="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class WellIntegrityActivity
     {
-        public WellIntegrityActivity()
-        {
-            WellAquiferConnections = new List<WellAquiferConnection>{};
-            WellInspections = new List<WellInspection>{};
-            WellRedevelopments = new List<WellRedevelopment>{};
-            WellRepairs = new List<WellRepair>{};
-        }
-
         ///<summary>
         ///List of aquifer connections associated with the well
         ///</summary>
         [ApiMember(DataType="array", Description="List of aquifer connections associated with the well", Name="WellAquiferConnections")]
-        public List<WellAquiferConnection> WellAquiferConnections { get; set; }
+        public List<WellAquiferConnection>? WellAquiferConnections { get; set; }
 
         ///<summary>
         ///List of inspections performed on the well
         ///</summary>
         [ApiMember(DataType="array", Description="List of inspections performed on the well", Name="WellInspections")]
-        public List<WellInspection> WellInspections { get; set; }
+        public List<WellInspection>? WellInspections { get; set; }
 
         ///<summary>
         ///List of redevelopment activities for the well
         ///</summary>
         [ApiMember(DataType="array", Description="List of redevelopment activities for the well", Name="WellRedevelopments")]
-        public List<WellRedevelopment> WellRedevelopments { get; set; }
+        public List<WellRedevelopment>? WellRedevelopments { get; set; }
 
         ///<summary>
         ///List of repair activities performed on the well
         ///</summary>
         [ApiMember(DataType="array", Description="List of repair activities performed on the well", Name="WellRepairs")]
-        public List<WellRepair> WellRepairs { get; set; }
+        public List<WellRepair>? WellRepairs { get; set; }
     }
 
     public class WellRedevelopment
@@ -5744,13 +5584,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Type of redevelopment performed on the well
         ///</summary>
         [ApiMember(Description="Type of redevelopment performed on the well", Name="WellRedevelopmentType")]
-        public string WellRedevelopmentType { get; set; }
+        public string? WellRedevelopmentType { get; set; }
 
         ///<summary>
         ///Additional comments or notes about the redevelopment
         ///</summary>
         [ApiMember(Description="Additional comments or notes about the redevelopment", Name="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class WellRepair
@@ -5771,22 +5611,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Type of repair performed on the well
         ///</summary>
         [ApiMember(Description="Type of repair performed on the well", Name="WellRepairType")]
-        public string WellRepairType { get; set; }
+        public string? WellRepairType { get; set; }
 
         ///<summary>
         ///Additional comments or notes about the repair
         ///</summary>
         [ApiMember(Description="Additional comments or notes about the repair", Name="Comments")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 
     public class ActiveMeterCalibration
     {
-        public ActiveMeterCalibration()
-        {
-            Equations = new List<ActiveMeterCalibrationEquation>{};
-        }
-
         ///<summary>
         ///Visit date
         ///</summary>
@@ -5797,7 +5632,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Equations
         ///</summary>
         [ApiMember(DataType="array", Description="Equations")]
-        public List<ActiveMeterCalibrationEquation> Equations { get; set; }
+        public List<ActiveMeterCalibrationEquation>? Equations { get; set; }
     }
 
     public class ActiveMeterCalibrationEquation
@@ -5808,11 +5643,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ActiveMeterDetails
         : CurrentMeter
     {
-        public ActiveMeterDetails()
-        {
-            MeterCalibrations = new List<ActiveMeterCalibration>{};
-        }
-
         ///<summary>
         ///Meter type
         ///</summary>
@@ -5823,25 +5653,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Configuration
         ///</summary>
         [ApiMember(Description="Configuration")]
-        public string Configuration { get; set; }
+        public string? Configuration { get; set; }
 
         ///<summary>
         ///Firmware version
         ///</summary>
         [ApiMember(Description="Firmware version")]
-        public string FirmwareVersion { get; set; }
+        public string? FirmwareVersion { get; set; }
 
         ///<summary>
         ///Software version
         ///</summary>
         [ApiMember(Description="Software version")]
-        public string SoftwareVersion { get; set; }
+        public string? SoftwareVersion { get; set; }
 
         ///<summary>
         ///Meter calibrations
         ///</summary>
         [ApiMember(DataType="array", Description="Meter calibrations")]
-        public List<ActiveMeterCalibration> MeterCalibrations { get; set; }
+        public List<ActiveMeterCalibration>? MeterCalibrations { get; set; }
     }
 
     public enum ActivityType
@@ -6379,27 +6209,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Table starting value
         ///</summary>
         [ApiMember(DataType="number", Description="Table starting value", Format="double", IsRequired=true)]
-        public double? StartValue { get; set; }
+        public double StartValue { get; set; }
 
         ///<summary>
         ///Table ending value
         ///</summary>
         [ApiMember(DataType="number", Description="Table ending value", Format="double", IsRequired=true)]
-        public double? EndValue { get; set; }
+        public double EndValue { get; set; }
     }
 
     [Route("/GetFieldVisitDataByLocation", "GET")]
     public class FieldVisitDataByLocationServiceRequest
         : IReturn<FieldVisitDataByLocationServiceResponse>, IFieldVisitDataRequest
     {
-        public FieldVisitDataByLocationServiceRequest()
-        {
-            Activities = new List<ActivityType>{};
-            Parameters = new List<string>{};
-            InspectionTypes = new List<InspectionType>{};
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Location identifier
         ///</summary>
@@ -6410,19 +6232,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment, HydraulicTest or WellIntegrity
         ///</summary>
         [ApiMember(AllowMultiple=true, DataType="array", Description="If set, only return specified activity types, selected from: Reading, Inspection, CalibrationCheck, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, Attachment, HydraulicTest or WellIntegrity")]
-        public List<ActivityType> Activities { get; set; }
+        public List<ActivityType>? Activities { get; set; }
 
         ///<summary>
         ///If set, only return readings and calibrations of the specified parameters
         ///</summary>
         [ApiMember(DataType="array", Description="If set, only return readings and calibrations of the specified parameters")]
-        public List<string> Parameters { get; set; }
+        public List<string>? Parameters { get; set; }
 
         ///<summary>
         ///If set, only return inspections of the specified types, selected from: BubbleGage, CrestStageGage, WireWeightGage, MaximumMinimumGage, WaterQuality, FieldMeter, Other
         ///</summary>
         [ApiMember(AllowMultiple=true, DataType="array", Description="If set, only return inspections of the specified types, selected from: BubbleGage, CrestStageGage, WireWeightGage, MaximumMinimumGage, WaterQuality, FieldMeter, Other")]
-        public List<InspectionType> InspectionTypes { get; set; }
+        public List<InspectionType>? InspectionTypes { get; set; }
 
         ///<summary>
         ///True if node details (raw JSON of each specific activity) should be included
@@ -6464,13 +6286,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///If set, length reading values will be converted to the specified Standard Reference Datum
         ///</summary>
         [ApiMember(Description="If set, length reading values will be converted to the specified Standard Reference Datum")]
-        public string ConvertToStandardReferenceDatum { get; set; }
+        public string? ConvertToStandardReferenceDatum { get; set; }
 
         ///<summary>
         ///Filter results to items matching the given extended attribute values
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
-        public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
+        public List<ExtendedAttributeFilter>? ExtendedFilters { get; set; }
     }
 
     [Route("/GetFieldVisitData", "GET")]
@@ -6487,7 +6309,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, HydraulicTest or WellIntegrity
         ///</summary>
         [ApiMember(Description="If set, only report the specific activity type: One of Inspection, DischargeSummary, DischargePointVelocity, DischargeVolumetric, DischargeEngineeredStructure, DischargeAdcp, DischargeOtherMethod, GageHeightAtZeroFlow, ControlCondition, CrossSectionSurvey, LevelSurvey, HydraulicTest or WellIntegrity")]
-        public string DiscreteMeasurementActivity { get; set; }
+        public string? DiscreteMeasurementActivity { get; set; }
 
         ///<summary>
         ///True if node details (raw JSON of each specific activity) should be included
@@ -6529,23 +6351,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///If set, length reading values will be converted to the specified Standard Reference Datum
         ///</summary>
         [ApiMember(Description="If set, length reading values will be converted to the specified Standard Reference Datum")]
-        public string ConvertToStandardReferenceDatum { get; set; }
+        public string? ConvertToStandardReferenceDatum { get; set; }
     }
 
     [Route("/GetFieldVisitDescriptionList", "GET")]
     public class FieldVisitDescriptionListServiceRequest
         : IReturn<FieldVisitDescriptionListServiceResponse>
     {
-        public FieldVisitDescriptionListServiceRequest()
-        {
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to the given location
         ///</summary>
         [ApiMember(Description="Filter results to the given location")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items with a StartTime at or after the QueryFrom time
@@ -6575,7 +6392,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to items matching the given extended attribute values
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
-        public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
+        public List<ExtendedAttributeFilter>? ExtendedFilters { get; set; }
     }
 
     [Route("/GetAuthToken", "GET")]
@@ -6586,35 +6403,30 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Username
         ///</summary>
         [ApiMember(Description="Username")]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         ///<summary>
         ///Encrypted password
         ///</summary>
         [ApiMember(Description="Encrypted password")]
-        public string EncryptedPassword { get; set; }
+        public string? EncryptedPassword { get; set; }
 
         ///<summary>
         ///Locale
         ///</summary>
         [ApiMember(Description="Locale")]
-        public string Locale { get; set; }
+        public string? Locale { get; set; }
     }
 
     [Route("/GetFieldVisitReadingsByLocation", "GET")]
     public class GetFieldVisitReadingsByLocationServiceRequest
         : IReturn<FieldVisitReadingsByLocationServiceResponse>
     {
-        public GetFieldVisitReadingsByLocationServiceRequest()
-        {
-            Parameters = new List<string>{};
-        }
-
         ///<summary>
         ///Location identifier. Must be empty when LocationUniqueId is set.
         ///</summary>
         [ApiMember(Description="Location identifier. Must be empty when LocationUniqueId is set.")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Location unique ID. Must be empty when LocationIdentifier is set.
@@ -6626,7 +6438,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///If set, only return readings of the specified parameters
         ///</summary>
         [ApiMember(DataType="array", Description="If set, only return readings of the specified parameters")]
-        public List<string> Parameters { get; set; }
+        public List<string>? Parameters { get; set; }
 
         ///<summary>
         ///Filter results to items matching the Publish value
@@ -6661,7 +6473,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         bool? IncludeVerticals { get; set; }
         bool? IncludeCrossSectionSurveyProfile { get; set; }
         bool? ConvertToLocalAssumedDatum { get; set; }
-        string ConvertToStandardReferenceDatum { get; set; }
+        string? ConvertToStandardReferenceDatum { get; set; }
     }
 
     [Route("/GetLocationData", "GET")]
@@ -6691,55 +6503,47 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class LocationDescriptionListServiceRequest
         : IReturn<LocationDescriptionListServiceResponse>
     {
-        public LocationDescriptionListServiceRequest()
-        {
-            TagNames = new List<string>{};
-            TagKeys = new List<string>{};
-            TagValues = new List<string>{};
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to the given location name (supports *partialname* pattern*)
         ///</summary>
         [ApiMember(Description="Filter results to the given location name (supports *partialname* pattern*)")]
-        public string LocationName { get; set; }
+        public string? LocationName { get; set; }
 
         ///<summary>
         ///Filter results to the given location identifier (supports *partialname* pattern)
         ///</summary>
         [ApiMember(Description="Filter results to the given location identifier (supports *partialname* pattern)")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to the given location folder (supports *partialname* pattern)
         ///</summary>
         [ApiMember(Description="Filter results to the given location folder (supports *partialname* pattern)")]
-        public string LocationFolder { get; set; }
+        public string? LocationFolder { get; set; }
 
         ///<summary>
         ///DEPRECATED: renamed to TagKeys
         ///</summary>
         [ApiMember(DataType="array", Description="DEPRECATED: renamed to TagKeys")]
-        public List<string> TagNames { get; set; }
+        public List<string>? TagNames { get; set; }
 
         ///<summary>
         ///Filter results to locations matching all tags by key (supports *partialname* pattern)
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to locations matching all tags by key (supports *partialname* pattern)")]
-        public List<string> TagKeys { get; set; }
+        public List<string>? TagKeys { get; set; }
 
         ///<summary>
         ///Filter results to locations matching all tags by value (supports *partialname* pattern)
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to locations matching all tags by value (supports *partialname* pattern)")]
-        public List<string> TagValues { get; set; }
+        public List<string>? TagValues { get; set; }
 
         ///<summary>
         ///Filter results to items matching the given extended attribute values
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
-        public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
+        public List<ExtendedAttributeFilter>? ExtendedFilters { get; set; }
 
         ///<summary>
         ///Filter results to items matching the Publish value
@@ -6855,7 +6659,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to the given location
         ///</summary>
         [ApiMember(Description="Filter results to the given location")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items matching the Publish value
@@ -6867,13 +6671,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to items maching the InputParameter identifier
         ///</summary>
         [ApiMember(Description="Filter results to items maching the InputParameter identifier")]
-        public string InputParameter { get; set; }
+        public string? InputParameter { get; set; }
 
         ///<summary>
         ///Filter results to items maching the OutputParameter identifier
         ///</summary>
         [ApiMember(Description="Filter results to items maching the OutputParameter identifier")]
-        public string OutputParameter { get; set; }
+        public string? OutputParameter { get; set; }
 
         ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
@@ -6886,11 +6690,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelEffectiveShiftsByStageValuesServiceRequest
         : IReturn<RatingModelEffectiveShiftsByStageValuesServiceResponse>
     {
-        public RatingModelEffectiveShiftsByStageValuesServiceRequest()
-        {
-            StageValues = new List<double>{};
-        }
-
         ///<summary>
         ///Rating model identifier
         ///</summary>
@@ -6901,13 +6700,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///The time at which the shift is to be applied
         ///</summary>
         [ApiMember(DataType="string", Description="The time at which the shift is to be applied", Format="date-time", IsRequired=true)]
-        public DateTimeOffset? MeasurementTime { get; set; }
+        public DateTimeOffset MeasurementTime { get; set; }
 
         ///<summary>
         ///The input stage values to which the shift is to be applied
         ///</summary>
         [ApiMember(DataType="array", Description="The input stage values to which the shift is to be applied", IsRequired=true)]
-        public List<double> StageValues { get; set; }
+        public List<double> StageValues { get; set; } = [];
     }
 
     [Route("/GetRatingModelEffectiveShifts", "GET")]
@@ -6943,11 +6742,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelInputValuesServiceRequest
         : IReturn<RatingModelInputValuesServiceResponse>
     {
-        public RatingModelInputValuesServiceRequest()
-        {
-            OutputValues = new List<double>{};
-        }
-
         ///<summary>
         ///Rating model identifier
         ///</summary>
@@ -6958,7 +6752,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Output values
         ///</summary>
         [ApiMember(DataType="array", Description="Output values", IsRequired=true)]
-        public List<double> OutputValues { get; set; }
+        public List<double> OutputValues { get; set; } = [];
 
         ///<summary>
         ///Effective time of the calculation. Defaults to the current time if not specified
@@ -6971,11 +6765,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelOutputValuesServiceRequest
         : IReturn<RatingModelOutputValuesServiceResponse>
     {
-        public RatingModelOutputValuesServiceRequest()
-        {
-            InputValues = new List<double>{};
-        }
-
         ///<summary>
         ///Rating model identifier
         ///</summary>
@@ -6986,7 +6775,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Input values
         ///</summary>
         [ApiMember(DataType="array", Description="Input values", IsRequired=true)]
-        public List<double> InputValues { get; set; }
+        public List<double> InputValues { get; set; } = [];
 
         ///<summary>
         ///Effective time of the calculation. Defaults to the current time if not specified
@@ -7005,14 +6794,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ReportListServiceRequest
         : IReturn<ReportListServiceResponse>
     {
-        public ReportListServiceRequest()
-        {
-            TimeSeriesUniqueIds = new List<Guid>{};
-            ReportUniqueIds = new List<Guid>{};
-            TagKeys = new List<string>{};
-            TagValues = new List<string>{};
-        }
-
         ///<summary>
         ///Filter results to given location unique ID
         ///</summary>
@@ -7023,7 +6804,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to given source time series unique IDs
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to given source time series unique IDs")]
-        public List<Guid> TimeSeriesUniqueIds { get; set; }
+        public List<Guid>? TimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Filter results to the given user unique ID
@@ -7035,13 +6816,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to the given report title
         ///</summary>
         [ApiMember(Description="Filter results to the given report title")]
-        public string ReportTitle { get; set; }
+        public string? ReportTitle { get; set; }
 
         ///<summary>
         ///Filter results to given report unique IDs
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to given report unique IDs")]
-        public List<Guid> ReportUniqueIds { get; set; }
+        public List<Guid>? ReportUniqueIds { get; set; }
 
         ///<summary>
         ///Filter results to items created at or after the CreatedFrom time
@@ -7053,13 +6834,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to items matching all tags by key (supports *partialname* pattern)
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to items matching all tags by key (supports *partialname* pattern)")]
-        public List<string> TagKeys { get; set; }
+        public List<string>? TagKeys { get; set; }
 
         ///<summary>
         ///Filter results to items matching all tags by value (supports *partialname* pattern)
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to items matching all tags by value (supports *partialname* pattern)")]
-        public List<string> TagValues { get; set; }
+        public List<string>? TagValues { get; set; }
 
         ///<summary>
         ///Limit the number of results items, after all filtering and ordering
@@ -7072,11 +6853,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RoundServiceRequest
         : IReturn<RoundServiceResponse>
     {
-        public RoundServiceRequest()
-        {
-            Data = new List<double>{};
-        }
-
         ///<summary>
         ///The data is for this parameter
         ///</summary>
@@ -7093,30 +6869,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///The data was measured using this method. Specify only if known
         ///</summary>
         [ApiMember(Description="The data was measured using this method. Specify only if known")]
-        public string MethodCode { get; set; }
+        public string? MethodCode { get; set; }
 
         ///<summary>
         ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.
         ///</summary>
         [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.")]
-        public string ValueForNaN { get; set; }
+        public string? ValueForNaN { get; set; }
 
         ///<summary>
         ///A list of data values to be rounded and returned as strings
         ///</summary>
         [ApiMember(DataType="array", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
-        public List<double> Data { get; set; }
+        public List<double> Data { get; set; } = [];
     }
 
     [Route("/Round/ToSpec", "PUT")]
     public class RoundServiceSpecRequest
         : IReturn<RoundServiceResponse>
     {
-        public RoundServiceSpecRequest()
-        {
-            Data = new List<double>{};
-        }
-
         ///<summary>
         ///Use this rounding specification to round the data
         ///</summary>
@@ -7127,88 +6898,70 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.
         ///</summary>
         [ApiMember(Description="If specified, return this value for inputs which are NaNs. Otherwise returns EMPTY for NaNs.")]
-        public string ValueForNaN { get; set; }
+        public string? ValueForNaN { get; set; }
 
         ///<summary>
         ///A list of data values to be rounded and returned as strings
         ///</summary>
         [ApiMember(DataType="array", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
-        public List<double> Data { get; set; }
+        public List<double> Data { get; set; } = [];
     }
 
     [Route("/GetSensorsAndGauges", "GET,POST")]
     public class SensorsAndGaugesServiceRequest
         : IReturn<SensorsAndGaugesServiceResponse>
     {
-        public SensorsAndGaugesServiceRequest()
-        {
-            LocationUniqueIds = new List<Guid>{};
-            TagKeys = new List<string>{};
-            TagValues = new List<string>{};
-        }
-
         ///<summary>
         ///Filter results to sensors and gauges for this location
         ///</summary>
         [ApiMember(Description="Filter results to sensors and gauges for this location")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to sensors and gauges for these locations. Limited to roughly 60 items for a GET request; use POST to avoid this limit.
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to sensors and gauges for these locations. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
-        public List<Guid> LocationUniqueIds { get; set; }
+        public List<Guid>? LocationUniqueIds { get; set; }
 
         ///<summary>
         ///Filter results to sensors and gauges matching all tags by key (supports *partialname* pattern)
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to sensors and gauges matching all tags by key (supports *partialname* pattern)")]
-        public List<string> TagKeys { get; set; }
+        public List<string>? TagKeys { get; set; }
 
         ///<summary>
         ///Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to sensors and gauges matching all tags by value (supports *partialname* pattern)")]
-        public List<string> TagValues { get; set; }
+        public List<string>? TagValues { get; set; }
     }
 
     [Route("/GetTagList", "GET")]
     public class TagListServiceRequest
         : IReturn<TagListServiceResponse>
     {
-        public TagListServiceRequest()
-        {
-            Applicability = new List<TagApplicability>{};
-        }
-
         ///<summary>
         ///If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges, AppliesToAttachments, AppliesToReports
         ///</summary>
         [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges, AppliesToAttachments, AppliesToReports")]
-        public List<TagApplicability> Applicability { get; set; }
+        public List<TagApplicability>? Applicability { get; set; }
     }
 
     [Route("/GetTimeSeriesData", "GET")]
     public class TimeAlignedDataServiceRequest
         : IReturn<TimeAlignedDataServiceResponse>
     {
-        public TimeAlignedDataServiceRequest()
-        {
-            TimeSeriesUniqueIds = new List<Guid>{};
-            TimeSeriesOutputUnitIds = new List<string>{};
-        }
-
         ///<summary>
         ///The unique IDs of the time-series to retrieve
         ///</summary>
         [ApiMember(DataType="array", Description="The unique IDs of the time-series to retrieve", IsRequired=true)]
-        public List<Guid> TimeSeriesUniqueIds { get; set; }
+        public List<Guid> TimeSeriesUniqueIds { get; set; } = [];
 
         ///<summary>
         ///The unit identifiers for points. Defaults to the time-series unit
         ///</summary>
         [ApiMember(DataType="array", Description="The unit identifiers for points. Defaults to the time-series unit")]
-        public List<string> TimeSeriesOutputUnitIds { get; set; }
+        public List<string>? TimeSeriesOutputUnitIds { get; set; }
 
         ///<summary>
         ///Filter results to items at or after the QueryFrom time
@@ -7290,13 +7043,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///The level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'
         ///</summary>
         [ApiMember(Description="The level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'")]
-        public string GetParts { get; set; }
+        public string? GetParts { get; set; }
 
         ///<summary>
         ///The unit identifier for points. Defaults to the time series unit
         ///</summary>
         [ApiMember(Description="The unit identifier for points. Defaults to the time series unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset
@@ -7349,13 +7102,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Sets the level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'
         ///</summary>
         [ApiMember(Description="Sets the level of time series detail to report. One of 'All', 'PointsOnly', or 'MetadataOnly'. Defaults to 'All'")]
-        public string GetParts { get; set; }
+        public string? GetParts { get; set; }
 
         ///<summary>
         ///The unit identifier for points. Defaults to the time series unit
         ///</summary>
         [ApiMember(Description="The unit identifier for points. Defaults to the time series unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Forces the response time values to a specific UTC offset. Defaults to the time series UTC offset
@@ -7374,38 +7127,28 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesDescriptionListByUniqueIdServiceRequest
         : IReturn<TimeSeriesDescriptionListByUniqueIdServiceResponse>
     {
-        public TimeSeriesDescriptionListByUniqueIdServiceRequest()
-        {
-            TimeSeriesUniqueIds = new List<Guid>{};
-        }
-
         ///<summary>
         ///A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.
         ///</summary>
         [ApiMember(DataType="array", Description="A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.")]
-        public List<Guid> TimeSeriesUniqueIds { get; set; }
+        public List<Guid>? TimeSeriesUniqueIds { get; set; }
     }
 
     [Route("/GetTimeSeriesDescriptionList", "GET")]
     public class TimeSeriesDescriptionServiceRequest
         : IReturn<TimeSeriesDescriptionListServiceResponse>
     {
-        public TimeSeriesDescriptionServiceRequest()
-        {
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to the given location
         ///</summary>
         [ApiMember(Description="Filter results to the given location")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items matching the parameter identifier
         ///</summary>
         [ApiMember(Description="Filter results to items matching the parameter identifier")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Filter results to items matching the Publish value
@@ -7417,30 +7160,25 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to items matching the computation identifier
         ///</summary>
         [ApiMember(Description="Filter results to items matching the computation identifier")]
-        public string ComputationIdentifier { get; set; }
+        public string? ComputationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items matching the computation period identifier
         ///</summary>
         [ApiMember(Description="Filter results to items matching the computation period identifier")]
-        public string ComputationPeriodIdentifier { get; set; }
+        public string? ComputationPeriodIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items matching the given extended attribute values
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
-        public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
+        public List<ExtendedAttributeFilter>? ExtendedFilters { get; set; }
     }
 
     [Route("/GetTimeSeriesUniqueIdList", "GET")]
     public class TimeSeriesUniqueIdListServiceRequest
         : IReturn<TimeSeriesUniqueIdListServiceResponse>
     {
-        public TimeSeriesUniqueIdListServiceRequest()
-        {
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
         ///</summary>
@@ -7451,19 +7189,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to a specific change event type: 'Data' or 'Attribute'
         ///</summary>
         [ApiMember(Description="Filter results to a specific change event type: 'Data' or 'Attribute'")]
-        public string ChangeEventType { get; set; }
+        public string? ChangeEventType { get; set; }
 
         ///<summary>
         ///Filter results to the given location
         ///</summary>
         [ApiMember(Description="Filter results to the given location")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items maching the Parameter identifier
         ///</summary>
         [ApiMember(Description="Filter results to items maching the Parameter identifier")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Filter results to items matching the Publish value
@@ -7475,53 +7213,48 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to items matching the computation identifier
         ///</summary>
         [ApiMember(Description="Filter results to items matching the computation identifier")]
-        public string ComputationIdentifier { get; set; }
+        public string? ComputationIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items matching the computation period identifier
         ///</summary>
         [ApiMember(Description="Filter results to items matching the computation period identifier")]
-        public string ComputationPeriodIdentifier { get; set; }
+        public string? ComputationPeriodIdentifier { get; set; }
 
         ///<summary>
         ///Filter results to items matching the given extended attribute values
         ///</summary>
         [ApiMember(DataType="array", Description="Filter results to items matching the given extended attribute values")]
-        public List<ExtendedAttributeFilter> ExtendedFilters { get; set; }
+        public List<ExtendedAttributeFilter>? ExtendedFilters { get; set; }
     }
 
     [Route("/GetTrendLineAnalysis", "POST")]
     public class TrendLineAnalysisServiceRequest
         : IReturn<TrendLineAnalysisServiceResponse>
     {
-        public TrendLineAnalysisServiceRequest()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///Type of regression analysis
         ///</summary>
         [ApiMember(DataType="string", Description="Type of regression analysis", IsRequired=true)]
-        public TrendLineAnalysisType? Type { get; set; }
+        public TrendLineAnalysisType Type { get; set; }
 
         ///<summary>
         ///Start Time
         ///</summary>
         [ApiMember(DataType="string", Description="Start Time", Format="date-time", IsRequired=true)]
-        public DateTimeOffset? QueryFrom { get; set; }
+        public DateTimeOffset QueryFrom { get; set; }
 
         ///<summary>
         ///End Time
         ///</summary>
         [ApiMember(DataType="string", Description="End Time", Format="date-time", IsRequired=true)]
-        public DateTimeOffset? QueryTo { get; set; }
+        public DateTimeOffset QueryTo { get; set; }
 
         ///<summary>
         ///List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.
         ///</summary>
         [ApiMember(DataType="array", Description="List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.", IsRequired=true)]
-        public List<TimeSeriesPoint> Points { get; set; }
+        public List<TimeSeriesPoint> Points { get; set; } = [];
     }
 
     [Route("/GetUnitList", "GET")]
@@ -7532,7 +7265,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Filter results to the given Unit Group
         ///</summary>
         [ApiMember(Description="Filter results to the given Unit Group")]
-        public string GroupIdentifier { get; set; }
+        public string? GroupIdentifier { get; set; }
     }
 
     [Route("/GetUpchainProcessorListByTimeSeries", "GET")]
@@ -7561,46 +7294,31 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ActiveMetersAndCalibrationsServiceResponse
         : PublishServiceResponse
     {
-        public ActiveMetersAndCalibrationsServiceResponse()
-        {
-            ActiveMeterDetails = new List<ActiveMeterDetails>{};
-        }
-
         ///<summary>
         ///Current meter details
         ///</summary>
         [ApiMember(DataType="array", Description="Current meter details")]
-        public List<ActiveMeterDetails> ActiveMeterDetails { get; set; }
+        public List<ActiveMeterDetails>? ActiveMeterDetails { get; set; }
     }
 
     public class ApprovalListServiceResponse
         : PublishServiceResponse
     {
-        public ApprovalListServiceResponse()
-        {
-            Approvals = new List<ApprovalMetadata>{};
-        }
-
         ///<summary>
         ///Approvals
         ///</summary>
         [ApiMember(DataType="array", Description="Approvals")]
-        public List<ApprovalMetadata> Approvals { get; set; }
+        public List<ApprovalMetadata>? Approvals { get; set; }
     }
 
     public class CorrectionListServiceResponse
         : PublishServiceResponse
     {
-        public CorrectionListServiceResponse()
-        {
-            Corrections = new List<Correction>{};
-        }
-
         ///<summary>
         ///Corrections
         ///</summary>
         [ApiMember(DataType="array", Description="Corrections")]
-        public List<Correction> Corrections { get; set; }
+        public List<Correction>? Corrections { get; set; }
     }
 
     public class EffectiveRatingCurveServiceResponse
@@ -7610,156 +7328,131 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Expanded rating curve
         ///</summary>
         [ApiMember(DataType="ExpandedRatingCurve", Description="Expanded rating curve")]
-        public ExpandedRatingCurve ExpandedRatingCurve { get; set; }
+        public ExpandedRatingCurve? ExpandedRatingCurve { get; set; }
     }
 
     public class ExpandedStageTableServiceResponse
         : PublishServiceResponse
     {
-        public ExpandedStageTableServiceResponse()
-        {
-            ExpandedStageTable = new List<StagePoint>{};
-            Corrections = new List<Correction>{};
-        }
-
         ///<summary>
         ///Expanded stage table
         ///</summary>
         [ApiMember(DataType="array", Description="Expanded stage table")]
-        public List<StagePoint> ExpandedStageTable { get; set; }
+        public List<StagePoint>? ExpandedStageTable { get; set; }
 
         ///<summary>
         ///Corrections
         ///</summary>
         [ApiMember(DataType="array", Description="Corrections")]
-        public List<Correction> Corrections { get; set; }
+        public List<Correction>? Corrections { get; set; }
     }
 
     public class FieldVisitDataByLocationServiceResponse
         : PublishServiceResponse
     {
-        public FieldVisitDataByLocationServiceResponse()
-        {
-            FieldVisitData = new List<FieldVisit>{};
-        }
-
         ///<summary>
         ///Field visit descriptions and data
         ///</summary>
         [ApiMember(DataType="array", Description="Field visit descriptions and data")]
-        public List<FieldVisit> FieldVisitData { get; set; }
+        public List<FieldVisit>? FieldVisitData { get; set; }
     }
 
     public class FieldVisitDataServiceResponse
         : PublishServiceResponse, IFieldVisitData
     {
-        public FieldVisitDataServiceResponse()
-        {
-            Attachments = new List<Attachment>{};
-            DischargeActivities = new List<DischargeActivity>{};
-            CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
-            HydraulicTestActivities = new List<HydraulicTestActivity>{};
-        }
-
         ///<summary>
         ///Field visit identifier
         ///</summary>
         [ApiMember(Description="Field visit identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Attachments
         ///</summary>
         [ApiMember(DataType="array", Description="Attachments")]
-        public List<Attachment> Attachments { get; set; }
+        public List<Attachment>? Attachments { get; set; }
 
         ///<summary>
         ///Discharge activities
         ///</summary>
         [ApiMember(DataType="array", Description="Discharge activities")]
-        public List<DischargeActivity> DischargeActivities { get; set; }
+        public List<DischargeActivity>? DischargeActivities { get; set; }
 
         ///<summary>
         ///Gage height at zero flow activity
         ///</summary>
         [ApiMember(DataType="GageHeightAtZeroFlowActivity", Description="Gage height at zero flow activity")]
-        public GageHeightAtZeroFlowActivity GageHeightAtZeroFlowActivity { get; set; }
+        public GageHeightAtZeroFlowActivity? GageHeightAtZeroFlowActivity { get; set; }
 
         ///<summary>
         ///Control condition activity
         ///</summary>
         [ApiMember(DataType="ControlConditionActivity", Description="Control condition activity")]
-        public ControlConditionActivity ControlConditionActivity { get; set; }
+        public ControlConditionActivity? ControlConditionActivity { get; set; }
 
         ///<summary>
         ///Inspection activity
         ///</summary>
         [ApiMember(DataType="InspectionActivity", Description="Inspection activity")]
-        public InspectionActivity InspectionActivity { get; set; }
+        public InspectionActivity? InspectionActivity { get; set; }
 
         ///<summary>
         ///Cross-section survey activity
         ///</summary>
         [ApiMember(DataType="array", Description="Cross-section survey activity")]
-        public List<CrossSectionSurveyActivity> CrossSectionSurveyActivity { get; set; }
+        public List<CrossSectionSurveyActivity>? CrossSectionSurveyActivity { get; set; }
 
         ///<summary>
         ///Level survey activity
         ///</summary>
         [ApiMember(DataType="LevelSurveyActivity", Description="Level survey activity")]
-        public LevelSurveyActivity LevelSurveyActivity { get; set; }
+        public LevelSurveyActivity? LevelSurveyActivity { get; set; }
 
         ///<summary>
         ///Approval
         ///</summary>
         [ApiMember(DataType="FieldVisitApproval", Description="Approval")]
-        public FieldVisitApproval Approval { get; set; }
+        public FieldVisitApproval? Approval { get; set; }
 
         ///<summary>
         ///Summary results for a requested datum conversion
         ///</summary>
         [ApiMember(DataType="DatumConversionResult", Description="Summary results for a requested datum conversion")]
-        public DatumConversionResult DatumConversionResult { get; set; }
+        public DatumConversionResult? DatumConversionResult { get; set; }
 
         ///<summary>
         ///Hydraulic Test Activities
         ///</summary>
         [ApiMember(DataType="array", Description="Hydraulic Test Activities")]
-        public List<HydraulicTestActivity> HydraulicTestActivities { get; set; }
+        public List<HydraulicTestActivity>? HydraulicTestActivities { get; set; }
 
         ///<summary>
         ///Well integrity activity
         ///</summary>
         [ApiMember(DataType="WellIntegrityActivity", Description="Well integrity activity")]
-        public WellIntegrityActivity WellIntegrityActivity { get; set; }
+        public WellIntegrityActivity? WellIntegrityActivity { get; set; }
 
         ///<summary>
         ///Extended attributes
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attributes")]
-        public IList<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public IList<ExtendedAttribute>? ExtendedAttributes { get; set; }
     }
 
     public class FieldVisitDescriptionListServiceResponse
         : PublishServiceResponse
     {
-        public FieldVisitDescriptionListServiceResponse()
-        {
-            FieldVisitDescriptions = new List<FieldVisitDescription>{};
-            DeletedFieldVisitDescriptions = new List<FieldVisitDescription>{};
-        }
-
         ///<summary>
         ///Field visit descriptions
         ///</summary>
         [ApiMember(DataType="array", Description="Field visit descriptions")]
-        public List<FieldVisitDescription> FieldVisitDescriptions { get; set; }
+        public List<FieldVisitDescription>? FieldVisitDescriptions { get; set; }
 
         ///<summary>
         ///Field visits that have been deleted since the requested ChangesSinceToken
         ///</summary>
         [ApiMember(DataType="array", Description="Field visits that have been deleted since the requested ChangesSinceToken")]
-        public List<FieldVisitDescription> DeletedFieldVisitDescriptions { get; set; }
+        public List<FieldVisitDescription>? DeletedFieldVisitDescriptions { get; set; }
 
         ///<summary>
         ///Next token
@@ -7771,63 +7464,43 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitReadingsByLocationServiceResponse
         : PublishServiceResponse
     {
-        public FieldVisitReadingsByLocationServiceResponse()
-        {
-            FieldVisitReadings = new List<FieldVisitReading>{};
-        }
-
         ///<summary>
         ///Field visit readings
         ///</summary>
         [ApiMember(DataType="array", Description="Field visit readings")]
-        public List<FieldVisitReading> FieldVisitReadings { get; set; }
+        public List<FieldVisitReading>? FieldVisitReadings { get; set; }
     }
 
     public class GradeListServiceResponse
         : PublishServiceResponse
     {
-        public GradeListServiceResponse()
-        {
-            Grades = new List<GradeMetadata>{};
-        }
-
         ///<summary>
         ///Grades
         ///</summary>
         [ApiMember(DataType="array", Description="Grades")]
-        public List<GradeMetadata> Grades { get; set; }
+        public List<GradeMetadata>? Grades { get; set; }
     }
 
     public class LocationDataServiceResponse
         : PublishServiceResponse
     {
-        public LocationDataServiceResponse()
-        {
-            Tags = new List<TagMetadata>{};
-            ExtendedAttributes = new List<ExtendedAttribute>{};
-            LocationRemarks = new List<LocationRemark>{};
-            LocationNotes = new List<LocationNote>{};
-            Attachments = new List<Attachment>{};
-            ReferencePoints = new List<ReferencePoint>{};
-        }
-
         ///<summary>
         ///Location name
         ///</summary>
         [ApiMember(Description="Location name")]
-        public string LocationName { get; set; }
+        public string? LocationName { get; set; }
 
         ///<summary>
         ///Description
         ///</summary>
         [ApiMember(Description="Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         ///<summary>
         ///Identifier
         ///</summary>
         [ApiMember(Description="Identifier")]
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         ///<summary>
         ///Unique id
@@ -7839,7 +7512,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Location type
         ///</summary>
         [ApiMember(Description="Location type")]
-        public string LocationType { get; set; }
+        public string? LocationType { get; set; }
 
         ///<summary>
         ///DEPRECATED: External locations are no longer supported; value always returns false.
@@ -7869,7 +7542,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Elevation units
         ///</summary>
         [ApiMember(Description="Elevation units")]
-        public string ElevationUnits { get; set; }
+        public string? ElevationUnits { get; set; }
 
         ///<summary>
         ///Elevation
@@ -7887,64 +7560,59 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Tags
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
-        public List<TagMetadata> Tags { get; set; }
+        public List<TagMetadata>? Tags { get; set; }
 
         ///<summary>
         ///Extended attributes
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attributes")]
-        public List<ExtendedAttribute> ExtendedAttributes { get; set; }
+        public List<ExtendedAttribute>? ExtendedAttributes { get; set; }
 
         ///<summary>
         ///Location remarks
         ///</summary>
         [ApiMember(DataType="array", Description="Location remarks")]
-        public List<LocationRemark> LocationRemarks { get; set; }
+        public List<LocationRemark>? LocationRemarks { get; set; }
 
         ///<summary>
         ///Location notes
         ///</summary>
         [ApiMember(DataType="array", Description="Location notes")]
-        public List<LocationNote> LocationNotes { get; set; }
+        public List<LocationNote>? LocationNotes { get; set; }
 
         ///<summary>
         ///Attachments
         ///</summary>
         [ApiMember(DataType="array", Description="Attachments")]
-        public List<Attachment> Attachments { get; set; }
+        public List<Attachment>? Attachments { get; set; }
 
         ///<summary>
         ///Location datum
         ///</summary>
         [ApiMember(DataType="LocationDatum", Description="Location datum")]
-        public LocationDatum LocationDatum { get; set; }
+        public LocationDatum? LocationDatum { get; set; }
 
         ///<summary>
         ///Reference points
         ///</summary>
         [ApiMember(DataType="array", Description="Reference points")]
-        public List<ReferencePoint> ReferencePoints { get; set; }
+        public List<ReferencePoint>? ReferencePoints { get; set; }
 
         ///<summary>
         ///Property Bag
         ///</summary>
         [ApiMember(Description="Property Bag")]
-        public string PropertyBag { get; set; }
+        public string? PropertyBag { get; set; }
     }
 
     public class LocationDescriptionListServiceResponse
         : PublishServiceResponse
     {
-        public LocationDescriptionListServiceResponse()
-        {
-            LocationDescriptions = new List<LocationDescription>{};
-        }
-
         ///<summary>
         ///Location descriptions
         ///</summary>
         [ApiMember(DataType="array", Description="Location descriptions")]
-        public List<LocationDescription> LocationDescriptions { get; set; }
+        public List<LocationDescription>? LocationDescriptions { get; set; }
 
         ///<summary>
         ///Next token
@@ -7956,22 +7624,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class LocationNotesServiceResponse
         : PublishServiceResponse
     {
-        public LocationNotesServiceResponse()
-        {
-            LocationNotes = new List<LocationNote>{};
-        }
-
         ///<summary>
         ///Location name
         ///</summary>
         [ApiMember(Description="Location name")]
-        public string LocationName { get; set; }
+        public string? LocationName { get; set; }
 
         ///<summary>
         ///Location identifier
         ///</summary>
         [ApiMember(Description="Location identifier")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Location unique id
@@ -7983,7 +7646,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Location notes
         ///</summary>
         [ApiMember(DataType="array", Description="Location notes")]
-        public List<LocationNote> LocationNotes { get; set; }
+        public List<LocationNote>? LocationNotes { get; set; }
     }
 
     public class MetadataChangeTransactionListServiceResponse
@@ -7993,16 +7656,11 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Metadata change transactions
         ///</summary>
         [ApiMember(DataType="array", Description="Metadata change transactions")]
-        public IList<MetadataChangeTransaction> MetadataChangeTransactions { get; set; }
+        public IList<MetadataChangeTransaction>? MetadataChangeTransactions { get; set; }
     }
 
     public class MonitoringMethodListServiceResponse
     {
-        public MonitoringMethodListServiceResponse()
-        {
-            MonitoringMethods = new List<MonitoringMethod>{};
-        }
-
         ///<summary>
         ///Response version
         ///</summary>
@@ -8019,43 +7677,33 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Summary
         ///</summary>
         [ApiMember(Description="Summary")]
-        public string Summary { get; set; }
+        public string? Summary { get; set; }
 
         ///<summary>
         ///Monitoring methods
         ///</summary>
         [ApiMember(DataType="array", Description="Monitoring methods")]
-        public List<MonitoringMethod> MonitoringMethods { get; set; }
+        public List<MonitoringMethod>? MonitoringMethods { get; set; }
     }
 
     public class ParameterListServiceResponse
         : PublishServiceResponse
     {
-        public ParameterListServiceResponse()
-        {
-            Parameters = new List<ParameterMetadata>{};
-        }
-
         ///<summary>
         ///Parameters
         ///</summary>
         [ApiMember(DataType="array", Description="Parameters")]
-        public List<ParameterMetadata> Parameters { get; set; }
+        public List<ParameterMetadata>? Parameters { get; set; }
     }
 
     public class ProcessorListServiceResponse
         : PublishServiceResponse
     {
-        public ProcessorListServiceResponse()
-        {
-            Processors = new List<Processor>{};
-        }
-
         ///<summary>
         ///Processors
         ///</summary>
         [ApiMember(DataType="array", Description="Processors")]
-        public List<Processor> Processors { get; set; }
+        public List<Processor>? Processors { get; set; }
     }
 
     public class PublishServiceResponse
@@ -8076,22 +7724,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Summary
         ///</summary>
         [ApiMember(Description="Summary")]
-        public string Summary { get; set; }
+        public string? Summary { get; set; }
     }
 
     public class QualifierListServiceResponse
         : PublishServiceResponse
     {
-        public QualifierListServiceResponse()
-        {
-            Qualifiers = new List<QualifierMetadata>{};
-        }
-
         ///<summary>
         ///Qualifiers
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifiers")]
-        public List<QualifierMetadata> Qualifiers { get; set; }
+        public List<QualifierMetadata>? Qualifiers { get; set; }
     }
 
     public class RatingCurveListServiceResponse
@@ -8101,13 +7744,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Rating curves
         ///</summary>
         [ApiMember(DataType="array", Description="Rating curves")]
-        public IList<RatingCurve> RatingCurves { get; set; }
+        public IList<RatingCurve>? RatingCurves { get; set; }
 
         ///<summary>
         ///Approvals
         ///</summary>
         [ApiMember(DataType="array", Description="Approvals")]
-        public IList<Approval> Approvals { get; set; }
+        public IList<Approval>? Approvals { get; set; }
     }
 
     public class RatingModelDescriptionListServiceResponse
@@ -8117,7 +7760,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Rating model descriptions
         ///</summary>
         [ApiMember(DataType="array", Description="Rating model descriptions")]
-        public IList<RatingModelDescription> RatingModelDescriptions { get; set; }
+        public IList<RatingModelDescription>? RatingModelDescriptions { get; set; }
 
         ///<summary>
         ///Next token
@@ -8129,11 +7772,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelEffectiveShiftsByStageValuesServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelEffectiveShiftsByStageValuesServiceResponse()
-        {
-            EffectiveShiftValues = new List<Nullable<Double>>{};
-        }
-
         ///<summary>
         ///Timestamp
         ///</summary>
@@ -8144,134 +7782,93 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Effective shift values
         ///</summary>
         [ApiMember(DataType="array", Description="Effective shift values")]
-        public List<Nullable<Double>> EffectiveShiftValues { get; set; }
+        public List<Nullable<Double>>? EffectiveShiftValues { get; set; }
     }
 
     public class RatingModelEffectiveShiftsServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelEffectiveShiftsServiceResponse()
-        {
-            EffectiveShifts = new List<EffectiveShift>{};
-        }
-
         ///<summary>
         ///Effective shifts
         ///</summary>
         [ApiMember(DataType="array", Description="Effective shifts")]
-        public List<EffectiveShift> EffectiveShifts { get; set; }
+        public List<EffectiveShift>? EffectiveShifts { get; set; }
     }
 
     public class RatingModelInputValuesServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelInputValuesServiceResponse()
-        {
-            InputValues = new List<Nullable<Double>>{};
-        }
-
         ///<summary>
         ///Input values
         ///</summary>
         [ApiMember(DataType="array", Description="Input values")]
-        public List<Nullable<Double>> InputValues { get; set; }
+        public List<Nullable<Double>>? InputValues { get; set; }
     }
 
     public class RatingModelOutputValuesServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelOutputValuesServiceResponse()
-        {
-            OutputValues = new List<Nullable<Double>>{};
-        }
-
         ///<summary>
         ///Output values
         ///</summary>
         [ApiMember(DataType="array", Description="Output values")]
-        public List<Nullable<Double>> OutputValues { get; set; }
+        public List<Nullable<Double>>? OutputValues { get; set; }
     }
 
     public class ReportListServiceResponse
         : PublishServiceResponse
     {
-        public ReportListServiceResponse()
-        {
-            Reports = new List<Report>{};
-        }
-
         ///<summary>
         ///Reports
         ///</summary>
         [ApiMember(DataType="array", Description="Reports")]
-        public List<Report> Reports { get; set; }
+        public List<Report>? Reports { get; set; }
     }
 
     public class RoundServiceResponse
         : PublishServiceResponse
     {
-        public RoundServiceResponse()
-        {
-            Data = new List<string>{};
-        }
-
         ///<summary>
         ///Values rounded as requested
         ///</summary>
         [ApiMember(DataType="array", Description="Values rounded as requested")]
-        public List<string> Data { get; set; }
+        public List<string>? Data { get; set; }
     }
 
     public class SensorsAndGaugesServiceResponse
         : PublishServiceResponse
     {
-        public SensorsAndGaugesServiceResponse()
-        {
-            MonitoringMethods = new List<LocationMonitoringMethod>{};
-        }
-
         ///<summary>
         ///Monitoring methods
         ///</summary>
         [ApiMember(DataType="array", Description="Monitoring methods")]
-        public List<LocationMonitoringMethod> MonitoringMethods { get; set; }
+        public List<LocationMonitoringMethod>? MonitoringMethods { get; set; }
     }
 
     public class TagListServiceResponse
         : PublishServiceResponse
     {
-        public TagListServiceResponse()
-        {
-            Tags = new List<TagDefinition>{};
-        }
-
         ///<summary>
         ///Tags
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
-        public List<TagDefinition> Tags { get; set; }
+        public List<TagDefinition>? Tags { get; set; }
     }
 
     public class TimeAlignedDataServiceResponse
         : PublishServiceResponse
     {
-        public TimeAlignedDataServiceResponse()
-        {
-            TimeSeries = new List<TimeAlignedTimeSeriesInfo>{};
-            Points = new List<TimeAlignedPoint>{};
-        }
-
         ///<summary>
         ///Summary info of the retrieved time-series
         ///</summary>
         [ApiMember(DataType="array", Description="Summary info of the retrieved time-series")]
-        public List<TimeAlignedTimeSeriesInfo> TimeSeries { get; set; }
+        public List<TimeAlignedTimeSeriesInfo>? TimeSeries { get; set; }
 
         ///<summary>
         ///Time range
         ///</summary>
         [ApiMember(DataType="TimeRange", Description="Time range")]
-        public TimeRange TimeRange { get; set; }
+        public TimeRange? TimeRange { get; set; }
 
         ///<summary>
         ///Number of points
@@ -8283,7 +7880,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Points
         ///</summary>
         [ApiMember(DataType="array", Description="Points")]
-        public List<TimeAlignedPoint> Points { get; set; }
+        public List<TimeAlignedPoint>? Points { get; set; }
     }
 
     public class TimeSeriesApprovalsTransactionListServiceResponse
@@ -8293,24 +7890,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Approvals transactions
         ///</summary>
         [ApiMember(DataType="array", Description="Approvals transactions")]
-        public IList<ApprovalsTransaction> ApprovalsTransactions { get; set; }
+        public IList<ApprovalsTransaction>? ApprovalsTransactions { get; set; }
     }
 
     public class TimeSeriesDataServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesDataServiceResponse()
-        {
-            Approvals = new List<Approval>{};
-            Qualifiers = new List<Qualifier>{};
-            Methods = new List<Method>{};
-            Grades = new List<Grade>{};
-            GapTolerances = new List<GapTolerance>{};
-            InterpolationTypes = new List<InterpolationType>{};
-            Notes = new List<Note>{};
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///Unique id
         ///</summary>
@@ -8321,19 +7906,19 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Parameter
         ///</summary>
         [ApiMember(Description="Parameter")]
-        public string Parameter { get; set; }
+        public string? Parameter { get; set; }
 
         ///<summary>
         ///Label
         ///</summary>
         [ApiMember(Description="Label")]
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         ///<summary>
         ///Location identifier
         ///</summary>
         [ApiMember(Description="Location identifier")]
-        public string LocationIdentifier { get; set; }
+        public string? LocationIdentifier { get; set; }
 
         ///<summary>
         ///Num points
@@ -8345,101 +7930,86 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Unit
         ///</summary>
         [ApiMember(Description="Unit")]
-        public string Unit { get; set; }
+        public string? Unit { get; set; }
 
         ///<summary>
         ///Approvals
         ///</summary>
         [ApiMember(DataType="array", Description="Approvals")]
-        public List<Approval> Approvals { get; set; }
+        public List<Approval>? Approvals { get; set; }
 
         ///<summary>
         ///Qualifiers
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifiers")]
-        public List<Qualifier> Qualifiers { get; set; }
+        public List<Qualifier>? Qualifiers { get; set; }
 
         ///<summary>
         ///Methods
         ///</summary>
         [ApiMember(DataType="array", Description="Methods")]
-        public List<Method> Methods { get; set; }
+        public List<Method>? Methods { get; set; }
 
         ///<summary>
         ///Grades
         ///</summary>
         [ApiMember(DataType="array", Description="Grades")]
-        public List<Grade> Grades { get; set; }
+        public List<Grade>? Grades { get; set; }
 
         ///<summary>
         ///Gap tolerances
         ///</summary>
         [ApiMember(DataType="array", Description="Gap tolerances")]
-        public List<GapTolerance> GapTolerances { get; set; }
+        public List<GapTolerance>? GapTolerances { get; set; }
 
         ///<summary>
         ///Interpolation types
         ///</summary>
         [ApiMember(DataType="array", Description="Interpolation types")]
-        public List<InterpolationType> InterpolationTypes { get; set; }
+        public List<InterpolationType>? InterpolationTypes { get; set; }
 
         ///<summary>
         ///Notes
         ///</summary>
         [ApiMember(DataType="array", Description="Notes")]
-        public List<Note> Notes { get; set; }
+        public List<Note>? Notes { get; set; }
 
         ///<summary>
         ///Time range
         ///</summary>
         [ApiMember(DataType="StatisticalTimeRange", Description="Time range")]
-        public StatisticalTimeRange TimeRange { get; set; }
+        public StatisticalTimeRange? TimeRange { get; set; }
 
         ///<summary>
         ///Points
         ///</summary>
         [ApiMember(DataType="array", Description="Points")]
-        public List<TimeSeriesPoint> Points { get; set; }
+        public List<TimeSeriesPoint>? Points { get; set; }
     }
 
     public class TimeSeriesDescriptionListByUniqueIdServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesDescriptionListByUniqueIdServiceResponse()
-        {
-            TimeSeriesDescriptions = new List<TimeSeriesDescription>{};
-        }
-
         ///<summary>
         ///Time series descriptions
         ///</summary>
         [ApiMember(DataType="array", Description="Time series descriptions")]
-        public List<TimeSeriesDescription> TimeSeriesDescriptions { get; set; }
+        public List<TimeSeriesDescription>? TimeSeriesDescriptions { get; set; }
     }
 
     public class TimeSeriesDescriptionListServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesDescriptionListServiceResponse()
-        {
-            TimeSeriesDescriptions = new List<TimeSeriesDescription>{};
-        }
-
         ///<summary>
         ///Time series descriptions
         ///</summary>
         [ApiMember(DataType="array", Description="Time series descriptions")]
-        public List<TimeSeriesDescription> TimeSeriesDescriptions { get; set; }
+        public List<TimeSeriesDescription>? TimeSeriesDescriptions { get; set; }
     }
 
     public class TimeSeriesUniqueIdListServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesUniqueIdListServiceResponse()
-        {
-            TimeSeriesUniqueIds = new List<TimeSeriesUniqueIds>{};
-        }
-
         ///<summary>
         ///Token expired
         ///</summary>
@@ -8456,7 +8026,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Time series unique ids
         ///</summary>
         [ApiMember(DataType="array", Description="Time series unique ids")]
-        public List<TimeSeriesUniqueIds> TimeSeriesUniqueIds { get; set; }
+        public List<TimeSeriesUniqueIds>? TimeSeriesUniqueIds { get; set; }
     }
 
     public class TrendLineAnalysisServiceResponse
@@ -8466,22 +8036,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Trend line analysis
         ///</summary>
         [ApiMember(DataType="TrendLineAnalysis", Description="Trend line analysis")]
-        public TrendLineAnalysis TrendLineAnalysis { get; set; }
+        public TrendLineAnalysis? TrendLineAnalysis { get; set; }
     }
 
     public class UnitListServiceResponse
         : PublishServiceResponse
     {
-        public UnitListServiceResponse()
-        {
-            Units = new List<UnitMetadata>{};
-        }
-
         ///<summary>
         ///Units
         ///</summary>
         [ApiMember(DataType="array", Description="Units")]
-        public List<UnitMetadata> Units { get; set; }
+        public List<UnitMetadata>? Units { get; set; }
     }
 
 }
@@ -8490,6 +8055,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.4.67.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.1.10.0");
     }
 }
