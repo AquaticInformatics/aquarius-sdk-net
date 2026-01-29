@@ -37,7 +37,7 @@ ApiVersion=`echo "$ApiVersionJson" | sed -e "s/{\"ApiVersion\":\"//" -e "s/\"}//
 
 echo "Generating $OutputFile ..."
 OutputFile=$OutputPath/$EndPointName.cs
-curl -s -o "$OutputFile" "$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartial=false&MakeVirtual=false&AddNullableAnnotations=false&InitializeCollections=true&ExportValueTypes=true&GlobalNamespace=$GlobalNamespace&DefaultNamespaces=System,System.Collections.Generic,ServiceStack,ServiceStack.DataAnnotations,ServiceStack.Web,NodaTime" || exit_abort "Can't read endpoint"
+curl -s -o "$OutputFile" "$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartial=false&MakeVirtual=false&AddNullableAnnotations=false&InitializeCollections=false&ExportValueTypes=true&GlobalNamespace=$GlobalNamespace&DefaultNamespaces=System,System.Collections.Generic,ServiceStack,ServiceStack.DataAnnotations,ServiceStack.Web,NodaTime" || exit_abort "Can't read endpoint"
 
 # 2021.1 added a hidden IFileUploadRequest.IsFileRequired property with [ApiMember(ExcludeInSchema = true)][IgnoreDataMember] attributes.
 # The built-in ServiceStack code generator endpoint doesn't respect these attributes.

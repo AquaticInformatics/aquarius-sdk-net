@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-01-29 11:34:46
+Date: 2026-01-29 12:26:27
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -17,7 +17,7 @@ AddNullableAnnotations: False
 //AddGeneratedCodeAttributes: False
 //AddResponseStatus: False
 //AddImplicitVersion: 
-InitializeCollections: True
+InitializeCollections: False
 ExportValueTypes: True
 //IncludeTypes: 
 //ExcludeTypes: 
@@ -566,13 +566,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Set of pick-list values. Required if ValueType is PickList. Values must be distinct.
         ///</summary>
         [ApiMember(DataType="array", Description="Set of pick-list values. Required if ValueType is PickList. Values must be distinct.")]
-        public List<string> PickListValues { get; set; } = [];
+        public List<string> PickListValues { get; set; }
 
         ///<summary>
         ///Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attribute applicability, select one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.")]
-        public List<ExtendedAttributeApplicability> Applicability { get; set; } = [];
+        public List<ExtendedAttributeApplicability> Applicability { get; set; }
 
         ///<summary>
         ///Flag which defines if extended attribute is VisibleInDatasetList
@@ -618,7 +618,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits
         ///</summary>
         [ApiMember(AllowMultiple=true, DataType="array", Description="If set, return only extended attribute definitions with specified applicability, select from: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits")]
-        public List<ExtendedAttributeApplicability> Applicability { get; set; } = [];
+        public List<ExtendedAttributeApplicability> Applicability { get; set; }
     }
 
     [Route("/extendedattributes", "POST")]
@@ -1051,7 +1051,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Unique IDs of Extended Attribute definitions associated with this location type
         ///</summary>
         [ApiMember(DataType="array", Description="Unique IDs of Extended Attribute definitions associated with this location type")]
-        public List<Guid> ExtendedAttributeDefinitionIds { get; set; } = [];
+        public List<Guid> ExtendedAttributeDefinitionIds { get; set; }
     }
 
     [Route("/locations", "POST")]
@@ -1162,13 +1162,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///DEPRECATED: use Tags instead
         ///</summary>
         [ApiMember(DataType="array", Description="DEPRECATED: use Tags instead")]
-        public List<Guid> TagUniqueIds { get; set; } = [];
+        public List<Guid> TagUniqueIds { get; set; }
 
         ///<summary>
         ///Tags to be assigned to the location with optional values; an empty list means the location will have no tags assigned to it.
         ///</summary>
         [ApiMember(DataType="array", Description="Tags to be assigned to the location with optional values; an empty list means the location will have no tags assigned to it.")]
-        public List<ApplyTagRequest> Tags { get; set; } = [];
+        public List<ApplyTagRequest> Tags { get; set; }
     }
 
     [Route("/locationtypes/{UniqueId}", "PUT")]
@@ -1674,7 +1674,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifier group identifiers - if no groups are specified, the qualifier will be assigned to the 'Default' qualifier group")]
-        public List<string> GroupIdentifiers { get; set; } = [];
+        public List<string> GroupIdentifiers { get; set; }
     }
 
     [Route("/grades/{GradeCode}", "DELETE")]
@@ -1980,7 +1980,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///List of approval transitions this role grants permission to perform.
         ///</summary>
         [ApiMember(DataType="array", Description="List of approval transitions this role grants permission to perform.")]
-        public List<RoleApprovalTransition> RoleApprovalTransitions { get; set; } = [];
+        public List<RoleApprovalTransition> RoleApprovalTransitions { get; set; }
 
         ///<summary>
         ///True if role grants permission to: Read data and generate reports.
@@ -2055,7 +2055,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'
         ///</summary>
         [ApiMember(DataType="array", Description="List of approval transitions this role grants permission to perform. Format: '&lt;FromLevel&gt; &lt;ToLevel&gt;'. Example: '900 1200'")]
-        public List<string> RoleApprovalTransitions { get; set; } = [];
+        public List<string> RoleApprovalTransitions { get; set; }
 
         ///<summary>
         ///True if role grants permission to: Read data and generate reports.
@@ -2223,7 +2223,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Tags to be assigned to the sensor with optional values
         ///</summary>
         [ApiMember(DataType="array", Description="Tags to be assigned to the sensor with optional values")]
-        public List<ApplyTagRequest> Tags { get; set; } = [];
+        public List<ApplyTagRequest> Tags { get; set; }
     }
 
     [Route("/settings/{Group}/{Key}", "DELETE")]
@@ -2732,13 +2732,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Set of pick-list values. Required if ValueType is PickList. Values must be distinct.
         ///</summary>
         [ApiMember(DataType="array", Description="Set of pick-list values. Required if ValueType is PickList. Values must be distinct.")]
-        public List<string> PickListValues { get; set; } = [];
+        public List<string> PickListValues { get; set; }
 
         ///<summary>
         ///If set, create tag with specified applicability, selected from one or more: AppliesToAttachments, AppliesToLocations, AppliesToLocationNotes, AppliesToReports and AppliesToSensorsGauges.  When omitted, the tag is applicable to all.
         ///</summary>
         [ApiMember(DataType="array", Description="If set, create tag with specified applicability, selected from one or more: AppliesToAttachments, AppliesToLocations, AppliesToLocationNotes, AppliesToReports and AppliesToSensorsGauges.  When omitted, the tag is applicable to all.")]
-        public List<TagApplicability> Applicability { get; set; } = [];
+        public List<TagApplicability> Applicability { get; set; }
     }
 
     public class DeleteNameTagBase
@@ -4245,7 +4245,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of approval levels
         ///</summary>
         [ApiMember(DataType="array", Description="The list of approval levels")]
-        public List<ApprovalLevel> Results { get; set; } = [];
+        public List<ApprovalLevel> Results { get; set; }
     }
 
     public class AttributeVariance
@@ -4281,7 +4281,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Summary of attribute changes
         ///</summary>
         [ApiMember(DataType="array", Description="Summary of attribute changes")]
-        public List<AttributeVariance> AttributeChanges { get; set; } = [];
+        public List<AttributeVariance> AttributeChanges { get; set; }
     }
 
     public class AuditEvent
@@ -4323,7 +4323,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of audits
         ///</summary>
         [ApiMember(DataType="array", Description="The list of audits")]
-        public List<Audit> Results { get; set; } = [];
+        public List<Audit> Results { get; set; }
     }
 
     public class Channel
@@ -4347,7 +4347,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of channels
         ///</summary>
         [ApiMember(DataType="array", Description="The list of channels")]
-        public List<Channel> Results { get; set; } = [];
+        public List<Channel> Results { get; set; }
     }
 
     public class CodeTableResponse
@@ -4356,7 +4356,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of codes
         ///</summary>
         [ApiMember(DataType="array", Description="The list of codes")]
-        public List<CodeTable> Results { get; set; } = [];
+        public List<CodeTable> Results { get; set; }
     }
 
     public class ConfigurableDropDownListItem
@@ -4375,7 +4375,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of configurable drop-down list items
         ///</summary>
         [ApiMember(DataType="array", Description="The list of configurable drop-down list items")]
-        public List<ConfigurableDropDownListItem> Results { get; set; } = [];
+        public List<ConfigurableDropDownListItem> Results { get; set; }
     }
 
     public class DropDownList
@@ -4399,7 +4399,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of drop-down lists
         ///</summary>
         [ApiMember(DataType="array", Description="The list of drop-down lists")]
-        public List<DropDownList> Results { get; set; } = [];
+        public List<DropDownList> Results { get; set; }
     }
 
     public class ExtendedAttribute
@@ -4426,7 +4426,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Set of pick-list values if ValueType is PickList
         ///</summary>
         [ApiMember(DataType="array", Description="Set of pick-list values if ValueType is PickList")]
-        public List<string> PickListValues { get; set; } = [];
+        public List<string> PickListValues { get; set; }
 
         ///<summary>
         ///DEPRECATED: Use Applicability instead. True if extended attribute is applicable to Locations
@@ -4456,7 +4456,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.
         ///</summary>
         [ApiMember(DataType="array", Description="Extended attribute applicability, one of: AppliesToLocations, AppliesToLocationTypes, AppliesToTimeSeries, AppliesToVisits.")]
-        public List<ExtendedAttributeApplicability> Applicability { get; set; } = [];
+        public List<ExtendedAttributeApplicability> Applicability { get; set; }
 
         ///<summary>
         ///True if extended attribute is VisibleInDatasetList
@@ -4576,7 +4576,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of extended attributes
         ///</summary>
         [ApiMember(DataType="array", Description="The list of extended attributes")]
-        public List<ExtendedAttribute> Results { get; set; } = [];
+        public List<ExtendedAttribute> Results { get; set; }
     }
 
     public class ExtendedAttributeValue
@@ -4645,7 +4645,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of registered field data plug-ins
         ///</summary>
         [ApiMember(DataType="array", Description="The list of registered field data plug-ins")]
-        public List<FieldDataPlugin> Results { get; set; } = [];
+        public List<FieldDataPlugin> Results { get; set; }
     }
 
     public class FixedDropDownListItem
@@ -4681,7 +4681,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of fixed drop-down list items
         ///</summary>
         [ApiMember(DataType="array", Description="The list of fixed drop-down list items")]
-        public List<FixedDropDownListItem> Results { get; set; } = [];
+        public List<FixedDropDownListItem> Results { get; set; }
     }
 
     public class Grade
@@ -4723,7 +4723,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of grades
         ///</summary>
         [ApiMember(DataType="array", Description="The list of grades")]
-        public List<Grade> Results { get; set; } = [];
+        public List<Grade> Results { get; set; }
     }
 
     public class InterpolationTypeEntry
@@ -4753,7 +4753,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of interpolation types
         ///</summary>
         [ApiMember(DataType="array", Description="The list of interpolation types")]
-        public List<InterpolationTypeEntry> Results { get; set; } = [];
+        public List<InterpolationTypeEntry> Results { get; set; }
     }
 
     public class Location
@@ -4846,7 +4846,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Tags applied to this location
         ///</summary>
         [ApiMember(DataType="array", Description="Tags applied to this location")]
-        public List<AppliedTag> Tags { get; set; } = [];
+        public List<AppliedTag> Tags { get; set; }
 
         ///<summary>
         ///Extended attribute values
@@ -4928,7 +4928,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of assumed local datums for the location
         ///</summary>
         [ApiMember(DataType="array", Description="The list of assumed local datums for the location")]
-        public List<LocationDatumPeriod> Results { get; set; } = [];
+        public List<LocationDatumPeriod> Results { get; set; }
     }
 
     public class LocationFolder
@@ -4976,7 +4976,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of location folders
         ///</summary>
         [ApiMember(DataType="array", Description="The list of location folders")]
-        public List<LocationFolder> Results { get; set; } = [];
+        public List<LocationFolder> Results { get; set; }
     }
 
     public class LocationFolderUserRole
@@ -5036,7 +5036,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///List of user roles applicable to this location folder
         ///</summary>
         [ApiMember(DataType="array", Description="List of user roles applicable to this location folder")]
-        public List<LocationFolderUserRole> Roles { get; set; } = [];
+        public List<LocationFolderUserRole> Roles { get; set; }
     }
 
     public class LocationType
@@ -5084,7 +5084,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of location types
         ///</summary>
         [ApiMember(DataType="array", Description="The list of location types")]
-        public List<LocationType> Results { get; set; } = [];
+        public List<LocationType> Results { get; set; }
     }
 
     public class LocationUserRole
@@ -5109,7 +5109,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///List of user roles applicable to this location
         ///</summary>
         [ApiMember(DataType="array", Description="List of user roles applicable to this location")]
-        public List<LocationUserRole> Roles { get; set; } = [];
+        public List<LocationUserRole> Roles { get; set; }
     }
 
     public class MonitoringMethod
@@ -5169,7 +5169,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of monitoring methods
         ///</summary>
         [ApiMember(DataType="array", Description="The list of monitoring methods")]
-        public List<MonitoringMethod> Results { get; set; } = [];
+        public List<MonitoringMethod> Results { get; set; }
     }
 
     public class NameTag
@@ -5193,7 +5193,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of tags
         ///</summary>
         [ApiMember(DataType="array", Description="The list of tags")]
-        public List<NameTag> Results { get; set; } = [];
+        public List<NameTag> Results { get; set; }
     }
 
     public class OnePlatformLocationsResponse
@@ -5202,7 +5202,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of One Platform locations
         ///</summary>
         [ApiMember(DataType="array", Description="The list of One Platform locations")]
-        public List<Location> Results { get; set; } = [];
+        public List<Location> Results { get; set; }
     }
 
     public class OnePlatformTimeSeriesResponse
@@ -5211,7 +5211,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of One Platform time-series
         ///</summary>
         [ApiMember(DataType="array", Description="The list of One Platform time-series")]
-        public List<TimeSeries> Results { get; set; } = [];
+        public List<TimeSeries> Results { get; set; }
     }
 
     public class OpenIdConnectRelyingPartyConfiguration
@@ -5356,7 +5356,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of parameters
         ///</summary>
         [ApiMember(DataType="array", Description="The list of parameters")]
-        public List<Parameter> Results { get; set; } = [];
+        public List<Parameter> Results { get; set; }
     }
 
     public class PopulatedUnitGroup
@@ -5375,7 +5375,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of unit groups
         ///</summary>
         [ApiMember(DataType="array", Description="The list of unit groups")]
-        public List<PopulatedUnitGroup> Results { get; set; } = [];
+        public List<PopulatedUnitGroup> Results { get; set; }
     }
 
     public class QualifierGroupResponse
@@ -5396,7 +5396,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Qualifier codes in group
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifier codes in group")]
-        public List<string> QualifierCodeList { get; set; } = [];
+        public List<string> QualifierCodeList { get; set; }
     }
 
     public class QualifierGroupsResponse
@@ -5405,7 +5405,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of qualifier groups
         ///</summary>
         [ApiMember(DataType="array", Description="The list of qualifier groups")]
-        public List<QualifierGroupResponse> Results { get; set; } = [];
+        public List<QualifierGroupResponse> Results { get; set; }
     }
 
     public class QualifierResponse
@@ -5430,7 +5430,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of qualifiers
         ///</summary>
         [ApiMember(DataType="array", Description="The list of qualifiers")]
-        public List<QualifierResponse> Results { get; set; } = [];
+        public List<QualifierResponse> Results { get; set; }
     }
 
     public class RecurringReport
@@ -5472,7 +5472,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of recurring reports
         ///</summary>
         [ApiMember(DataType="array", Description="The list of recurring reports")]
-        public List<RecurringReport> Results { get; set; } = [];
+        public List<RecurringReport> Results { get; set; }
     }
 
     public class ReferencePoint
@@ -5488,7 +5488,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Periods of applicablity for this reference point
         ///</summary>
         [ApiMember(DataType="array", Description="Periods of applicablity for this reference point")]
-        public List<ReferencePointPeriod> ReferencePointPeriods { get; set; } = [];
+        public List<ReferencePointPeriod> ReferencePointPeriods { get; set; }
     }
 
     public class ReferencePointPeriod
@@ -5570,7 +5570,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of reference points
         ///</summary>
         [ApiMember(DataType="array", Description="The list of reference points")]
-        public List<ReferencePoint> Results { get; set; } = [];
+        public List<ReferencePoint> Results { get; set; }
     }
 
     public class ReportPlugin
@@ -5612,7 +5612,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of registered reports
         ///</summary>
         [ApiMember(DataType="array", Description="The list of registered reports")]
-        public List<ReportPlugin> Results { get; set; } = [];
+        public List<ReportPlugin> Results { get; set; }
     }
 
     public class Role
@@ -5633,7 +5633,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///List of approval transitions this role grants permission to perform.
         ///</summary>
         [ApiMember(DataType="array", Description="List of approval transitions this role grants permission to perform.")]
-        public List<RoleApprovalTransition> RoleApprovalTransitions { get; set; } = [];
+        public List<RoleApprovalTransition> RoleApprovalTransitions { get; set; }
 
         ///<summary>
         ///True if role grants permission to: Read data and generate reports.
@@ -5727,7 +5727,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of roles
         ///</summary>
         [ApiMember(DataType="array", Description="The list of roles")]
-        public List<Role> Results { get; set; } = [];
+        public List<Role> Results { get; set; }
     }
 
     public class Sensor
@@ -5808,7 +5808,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Tags
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
-        public List<AppliedTag> Tags { get; set; } = [];
+        public List<AppliedTag> Tags { get; set; }
     }
 
     public class Setting
@@ -5856,7 +5856,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of settings
         ///</summary>
         [ApiMember(DataType="array", Description="The list of settings")]
-        public List<Setting> Results { get; set; } = [];
+        public List<Setting> Results { get; set; }
     }
 
     public class StandardDatum
@@ -5874,7 +5874,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of standard datums
         ///</summary>
         [ApiMember(DataType="array", Description="The list of standard datums")]
-        public List<StandardDatum> Results { get; set; } = [];
+        public List<StandardDatum> Results { get; set; }
     }
 
     public class StandardReferenceDatum
@@ -5928,7 +5928,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of Standard Reference Datums
         ///</summary>
         [ApiMember(DataType="array", Description="The list of Standard Reference Datums")]
-        public List<StandardReferenceDatum> Results { get; set; } = [];
+        public List<StandardReferenceDatum> Results { get; set; }
     }
 
     public class SubLocation
@@ -5958,7 +5958,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of sublocations
         ///</summary>
         [ApiMember(DataType="array", Description="The list of sublocations")]
-        public List<SubLocation> Results { get; set; } = [];
+        public List<SubLocation> Results { get; set; }
     }
 
     public class Tag
@@ -5985,7 +5985,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Set of pick-list values if ValueType is PickList
         ///</summary>
         [ApiMember(DataType="array", Description="Set of pick-list values if ValueType is PickList")]
-        public List<string> PickListValues { get; set; } = [];
+        public List<string> PickListValues { get; set; }
 
         ///<summary>
         ///DEPRECATED: Use Applicability instead. True if tag is applicable to Attachments
@@ -6021,7 +6021,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Tag applicability, any of: AppliesToAttachments, AppliesToLocations, AppliesToLocationNotes, AppliesToReports and AppliesToSensorsGauges.
         ///</summary>
         [ApiMember(DataType="array", Description="Tag applicability, any of: AppliesToAttachments, AppliesToLocations, AppliesToLocationNotes, AppliesToReports and AppliesToSensorsGauges.")]
-        public List<TagApplicability> Applicability { get; set; } = [];
+        public List<TagApplicability> Applicability { get; set; }
     }
 
     public class TagsResponse
@@ -6030,7 +6030,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of tags
         ///</summary>
         [ApiMember(DataType="array", Description="The list of tags")]
-        public List<Tag> Results { get; set; } = [];
+        public List<Tag> Results { get; set; }
     }
 
     public class ThresholdType
@@ -6072,7 +6072,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of threshold types
         ///</summary>
         [ApiMember(DataType="array", Description="The list of threshold types")]
-        public List<ThresholdType> Results { get; set; } = [];
+        public List<ThresholdType> Results { get; set; }
     }
 
     public class TimeSeries
@@ -6198,7 +6198,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of time series
         ///</summary>
         [ApiMember(DataType="array", Description="The list of time series")]
-        public List<TimeSeries> Results { get; set; } = [];
+        public List<TimeSeries> Results { get; set; }
     }
 
     public class Unit
@@ -6339,7 +6339,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of unit groups
         ///</summary>
         [ApiMember(DataType="array", Description="The list of unit groups")]
-        public List<UnitGroup> Results { get; set; } = [];
+        public List<UnitGroup> Results { get; set; }
     }
 
     public class UnitsResponse
@@ -6348,7 +6348,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of units
         ///</summary>
         [ApiMember(DataType="array", Description="The list of units")]
-        public List<Unit> Results { get; set; } = [];
+        public List<Unit> Results { get; set; }
     }
 
     public class User
@@ -6420,7 +6420,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///The list of users
         ///</summary>
         [ApiMember(DataType="array", Description="The list of users")]
-        public List<User> Results { get; set; } = [];
+        public List<User> Results { get; set; }
     }
 
 }

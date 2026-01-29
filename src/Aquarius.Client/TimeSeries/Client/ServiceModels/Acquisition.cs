@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-01-29 11:34:50
+Date: 2026-01-29 12:26:31
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Acquisition/v2
@@ -17,7 +17,7 @@ AddNullableAnnotations: False
 //AddGeneratedCodeAttributes: False
 //AddResponseStatus: False
 //AddImplicitVersion: 
-InitializeCollections: True
+InitializeCollections: False
 ExportValueTypes: True
 //IncludeTypes: 
 //ExcludeTypes: 
@@ -190,7 +190,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Tags to be assigned to the attachment with optional values; an empty list means the attachment will have no tags assigned to it.
         ///</summary>
         [ApiMember(DataType="array", Description="Tags to be assigned to the attachment with optional values; an empty list means the attachment will have no tags assigned to it.")]
-        public List<ApplyTagRequest> Tags { get; set; } = [];
+        public List<ApplyTagRequest> Tags { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/reflected", "POST")]
@@ -207,7 +207,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
         [ApiMember(DataType="array", Description="Points to append (can be empty). All points must lie within the time range")]
-        public List<TimeSeriesPoint> Points { get; set; } = [];
+        public List<TimeSeriesPoint> Points { get; set; }
 
         ///<summary>
         ///Time range to update. Any existing points in the time range will be overwritten
@@ -248,7 +248,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Unique IDs of source time-series displayed in report
         ///</summary>
         [ApiMember(DataType="array", Description="Unique IDs of source time-series displayed in report")]
-        public List<Guid> SourceTimeSeriesUniqueIds { get; set; } = [];
+        public List<Guid> SourceTimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Time range of source data displayed in report
@@ -266,7 +266,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Tags to be assigned to the report with optional values; an empty list means the report will have no tags assigned to it.
         ///</summary>
         [ApiMember(DataType="array", Description="Tags to be assigned to the report with optional values; an empty list means the report will have no tags assigned to it.")]
-        public List<ApplyTagRequest> Tags { get; set; } = [];
+        public List<ApplyTagRequest> Tags { get; set; }
 
         ///<summary>
         ///File
@@ -290,7 +290,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Points to append (can be empty)
         ///</summary>
         [ApiMember(DataType="array", Description="Points to append (can be empty)")]
-        public List<TimeSeriesPoint> Points { get; set; } = [];
+        public List<TimeSeriesPoint> Points { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/metadata/grade", "POST")]
@@ -353,7 +353,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
         [ApiMember(DataType="array", Description="Points to append (can be empty). All points must lie within the time range")]
-        public List<TimeSeriesPoint> Points { get; set; } = [];
+        public List<TimeSeriesPoint> Points { get; set; }
 
         ///<summary>
         ///Time range to delete before appending points
@@ -446,7 +446,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Qualifier codes
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifier codes")]
-        public List<string> Qualifiers { get; set; } = [];
+        public List<string> Qualifiers { get; set; }
     }
 
     public class AppendResponse
@@ -546,7 +546,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Tags applied to this attachment
         ///</summary>
         [ApiMember(DataType="array", Description="Tags applied to this attachment")]
-        public List<AppliedTag> Tags { get; set; } = [];
+        public List<AppliedTag> Tags { get; set; }
     }
 
     public class PostReportResponse
@@ -573,13 +573,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Relative URIs of created or modified visits
         ///</summary>
         [ApiMember(DataType="array", Description="Relative URIs of created or modified visits")]
-        public List<string> VisitUris { get; set; } = [];
+        public List<string> VisitUris { get; set; }
 
         ///<summary>
         ///Identifiers of created or modified visits
         ///</summary>
         [ApiMember(DataType="array", Description="Identifiers of created or modified visits")]
-        public List<string> VisitIdentifiers { get; set; } = [];
+        public List<string> VisitIdentifiers { get; set; }
 
         ///<summary>
         ///Registered field data plug-in that processed the file
