@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-01-29 12:26:22
+Date: 2026-01-29 13:26:32
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Publish/v2
@@ -6706,7 +6706,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///The input stage values to which the shift is to be applied
         ///</summary>
         [ApiMember(DataType="array", Description="The input stage values to which the shift is to be applied", IsRequired=true)]
-        public List<double> StageValues { get; set; } = [];
+        public List<double> StageValues { get; set; }
     }
 
     [Route("/GetRatingModelEffectiveShifts", "GET")]
@@ -6752,7 +6752,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Output values
         ///</summary>
         [ApiMember(DataType="array", Description="Output values", IsRequired=true)]
-        public List<double> OutputValues { get; set; } = [];
+        public List<double> OutputValues { get; set; }
 
         ///<summary>
         ///Effective time of the calculation. Defaults to the current time if not specified
@@ -6775,7 +6775,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///Input values
         ///</summary>
         [ApiMember(DataType="array", Description="Input values", IsRequired=true)]
-        public List<double> InputValues { get; set; } = [];
+        public List<double> InputValues { get; set; }
 
         ///<summary>
         ///Effective time of the calculation. Defaults to the current time if not specified
@@ -6881,7 +6881,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///A list of data values to be rounded and returned as strings
         ///</summary>
         [ApiMember(DataType="array", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
-        public List<double> Data { get; set; } = [];
+        public List<double> Data { get; set; }
     }
 
     [Route("/Round/ToSpec", "PUT")]
@@ -6904,7 +6904,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///A list of data values to be rounded and returned as strings
         ///</summary>
         [ApiMember(DataType="array", Description="A list of data values to be rounded and returned as strings", IsRequired=true)]
-        public List<double> Data { get; set; } = [];
+        public List<double> Data { get; set; }
     }
 
     [Route("/GetSensorsAndGauges", "GET,POST")]
@@ -6955,7 +6955,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///The unique IDs of the time-series to retrieve
         ///</summary>
         [ApiMember(DataType="array", Description="The unique IDs of the time-series to retrieve", IsRequired=true)]
-        public List<Guid> TimeSeriesUniqueIds { get; set; } = [];
+        public List<Guid> TimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///The unit identifiers for points. Defaults to the time-series unit
@@ -7254,7 +7254,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.
         ///</summary>
         [ApiMember(DataType="array", Description="List of data points to perform analysis on. Requires a minimum of three points, and points sorted by timestamp in ascending order. Must not contain any duplicate times.", IsRequired=true)]
-        public List<TimeSeriesPoint> Points { get; set; } = [];
+        public List<TimeSeriesPoint> Points { get; set; }
     }
 
     [Route("/GetUnitList", "GET")]

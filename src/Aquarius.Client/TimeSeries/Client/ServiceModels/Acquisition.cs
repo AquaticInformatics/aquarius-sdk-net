@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-01-29 12:26:31
+Date: 2026-01-29 13:26:44
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Acquisition/v2
@@ -336,7 +336,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Notes to append
         ///</summary>
         [ApiMember(DataType="array", Description="Notes to append", IsRequired=true)]
-        public List<TimeSeriesNote> Notes { get; set; } = [];
+        public List<TimeSeriesNote> Notes { get; set; }
     }
 
     [Route("/timeseries/{UniqueId}/overwriteappend", "POST")]

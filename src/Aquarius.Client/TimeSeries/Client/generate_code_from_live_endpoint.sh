@@ -44,6 +44,8 @@ curl -s -o "$OutputFile" "$ServerName/AQUARIUS/$EndPoint/types/csharp?MakePartia
 # So we need to manually detect and remove the IsFileRequired property so that everything compiles.
 # This blunt-hammer approach works for 2021.1, but may need to be revisited if a property of the same name ever needs to exist in the API
 sed -i.bak -e "s/        bool IsFileRequired { get; set; }/        \\/\\/ HACK from generate_code_from_live_endpoint.sh \\/\\/ bool IsFileRequired { get; set; }/" "$OutputFile"
+# 2026.1 InitializeCollections=false doesn't work for 100% of collections, need to remove some code manually
+sed -i.bak -e 's/ = \[\];//g' "$OutputFile"
 
 # Append the generated version to the code
 echo "namespace $GlobalNamespace" >> "$OutputFile"

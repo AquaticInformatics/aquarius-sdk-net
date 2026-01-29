@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-01-29 12:26:27
+Date: 2026-01-29 13:26:38
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -1090,7 +1090,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Periods of applicablity for this reference point. Must have at least one period
         ///</summary>
         [ApiMember(DataType="array", Description="Periods of applicablity for this reference point. Must have at least one period", IsRequired=true)]
-        public List<PostReferencePointPeriod> ReferencePointPeriods { get; set; } = [];
+        public List<PostReferencePointPeriod> ReferencePointPeriods { get; set; }
     }
 
     public class PostReferencePointPeriod
@@ -1207,7 +1207,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Periods of applicablity for this reference point. Must have at least one period
         ///</summary>
         [ApiMember(DataType="array", Description="Periods of applicablity for this reference point. Must have at least one period", IsRequired=true)]
-        public List<PutReferencePointPeriod> ReferencePointPeriods { get; set; } = [];
+        public List<PutReferencePointPeriod> ReferencePointPeriods { get; set; }
     }
 
     public class PutReferencePointPeriod
@@ -1624,7 +1624,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifier group identifiers - if no groups (an empty list is []) are specified, the qualifier will be removed from all groups and re-assigned to the 'Default' qualifier group", IsRequired=true)]
-        public List<string> GroupIdentifiers { get; set; } = [];
+        public List<string> GroupIdentifiers { get; set; }
     }
 
     [Route("/qualifiergroups/{UniqueId}", "PUT")]
@@ -1647,7 +1647,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///Qualifier codes contained in this group 
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifier codes contained in this group ", IsRequired=true)]
-        public List<string> QualifierCodeList { get; set; } = [];
+        public List<string> QualifierCodeList { get; set; }
     }
 
     public class QualifierBase
@@ -3178,7 +3178,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master
         ///</summary>
         [ApiMember(DataType="array", Description="List of time series unique IDs of which the order translates to x1, x2… xN with x1 being the Master", IsRequired=true)]
-        public List<Guid> TimeSeriesUniqueIds { get; set; } = [];
+        public List<Guid> TimeSeriesUniqueIds { get; set; }
 
         ///<summary>
         ///Formula
