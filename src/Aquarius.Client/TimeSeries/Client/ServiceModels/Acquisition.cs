@@ -1,14 +1,15 @@
 /* Options:
-Date: 2026-01-08 01:51:05
-Version: 6.02
+Date: 2026-01-29 11:34:50
+Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Acquisition/v2
+BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
 MakeVirtual: False
 //MakeInternal: False
 //MakeDataContractsExtensible: False
+AddNullableAnnotations: False
 //AddReturnMarker: True
 //AddDescriptionAsComments: True
 //AddDataContractAttributes: False
@@ -16,7 +17,7 @@ MakeVirtual: False
 //AddGeneratedCodeAttributes: False
 //AddResponseStatus: False
 //AddImplicitVersion: 
-//InitializeCollections: True
+InitializeCollections: True
 ExportValueTypes: True
 //IncludeTypes: 
 //ExcludeTypes: 
@@ -160,11 +161,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostLocationAttachment
         : IReturn<PostLocationAttachmentResponse>, IFileUploadRequest
     {
-        public PostLocationAttachment()
-        {
-            Tags = new List<ApplyTagRequest>{};
-        }
-
         ///<summary>
         ///Unique ID of the location to add the attachment to
         ///</summary>
@@ -194,18 +190,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Tags to be assigned to the attachment with optional values; an empty list means the attachment will have no tags assigned to it.
         ///</summary>
         [ApiMember(DataType="array", Description="Tags to be assigned to the attachment with optional values; an empty list means the attachment will have no tags assigned to it.")]
-        public List<ApplyTagRequest> Tags { get; set; }
+        public List<ApplyTagRequest> Tags { get; set; } = [];
     }
 
     [Route("/timeseries/{UniqueId}/reflected", "POST")]
     public class PostReflectedTimeSeries
         : IReturn<AppendResponse>
     {
-        public PostReflectedTimeSeries()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the reflected time-series to receive points
         ///</summary>
@@ -216,7 +207,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
         [ApiMember(DataType="array", Description="Points to append (can be empty). All points must lie within the time range")]
-        public List<TimeSeriesPoint> Points { get; set; }
+        public List<TimeSeriesPoint> Points { get; set; } = [];
 
         ///<summary>
         ///Time range to update. Any existing points in the time range will be overwritten
@@ -229,12 +220,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostReportAttachment
         : IReturn<PostReportResponse>, IFileUploadRequest
     {
-        public PostReportAttachment()
-        {
-            SourceTimeSeriesUniqueIds = new List<Guid>{};
-            Tags = new List<ApplyTagRequest>{};
-        }
-
         ///<summary>
         ///Title of the report
         ///</summary>
@@ -263,7 +248,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Unique IDs of source time-series displayed in report
         ///</summary>
         [ApiMember(DataType="array", Description="Unique IDs of source time-series displayed in report")]
-        public List<Guid> SourceTimeSeriesUniqueIds { get; set; }
+        public List<Guid> SourceTimeSeriesUniqueIds { get; set; } = [];
 
         ///<summary>
         ///Time range of source data displayed in report
@@ -281,7 +266,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Tags to be assigned to the report with optional values; an empty list means the report will have no tags assigned to it.
         ///</summary>
         [ApiMember(DataType="array", Description="Tags to be assigned to the report with optional values; an empty list means the report will have no tags assigned to it.")]
-        public List<ApplyTagRequest> Tags { get; set; }
+        public List<ApplyTagRequest> Tags { get; set; } = [];
 
         ///<summary>
         ///File
@@ -295,11 +280,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostTimeSeriesAppend
         : IReturn<AppendResponse>
     {
-        public PostTimeSeriesAppend()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
@@ -310,7 +290,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Points to append (can be empty)
         ///</summary>
         [ApiMember(DataType="array", Description="Points to append (can be empty)")]
-        public List<TimeSeriesPoint> Points { get; set; }
+        public List<TimeSeriesPoint> Points { get; set; } = [];
     }
 
     [Route("/timeseries/{UniqueId}/metadata/grade", "POST")]
@@ -346,11 +326,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostTimeSeriesMetadata
         : IReturn<PostTimeSeriesMetadataResponse>
     {
-        public PostTimeSeriesMetadata()
-        {
-            Notes = new List<TimeSeriesNote>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the time-series
         ///</summary>
@@ -361,18 +336,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Notes to append
         ///</summary>
         [ApiMember(DataType="array", Description="Notes to append", IsRequired=true)]
-        public List<TimeSeriesNote> Notes { get; set; }
+        public List<TimeSeriesNote> Notes { get; set; } = [];
     }
 
     [Route("/timeseries/{UniqueId}/overwriteappend", "POST")]
     public class PostTimeSeriesOverwriteAppend
         : IReturn<AppendResponse>
     {
-        public PostTimeSeriesOverwriteAppend()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
@@ -383,7 +353,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Points to append (can be empty). All points must lie within the time range
         ///</summary>
         [ApiMember(DataType="array", Description="Points to append (can be empty). All points must lie within the time range")]
-        public List<TimeSeriesPoint> Points { get; set; }
+        public List<TimeSeriesPoint> Points { get; set; } = [];
 
         ///<summary>
         ///Time range to delete before appending points
@@ -448,11 +418,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     public class TimeSeriesPoint
     {
-        public TimeSeriesPoint()
-        {
-            Qualifiers = new List<string>{};
-        }
-
         ///<summary>
         ///ISO 8601 timestamp. Must not be specified if Type is 'Gap'.
         ///</summary>
@@ -481,7 +446,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Qualifier codes
         ///</summary>
         [ApiMember(DataType="array", Description="Qualifier codes")]
-        public List<string> Qualifiers { get; set; }
+        public List<string> Qualifiers { get; set; } = [];
     }
 
     public class AppendResponse
@@ -540,11 +505,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     public class PostLocationAttachmentResponse
     {
-        public PostLocationAttachmentResponse()
-        {
-            Tags = new List<AppliedTag>{};
-        }
-
         ///<summary>
         ///Attachment URL
         ///</summary>
@@ -586,7 +546,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
         ///Tags applied to this attachment
         ///</summary>
         [ApiMember(DataType="array", Description="Tags applied to this attachment")]
-        public List<AppliedTag> Tags { get; set; }
+        public List<AppliedTag> Tags { get; set; } = [];
     }
 
     public class PostReportResponse
@@ -609,23 +569,17 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     public class PostVisitFileResponse
     {
-        public PostVisitFileResponse()
-        {
-            VisitUris = new List<string>{};
-            VisitIdentifiers = new List<string>{};
-        }
-
         ///<summary>
         ///Relative URIs of created or modified visits
         ///</summary>
         [ApiMember(DataType="array", Description="Relative URIs of created or modified visits")]
-        public List<string> VisitUris { get; set; }
+        public List<string> VisitUris { get; set; } = [];
 
         ///<summary>
         ///Identifiers of created or modified visits
         ///</summary>
         [ApiMember(DataType="array", Description="Identifiers of created or modified visits")]
-        public List<string> VisitIdentifiers { get; set; }
+        public List<string> VisitIdentifiers { get; set; } = [];
 
         ///<summary>
         ///Registered field data plug-in that processed the file
@@ -724,6 +678,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.4.67.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.1.8.0");
     }
 }
