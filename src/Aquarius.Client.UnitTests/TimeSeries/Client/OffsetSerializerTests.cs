@@ -27,7 +27,8 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new TestCaseData("Negative offset", Negative8.Value, "\"-PT8H\""),
             new TestCaseData("Utc offset", UtcOffset.Value, "\"PT0S\""),
             new TestCaseData("Positive offset", Positive10.Value, "\"PT10H\""),
-            new TestCaseData("Positive offset with hours and minutes", Positive9Point5.Value, "\"PT9H30M\"")
+            new TestCaseData("Positive offset with hours and minutes", Positive9Point5.Value, "\"PT9H30M\""),
+            new TestCaseData("Null offset", null, "\"PT0S\"")
         };
 
         private static readonly IEnumerable<TestCaseData> NullableOffsetCases = new[]
