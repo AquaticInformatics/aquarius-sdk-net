@@ -98,6 +98,9 @@ namespace Aquarius.TimeSeries.Client
             JsConfig<Offset>.DeSerializeFn = DeserializeOffset;
             JsConfig<Offset>.IncludeDefaultValue = true;
 
+            JsConfig<Offset?>.RawSerializeFn = SerializeOffset;
+            JsConfig<Offset?>.DeSerializeFn = DeserializeNullableOffset;
+
             JsConfig<ObjectId>.SerializeFn = id => id.ToString();
             JsConfig<ObjectId>.DeSerializeFn = s => new ObjectId(long.Parse(s, CultureInfo.InvariantCulture));
 
@@ -397,8 +400,21 @@ namespace Aquarius.TimeSeries.Client
             return value.ToTimeSpan().SerializeToString();
         }
 
+        private static string SerializeOffset(Offset? value)
+        {
+            return value?.ToTimeSpan().SerializeToString();
+        }
+
         private static Offset DeserializeOffset(string text)
         {
+            return Offset.FromTicks(text.FromJson<TimeSpan>().Ticks);
+        }
+
+        private static Offset? DeserializeNullableOffset(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return null;
+
             return Offset.FromTicks(text.FromJson<TimeSpan>().Ticks);
         }
 

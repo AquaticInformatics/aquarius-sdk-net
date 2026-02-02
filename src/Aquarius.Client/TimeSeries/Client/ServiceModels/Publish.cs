@@ -1,14 +1,15 @@
 /* Options:
-Date: 2026-01-08 01:51:02
-Version: 6.02
+Date: 2026-01-29 13:26:32
+Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
+BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Publish/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Publish
 MakePartial: False
 MakeVirtual: False
 //MakeInternal: False
 //MakeDataContractsExtensible: False
+AddNullableAnnotations: False
 //AddReturnMarker: True
 //AddDescriptionAsComments: True
 //AddDataContractAttributes: False
@@ -16,7 +17,7 @@ MakeVirtual: False
 //AddGeneratedCodeAttributes: False
 //AddResponseStatus: False
 //AddImplicitVersion: 
-//InitializeCollections: True
+InitializeCollections: False
 ExportValueTypes: True
 //IncludeTypes: 
 //ExcludeTypes: 
@@ -317,15 +318,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class ExpandedRatingCurve
     {
-        public ExpandedRatingCurve()
-        {
-            PeriodsOfApplicability = new List<PeriodOfApplicability>{};
-            Shifts = new List<RatingShift>{};
-            Offsets = new List<OffsetPoint>{};
-            BaseRatingTable = new List<RatingPoint>{};
-            AdjustedRatingTable = new List<RatingPoint>{};
-        }
-
         ///<summary>
         ///Id
         ///</summary>
@@ -610,11 +602,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LocationDatum
     {
-        public LocationDatum()
-        {
-            DatumPeriods = new List<LocationDatumPeriod>{};
-        }
-
         ///<summary>
         ///Reference standard
         ///</summary>
@@ -693,12 +680,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LocationDescription
     {
-        public LocationDescription()
-        {
-            SecondaryFolders = new List<string>{};
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///Name
         ///</summary>
@@ -762,11 +743,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LocationMonitoringMethod
     {
-        public LocationMonitoringMethod()
-        {
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///UniqueId
         ///</summary>
@@ -872,11 +848,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LocationNote
     {
-        public LocationNote()
-        {
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///UniqueId
         ///</summary>
@@ -940,11 +911,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LocationReferenceStandard
     {
-        public LocationReferenceStandard()
-        {
-            ReferenceStandardOffsets = new List<ReferenceStandardOffset>{};
-        }
-
         ///<summary>
         ///Reference standard
         ///</summary>
@@ -1298,12 +1264,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Processor
     {
-        public Processor()
-        {
-            InputTimeSeriesUniqueIds = new List<Guid>{};
-            Settings = new Dictionary<string, string>{};
-        }
-
         ///<summary>
         ///Processor type
         ///</summary>
@@ -1416,15 +1376,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class RatingCurve
     {
-        public RatingCurve()
-        {
-            PeriodsOfApplicability = new List<PeriodOfApplicability>{};
-            Shifts = new List<RatingShift>{};
-            BaseRatingTable = new List<RatingPoint>{};
-            Offsets = new List<OffsetPoint>{};
-            GradeRanges = new List<RatingGrade>{};
-        }
-
         ///<summary>
         ///Id
         ///</summary>
@@ -1609,11 +1560,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class RatingShift
     {
-        public RatingShift()
-        {
-            ShiftPoints = new List<RatingShiftPoint>{};
-        }
-
         ///<summary>
         ///Period of applicability
         ///</summary>
@@ -1644,11 +1590,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class ReferencePoint
     {
-        public ReferencePoint()
-        {
-            ReferencePointPeriods = new List<ReferencePointPeriod>{};
-        }
-
         ///<summary>
         ///Unique ID of the reference point
         ///</summary>
@@ -1808,12 +1749,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Report
     {
-        public Report()
-        {
-            SourceTimeSeriesUniqueIds = new List<Guid>{};
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///ReportUniqueId
         ///</summary>
@@ -1946,11 +1881,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class TagDefinition
     {
-        public TagDefinition()
-        {
-            PickListValues = new List<string>{};
-        }
-
         ///<summary>
         ///Key of the tag
         ///</summary>
@@ -2758,11 +2688,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class TimeSeriesThreshold
     {
-        public TimeSeriesThreshold()
-        {
-            Periods = new List<TimeSeriesThresholdPeriod>{};
-        }
-
         ///<summary>
         ///Name
         ///</summary>
@@ -3209,11 +3134,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Attachment
     {
-        public Attachment()
-        {
-            Tags = new List<TagMetadata>{};
-        }
-
         ///<summary>
         ///Attachment type
         ///</summary>
@@ -3604,11 +3524,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class CrossSectionSurveyActivity
     {
-        public CrossSectionSurveyActivity()
-        {
-            CrossSectionPoints = new List<CrossSectionPoint>{};
-        }
-
         ///<summary>
         ///Start time
         ///</summary>
@@ -3718,15 +3633,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class DischargeActivity
     {
-        public DischargeActivity()
-        {
-            VolumetricDischargeActivities = new List<VolumetricDischargeActivity>{};
-            EngineeredStructureDischargeActivities = new List<EngineeredStructureDischargeActivity>{};
-            PointVelocityDischargeActivities = new List<PointVelocityDischargeActivity>{};
-            OtherMethodDischargeActivities = new List<OtherMethodDischargeActivity>{};
-            AdcpDischargeActivities = new List<AdcpDischargeActivity>{};
-        }
-
         ///<summary>
         ///Discharge summary
         ///</summary>
@@ -3877,11 +3783,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class DischargeSummary
     {
-        public DischargeSummary()
-        {
-            GageHeightReadings = new List<GageHeightReading>{};
-        }
-
         ///<summary>
         ///Measurement start time
         ///</summary>
@@ -4120,14 +4021,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisit
         : FieldVisitDescription, IFieldVisitData
     {
-        public FieldVisit()
-        {
-            Attachments = new List<Attachment>{};
-            DischargeActivities = new List<DischargeActivity>{};
-            CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
-            HydraulicTestActivities = new List<HydraulicTestActivity>{};
-        }
-
         ///<summary>
         ///Attachments
         ///</summary>
@@ -4287,12 +4180,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class FieldVisitReading
     {
-        public FieldVisitReading()
-        {
-            DatumConvertedValues = new List<DatumConvertedQuantityWithDisplay>{};
-            Qualifiers = new List<string>{};
-        }
-
         ///<summary>
         ///Approval
         ///</summary>
@@ -4554,13 +4441,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class HydraulicTestActivity
     {
-        public HydraulicTestActivity()
-        {
-            RelatedTimeSeriesUniqueIds = new List<Guid>{};
-            RelatedFieldVisitIdentifiers = new List<Guid>{};
-            Results = new List<HydraulicTestResult>{};
-        }
-
         ///<summary>
         ///The name of the test
         ///</summary>
@@ -4775,13 +4655,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class InspectionActivity
     {
-        public InspectionActivity()
-        {
-            Readings = new List<Reading>{};
-            CalibrationChecks = new List<CalibrationCheck>{};
-            Inspections = new List<Inspection>{};
-        }
-
         ///<summary>
         ///Party
         ///</summary>
@@ -4821,11 +4694,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class LevelSurveyActivity
     {
-        public LevelSurveyActivity()
-        {
-            LevelMeasurements = new List<LevelSurveyMeasurement>{};
-        }
-
         ///<summary>
         ///Party
         ///</summary>
@@ -4946,11 +4814,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class PointVelocityDischargeActivity
     {
-        public PointVelocityDischargeActivity()
-        {
-            Verticals = new List<Vertical>{};
-        }
-
         ///<summary>
         ///Discharge channel measurement
         ///</summary>
@@ -5114,11 +4977,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Reading
     {
-        public Reading()
-        {
-            ReadingQualifiers = new List<string>{};
-        }
-
         ///<summary>
         ///Parameter Name
         ///</summary>
@@ -5374,11 +5232,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class Vertical
     {
-        public Vertical()
-        {
-            Calibrations = new List<Calibration>{};
-        }
-
         ///<summary>
         ///Vertical number
         ///</summary>
@@ -5526,11 +5379,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class VolumetricDischargeActivity
     {
-        public VolumetricDischargeActivity()
-        {
-            VolumetricDischargeReadings = new List<VolumetricDischargeReading>{};
-        }
-
         ///<summary>
         ///Discharge channel measurement
         ///</summary>
@@ -5687,14 +5535,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class WellIntegrityActivity
     {
-        public WellIntegrityActivity()
-        {
-            WellAquiferConnections = new List<WellAquiferConnection>{};
-            WellInspections = new List<WellInspection>{};
-            WellRedevelopments = new List<WellRedevelopment>{};
-            WellRepairs = new List<WellRepair>{};
-        }
-
         ///<summary>
         ///List of aquifer connections associated with the well
         ///</summary>
@@ -5782,11 +5622,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class ActiveMeterCalibration
     {
-        public ActiveMeterCalibration()
-        {
-            Equations = new List<ActiveMeterCalibrationEquation>{};
-        }
-
         ///<summary>
         ///Visit date
         ///</summary>
@@ -5808,11 +5643,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ActiveMeterDetails
         : CurrentMeter
     {
-        public ActiveMeterDetails()
-        {
-            MeterCalibrations = new List<ActiveMeterCalibration>{};
-        }
-
         ///<summary>
         ///Meter type
         ///</summary>
@@ -6392,14 +6222,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitDataByLocationServiceRequest
         : IReturn<FieldVisitDataByLocationServiceResponse>, IFieldVisitDataRequest
     {
-        public FieldVisitDataByLocationServiceRequest()
-        {
-            Activities = new List<ActivityType>{};
-            Parameters = new List<string>{};
-            InspectionTypes = new List<InspectionType>{};
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Location identifier
         ///</summary>
@@ -6536,11 +6358,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitDescriptionListServiceRequest
         : IReturn<FieldVisitDescriptionListServiceResponse>
     {
-        public FieldVisitDescriptionListServiceRequest()
-        {
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to the given location
         ///</summary>
@@ -6605,11 +6422,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class GetFieldVisitReadingsByLocationServiceRequest
         : IReturn<FieldVisitReadingsByLocationServiceResponse>
     {
-        public GetFieldVisitReadingsByLocationServiceRequest()
-        {
-            Parameters = new List<string>{};
-        }
-
         ///<summary>
         ///Location identifier. Must be empty when LocationUniqueId is set.
         ///</summary>
@@ -6691,14 +6503,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class LocationDescriptionListServiceRequest
         : IReturn<LocationDescriptionListServiceResponse>
     {
-        public LocationDescriptionListServiceRequest()
-        {
-            TagNames = new List<string>{};
-            TagKeys = new List<string>{};
-            TagValues = new List<string>{};
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to the given location name (supports *partialname* pattern*)
         ///</summary>
@@ -6886,11 +6690,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelEffectiveShiftsByStageValuesServiceRequest
         : IReturn<RatingModelEffectiveShiftsByStageValuesServiceResponse>
     {
-        public RatingModelEffectiveShiftsByStageValuesServiceRequest()
-        {
-            StageValues = new List<double>{};
-        }
-
         ///<summary>
         ///Rating model identifier
         ///</summary>
@@ -6943,11 +6742,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelInputValuesServiceRequest
         : IReturn<RatingModelInputValuesServiceResponse>
     {
-        public RatingModelInputValuesServiceRequest()
-        {
-            OutputValues = new List<double>{};
-        }
-
         ///<summary>
         ///Rating model identifier
         ///</summary>
@@ -6971,11 +6765,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelOutputValuesServiceRequest
         : IReturn<RatingModelOutputValuesServiceResponse>
     {
-        public RatingModelOutputValuesServiceRequest()
-        {
-            InputValues = new List<double>{};
-        }
-
         ///<summary>
         ///Rating model identifier
         ///</summary>
@@ -7005,14 +6794,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ReportListServiceRequest
         : IReturn<ReportListServiceResponse>
     {
-        public ReportListServiceRequest()
-        {
-            TimeSeriesUniqueIds = new List<Guid>{};
-            ReportUniqueIds = new List<Guid>{};
-            TagKeys = new List<string>{};
-            TagValues = new List<string>{};
-        }
-
         ///<summary>
         ///Filter results to given location unique ID
         ///</summary>
@@ -7072,11 +6853,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RoundServiceRequest
         : IReturn<RoundServiceResponse>
     {
-        public RoundServiceRequest()
-        {
-            Data = new List<double>{};
-        }
-
         ///<summary>
         ///The data is for this parameter
         ///</summary>
@@ -7112,11 +6888,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RoundServiceSpecRequest
         : IReturn<RoundServiceResponse>
     {
-        public RoundServiceSpecRequest()
-        {
-            Data = new List<double>{};
-        }
-
         ///<summary>
         ///Use this rounding specification to round the data
         ///</summary>
@@ -7140,13 +6911,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class SensorsAndGaugesServiceRequest
         : IReturn<SensorsAndGaugesServiceResponse>
     {
-        public SensorsAndGaugesServiceRequest()
-        {
-            LocationUniqueIds = new List<Guid>{};
-            TagKeys = new List<string>{};
-            TagValues = new List<string>{};
-        }
-
         ///<summary>
         ///Filter results to sensors and gauges for this location
         ///</summary>
@@ -7176,11 +6940,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TagListServiceRequest
         : IReturn<TagListServiceResponse>
     {
-        public TagListServiceRequest()
-        {
-            Applicability = new List<TagApplicability>{};
-        }
-
         ///<summary>
         ///If set, return only tags with specified applicability, selected from: AppliesToLocations, AppliesToLocationNotes, AppliesToSensorsGauges, AppliesToAttachments, AppliesToReports
         ///</summary>
@@ -7192,12 +6951,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeAlignedDataServiceRequest
         : IReturn<TimeAlignedDataServiceResponse>
     {
-        public TimeAlignedDataServiceRequest()
-        {
-            TimeSeriesUniqueIds = new List<Guid>{};
-            TimeSeriesOutputUnitIds = new List<string>{};
-        }
-
         ///<summary>
         ///The unique IDs of the time-series to retrieve
         ///</summary>
@@ -7374,11 +7127,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesDescriptionListByUniqueIdServiceRequest
         : IReturn<TimeSeriesDescriptionListByUniqueIdServiceResponse>
     {
-        public TimeSeriesDescriptionListByUniqueIdServiceRequest()
-        {
-            TimeSeriesUniqueIds = new List<Guid>{};
-        }
-
         ///<summary>
         ///A collection of time series unique IDs to query. Limited to roughly 60 items for a GET request; use POST to avoid this limit.
         ///</summary>
@@ -7390,11 +7138,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesDescriptionServiceRequest
         : IReturn<TimeSeriesDescriptionListServiceResponse>
     {
-        public TimeSeriesDescriptionServiceRequest()
-        {
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to the given location
         ///</summary>
@@ -7436,11 +7179,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesUniqueIdListServiceRequest
         : IReturn<TimeSeriesUniqueIdListServiceResponse>
     {
-        public TimeSeriesUniqueIdListServiceRequest()
-        {
-            ExtendedFilters = new List<ExtendedAttributeFilter>{};
-        }
-
         ///<summary>
         ///Filter results to items modified at or after the ChangesSinceToken time
         ///</summary>
@@ -7494,11 +7232,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TrendLineAnalysisServiceRequest
         : IReturn<TrendLineAnalysisServiceResponse>
     {
-        public TrendLineAnalysisServiceRequest()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///Type of regression analysis
         ///</summary>
@@ -7561,11 +7294,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ActiveMetersAndCalibrationsServiceResponse
         : PublishServiceResponse
     {
-        public ActiveMetersAndCalibrationsServiceResponse()
-        {
-            ActiveMeterDetails = new List<ActiveMeterDetails>{};
-        }
-
         ///<summary>
         ///Current meter details
         ///</summary>
@@ -7576,11 +7304,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ApprovalListServiceResponse
         : PublishServiceResponse
     {
-        public ApprovalListServiceResponse()
-        {
-            Approvals = new List<ApprovalMetadata>{};
-        }
-
         ///<summary>
         ///Approvals
         ///</summary>
@@ -7591,11 +7314,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class CorrectionListServiceResponse
         : PublishServiceResponse
     {
-        public CorrectionListServiceResponse()
-        {
-            Corrections = new List<Correction>{};
-        }
-
         ///<summary>
         ///Corrections
         ///</summary>
@@ -7616,12 +7334,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ExpandedStageTableServiceResponse
         : PublishServiceResponse
     {
-        public ExpandedStageTableServiceResponse()
-        {
-            ExpandedStageTable = new List<StagePoint>{};
-            Corrections = new List<Correction>{};
-        }
-
         ///<summary>
         ///Expanded stage table
         ///</summary>
@@ -7638,11 +7350,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitDataByLocationServiceResponse
         : PublishServiceResponse
     {
-        public FieldVisitDataByLocationServiceResponse()
-        {
-            FieldVisitData = new List<FieldVisit>{};
-        }
-
         ///<summary>
         ///Field visit descriptions and data
         ///</summary>
@@ -7653,14 +7360,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitDataServiceResponse
         : PublishServiceResponse, IFieldVisitData
     {
-        public FieldVisitDataServiceResponse()
-        {
-            Attachments = new List<Attachment>{};
-            DischargeActivities = new List<DischargeActivity>{};
-            CrossSectionSurveyActivity = new List<CrossSectionSurveyActivity>{};
-            HydraulicTestActivities = new List<HydraulicTestActivity>{};
-        }
-
         ///<summary>
         ///Field visit identifier
         ///</summary>
@@ -7743,12 +7442,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitDescriptionListServiceResponse
         : PublishServiceResponse
     {
-        public FieldVisitDescriptionListServiceResponse()
-        {
-            FieldVisitDescriptions = new List<FieldVisitDescription>{};
-            DeletedFieldVisitDescriptions = new List<FieldVisitDescription>{};
-        }
-
         ///<summary>
         ///Field visit descriptions
         ///</summary>
@@ -7771,11 +7464,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class FieldVisitReadingsByLocationServiceResponse
         : PublishServiceResponse
     {
-        public FieldVisitReadingsByLocationServiceResponse()
-        {
-            FieldVisitReadings = new List<FieldVisitReading>{};
-        }
-
         ///<summary>
         ///Field visit readings
         ///</summary>
@@ -7786,11 +7474,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class GradeListServiceResponse
         : PublishServiceResponse
     {
-        public GradeListServiceResponse()
-        {
-            Grades = new List<GradeMetadata>{};
-        }
-
         ///<summary>
         ///Grades
         ///</summary>
@@ -7801,16 +7484,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class LocationDataServiceResponse
         : PublishServiceResponse
     {
-        public LocationDataServiceResponse()
-        {
-            Tags = new List<TagMetadata>{};
-            ExtendedAttributes = new List<ExtendedAttribute>{};
-            LocationRemarks = new List<LocationRemark>{};
-            LocationNotes = new List<LocationNote>{};
-            Attachments = new List<Attachment>{};
-            ReferencePoints = new List<ReferencePoint>{};
-        }
-
         ///<summary>
         ///Location name
         ///</summary>
@@ -7935,11 +7608,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class LocationDescriptionListServiceResponse
         : PublishServiceResponse
     {
-        public LocationDescriptionListServiceResponse()
-        {
-            LocationDescriptions = new List<LocationDescription>{};
-        }
-
         ///<summary>
         ///Location descriptions
         ///</summary>
@@ -7956,11 +7624,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class LocationNotesServiceResponse
         : PublishServiceResponse
     {
-        public LocationNotesServiceResponse()
-        {
-            LocationNotes = new List<LocationNote>{};
-        }
-
         ///<summary>
         ///Location name
         ///</summary>
@@ -7998,11 +7661,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 
     public class MonitoringMethodListServiceResponse
     {
-        public MonitoringMethodListServiceResponse()
-        {
-            MonitoringMethods = new List<MonitoringMethod>{};
-        }
-
         ///<summary>
         ///Response version
         ///</summary>
@@ -8031,11 +7689,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ParameterListServiceResponse
         : PublishServiceResponse
     {
-        public ParameterListServiceResponse()
-        {
-            Parameters = new List<ParameterMetadata>{};
-        }
-
         ///<summary>
         ///Parameters
         ///</summary>
@@ -8046,11 +7699,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ProcessorListServiceResponse
         : PublishServiceResponse
     {
-        public ProcessorListServiceResponse()
-        {
-            Processors = new List<Processor>{};
-        }
-
         ///<summary>
         ///Processors
         ///</summary>
@@ -8082,11 +7730,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class QualifierListServiceResponse
         : PublishServiceResponse
     {
-        public QualifierListServiceResponse()
-        {
-            Qualifiers = new List<QualifierMetadata>{};
-        }
-
         ///<summary>
         ///Qualifiers
         ///</summary>
@@ -8129,11 +7772,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelEffectiveShiftsByStageValuesServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelEffectiveShiftsByStageValuesServiceResponse()
-        {
-            EffectiveShiftValues = new List<Nullable<Double>>{};
-        }
-
         ///<summary>
         ///Timestamp
         ///</summary>
@@ -8150,11 +7788,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelEffectiveShiftsServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelEffectiveShiftsServiceResponse()
-        {
-            EffectiveShifts = new List<EffectiveShift>{};
-        }
-
         ///<summary>
         ///Effective shifts
         ///</summary>
@@ -8165,11 +7798,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelInputValuesServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelInputValuesServiceResponse()
-        {
-            InputValues = new List<Nullable<Double>>{};
-        }
-
         ///<summary>
         ///Input values
         ///</summary>
@@ -8180,11 +7808,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RatingModelOutputValuesServiceResponse
         : PublishServiceResponse
     {
-        public RatingModelOutputValuesServiceResponse()
-        {
-            OutputValues = new List<Nullable<Double>>{};
-        }
-
         ///<summary>
         ///Output values
         ///</summary>
@@ -8195,11 +7818,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class ReportListServiceResponse
         : PublishServiceResponse
     {
-        public ReportListServiceResponse()
-        {
-            Reports = new List<Report>{};
-        }
-
         ///<summary>
         ///Reports
         ///</summary>
@@ -8210,11 +7828,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class RoundServiceResponse
         : PublishServiceResponse
     {
-        public RoundServiceResponse()
-        {
-            Data = new List<string>{};
-        }
-
         ///<summary>
         ///Values rounded as requested
         ///</summary>
@@ -8225,11 +7838,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class SensorsAndGaugesServiceResponse
         : PublishServiceResponse
     {
-        public SensorsAndGaugesServiceResponse()
-        {
-            MonitoringMethods = new List<LocationMonitoringMethod>{};
-        }
-
         ///<summary>
         ///Monitoring methods
         ///</summary>
@@ -8240,11 +7848,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TagListServiceResponse
         : PublishServiceResponse
     {
-        public TagListServiceResponse()
-        {
-            Tags = new List<TagDefinition>{};
-        }
-
         ///<summary>
         ///Tags
         ///</summary>
@@ -8255,12 +7858,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeAlignedDataServiceResponse
         : PublishServiceResponse
     {
-        public TimeAlignedDataServiceResponse()
-        {
-            TimeSeries = new List<TimeAlignedTimeSeriesInfo>{};
-            Points = new List<TimeAlignedPoint>{};
-        }
-
         ///<summary>
         ///Summary info of the retrieved time-series
         ///</summary>
@@ -8299,18 +7896,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesDataServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesDataServiceResponse()
-        {
-            Approvals = new List<Approval>{};
-            Qualifiers = new List<Qualifier>{};
-            Methods = new List<Method>{};
-            Grades = new List<Grade>{};
-            GapTolerances = new List<GapTolerance>{};
-            InterpolationTypes = new List<InterpolationType>{};
-            Notes = new List<Note>{};
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///Unique id
         ///</summary>
@@ -8405,11 +7990,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesDescriptionListByUniqueIdServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesDescriptionListByUniqueIdServiceResponse()
-        {
-            TimeSeriesDescriptions = new List<TimeSeriesDescription>{};
-        }
-
         ///<summary>
         ///Time series descriptions
         ///</summary>
@@ -8420,11 +8000,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesDescriptionListServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesDescriptionListServiceResponse()
-        {
-            TimeSeriesDescriptions = new List<TimeSeriesDescription>{};
-        }
-
         ///<summary>
         ///Time series descriptions
         ///</summary>
@@ -8435,11 +8010,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class TimeSeriesUniqueIdListServiceResponse
         : PublishServiceResponse
     {
-        public TimeSeriesUniqueIdListServiceResponse()
-        {
-            TimeSeriesUniqueIds = new List<TimeSeriesUniqueIds>{};
-        }
-
         ///<summary>
         ///Token expired
         ///</summary>
@@ -8472,11 +8042,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
     public class UnitListServiceResponse
         : PublishServiceResponse
     {
-        public UnitListServiceResponse()
-        {
-            Units = new List<UnitMetadata>{};
-        }
-
         ///<summary>
         ///Units
         ///</summary>
@@ -8490,6 +8055,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.4.67.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.1.8.0");
     }
 }

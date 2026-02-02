@@ -1,14 +1,15 @@
 /* Options:
-Date: 2026-01-08 01:51:05
-Version: 6.02
+Date: 2026-01-29 13:26:44
+Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
-BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Acquisition/v2
+BaseUrl: https://aqwp-opendata.aquariusdev.net/AQUARIUS/Acquisition/v2
 
 GlobalNamespace: Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 MakePartial: False
 MakeVirtual: False
 //MakeInternal: False
 //MakeDataContractsExtensible: False
+AddNullableAnnotations: False
 //AddReturnMarker: True
 //AddDescriptionAsComments: True
 //AddDataContractAttributes: False
@@ -16,7 +17,7 @@ MakeVirtual: False
 //AddGeneratedCodeAttributes: False
 //AddResponseStatus: False
 //AddImplicitVersion: 
-//InitializeCollections: True
+InitializeCollections: False
 ExportValueTypes: True
 //IncludeTypes: 
 //ExcludeTypes: 
@@ -160,11 +161,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostLocationAttachment
         : IReturn<PostLocationAttachmentResponse>, IFileUploadRequest
     {
-        public PostLocationAttachment()
-        {
-            Tags = new List<ApplyTagRequest>{};
-        }
-
         ///<summary>
         ///Unique ID of the location to add the attachment to
         ///</summary>
@@ -201,11 +197,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostReflectedTimeSeries
         : IReturn<AppendResponse>
     {
-        public PostReflectedTimeSeries()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the reflected time-series to receive points
         ///</summary>
@@ -229,12 +220,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostReportAttachment
         : IReturn<PostReportResponse>, IFileUploadRequest
     {
-        public PostReportAttachment()
-        {
-            SourceTimeSeriesUniqueIds = new List<Guid>{};
-            Tags = new List<ApplyTagRequest>{};
-        }
-
         ///<summary>
         ///Title of the report
         ///</summary>
@@ -295,11 +280,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostTimeSeriesAppend
         : IReturn<AppendResponse>
     {
-        public PostTimeSeriesAppend()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
@@ -346,11 +326,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostTimeSeriesMetadata
         : IReturn<PostTimeSeriesMetadataResponse>
     {
-        public PostTimeSeriesMetadata()
-        {
-            Notes = new List<TimeSeriesNote>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the time-series
         ///</summary>
@@ -368,11 +343,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
     public class PostTimeSeriesOverwriteAppend
         : IReturn<AppendResponse>
     {
-        public PostTimeSeriesOverwriteAppend()
-        {
-            Points = new List<TimeSeriesPoint>{};
-        }
-
         ///<summary>
         ///The unique ID (from Publish API) of the time-series to receive points
         ///</summary>
@@ -448,11 +418,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     public class TimeSeriesPoint
     {
-        public TimeSeriesPoint()
-        {
-            Qualifiers = new List<string>{};
-        }
-
         ///<summary>
         ///ISO 8601 timestamp. Must not be specified if Type is 'Gap'.
         ///</summary>
@@ -540,11 +505,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     public class PostLocationAttachmentResponse
     {
-        public PostLocationAttachmentResponse()
-        {
-            Tags = new List<AppliedTag>{};
-        }
-
         ///<summary>
         ///Attachment URL
         ///</summary>
@@ -609,12 +569,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 
     public class PostVisitFileResponse
     {
-        public PostVisitFileResponse()
-        {
-            VisitUris = new List<string>{};
-            VisitIdentifiers = new List<string>{};
-        }
-
         ///<summary>
         ///Relative URIs of created or modified visits
         ///</summary>
@@ -724,6 +678,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Acquisition
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("25.4.67.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.1.8.0");
     }
 }
