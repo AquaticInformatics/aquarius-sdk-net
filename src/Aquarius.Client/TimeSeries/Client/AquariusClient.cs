@@ -130,13 +130,31 @@ namespace Aquarius.TimeSeries.Client
 
         public void SetTimeout(IServiceClient client, TimeSpan? requestTimeout, TimeSpan? readWriteTimeout)
         {
-            if (client is JsonServiceClient jsonServiceClient)
+            if (client is ServiceClientBase serviceClient)
             {
                 if (requestTimeout.HasValue)
-                    jsonServiceClient.Timeout = requestTimeout.Value;
+                    serviceClient.Timeout = requestTimeout.Value;
 
                 if (readWriteTimeout.HasValue)
-                    jsonServiceClient.ReadWriteTimeout = readWriteTimeout.Value;
+                    serviceClient.ReadWriteTimeout = readWriteTimeout.Value;
+
+                var timeoutMs = requestTimeout.HasValue
+                    ? (int)requestTimeout.Value.TotalMilliseconds
+                    : (int?)null;
+
+                var readWriteTimeoutMs = readWriteTimeout.HasValue
+                    ? (int)readWriteTimeout.Value.TotalMilliseconds
+                    : (int?)null;
+
+                var existingFilter = serviceClient.RequestFilter;
+                serviceClient.RequestFilter = req =>
+                {
+                    existingFilter?.Invoke(req);
+                    if (timeoutMs.HasValue)
+                        req.Timeout = timeoutMs.Value;
+                    if (readWriteTimeoutMs.HasValue)
+                        req.ReadWriteTimeout = readWriteTimeoutMs.Value;
+                };
             }
         }
 
