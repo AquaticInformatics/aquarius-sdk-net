@@ -112,6 +112,7 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
         {
             var serviceClient = new JsonServiceClient("http://localhost");
             var defaultTimeout = 100000; // .NET default HttpWebRequest.Timeout
+            var defaultReadWriteTimeout = 300000; // .NET default HttpWebRequest.ReadWriteTimeout
 
             _client.SetTimeout(serviceClient, null, null);
 
@@ -119,6 +120,7 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
             serviceClient.RequestFilter(request);
 
             request.Timeout.Should().Be(defaultTimeout);
+            request.ReadWriteTimeout.Should().Be(defaultReadWriteTimeout);
         }
 
         [Test]
