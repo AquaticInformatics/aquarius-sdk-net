@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 2x.x.x
+- Updated the service models for the AQUARIUS Time-Series 202x.x release.
+
 ### 25.4.2
 - Collections are no longer initialized by default. When creating an API object directly collections won't be initalized but appear to be done so when binding through an API request.
 - Fixes a bug where Provisioning Locations POST/PUT methods failed on the UtcOffset field
