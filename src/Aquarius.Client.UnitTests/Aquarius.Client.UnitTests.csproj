@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net472;net10.0</TargetFrameworks>
     <Version>0.0.0</Version>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -16,7 +17,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0'">
 	  <PackageReference Include="AutoFixture" Version="4.0.0-rc1" />
 	  <PackageReference Include="FluentAssertions" Version="4.19.4" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
     <PackageReference Include="NodaTime" Version="2.2.3" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
     <PackageReference Include="NUnit" Version="3.9.0" />
@@ -43,7 +44,7 @@
     <PackageReference Include="ServiceStack.Text" Version="8.4.0" />
     <PackageReference Include="AutoFixture" Version="3.51.0" />
     <PackageReference Include="FluentAssertions" Version="4.19.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
     <PackageReference Include="NUnit" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />

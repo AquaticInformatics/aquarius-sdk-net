@@ -84,9 +84,7 @@ namespace Aquarius.Helpers
             if (assembly == null)
                 return string.Empty;
 
-            // Lifted from http://stackoverflow.com/questions/864484/getting-the-path-of-the-current-assembly
-            var uri = new Uri(assembly.CodeBase);
-            return Path.GetFullPath(Uri.UnescapeDataString(uri.AbsolutePath));
+            return Path.GetFullPath(assembly.Location);
         }
     }
 }
