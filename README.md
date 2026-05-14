@@ -18,7 +18,7 @@ View the [Release Notes](ReleaseNotes.md) here.
 
 ## Building from source
 
-Requires Visual Studio 2017+ (Community Edition is fine.)
+Requires Visual Studio 2022+ (Community Edition is fine.)
 
 See the [Contributing](CONTRIBUTING.md) page for details.
 
