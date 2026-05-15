@@ -43,7 +43,7 @@ init:
       }
 
 before_build:
-  - nuget restore src\Aquarius.SDK.sln
+  - dotnet restore src\Aquarius.SDK.sln
 
 build:
   project: src\Aquarius.SDK.sln
