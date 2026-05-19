@@ -84,7 +84,16 @@ namespace Aquarius.Helpers
             if (assembly == null)
                 return string.Empty;
 
-            return Path.GetFullPath(assembly.Location);
+            if (string.IsNullOrEmpty(assembly.Location))
+                return string.Empty;
+
+            var location = assembly.Location;
+
+            // In single-file/bundled deployments Assembly.Location can be empty.
+            if (string.IsNullOrEmpty(location))
+                return string.Empty;
+
+            return Path.GetFullPath(location);
         }
     }
 }
