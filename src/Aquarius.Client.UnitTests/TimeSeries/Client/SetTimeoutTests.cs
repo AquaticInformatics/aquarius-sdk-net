@@ -54,12 +54,10 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
 
             serviceClient.RequestFilter.Should().NotBeNull();
 
-#if NET472
             var request = WebRequest.CreateHttp("http://localhost");
             serviceClient.RequestFilter(request);
 
             request.Timeout.Should().Be((int)timeout.TotalMilliseconds);
-#endif
         }
 
         [Test]
@@ -72,12 +70,10 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
 
             serviceClient.RequestFilter.Should().NotBeNull();
 
-#if NET472
             var request = WebRequest.CreateHttp("http://localhost");
             serviceClient.RequestFilter(request);
 
             request.ReadWriteTimeout.Should().Be((int)readWriteTimeout.TotalMilliseconds);
-#endif
         }
 
         [Test]
@@ -89,52 +85,42 @@ namespace Aquarius.Client.UnitTests.TimeSeries.Client
 
             _client.SetTimeout(serviceClient, timeout, readWriteTimeout);
 
-#if NET472
             var request = WebRequest.CreateHttp("http://localhost");
             serviceClient.RequestFilter(request);
 
             request.Timeout.Should().Be((int)timeout.TotalMilliseconds);
             request.ReadWriteTimeout.Should().Be((int)readWriteTimeout.TotalMilliseconds);
-#endif
         }
 
         [Test]
         public void SetTimeout_PreservesExistingRequestFilter()
         {
             var serviceClient = new JsonServiceClient("http://localhost");
-
-#if NET472
             var existingFilterCalled = false;
             serviceClient.RequestFilter = _ => existingFilterCalled = true;
-#endif
 
             _client.SetTimeout(serviceClient, TimeSpan.FromSeconds(300), null);
 
-#if NET472
             var request = WebRequest.CreateHttp("http://localhost");
             serviceClient.RequestFilter(request);
 
             existingFilterCalled.Should().BeTrue();
-#endif
         }
 
         [Test]
         public void SetTimeout_WithNullTimeouts_DoesNotSetTimeoutOnHttpWebRequest()
         {
             var serviceClient = new JsonServiceClient("http://localhost");
-
-            _client.SetTimeout(serviceClient, null, null);
-
-#if NET472
             var defaultTimeout = 100000; // .NET default HttpWebRequest.Timeout
             var defaultReadWriteTimeout = 300000; // .NET default HttpWebRequest.ReadWriteTimeout
+
+            _client.SetTimeout(serviceClient, null, null);
 
             var request = WebRequest.CreateHttp("http://localhost");
             serviceClient.RequestFilter(request);
 
             request.Timeout.Should().Be(defaultTimeout);
             request.ReadWriteTimeout.Should().Be(defaultReadWriteTimeout);
-#endif
         }
 
         [Test]
