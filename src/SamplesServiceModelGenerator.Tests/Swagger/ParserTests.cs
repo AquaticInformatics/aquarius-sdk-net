@@ -69,16 +69,16 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
 
         public void AssertExpectedTitle()
         {
-            Assert.AreEqual(_json["info"]["title"].ToString(), _parseOutput.Title);
+            Assert.AreEqual(_json["info"]?["title"]?.ToString(), _parseOutput.Title);
         }
 
         public void AssertExpectedDefinitions()
         {
             _parseOutput.Definitions.Should().NotBeEmpty();
 
-            _parseOutput.Definitions.Count().Equals(_json["definitions"].Count());
+            Assert.AreEqual(_json["definitions"]?.Count() ?? 0, _parseOutput.Definitions.Count());
 
-            var expectedDefinitions = _json["definitions"] as JObject;
+            var expectedDefinitions = _json["definitions"] as JObject ?? new JObject();
             var expectedProperties = new List<string>();
 
             foreach (var def in expectedDefinitions.Properties())
@@ -109,9 +109,9 @@ namespace SamplesServiceModelGenerator.Tests.Swagger
         {
             _parseOutput.Paths.Should().NotBeEmpty();
 
-            _parseOutput.Paths.Count().Equals(_json["paths"].Count());
+            Assert.AreEqual(_json["paths"]?.Count() ?? 0, _parseOutput.Paths.Count());
 
-            var expectedPaths = _json["paths"] as JObject;
+            var expectedPaths = _json["paths"] as JObject ?? new JObject();
             List<string> verbs = ["get", "delete", "post", "put"];
             var expectedOperationIds = new List<string>();
             var parsedOperationIds = new List<string>();

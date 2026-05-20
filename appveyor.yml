@@ -3,7 +3,6 @@ image: Visual Studio 2022
 platform: Any CPU
 configuration: Release
 
-shallow_clone: true
 skip_tags: true
 
 pull_requests:
@@ -30,18 +29,27 @@ dotnet_csproj:
   assembly_version: "1.0.0.0"
   file_version: '{version}'
   informational_version: '{version}'
-  
+
 init:
   - ps: |
       If (-Not $env:APPVEYOR_PULL_REQUEST_NUMBER) {
         $env:IS_NOT_PR = "true"
       }
 
-before_build:
-  - nuget restore src\Aquarius.SDK.sln
+install:
+  - ps: |
+      Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile dotnet-install.ps1
+      .\dotnet-install.ps1 -Version 10.0.107 -InstallDir 'C:\Program Files\dotnet'
+      dotnet --version
 
-build:
-  project: src\Aquarius.SDK.sln
+before_build:
+  - dotnet restore src\Aquarius.SDK.sln
+
+build_script:
+  - dotnet build src\Aquarius.SDK.sln --configuration Release --no-restore
+
+test_script:
+  - dotnet test src\Aquarius.SDK.sln --configuration Release --no-build
 
 artifacts:
   - path: '**\*.nupkg'

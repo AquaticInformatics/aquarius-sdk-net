@@ -4,6 +4,9 @@ This page highlights some changes in the SDK.
 
 Not all changes will be listed, but you can always [compare by version tags](https://github.com/AquaticInformatics/aquarius-sdk-net/compare/v17.2.21...v17.2.25) to see the full source code difference.
 
+### 26.2.0
+- Added .NET 10.0 support, replacing .NET 8.0. The SDK now dual-targets `net472`/`netstandard2.1` and `net10.0`.
+
 ### 26.1.0
 - Updated the service models for the AQUARIUS Time-Series 2026.1 release.
 
