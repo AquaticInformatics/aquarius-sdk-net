@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-04-02 22:03:45
+Date: 2026-07-10 17:49:19
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
@@ -1045,6 +1045,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public IList<MethodOperation> MethodOperations { get; set; }
 
         ///<summary>
+        ///Sensor operations
+        ///</summary>
+        [ApiMember(DataType="array", Description="Sensor operations")]
+        public IList<SensorOperation> SensorOperations { get; set; }
+
+        ///<summary>
         ///Note operations
         ///</summary>
         [ApiMember(DataType="array", Description="Note operations")]
@@ -1826,6 +1832,50 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///</summary>
         [ApiMember(Description="Attachment URL")]
         public string Url { get; set; }
+    }
+
+    public class Sensor
+        : TimeRange
+    {
+        ///<summary>
+        ///Unique ID of the sensor
+        ///</summary>
+        [ApiMember(DataType="string", Description="Unique ID of the sensor", Format="guid")]
+        public Guid UniqueId { get; set; }
+    }
+
+    public class SensorOperation
+        : Sensor, IStackPositionMetadataOperation
+    {
+        ///<summary>
+        ///Date applied utc
+        ///</summary>
+        [ApiMember(DataType="string", Description="Date applied utc", Format="date-time")]
+        public DateTime DateAppliedUtc { get; set; }
+
+        ///<summary>
+        ///User
+        ///</summary>
+        [ApiMember(Description="User")]
+        public string User { get; set; }
+
+        ///<summary>
+        ///Operation type
+        ///</summary>
+        [ApiMember(DataType="string", Description="Operation type")]
+        public MetadataChangeOperationType OperationType { get; set; }
+
+        ///<summary>
+        ///Stack position
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Stack position", Format="int32")]
+        public int StackPosition { get; set; }
+
+        ///<summary>
+        ///Comments
+        ///</summary>
+        [ApiMember(Description="Comments")]
+        public string Comments { get; set; }
     }
 
     public class StagePoint
@@ -7975,6 +8025,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         public List<Note> Notes { get; set; }
 
         ///<summary>
+        ///Sensors
+        ///</summary>
+        [ApiMember(DataType="array", Description="Sensors")]
+        public List<Sensor> Sensors { get; set; }
+
+        ///<summary>
         ///Time range
         ///</summary>
         [ApiMember(DataType="StatisticalTimeRange", Description="Time range")]
@@ -8055,6 +8111,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.1.68.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.2.86.0");
     }
 }
