@@ -37,7 +37,7 @@
     <PackageReference Include="ServiceStack.Interfaces.Core" Version="8.4.0" />
     <PackageReference Include="ServiceStack.Text.Core" Version="8.4.0" />
     <PackageReference Include="System.Formats.Asn1" Version="10.0.8" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.8" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
   </ItemGroup>
 
   <!-- .NET 4.7.2 references, compilation flags and build options -->
