@@ -29,6 +29,9 @@ Not all changes will be listed, but you can always [compare by version tags](htt
 ### 25.1.5-25.1.12
 - Automating the SDK build process created many extra releases.
 
+### 26.2.1
+- Updated the service models for the AQUARIUS Samples 2026.9 release.
+
 ### 25.1.0
 - Updated the service models for the AQUARIUS Time-Series 2025.1 release.
 
