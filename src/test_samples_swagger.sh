@@ -12,7 +12,7 @@ exit_abort () {
 
 ServerName=$1
 Configuration=$2
-[ ! -z "$ServerName" ] || ServerName=https://test.gaiaserve.net
+[ ! -z "$ServerName" ] || ServerName=https://test.aqstest.com
 [ ! -z "$Configuration" ] || Configuration=Release
 
 echo Building SamplesServiceModelGenerator ...
