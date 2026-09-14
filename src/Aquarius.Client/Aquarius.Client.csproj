@@ -56,6 +56,8 @@
     <PackageReference Include="ServiceStack.HttpClient" Version="8.4.0" />
     <PackageReference Include="ServiceStack.Interfaces" Version="8.4.0" />
     <PackageReference Include="ServiceStack.Text" Version="8.4.0" />
+    <PackageReference Include="System.Formats.Asn1" Version="10.0.12" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.12" />
   </ItemGroup>
 
 </Project>
