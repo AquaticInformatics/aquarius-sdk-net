@@ -1,6 +1,6 @@
-// Date: 2026-09-11T16:53:01.0669219-07:00
-// Base URL: https://test.aqstest.com/api/swagger.json
-// Source: AQUARIUS Samples API (2026.8.8294)
+// Date: 2026-09-14T14:16:32.3296561-07:00
+// Base URL: https://aqts-connector-integration-test-first-sync.aqstest.com/api/swagger.json
+// Source: AQUARIUS Samples API (2026.8.8297)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2026.8.8294");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2026.8.8297");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -1314,18 +1314,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string Id { get; set; }
     }
 
-    [Route("/v1/queues/backgroundprocessor", "GET")]
-    public class GetBackgroundProcessorQueueCount : IReturn<QueueCountDto>
-    {
-        
-    }
-
-    [Route("/v1/queues/importprocessor", "GET")]
-    public class GetLabReportProcessorQueueCount : IReturn<QueueCountDto>
-    {
-        
-    }
-
     [Route("/v1/resultgrades", "GET")]
     public class GetResultGrades : IReturn<SearchResultResultGrade>
     {
@@ -2443,7 +2431,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string FileType { get; set; }
         public string TimeZoneOffset { get; set; }
         public bool? LinkFieldVisitsForNewObservations { get; set; }
-        public string ImportTemplateId { get; set; }
     }
 
     [Route("/v2/observationimports/{id}/result", "GET")]
@@ -2464,7 +2451,6 @@ namespace Aquarius.Samples.Client.ServiceModel
         public string FileType { get; set; }
         public string TimeZoneOffset { get; set; }
         public bool? LinkFieldVisitsForNewObservations { get; set; }
-        public string ImportTemplateId { get; set; }
     }
 
     [DataContract]
@@ -4008,7 +3994,6 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class ImportChangeItem
     {
         public string PropertyName { get; set; }
-        public string DisplayPropertyName { get; set; }
         public object Left { get; set; }
         public object Right { get; set; }
     }
@@ -4325,11 +4310,11 @@ namespace Aquarius.Samples.Client.ServiceModel
     public class InputPart
     {
         public string FileName { get; set; }
-        public object Headers { get; set; }
         public InputStream Body { get; set; }
         public MediaType MediaType { get; set; }
         public string BodyAsString { get; set; }
         public bool ContentTypeFromMessage { get; set; }
+        public object Headers { get; set; }
     }
 
     public class InputStream
@@ -4761,11 +4746,6 @@ namespace Aquarius.Samples.Client.ServiceModel
     {
         public double Value { get; set; }
         public Unit Unit { get; set; }
-    }
-
-    public class QueueCountDto
-    {
-        public int QueueCount { get; set; }
     }
 
     public class ResultDetectionCondition
