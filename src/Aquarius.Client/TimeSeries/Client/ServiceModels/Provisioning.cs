@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-07-10 17:49:21
+Date: 2026-10-08 04:39:21
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Provisioning/v1
@@ -124,6 +124,13 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="XML blob containing the RSA public key components")]
         public string Xml { get; set; }
+    }
+
+    public enum AccuracyType
+    {
+        Unspecified,
+        Percentage,
+        Unit,
     }
 
     public enum AuditEventType
@@ -988,9 +995,9 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         public double? Elevation { get; set; }
 
         ///<summary>
-        ///ISO 8601 duration format. For POST requests, if the value is not provided, the offset defaults to 'PT0S' (UTC). For PUT requests, if the value is not provided, the existing stored offset will be preserved and not overwritten.
+        ///ISO 8601 duration format. The offset must be a multiple of 15 minutes. For POST requests, if the value is not provided, the offset defaults to 'PT0S' (UTC). For PUT requests, if the value is not provided, the existing stored offset will be preserved and not overwritten.
         ///</summary>
-        [ApiMember(DataType="string", Description="ISO 8601 duration format. For POST requests, if the value is not provided, the offset defaults to 'PT0S' (UTC). For PUT requests, if the value is not provided, the existing stored offset will be preserved and not overwritten.", Format="offset from UTC")]
+        [ApiMember(DataType="string", Description="ISO 8601 duration format. The offset must be a multiple of 15 minutes. For POST requests, if the value is not provided, the offset defaults to 'PT0S' (UTC). For PUT requests, if the value is not provided, the existing stored offset will be preserved and not overwritten.", Format="offset from UTC")]
         public Offset? UtcOffset { get; set; }
 
         ///<summary>
@@ -2224,6 +2231,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="Tags to be assigned to the sensor with optional values")]
         public List<ApplyTagRequest> Tags { get; set; }
+
+        ///<summary>
+        ///Sensor accuracy type. Valid values are: 'Unspecified'; 'Percentage'; or 'Unit'
+        ///</summary>
+        [ApiMember(Description="Sensor accuracy type. Valid values are: 'Unspecified'; 'Percentage'; or 'Unit'")]
+        public AccuracyType? AccuracyType { get; set; }
+
+        ///<summary>
+        ///Numeric representation of a Sensor's accuracy (+/-)
+        ///</summary>
+        [ApiMember(DataType="number", Description="Numeric representation of a Sensor's accuracy (+/-)", Format="double")]
+        public double? AccuracyValue { get; set; }
     }
 
     [Route("/settings/{Group}/{Key}", "DELETE")]
@@ -3578,6 +3597,12 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(Description="Property Bag")]
         public string PropertyBag { get; set; }
+
+        ///<summary>
+        ///Moving window size in minutes
+        ///</summary>
+        [ApiMember(DataType="integer", Description="Moving window size in minutes", Format="int32")]
+        public int? MovingWindowSizeInMinutes { get; set; }
     }
 
     [Route("/timeseries/{TimeSeriesUniqueId}", "PUT")]
@@ -5809,6 +5834,18 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
         ///</summary>
         [ApiMember(DataType="array", Description="Tags")]
         public List<AppliedTag> Tags { get; set; }
+
+        ///<summary>
+        ///Sensor accuracy type. Valid values are: 'Unspecified'; 'Percentage'; or 'Unit'
+        ///</summary>
+        [ApiMember(Description="Sensor accuracy type. Valid values are: 'Unspecified'; 'Percentage'; or 'Unit'")]
+        public AccuracyType? AccuracyType { get; set; }
+
+        ///<summary>
+        ///Numeric representation of a Sensor's accuracy (+/-)
+        ///</summary>
+        [ApiMember(DataType="number", Description="Numeric representation of a Sensor's accuracy (+/-)", Format="double")]
+        public double? AccuracyValue { get; set; }
     }
 
     public class Setting
@@ -6429,6 +6466,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Provisioning
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.2.86.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.3.69.0");
     }
 }
