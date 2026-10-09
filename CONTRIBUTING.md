@@ -16,6 +16,23 @@ Either build from within Visual Studio, or run `dotnet build src` from the root 
 
 The NUnit-based test suite can be run from with Visual Studio.
 
+### Samples API integration tests
+
+`SamplesApiIntegrationTests` in the `Aquarius.Client.IntegrationTests` project
+sends real requests to an AQUARIUS Samples API, separate from the unit tests.
+The fixture is marked `[Explicit]`, so normal test runs do not execute it.
+An explicit name filter that matches this fixture, including a broad namespace
+filter, can select it for execution.
+Set `SAMPLES_CLIENT` to the server URL and `SAMPLES_TOKEN` to an API token
+with permission to read activities and create/update sampling locations,
+field visits, and activities. Use a non-production test server.
+
+Run the fixture explicitly with the Bash script (from the repository root):
+
+```sh
+bash src/test_samples_integration.sh
+```
+
 ## Pull Requests
 
 We actively welcome your pull requests.
