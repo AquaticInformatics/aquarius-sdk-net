@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Aquarius.Samples.Client;
 using Aquarius.Samples.Client.ServiceModel;
 using NUnit.Framework;
@@ -10,6 +11,8 @@ namespace Aquarius.Client.IntegrationTests.Samples.Client
     [Explicit("Requires Samples API credentials and creates records that are left for inspection.")]
     public class SamplesApiIntegrationTests
     {
+        private const string TrackingCustomIdPrefix = "tracking-test-";
+        private const string TrackingNamePrefix = "tracking-name-";
         private ISamplesClient _client;
 
         [SetUp]
@@ -52,7 +55,7 @@ namespace Aquarius.Client.IntegrationTests.Samples.Client
             var created = _client.Post(new PostActivity
             {
                 Type = ActivityType.SAMPLE_ROUTINE,
-                CustomId = "tracking-test-" + Guid.NewGuid(),
+                CustomId = TrackingCustomIdPrefix + Guid.NewGuid(),
                 StartTime = DateTimeOffset.UtcNow,
                 SamplingLocation = fieldVisit.SamplingLocation,
                 FieldVisit = fieldVisit,
@@ -70,7 +73,7 @@ namespace Aquarius.Client.IntegrationTests.Samples.Client
             Assert.That(fetched.ExternalTrackingId, Is.EqualTo(trackingId));
             Assert.That(fetched.ExternalTrackingName, Is.EqualTo(trackingName));
 
-            var updatedTrackingName = "tracking-" + Guid.NewGuid();
+            var updatedTrackingName = TrackingNamePrefix + Guid.NewGuid();
             var updated = _client.Put(new PutActivity
             {
                 Id = fetched.Id,
@@ -93,11 +96,48 @@ namespace Aquarius.Client.IntegrationTests.Samples.Client
             Assert.That(persisted.ExternalTrackingName, Is.EqualTo(updatedTrackingName));
         }
 
+        [Test]
+        public void GetActivities_WithExternalTrackingNameSearch_ReturnsOnlyMatchingActivities()
+        {
+            var matchingName = TrackingNamePrefix + "match-" + Guid.NewGuid();
+            var otherName = TrackingNamePrefix + "other-" + Guid.NewGuid();
+            var matching = CreateTrackingActivity(matchingName);
+            var other = CreateTrackingActivity(otherName);
+
+            var result = _client.Get(new GetActivities {ExternalTrackingNameSearch = matchingName});
+
+            Assert.That(result.DomainObjects, Is.Not.Null.And.Not.Empty);
+            var ids = result.DomainObjects.Select(a => a.Id).ToList();
+            Assert.That(ids, Does.Contain(matching.Id));
+            Assert.That(ids, Does.Not.Contain(other.Id));
+            Assert.That(result.DomainObjects.Select(a => a.ExternalTrackingName), Has.All.EqualTo(matchingName));
+        }
+
+        private Activity CreateTrackingActivity(string trackingName)
+        {
+            var fieldVisit = CreateTrackingFieldVisit();
+            var created = _client.Post(new PostActivity
+            {
+                Type = ActivityType.SAMPLE_ROUTINE,
+                CustomId = TrackingCustomIdPrefix + Guid.NewGuid(),
+                StartTime = DateTimeOffset.UtcNow,
+                SamplingLocation = fieldVisit.SamplingLocation,
+                FieldVisit = fieldVisit,
+                Medium = new Medium {SystemCode = MediumSystemCodeType.WATER},
+                ExternalTrackingId = Guid.NewGuid().ToString(),
+                ExternalTrackingName = trackingName
+            });
+            Assert.That(created.Id, Is.Not.Null.And.Not.Empty);
+            TestContext.WriteLine($"Created activity: {created.Id} (tracking name: {trackingName}).");
+
+            return created;
+        }
+
         private FieldVisit CreateTrackingFieldVisit()
         {
             var location = _client.Post(new PostSamplingLocation
             {
-                CustomId = "tracking-test-" + Guid.NewGuid()
+                CustomId = TrackingCustomIdPrefix + Guid.NewGuid()
             });
             Assert.That(location.Id, Is.Not.Null.And.Not.Empty);
             TestContext.WriteLine($"Created sampling location: {location.Id} (custom ID: {location.CustomId}).");
