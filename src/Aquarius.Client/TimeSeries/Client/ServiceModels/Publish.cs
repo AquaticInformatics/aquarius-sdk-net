@@ -1,5 +1,5 @@
 /* Options:
-Date: 2026-10-08 04:39:19
+Date: 2026-10-16 21:28:00
 Version: 10.04
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://develop-1.dev.aquariusdev.net/AQUARIUS/Publish/v2
@@ -855,7 +855,7 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
         ///<summary>
         ///Sensor accuracy type. Valid values are: 'Unspecified'; 'Percentage'; or 'Unit'
         ///</summary>
-        [ApiMember(Description="Sensor accuracy type. Valid values are: 'Unspecified'; 'Percentage'; or 'Unit'")]
+        [ApiMember(DataType="AccuracyType", Description="Sensor accuracy type. Valid values are: 'Unspecified'; 'Percentage'; or 'Unit'")]
         public AccuracyType? AccuracyType { get; set; }
 
         ///<summary>
@@ -22050,6 +22050,6 @@ namespace Aquarius.TimeSeries.Client.ServiceModels.Publish
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.3.69.0");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("26.3.75.0");
     }
 }
