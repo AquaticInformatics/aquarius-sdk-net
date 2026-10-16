@@ -27,7 +27,7 @@ OutputPath=$2
 command -v dotnet >/dev/null 2>&1 || exit_abort "This script requires the .NET 8 runtime. Grab it from here: https://www.microsoft.com/net/download"
 
 [ -f "$Generator" ]    || dotnet build "$GeneratorProjectPath" -c Release || exit_abort "Can't find or build SamplesServiceModelGenerator.dll"
-[ ! -z "$ServerName" ] || ServerName=https://demo.aqsamples.com
+[ ! -z "$ServerName" ] || ServerName=https://aqts-connector-integration-test-first-sync.aqstest.com
 [ ! -z "$OutputPath" ] || OutputPath=./ServiceModel.cs
 
 dotnet $Generator -filename=$OutputPath -url=$ServerName/api/swagger.json || exit_abort
