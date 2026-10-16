@@ -1,6 +1,6 @@
-// Date: 2026-09-14T14:16:32.3296561-07:00
-// Base URL: https://aqts-connector-integration-test-first-sync.aqstest.com/api/swagger.json
-// Source: AQUARIUS Samples API (2026.9.8300)
+// Date: 2026-10-16T15:26:04.0971139-07:00
+// Base URL: https:/demo.aqsamples.com/api/swagger.json
+// Source: AQUARIUS Samples API (2026.9.8353)
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Aquarius.Samples.Client.ServiceModel
 {
     public static class Current
     {
-        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2026.9.8300");
+        public static readonly AquariusServerVersion Version = AquariusServerVersion.Create("2026.9.8353");
     }
 
     [Route("/v1/accessgroups", "GET")]
@@ -72,7 +72,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> CollectionMethodIds { get; set; }
         public string Cursor { get; set; }
         public string CustomId { get; set; }
-        public List<string> ExternalTrackingNameSearch { get; set; }
+        public string ExternalTrackingNameSearch { get; set; }
         public string FieldVisitId { get; set; }
         public Instant? FromStartTime { get; set; }
         public List<string> Ids { get; set; }
@@ -118,7 +118,7 @@ namespace Aquarius.Samples.Client.ServiceModel
         public List<string> CollectionMethodIds { get; set; }
         public string Cursor { get; set; }
         public string CustomId { get; set; }
-        public List<string> ExternalTrackingNameSearch { get; set; }
+        public string ExternalTrackingNameSearch { get; set; }
         public string FieldVisitId { get; set; }
         public Instant? FromStartTime { get; set; }
         public List<string> Ids { get; set; }
