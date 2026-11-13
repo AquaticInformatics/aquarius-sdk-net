@@ -28,10 +28,10 @@ namespace Aquarius.TimeSeries.Client
         private void AdjustMajorVersion()
         {
             const int firstNgMajorVersion = 14;
-            const int lastYearInCentury = 99;
+            const int lastPrefixedYearMajorVersion = 999;
             const int thisMillenium = 2000;
 
-            if (_versionComponents[0] >= firstNgMajorVersion && _versionComponents[0] <= lastYearInCentury)
+            if (_versionComponents[0] >= firstNgMajorVersion && _versionComponents[0] <= lastPrefixedYearMajorVersion)
             {
                 _versionComponents[0] += thisMillenium;
             }
