@@ -38,6 +38,9 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new TestCaseData("Developer version", "0.0.0.0", "0.0.0.0"),
             new TestCaseData("Early 3X version", "3.6.121", "3.6.121"),
             new TestCaseData("Early NG version", "14.4.58", "2014.4.58"),
+            new TestCaseData("Current NG version", "26.4.11.0", "2026.4.11.0"),
+            new TestCaseData("Feature branch version", "226.3.126.0", "2226.3.126.0"),
+            new TestCaseData("Full year version", "2026.4.11", "2026.4.11"),
         };
 
         [TestCaseSource("SanitizeMajorVersionTests")]
@@ -66,6 +69,11 @@ namespace Aquarius.UnitTests.TimeSeries.Client
             new TestCaseData("NextYear.First is greater than PreviousYear.Last", "16.1.123", "15.4.123", false, 1),
             new TestCaseData("Simplest 3X version test is less than NG", "3", "15.4.123", true, -1),
             new TestCaseData("Simplest NG version test is greater than 3X", "15.4.123", "3", false, 1),
+            new TestCaseData("Feature branch is greater than the same year's release", "226.3.126", "26.4.11", false, 1),
+            new TestCaseData("Release is less than a feature branch of the same year", "26.4.11", "226.3.126", true, -1),
+            new TestCaseData("Feature branch meets a minimum full-year version", "226.3.126", "2019.1", false, 1),
+            new TestCaseData("Feature branch is less than a developer version", "226.3.126", "0.0.0.0", true, -1),
+            new TestCaseData("3X is less than a feature branch", "3.9.123", "226.3.126", true, -1),
         };
 
         [TestCaseSource("VersionComparisonTests")]
